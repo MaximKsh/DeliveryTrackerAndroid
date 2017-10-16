@@ -1,3 +1,31 @@
 <resources>
+    <string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>
     <string name="app_name">DTCore</string>
+    <string name="ServerMessage_ServerError_InvalidInputParameter">Invalid input parameter</string>
+    <string name="ServerMessage_ServerError_UserNotFound">User not found</string>
+    <string name="ServerMessage_ServerError_UserWithoutRole">User without role</string>
+    <string name="ServerMessage_ServerError_UserNotInRole">User hasn\'t required role</string>
+    <string name="ServerMessage_ServerError_IdentityError">Identity error</string>
+    <string name="ServerMessage_ServerError_InvitationDoesnotExist">Invitation doesn\' exist</string>
+    <string name="ServerMessage_ServerError_InvitationExpired">Invitation expired</string>
+    <string name="ServerMessage_ServerError_GroupAlreadyHasCreator">Group already has creator</string>
+    <string name="ServerMessage_ServerError_PerformerInAnotherGroup">Performer not found</string>
+    <string name="ServerMessage_ServerError_TaskNotFound">Task not found</string>
+    <string name="ServerMessage_ServerError_IncorrectTaskState">Incorrect task state</string>
+    <string name="ServerMessage_ServerError_IncorrectTaskStateTransition">Incorrect task state transition</string>
+    <string name="ServerMessage_ServerError_TaskIsForbidden">Task is forbidden</string>
+    <string name="ServerMessage_ServerError_IdIsRequired">Id is required</string>
+    <string name="ServerMessage_ServerError_UserNameIsRequired">UserName is required</string>
+    <string name="ServerMessage_ServerError_RoleIsRequired">Role is required</string>
+    <string name="ServerMessage_ServerError_DisplayableNameIsRequired">DisplayableName is required</string>
+    <string name="ServerMessage_ServerError_InvitationCodeIsRequired">InvitationCode is required</string>
+    <string name="ServerMessage_ServerError_PasswordIsRequired">Password is required</string>
+    <string name="ServerMessage_ServerError_CaptionIsRequired">Caption is required</string>
+    <string name="ServerMessage_ServerError_ContentIsRequired">Content is required</string>
+    <string name="ServerMessage_ServerError_GroupNameIsRequired">GroupName is required</string>
+    <string name="ServerMessage_ServerError_CreatorDisplayableNameIsRequired">CreatorDisplayableName is required</string>
+    <string name="ServerMessage_ServerError_CreatorPasswordIsRequired">CreatorPassword is required</string>
+    <string name="ServerMessage_ServerError_LongitudeIsRequired">Longitude is required</string>
+    <string name="ServerMessage_ServerError_LatitudeIsRequired">Latitude is required</string>
+    <string name="ServerMessage_ServerError_ExpirationDateIsRequired">ExpirationDate is required</string>
 </resources>

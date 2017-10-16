@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DTCore</string>
+    <string name="ServerMessage_ServerError_InvalidInputParameter">Некорректный параметр запроса</string>
+    <string name="ServerMessage_ServerError_UserNotFound">Пользователь не найден</string>
+    <string name="ServerMessage_ServerError_UserWithoutRole">Пользователь без роли</string>
+    <string name="ServerMessage_ServerError_UserNotInRole">Пользователь не входит в требуемую роль</string>
+    <string name="ServerMessage_ServerError_IdentityError">Ошибка авторизации</string>
+    <string name="ServerMessage_ServerError_InvitationDoesnotExist">Приглашение не существует</string>
+    <string name="ServerMessage_ServerError_InvitationExpired">Приглашение просрочено</string>
+    <string name="ServerMessage_ServerError_GroupAlreadyHasCreator">У группы уже указан создатель</string>
+    <string name="ServerMessage_ServerError_PerformerInAnotherGroup">Исполнитель не найден</string>
+    <string name="ServerMessage_ServerError_TaskNotFound">Задание не найдено</string>
+    <string name="ServerMessage_ServerError_IncorrectTaskState">Некорректное состояние задания</string>
+    <string name="ServerMessage_ServerError_IncorrectTaskStateTransition">Некорректный переход состояний задания</string>
+    <string name="ServerMessage_ServerError_TaskIsForbidden">Задание недоступно</string>
+    <string name="ServerMessage_ServerError_IdIsRequired">Укажите \'Id\'</string>
+    <string name="ServerMessage_ServerError_UserNameIsRequired">Укажите \'UserName\'</string>
+    <string name="ServerMessage_ServerError_RoleIsRequired">Укажите \'Role\'</string>
+    <string name="ServerMessage_ServerError_DisplayableNameIsRequired">Укажите \'DisplayableName\'</string>
+    <string name="ServerMessage_ServerError_InvitationCodeIsRequired">Укажите \'InvitationCode\'</string>
+    <string name="ServerMessage_ServerError_PasswordIsRequired">Укажите \'Password\'</string>
+    <string name="ServerMessage_ServerError_CaptionIsRequired">Укажите \'Caption\'</string>
+    <string name="ServerMessage_ServerError_ContentIsRequired">Укажите \'Content\'</string>
+    <string name="ServerMessage_ServerError_GroupNameIsRequired">Укажите \'GroupName\'</string>
+    <string name="ServerMessage_ServerError_CreatorDisplayableNameIsRequired">Укажите \'CreatorDisplayableName\'</string>
+    <string name="ServerMessage_ServerError_CreatorPasswordIsRequired">Укажите \'CreatorPassword\'</string>
+    <string name="ServerMessage_ServerError_LongitudeIsRequired">Укажите \'Longitude\'</string>
+    <string name="ServerMessage_ServerError_LatitudeIsRequired">Укажите \'Latitude\'</string>
+    <string name="ServerMessage_ServerError_ExpirationDateIsRequired">Укажите \'ExpirationDate\'</string>
+</resources>

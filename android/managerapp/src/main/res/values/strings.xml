@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DeliveryTracker</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="first_fragment">FIRST FRAGMENT</string>
+    <string name="second_fragment">SECOND FRAGMENT</string>
 </resources>
