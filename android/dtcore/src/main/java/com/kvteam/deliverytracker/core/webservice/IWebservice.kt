@@ -6,13 +6,11 @@ interface IWebservice {
     fun <T : Any> get(
             url: String,
             responseType: Type,
-            onSuccess: (T) -> Unit,
-            onError: (ErrorListModel) -> Unit)
+            withToken: Boolean = false): NetworkResponse<T>
 
     fun <T : Any> post(
             url: String,
             content: Any?,
             responseType: Type,
-            onSuccess: (T) -> Unit,
-            onError: (ErrorListModel) -> Unit)
+            withToken: Boolean = false): NetworkResponse<T>
 }

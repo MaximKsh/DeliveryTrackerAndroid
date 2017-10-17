@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.launch
 
 
-fun <T> async(
+fun <T> invokeAsync(
         task: suspend CoroutineScope.() -> T,
         continueWith: (suspend CoroutineScope.(T) -> Unit)? = null) {
     if(continueWith != null) {
