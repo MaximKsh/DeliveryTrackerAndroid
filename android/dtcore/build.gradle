@@ -39,18 +39,25 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.android.volley:volley:1.0.0'
+
     //Dagger 2
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     //Dagger-Android
     compile 'com.google.dagger:dagger-android:2.11'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    //Если мы собираемся использовать support библиотеку
     compile 'com.google.dagger:dagger-android-support:2.11'
+
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.1'
 
     kapt 'com.google.dagger:dagger-compiler:2.11'
     kapt "com.google.dagger:dagger-android-processor:2.11"
 }
 repositories {
     mavenCentral()
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

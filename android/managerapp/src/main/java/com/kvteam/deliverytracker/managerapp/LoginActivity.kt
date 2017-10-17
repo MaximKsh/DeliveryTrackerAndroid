@@ -1,6 +1,9 @@
 package com.kvteam.deliverytracker.managerapp
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.kvteam.deliverytracker.core.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.webservice.*
 import com.kvteam.deliverytracker.managerapp.dagger.ISimpleActivity
@@ -10,6 +13,8 @@ import com.kvteam.deliverytracker.managerapp.dagger.SimpleSingleton
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
+
+import kotlinx.coroutines.experimental.*
 
 class LoginActivity : DeliveryTrackerActivity() {
 
@@ -23,16 +28,20 @@ class LoginActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
-       /* this.button.setOnClickListener({ _ ->
-            webservice.post<UserInfoModel>(
-                    "/api/group/create",
-                    CreateGroupModel("1","2", "123Bb!"),
-                    UserInfoModel::class.java,
-                    {r -> onGettingResponse(r)},
-                    {r -> onError(r)})
-        })
-*/
+        val button = this.button
+        async {
+            button.text = "asd"
+            4
+        }
+        /* this.button.setOnClickListener({ _ ->
+             webservice.post<UserInfoModel>(
+                     "/api/group/create",
+                     CreateGroupModel("1","2", "123Bb!"),
+                     UserInfoModel::class.java,
+                     {r -> onGettingResponse(r)},
+                     {r -> onError(r)})
+         })
+ */
         this.button2.setOnClickListener({_ ->
             toggleState()
         })
