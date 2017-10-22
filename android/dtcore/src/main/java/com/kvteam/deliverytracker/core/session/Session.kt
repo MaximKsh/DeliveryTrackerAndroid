@@ -86,11 +86,11 @@ class Session (
         } catch (e: JsonSyntaxException) {
             return LoginResult.Error
         }
-        this.username = username
-        this.surname = token.user.surname ?: "no surname"
-        this.name = token.user.name ?: "no name"
-        this.phoneNumber = token.user.phoneNumber ?: "no phone number"
-        this.role = token.user.role ?: "no role"
+        val role = token.user.role
+        if(role != null
+                && !sessionInfo.allowRoles.contains(role)) {
+            return LoginResult.RoleMismatch
+        }
 
         val account = Account(username, sessionInfo.accountType)
         try{
@@ -113,6 +113,13 @@ class Session (
         } catch (e: Exception) {
             return LoginResult.Error
         }
+
+        this.username = username
+        this.surname = token.user.surname ?: "no surname"
+        this.name = token.user.name ?: "no name"
+        this.phoneNumber = token.user.phoneNumber ?: "no phone number"
+        this.role = token.user.role ?: "no role"
+
         return if(tokenResponse.statusCode == 201) LoginResult.Registered  else LoginResult.Success
     }
 

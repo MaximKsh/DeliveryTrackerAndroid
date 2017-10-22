@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.performerapp
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.InvitationModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
@@ -16,7 +17,7 @@ class MainActivity : DeliveryTrackerActivity() {
             get() = true
 
     @Inject
-    lateinit var webservice: IWebservice
+    lateinit var instanceManager: IInstanceManager
 
     @Inject
     lateinit var session: ISession
@@ -34,17 +35,32 @@ class MainActivity : DeliveryTrackerActivity() {
             })
         })
 
-        loadButton.setOnClickListener { _ ->
+        loadManagersButton.setOnClickListener { _ ->
             invokeAsync({
-                webservice.post<InvitationModel>(
-                        "/api/instance/invite_manager",
-                        null,
-                        InvitationModel::class.java,
-                        true)
+                instanceManager.getManagers()
             }, {
-                if(it.statusCode == 200) {
-                    val res = it.responseEntity!!
-                    textView2.text = res.invitationCode
+                if(it != null) {
+                    textView2.text =  if(it.isEmpty()){
+                        "empty"
+                    } else {
+                        it.map { p -> p.username }.reduce{ acc, p -> acc + ", " + p}
+                    }
+                } else {
+                    textView2.text = ":("
+                }
+            })
+        }
+
+        loadPerformersButton.setOnClickListener { _ ->
+            invokeAsync({
+                instanceManager.getPerformers()
+            }, {
+                if(it != null) {
+                    textView2.text =  if(it.isEmpty()){
+                        "empty"
+                    } else {
+                        it.map { p -> p.username }.reduce{ acc, p -> acc + ", " + p}
+                    }
                 } else {
                     textView2.text = ":("
                 }
@@ -56,13 +72,9 @@ class MainActivity : DeliveryTrackerActivity() {
         super.onResume()
 
         invokeAsync({
-            webservice.get<UserModel>("/api/session/check", UserModel::class.java, true)
+            session.surname
         }, {
-            if(it.statusCode == 200) {
-                textView.text = it.responseEntity?.surname ?: "surname is null"
-            } else {
-                textView.text = "bad error"
-            }
+            textView.text = it ?: "surname is null"
         })
     }
 }

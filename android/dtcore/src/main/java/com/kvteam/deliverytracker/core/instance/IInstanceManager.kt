@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.instance
 
 import com.kvteam.deliverytracker.core.models.CredentialsModel
 import com.kvteam.deliverytracker.core.models.InstanceModel
+import com.kvteam.deliverytracker.core.models.InvitationModel
 import com.kvteam.deliverytracker.core.models.UserModel
 
 interface IInstanceManager {
@@ -9,4 +10,12 @@ interface IInstanceManager {
             instance: InstanceModel,
             user: UserModel,
             credentials: CredentialsModel): UserModel?
+
+    fun getUser(username: String): UserModel?
+    fun inviteManager(preliminaryUserInfo: UserModel): InvitationModel?
+    fun invitePerformer(preliminaryUserInfo: UserModel): InvitationModel?
+    fun getPerformers(): List<UserModel>?
+    fun getManagers(): List<UserModel>?
+    fun deleteManager(username: String): Boolean
+    fun deletePerformer(username: String): Boolean
 }

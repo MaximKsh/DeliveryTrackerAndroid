@@ -4,6 +4,7 @@ import android.accounts.AccountAuthenticatorActivity
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
@@ -52,8 +53,14 @@ class LoginActivity : AccountAuthenticatorActivity() {
                         }
                         finish()
                     }
+                    LoginResult.RoleMismatch -> {
+                        Toast.makeText(ctx, "Не твоя роль", Toast.LENGTH_LONG).show()
+                    }
+                    LoginResult.Error -> {
+                        Toast.makeText(ctx, "Неверные данные", Toast.LENGTH_LONG).show()
+                    }
                     else -> {
-                        // показать ошибку
+                        Toast.makeText(ctx, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
                     }
                 }
             })
