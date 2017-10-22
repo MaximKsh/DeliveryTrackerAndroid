@@ -1,4 +1,6 @@
 package com.kvteam.deliverytracker.core.webservice
 
-fun unknownNetworkError() =
-        ErrorItemModel(UnknownNetworkError, "PutMessageHere", mapOf())
+import com.kvteam.deliverytracker.core.models.ErrorItemModel
+
+fun invalidResponseBody() =
+        ErrorItemModel(UnknownNetworkError, "InvalidResponseBody", mapOf())

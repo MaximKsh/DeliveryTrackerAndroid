@@ -10,13 +10,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.kvteam.deliverytracker.core.session.SessionService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.GET_ACCOUNTS|android.permission.MANAGE_ACCOUNTS|android.permission.AUTHENTICATE_ACCOUNT|android.permission.USE_CREDENTIALS">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator" />
+        </service>
+
+        <activity android:name=".ConfirmDataActivity"></activity>
     </application>
 
 </manifest>

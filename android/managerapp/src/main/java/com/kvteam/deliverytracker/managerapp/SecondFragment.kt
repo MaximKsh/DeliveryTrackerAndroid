@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.managerapp.dagger.ISimpleType
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
 class SecondFragment : DeliveryTrackerFragment() {
     //@Inject
     //lateinit var ss: ISimpleType
+
+    //@Inject
+    //lateinit var session: ISession
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

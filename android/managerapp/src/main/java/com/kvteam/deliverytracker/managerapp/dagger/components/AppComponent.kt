@@ -5,8 +5,8 @@ import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import com.kvteam.deliverytracker.managerapp.ManagerApplication
 import com.kvteam.deliverytracker.managerapp.dagger.modules.AndroidBindingModule
-import com.kvteam.deliverytracker.managerapp.dagger.SimpleSingletonModule
 import com.kvteam.deliverytracker.managerapp.dagger.modules.CoreModule
+import com.kvteam.deliverytracker.managerapp.dagger.modules.SingletonCoreModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(
         AndroidSupportInjectionModule::class,
         AndroidBindingModule::class,
-        SimpleSingletonModule::class,
+        SingletonCoreModule::class,
         CoreModule::class))
 internal interface AppComponent : AndroidInjector<ManagerApplication> {
     @Component.Builder

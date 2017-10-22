@@ -1,14 +1,12 @@
 package com.kvteam.deliverytracker.core.instance
 
-import com.kvteam.deliverytracker.core.webservice.UserInfoModel
-
-/**
- * Created by maxim on 17.10.17.
- */
+import com.kvteam.deliverytracker.core.models.CredentialsModel
+import com.kvteam.deliverytracker.core.models.InstanceModel
+import com.kvteam.deliverytracker.core.models.UserModel
 
 interface IInstanceManager {
     fun create(
-            groupName: String,
-            creatorDisplayableName: String,
-            creatorPassword: String): UserInfoModel?
+            instance: InstanceModel,
+            user: UserModel,
+            credentials: CredentialsModel): UserModel?
 }

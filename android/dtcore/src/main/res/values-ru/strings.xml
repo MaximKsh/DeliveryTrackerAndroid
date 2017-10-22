@@ -14,18 +14,11 @@
     <string name="ServerMessage_ServerError_IncorrectTaskState">Некорректное состояние задания</string>
     <string name="ServerMessage_ServerError_IncorrectTaskStateTransition">Некорректный переход состояний задания</string>
     <string name="ServerMessage_ServerError_TaskIsForbidden">Задание недоступно</string>
-    <string name="ServerMessage_ServerError_IdIsRequired">Укажите \'Id\'</string>
-    <string name="ServerMessage_ServerError_UserNameIsRequired">Укажите \'UserName\'</string>
-    <string name="ServerMessage_ServerError_RoleIsRequired">Укажите \'Role\'</string>
     <string name="ServerMessage_ServerError_DisplayableNameIsRequired">Укажите \'DisplayableName\'</string>
-    <string name="ServerMessage_ServerError_InvitationCodeIsRequired">Укажите \'InvitationCode\'</string>
-    <string name="ServerMessage_ServerError_PasswordIsRequired">Укажите \'Password\'</string>
-    <string name="ServerMessage_ServerError_CaptionIsRequired">Укажите \'Caption\'</string>
-    <string name="ServerMessage_ServerError_ContentIsRequired">Укажите \'Content\'</string>
-    <string name="ServerMessage_ServerError_GroupNameIsRequired">Укажите \'GroupName\'</string>
-    <string name="ServerMessage_ServerError_CreatorDisplayableNameIsRequired">Укажите \'CreatorDisplayableName\'</string>
-    <string name="ServerMessage_ServerError_CreatorPasswordIsRequired">Укажите \'CreatorPassword\'</string>
+    <string name="ServerMessage_ServerError_InvitationCodeIsRequired">Укажите \'InstanceName\'</string>
     <string name="ServerMessage_ServerError_LongitudeIsRequired">Укажите \'Longitude\'</string>
     <string name="ServerMessage_ServerError_LatitudeIsRequired">Укажите \'Latitude\'</string>
-    <string name="ServerMessage_ServerError_ExpirationDateIsRequired">Укажите \'ExpirationDate\'</string>
+    <string name="ServerMessage_ServerError_AccessDenied">Доступ запрещен</string>
+    <string name="ServerMessage_ServerError_UserDeleted">Пользователь был удален</string>
+    <string name="ServerMessage_ServerError_RoleRange">Укажите корректную роль</string>
 </resources>

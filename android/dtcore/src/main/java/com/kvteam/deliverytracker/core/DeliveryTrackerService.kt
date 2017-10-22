@@ -1,11 +1,8 @@
 package com.kvteam.deliverytracker.core
 
 import android.app.Service
+import dagger.android.DaggerService
 
-/**
- * Created by maxim on 16.10.17.
- */
-
-abstract class DeliveryTrackerService: Service() {
+abstract class DeliveryTrackerService: DaggerService() {
 
 }

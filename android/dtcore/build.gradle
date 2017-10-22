@@ -52,6 +52,7 @@ dependencies {
 
     kapt 'com.google.dagger:dagger-compiler:2.11'
     kapt "com.google.dagger:dagger-android-processor:2.11"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.1.51"
 }
 repositories {
     mavenCentral()

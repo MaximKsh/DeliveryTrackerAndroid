@@ -1,5 +1,9 @@
 package com.kvteam.deliverytracker.core.webservice
 
-data class NetworkResponse <out T>(
-        val responseEntity: T?,
-        val errorList: ErrorListModel?)
+import com.kvteam.deliverytracker.core.models.ErrorListModel
+
+data class NetworkResponse<T> (
+        var fetched: Boolean = false,
+        var statusCode: Int = 0,
+        var responseEntity: T? = null,
+        var errorList: ErrorListModel? = null)

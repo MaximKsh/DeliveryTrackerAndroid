@@ -6,8 +6,6 @@ import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.managerapp.FirstFragment
 import com.kvteam.deliverytracker.managerapp.LoginActivity
 import com.kvteam.deliverytracker.managerapp.SecondFragment
-import com.kvteam.deliverytracker.managerapp.dagger.ISimpleType
-import com.kvteam.deliverytracker.managerapp.dagger.SimpleType
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
 import dagger.android.AndroidInjector
 import dagger.android.ActivityKey
@@ -18,8 +16,7 @@ import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 
 
-@Module(subcomponents = arrayOf(LoginActivitySubcomponent::class),
-        includes = arrayOf(LoginActivityModule.SimpleTypeModule::class))
+@Module(subcomponents = arrayOf(LoginActivitySubcomponent::class))
 abstract class LoginActivityModule {
     @Binds
     @IntoMap
@@ -35,14 +32,5 @@ abstract class LoginActivityModule {
     @ContributesAndroidInjector(modules = arrayOf(SecondFragmentModule::class))
     internal abstract fun secondFragment(): SecondFragment
 
-    @Module
-    class SimpleTypeModule {
-        @Provides
-        @ActivityScope
-        fun simpleType(activity: LoginActivity): ISimpleType {
-            return SimpleType(activity)
-        }
-
-    }
 }
 
