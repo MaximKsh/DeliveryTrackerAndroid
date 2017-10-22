@@ -6,6 +6,7 @@ import com.kvteam.deliverytracker.core.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import kotlinx.android.synthetic.main.activity_confirm_data.*
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         surnameEditText.setText(session.surname ?: "")
         nameEditText.setText(session.name ?: "")
         phoneEditText.setText(session.phoneNumber ?: "")
+        val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
 
         confirmButton.setOnClickListener{ _ ->
             val userInfo = UserModel(
@@ -32,8 +34,10 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 session.updateUserInfo(userInfo)
             }, {
                 if(it) {
-                    val intent = Intent(ctx, MainActivity::class.java)
-                    startActivity(intent)
+                    if(settingsContext) {
+                        val intent = Intent(ctx, MainActivity::class.java)
+                        startActivity(intent)
+                    }
                     finish()
                 } else {
                     // Произоша ошибка

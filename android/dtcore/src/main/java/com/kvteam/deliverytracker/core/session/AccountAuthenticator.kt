@@ -27,6 +27,7 @@ class AccountAuthenticator(
 
         intent.putExtra(sessionInfo.accountType, accountType)
         intent.putExtra(sessionInfo.authToken, authTokenType)
+        intent.putExtra(SETTINGS_CONTEXT, true)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
 
         val bundle = Bundle()
@@ -54,9 +55,11 @@ class AccountAuthenticator(
 
         val am = AccountManager.get(application)
 
+        // Берем токен из кэша
         var authToken = am.peekAuthToken(account, authTokenType)
 
         if (TextUtils.isEmpty(authToken)) {
+            // В кэше токена нет, логинимся по новой
             val credentials = CredentialsModel(account.name, am.getPassword(account))
             val tokenResponse = webservice.post<TokenModel>(
                     "/api/session/login",
@@ -66,6 +69,7 @@ class AccountAuthenticator(
         }
 
         if (!TextUtils.isEmpty(authToken)) {
+            // Есть токен, возвращаем бандл с токеном
             val result = Bundle()
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
@@ -73,11 +77,7 @@ class AccountAuthenticator(
             return result
         }
 
-        // If you reach here, person needs to login again. or sign up
-
-        // If we get here, then we couldn't access the user's password - so we
-        // need to re-prompt them for their credentials. We do that by creating
-        // an intent to display our AuthenticatorActivity which is the AccountsActivity in my case.
+        // нет токена, редиректим на страницу логина
         val intent = Intent(application, (application).loginActivityType as Class<*>)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra(sessionInfo.accountType, accountType)

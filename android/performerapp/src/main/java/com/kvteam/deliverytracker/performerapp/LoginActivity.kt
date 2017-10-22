@@ -1,12 +1,13 @@
 package com.kvteam.deliverytracker.performerapp
 
-import android.accounts.Account
 import android.accounts.AccountAuthenticatorActivity
 import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.session.*
+import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.LoginResult
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
@@ -25,8 +26,7 @@ class LoginActivity : AccountAuthenticatorActivity() {
         setContentView(R.layout.activity_login)
         usernameEditText.setText("nRedS2Gd4T")
         passwordEditText.setText("123qQ!")
-
-        val am = AccountManager.get(this)
+        val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
 
         signInButton.setOnClickListener { _ ->
             val username = usernameEditText.text.toString()
@@ -39,12 +39,17 @@ class LoginActivity : AccountAuthenticatorActivity() {
                 when (it) {
                     LoginResult.Registered -> {
                         val intent = Intent(ctx, ConfirmDataActivity::class.java)
+                        if(settingsContext){
+                            intent.putExtra(SETTINGS_CONTEXT, true)
+                        }
                         startActivity(intent)
                         finish()
                     }
                     LoginResult.Success -> {
-                        val intent = Intent(ctx, MainActivity::class.java)
-                        startActivity(intent)
+                        if(!settingsContext) {
+                            val intent = Intent(ctx, MainActivity::class.java)
+                            startActivity(intent)
+                        }
                         finish()
                     }
                     else -> {
