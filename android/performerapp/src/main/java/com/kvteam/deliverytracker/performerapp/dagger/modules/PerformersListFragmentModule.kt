@@ -2,7 +2,7 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.performerapp.dagger.components.PerformersListFragmentSubcomponent
-import com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector

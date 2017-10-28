@@ -4,32 +4,36 @@
     <data>
         <variable
             name="fragment"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListFragment" />
+            type="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment" />
 
         <variable
             name="viewModel"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListViewModel" />
+            type="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListViewModel" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListFragment">
+        android:orientation="vertical"
+        tools:context="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@{viewModel.header}" />
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.header}"
+            android:textAlignment="center"
+            android:typeface="monospace" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/performersList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:layoutManager="LinearLayoutManager"
             app:addItemDecoration="@{fragment.divider}"
-            tools:listitem="@layout/fragment_performers_item"/>
+            tools:listitem="@layout/fragment_users_item"/>
 
-    </FrameLayout>
+    </LinearLayout>
 </layout>
 
 

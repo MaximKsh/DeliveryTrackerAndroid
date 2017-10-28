@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.Observable
 import android.os.Bundle
 import android.view.MenuItem
+import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerViewModelFactory
 import com.kvteam.deliverytracker.performerapp.R
@@ -33,7 +34,7 @@ class MainActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: AutoClearedValue<ActivityMainBinding>
 
     override val checkHasAccountOnResume
             get() = true
@@ -42,25 +43,28 @@ class MainActivity : DeliveryTrackerActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        this.binding = DataBindingUtil
-                .setContentView(this, com.kvteam.deliverytracker.performerapp.R.layout.activity_main)
+        val binding = DataBindingUtil
+                .setContentView<ActivityMainBinding>(
+                        this,
+                        com.kvteam.deliverytracker.performerapp.R.layout.activity_main)
+        this.binding = AutoClearedValue(
+                this,
+                binding,
+                {
+                    it?.executePendingBindings()
+                    it?.unbind()
+                    it?.activity = null
+                    it?.viewModel = null
+                })
         val viewModel = ViewModelProviders
                 .of(this, vmFactory)
                 .get(MainViewModel::class.java)
-        this.binding.viewModel = viewModel
-        this.binding.activity = this
+        this.binding.value?.viewModel = viewModel
+        this.binding.value?.activity = this
 
         if (savedInstanceState == null) {
             viewModel.selectedBottomMenu.value = performersMenu
         }
         viewModel.selectedBottomMenu.observe(this, Observer{ menuItemMapper[it]?.invoke() })
-    }
-
-    override fun onDestroy() {
-        this.binding.executePendingBindings()
-        this.binding.unbind()
-        this.binding.viewModel = null
-        this.binding.activity = null
-        super.onDestroy()
     }
 }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kvteam.deliverytracker.performerapp">
 
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:name=".PerformerApplication"
         android:allowBackup="true"
@@ -11,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.login.LoginActivity" />
+        <activity android:name=".ui.confirm.ConfirmDataActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <service
             android:name="com.kvteam.deliverytracker.core.session.SessionService"
@@ -33,7 +36,6 @@
                 android:resource="@xml/account_authenticator" />
         </service>
 
-        <activity android:name=".ui.confirm.ConfirmDataActivity"></activity>
     </application>
 
 </manifest>

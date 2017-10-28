@@ -5,8 +5,8 @@ import com.kvteam.deliverytracker.core.dagger.keys.ViewModelKey
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataViewModel
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginViewModel
 import com.kvteam.deliverytracker.performerapp.ui.main.MainViewModel
-import com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListViewModel
 import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskViewModel
+import com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -33,9 +33,14 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TaskViewModel::class)
     internal abstract fun taskViewModel(taskViewModel: TaskViewModel): ViewModel
-
+/*
     @Binds
     @IntoMap
     @ViewModelKey(PerformersListViewModel::class)
     internal abstract fun performersListViewModel(performersListViewModel: PerformersListViewModel): ViewModel
+        */
+    @Binds
+    @IntoMap
+    @ViewModelKey(UsersListViewModel::class)
+    internal abstract fun usersListViewModel(usersListViewModel: UsersListViewModel): ViewModel
 }

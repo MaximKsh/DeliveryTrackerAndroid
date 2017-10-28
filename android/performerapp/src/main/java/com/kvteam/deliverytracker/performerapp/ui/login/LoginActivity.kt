@@ -12,6 +12,7 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
+import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import dagger.android.AndroidInjection
 import com.kvteam.deliverytracker.performerapp.databinding.ActivityLoginBinding
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
@@ -24,34 +25,42 @@ class LoginActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var vmFactory: DeliveryTrackerViewModelFactory
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: AutoClearedValue<ActivityLoginBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        this.binding = DataBindingUtil
-                .setContentView(this, com.kvteam.deliverytracker.performerapp.R.layout.activity_login)
+        val binding = DataBindingUtil
+                .setContentView<ActivityLoginBinding>(
+                        this,
+                        com.kvteam.deliverytracker.performerapp.R.layout.activity_login)
+        this.binding = AutoClearedValue(
+                this,
+                binding,
+                {
+                    it?.executePendingBindings()
+                    it?.unbind()
+                    it?.activity = null
+                    it?.viewModel = null
+                })
         val viewModel = ViewModelProviders
                 .of(this, vmFactory)
                 .get(LoginViewModel::class.java)
-        this.binding.viewModel = viewModel
-        this.binding.activity = this
+        this.binding.value?.viewModel = viewModel
+        this.binding.value?.activity = this
 
+        if(savedInstanceState == null) {
+            viewModel.username.value = "Rdpasz26f3"
+            viewModel.password.value = "123qQ!"
+        }
         if(intent.getBooleanExtra(SETTINGS_CONTEXT, false)) {
             viewModel.openedFromSettings = true
         }
     }
 
-    override fun onDestroy() {
-        this.binding.executePendingBindings()
-        this.binding.unbind()
-        this.binding.viewModel = null
-        this.binding.activity = null
-        super.onDestroy()
-    }
-
     fun onSignInClicked(v: View) {
         val ctx = this
+        val binding = binding.value ?: return
         val fromSettings = binding.viewModel?.openedFromSettings ?: false
         val username = binding.viewModel?.username?.value
         val password = binding.viewModel?.password?.value

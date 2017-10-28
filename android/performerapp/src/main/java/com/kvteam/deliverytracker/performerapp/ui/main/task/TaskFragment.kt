@@ -38,7 +38,15 @@ class TaskFragment : Fragment() {
                 R.layout.fragment_task,
                 container,
                 false)
-        binding = AutoClearedValue(this, dataBinding)
+        binding = AutoClearedValue(
+                this,
+                dataBinding,
+                {
+                    it?.executePendingBindings()
+                    it?.unbind()
+                    it?.fragment = null
+                    it?.viewModel = null
+                })
         return dataBinding.root
     }
 
