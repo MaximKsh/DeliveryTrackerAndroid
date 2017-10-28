@@ -7,6 +7,8 @@ import com.kvteam.deliverytracker.performerapp.dagger.components.MainActivitySub
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
 import dagger.android.AndroidInjector
 import dagger.android.ActivityKey
@@ -28,6 +30,14 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskFragmentModule::class))
     internal abstract fun taskFragment(): TaskFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(MyTasksListFragmentModule::class))
+    internal abstract fun myTasksListFragment(): MyTasksListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(UndistributedTasksListFragmentModule::class))
+    internal abstract fun undistributedTasksListFragment(): UndistributedTasksListFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(PerformersListFragmentModule::class))

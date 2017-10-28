@@ -1,5 +1,5 @@
 package com.kvteam.deliverytracker.core.ui
 
-import dagger.android.support.DaggerFragment
+import android.support.v4.app.Fragment
 
-abstract class DeliveryTrackerFragment: DaggerFragment()
+abstract class DeliveryTrackerFragment: Fragment()

@@ -2,6 +2,12 @@
     <string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>
 
     <string name="app_name">DTCore</string>
+    <string name="Core_TaskState_NewUndistributed">New undistributed</string>
+    <string name="Core_TaskState_New">New</string>
+    <string name="Core_TaskState_InWork">In work</string>
+    <string name="Core_TaskState_Performed">Performed</string>
+    <string name="Core_TaskState_Cancelled">Cancelled</string>
+    <string name="Core_TaskState_CancelledByManager">CancelledByManager</string>
     <string name="ServerMessage_ServerError_InvalidInputParameter">Invalid input parameter</string>
     <string name="ServerMessage_ServerError_UserNotFound">User not found</string>
     <string name="ServerMessage_ServerError_UserWithoutRole">User without role</string>

@@ -2,6 +2,8 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,19 +36,17 @@ class NavigationController (private val mainActivity: MainActivity) {
     }
 
     fun navigateToMyTasks() {
-        navigateToTask()
-//        val fragment = ManagersListFragment()
-//        fragmentManager.beginTransaction()
-//                .replace(containerId, fragment)
-//                .commitAllowingStateLoss()
+        val fragment = MyTasksListFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
     }
 
     fun navigateToUndistributedTasks() {
-        navigateToTask()
-//        val fragment = ManagersListFragment()
-//        fragmentManager.beginTransaction()
-//                .replace(containerId, fragment)
-//                .commitAllowingStateLoss()
+        val fragment = UndistributedTasksListFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
     }
 
 }

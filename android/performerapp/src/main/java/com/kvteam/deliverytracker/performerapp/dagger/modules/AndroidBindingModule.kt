@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import com.kvteam.deliverytracker.core.dagger.modules.SessionServiceModule
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
-import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
 import com.kvteam.deliverytracker.core.session.SessionService
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity

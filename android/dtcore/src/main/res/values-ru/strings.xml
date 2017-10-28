@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DTCore</string>
+    <string name="Core_TaskState_NewUndistributed">Новое нераспределенное</string>
+    <string name="Core_TaskState_New">Новое</string>
+    <string name="Core_TaskState_InWork">В работе</string>
+    <string name="Core_TaskState_Performed">Выполнено</string>
+    <string name="Core_TaskState_Cancelled">Отменено</string>
+    <string name="Core_TaskState_CancelledByManager">Отменено управляющим</string>
     <string name="ServerMessage_ServerError_InvalidInputParameter">Некорректный параметр запроса</string>
     <string name="ServerMessage_ServerError_UserNotFound">Пользователь не найден</string>
     <string name="ServerMessage_ServerError_UserWithoutRole">Пользователь без роли</string>
