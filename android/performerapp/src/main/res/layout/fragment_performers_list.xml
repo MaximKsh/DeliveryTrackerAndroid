@@ -1,0 +1,35 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="fragment"
+            type="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.kvteam.deliverytracker.performerapp.ui.main.performerslist.PerformersListFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@{viewModel.header}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/performersList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"
+            app:addItemDecoration="@{fragment.divider}"
+            tools:listitem="@layout/fragment_performers_item"/>
+
+    </FrameLayout>
+</layout>
+
+

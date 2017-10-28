@@ -2,16 +2,18 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import com.kvteam.deliverytracker.core.dagger.modules.SessionServiceModule
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
+import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
 import com.kvteam.deliverytracker.core.session.SessionService
-import com.kvteam.deliverytracker.performerapp.ConfirmDataActivity
-import com.kvteam.deliverytracker.performerapp.LoginActivity
-import com.kvteam.deliverytracker.performerapp.MainActivity
+import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
+import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
+import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 internal abstract class AndroidBindingModule {
+
     @ActivityScope
     @ContributesAndroidInjector(modules = arrayOf(LoginActivityModule::class))
     internal abstract fun loginActivity(): LoginActivity

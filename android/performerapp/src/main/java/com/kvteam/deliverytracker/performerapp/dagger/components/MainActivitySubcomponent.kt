@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.performerapp.dagger.components
 
-import com.kvteam.deliverytracker.performerapp.MainActivity
+import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 

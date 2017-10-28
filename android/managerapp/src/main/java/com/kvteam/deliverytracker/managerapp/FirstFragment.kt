@@ -1,21 +1,13 @@
 package com.kvteam.deliverytracker.managerapp
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.app.Activity
 import android.widget.TextView
-import com.kvteam.deliverytracker.core.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.managerapp.dagger.*
-import dagger.android.AndroidInjection
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_first.*
-import javax.inject.Inject
 
 
 class FirstFragment : DeliveryTrackerFragment() {

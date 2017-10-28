@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.app.Activity
-import com.kvteam.deliverytracker.performerapp.ConfirmDataActivity
+import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.dagger.components.ConfirmDataActivitySubcomponent
 import dagger.Binds
 import dagger.Module

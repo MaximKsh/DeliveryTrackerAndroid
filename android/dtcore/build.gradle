@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -23,6 +25,10 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
 }
 
 kapt {
@@ -32,7 +38,12 @@ kapt {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation "android.arch.lifecycle:extensions:1.0.0-rc1"
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+
     testImplementation 'junit:junit:4.12'
+
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -53,6 +64,8 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.11'
     kapt "com.google.dagger:dagger-android-processor:2.11"
     compile "org.jetbrains.kotlin:kotlin-reflect:1.1.51"
+
+    kapt 'com.android.databinding:compiler:3.0.0-rc2'
 }
 repositories {
     mavenCentral()

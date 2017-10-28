@@ -1,8 +1,8 @@
 package com.kvteam.deliverytracker.managerapp
 
 import android.accounts.AccountManager
+import android.app.Activity
 import android.os.Bundle
-import com.kvteam.deliverytracker.core.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.ErrorListModel
 import com.kvteam.deliverytracker.core.models.UserModel
@@ -10,7 +10,7 @@ import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : DeliveryTrackerActivity() {
+class LoginActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -87,9 +87,9 @@ class LoginActivity : DeliveryTrackerActivity() {
             })
         })
 */
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.container, FirstFragment())
-        transaction.commit()
+        //val transaction = supportFragmentManager.beginTransaction()
+        //transaction.add(R.id.container, FirstFragment())
+        //transaction.commit()
     }
 
     private fun onGettingResponse(resp: UserModel) {
@@ -99,7 +99,7 @@ class LoginActivity : DeliveryTrackerActivity() {
     private fun onError(resp: ErrorListModel) {
 
     }
-
+/*
     private fun toggleState() {
         val transaction = supportFragmentManager.beginTransaction()
         val top = supportFragmentManager.findFragmentById(R.id.container)
@@ -117,5 +117,5 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         transaction.addToBackStack(null)
         transaction.commit()
-    }
+    }*/
 }

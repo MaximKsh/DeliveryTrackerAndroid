@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.performerapp.dagger.components
 
-import com.kvteam.deliverytracker.performerapp.ConfirmDataActivity
+import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 

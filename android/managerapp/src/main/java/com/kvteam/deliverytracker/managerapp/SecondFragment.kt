@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import dagger.android.support.AndroidSupportInjection
 
 class SecondFragment : DeliveryTrackerFragment() {
