@@ -3,13 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="com.kvteam.deliverytracker.core.tasks.TaskState"/>
         <variable
             name="task"
             type="com.kvteam.deliverytracker.core.models.TaskModel"/>
+        <variable
+            name="taskState"
+            type="com.kvteam.deliverytracker.core.tasks.TaskState"/>
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1"/>
     </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:background="@{taskState == TaskState.NewUndistributed ? @color/taskNewUndistributedColor : (taskState == TaskState.New ? @color/taskNewColor : (taskState == TaskState.InWork ? @color/taskInWorkColor : (taskState == TaskState.Performed ? @color/taskPerformedColor : (taskState == TaskState.Cancelled ? @color/taskCancelledColor : (taskState == TaskState.CancelledByManager ? @color/taskCancelledByManagerColor : 0)))))}"
+        android:onClick="@{() -> onClick.invoke(task)}"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="wrap_content"
@@ -18,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{task.state}"/>
+            android:text="@{taskState.localizationStringId}"/>
     </LinearLayout>
 </layout>
 

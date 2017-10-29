@@ -1,4 +1,5 @@
 <resources>
+    <string name="Core_EmptyString" translatable="false" />
     <string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>
 
     <string name="app_name">DTCore</string>

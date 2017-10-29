@@ -4,4 +4,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="PerformerApp_TaskFragment_ReserveButton">Reserve</string>
+    <string name="PerformerApp_TaskFragment_InWorkButton">Take into work</string>
+    <string name="PerformerApp_TaskFragment_PerformButton">Perform</string>
+    <string name="PerformerApp_TaskFragment_CancelButton">Cancel</string>
 </resources>

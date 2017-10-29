@@ -63,7 +63,7 @@ class MainActivity : DeliveryTrackerActivity() {
         this.binding.value?.activity = this
 
         if (savedInstanceState == null) {
-            viewModel.selectedBottomMenu.value = performersMenu
+            viewModel.selectedBottomMenu.value = myTasksMenu
         }
         viewModel.selectedBottomMenu.observe(this, Observer{ menuItemMapper[it]?.invoke() })
     }

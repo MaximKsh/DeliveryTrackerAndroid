@@ -4,54 +4,43 @@ import com.kvteam.deliverytracker.core.R
 
 enum class TaskState {
     NewUndistributed {
-        override fun toString() = "TaskState_NewUndistributed"
-        override fun getLocalizationId() = R.string.Core_TaskState_NewUndistributed
-        override fun getLocalizationName() = "Core_TaskState_NewUndistributed"
+        override val simpleName = "TaskState_NewUndistributed"
+        override val localizationStringId = R.string.Core_TaskState_NewUndistributed
+        override val localizationStringName = "Core_TaskState_NewUndistributed"
     },
 
     New {
-        override fun toString() = "TaskState_New"
-        override fun getLocalizationId() = R.string.Core_TaskState_New
-        override fun getLocalizationName() = "Core_TaskState_New"
+        override val simpleName = "TaskState_New"
+        override val localizationStringId = R.string.Core_TaskState_New
+        override val localizationStringName = "Core_TaskState_New"
     },
 
     InWork {
-        override fun toString() = "TaskState_InWork"
-        override fun getLocalizationId() = R.string.Core_TaskState_InWork
-        override fun getLocalizationName() = "Core_TaskState_InWork"
+        override val simpleName = "TaskState_InWork"
+        override val localizationStringId = R.string.Core_TaskState_InWork
+        override val localizationStringName = "Core_TaskState_InWork"
     },
 
     Performed {
-        override fun toString() = "TaskState_Performed"
-        override fun getLocalizationId() = R.string.Core_TaskState_Performed
-        override fun getLocalizationName() = "Core_TaskState_Performed"
+        override val simpleName = "TaskState_Performed"
+        override val localizationStringId = R.string.Core_TaskState_Performed
+        override val localizationStringName = "Core_TaskState_Performed"
     },
 
     Cancelled {
-        override fun toString() = "TaskState_Cancelled"
-        override fun getLocalizationId() = R.string.Core_TaskState_Cancelled
-        override fun getLocalizationName() = "Core_TaskState_Cancelled"
+        override val simpleName = "TaskState_Cancelled"
+        override val localizationStringId = R.string.Core_TaskState_Cancelled
+        override val localizationStringName = "Core_TaskState_Cancelled"
     },
 
     CancelledByManager {
-        override fun toString() = "TaskState_CancelledByManager"
-        override fun getLocalizationId() = R.string.Core_TaskState_CancelledByManager
-        override fun getLocalizationName() = "Core_TaskState_CancelledByManager"
+        override val simpleName = "TaskState_CancelledByManager"
+        override val localizationStringId = R.string.Core_TaskState_CancelledByManager
+        override val localizationStringName = "Core_TaskState_CancelledByManager"
     }
     ;
 
-    abstract fun getLocalizationId(): Int
-    abstract fun getLocalizationName(): String
-
-    fun getByName(name: String): TaskState? {
-        return when(name){
-            NewUndistributed.toString() -> NewUndistributed
-            New.toString() -> New
-            InWork.toString() -> InWork
-            Performed.toString() -> Performed
-            Cancelled.toString() -> Cancelled
-            CancelledByManager.toString() -> CancelledByManager
-            else -> null
-        }
-    }
+    abstract val simpleName: String
+    abstract val localizationStringId: Int
+    abstract val localizationStringName: String
 }

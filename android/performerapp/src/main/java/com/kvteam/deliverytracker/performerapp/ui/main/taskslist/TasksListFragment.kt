@@ -8,12 +8,14 @@ import android.support.v7.widget.DividerItemDecoration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerViewModelFactory
 
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.databinding.FragmentTasksListBinding
+import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -21,6 +23,8 @@ import javax.inject.Inject
 open class TasksListFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var vmFactory: DeliveryTrackerViewModelFactory
+    @Inject
+    lateinit var navigationController: NavigationController
 
     lateinit var divider: DividerItemDecoration
 
@@ -61,11 +65,21 @@ open class TasksListFragment : DeliveryTrackerFragment() {
 
         this.adapter = AutoClearedValue(
                 this,
-                TasksListAdapter())
+                TasksListAdapter(this::onTaskClicked),
+                {
+                    it?.onClick = null
+                })
 
         binding.value?.viewModel = viewModel
         binding.value?.fragment = this
         binding.value?.tasksList?.adapter = this.adapter.value
+    }
+
+    private fun onTaskClicked(task: TaskModel) {
+        val id = task.id
+        if(id != null) {
+            navigationController.navigateToTask(id)
+        }
     }
 
 }

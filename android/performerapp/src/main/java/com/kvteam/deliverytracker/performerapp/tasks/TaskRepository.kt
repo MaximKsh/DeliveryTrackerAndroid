@@ -15,7 +15,8 @@ class TaskRepository(
         val result = this.webservice.post<TaskModel>(
                 "/api/performer/reserve_task",
                 requestObj,
-                TaskModel::class.java)
+                TaskModel::class.java,
+                true)
         return result.responseEntity
     }
 
@@ -24,25 +25,28 @@ class TaskRepository(
         val result = this.webservice.post<TaskModel>(
                 "/api/performer/take_task_to_work",
                 requestObj,
-                TaskModel::class.java)
+                TaskModel::class.java,
+                true)
         return result.responseEntity
     }
 
     override fun performTask(taskId: UUID): TaskModel? {
-        val requestObj = TaskModel(taskId, state = TaskState.Performed.toString())
+        val requestObj = TaskModel(taskId, state = TaskState.Performed.simpleName)
         val result = this.webservice.post<TaskModel>(
                 "/api/performer/complete_task",
                 requestObj,
-                TaskModel::class.java)
+                TaskModel::class.java,
+                true)
         return result.responseEntity
     }
 
     override fun cancelTask(taskId: UUID): TaskModel? {
-        val requestObj = TaskModel(taskId, state = TaskState.Cancelled.toString())
+        val requestObj = TaskModel(taskId, state = TaskState.Cancelled.simpleName)
         val result = this.webservice.post<TaskModel>(
                 "/api/performer/complete_task",
                 requestObj,
-                TaskModel::class.java)
+                TaskModel::class.java,
+                true)
         return result.responseEntity
     }
 

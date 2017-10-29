@@ -7,6 +7,7 @@ import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTa
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class NavigationController (private val mainActivity: MainActivity) {
     private val containerId: Int
@@ -14,15 +15,21 @@ class NavigationController (private val mainActivity: MainActivity) {
     private val fragmentManager: FragmentManager
         get() = mainActivity.supportFragmentManager
 
-    fun navigateToTask() {
-        val fragment = TaskFragment()
+    fun closeCurrentFragment() {
+        fragmentManager.popBackStack()
+    }
+
+    fun navigateToTask(taskId: UUID) {
+        val fragment = TaskFragment.create(taskId)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 
     fun navigateToManagers() {
         val fragment = ManagersListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
@@ -30,6 +37,7 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     fun navigateToPerformers() {
         val fragment = PerformersListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
@@ -37,6 +45,7 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     fun navigateToMyTasks() {
         val fragment = MyTasksListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
@@ -44,6 +53,7 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     fun navigateToUndistributedTasks() {
         val fragment = UndistributedTasksListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()

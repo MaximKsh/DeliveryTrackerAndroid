@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">performerapp</string>
+    <string name="title_activity_main">11</string>
+    <string name="hello_blank_fragment">11</string>
+    <string name="PerformerApp_TaskFragment_ReserveButton">Зарезервировать</string>
+    <string name="PerformerApp_TaskFragment_InWorkButton">Взять в работу</string>
+    <string name="PerformerApp_TaskFragment_PerformButton">Завершить</string>
+    <string name="PerformerApp_TaskFragment_CancelButton">Отменить</string>
+</resources>

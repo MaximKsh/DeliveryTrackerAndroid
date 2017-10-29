@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.kvteam.deliverytracker.core.tasks.TaskState"/>
+        <import type="com.kvteam.deliverytracker.performerapp.R"/>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.kvteam.deliverytracker.performerapp.ui.main.task.TaskViewModel" />
@@ -29,27 +32,27 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.number}" />
+                    android:text="@{viewModel.task.number}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.shippingDesc}" />
+                    android:text="@{viewModel.task.shippingDesc}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.details}" />
+                    android:text="@{viewModel.task.details}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.address}" />
+                    android:text="@{viewModel.task.address}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.state}" />
+                    android:text="@{viewModel.taskState.localizationStringId != 0 ? viewModel.taskState.localizationStringId : R.string.Core_EmptyString}" />
             </LinearLayout>
         </ScrollView>
 
@@ -58,15 +61,39 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:onClick="@{fragment::onReserveButtonClicked}"
+                android:enabled="@{!viewModel.operationPending}"
+                android:visibility="@{viewModel.taskState == TaskState.NewUndistributed ? View.VISIBLE: View.GONE}"
+                android:text="@string/PerformerApp_TaskFragment_ReserveButton" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:onClick="@{fragment::onTakeIntoWorkButtonClicked}"
+                android:enabled="@{!viewModel.operationPending}"
+                android:visibility="@{TaskState.New == viewModel.taskState? View.VISIBLE : View.GONE}"
+                android:text="@string/PerformerApp_TaskFragment_InWorkButton" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{fragment::onPerformButtonClicked}"
+                android:enabled="@{!viewModel.operationPending}"
+                android:visibility="@{TaskState.InWork == viewModel.taskState? View.VISIBLE : View.GONE}"
+                android:text="@string/PerformerApp_TaskFragment_PerformButton" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{fragment::onCancelButtonClicked}"
+                android:enabled="@{!viewModel.operationPending}"
+                android:visibility="@{TaskState.InWork == viewModel.taskState? View.VISIBLE: View.GONE}"
+                android:text="@string/PerformerApp_TaskFragment_CancelButton" />
+
         </LinearLayout>
 
     </LinearLayout>
