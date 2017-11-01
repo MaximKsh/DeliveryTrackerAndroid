@@ -16,11 +16,10 @@ class AddCompanyActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_company)
 
-        setSupportActionBar(this.toolbar_top)
-        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+         setSupportActionBar(this.toolbar_top)
+         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val transaction = supportFragmentManager.beginTransaction()
-        val container = supportFragmentManager.findFragmentById(R.id.container)
         transaction.add(R.id.container, LocationFragment())
         transaction.addToBackStack(null)
         transaction.commit()
