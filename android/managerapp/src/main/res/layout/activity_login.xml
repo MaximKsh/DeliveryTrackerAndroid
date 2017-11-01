@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff"
+    android:background="@color/colorWhite"
     android:padding="30dp"
     android:gravity="center_horizontal"
     tools:context="com.kvteam.deliverytracker.managerapp.LoginActivity">
 
 
     <ImageView
+        android:contentDescription="@string/main_logo"
         android:id="@+id/imageView"
         android:layout_width="150dp"
         android:layout_height="100dp"
@@ -27,12 +28,14 @@
         >
 
         <EditText
+            android:id="@+id/etLoginField"
             android:layout_width="match_parent"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
             android:layout_height="60dp"
             android:ems="10"
             android:inputType="text"
+            android:theme="@style/EditTextTheme"
             android:hint="@string/enter_code_hint" />
 
 
@@ -43,7 +46,7 @@
             android:layout_marginTop="13dp"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:src="@drawable/ic_assignment_ind_black_24dp" />
+            android:src="@drawable/ic_insert_invitation_black_24dp" />
 
     </RelativeLayout>
 
@@ -55,18 +58,20 @@
         >
 
         <EditText
+            android:id="@+id/etPasswordField"
             android:layout_width="match_parent"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
             android:layout_height="60dp"
             android:ems="10"
             android:inputType="textPassword"
+            android:theme="@style/EditTextTheme"
             android:hint="@string/enter_password_hint" />
 
 
         <ImageView
             android:contentDescription="@string/password_hint_icon"
-            android:id="@+id/ivPassportHintIcon"
+            android:id="@+id/ivPasswordHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
             android:layout_width="wrap_content"
@@ -76,15 +81,17 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/btnLogin"
+        android:onClick="onLoginClick"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textColor="#ffffff"
-        android:background="#2F53A1"
+        android:theme="@style/PrimaryButtonTheme"
         />
 
     <TextView
+        android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -103,12 +110,14 @@
             android:text="@string/add_your_company" />
 
         <Button
+            android:id="@+id/btnAddCompany"
+            android:onClick="onAddCompanyClick"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add"
             android:background="@drawable/button_border"
-            android:textColor="#2F53A1"
+            android:theme="@style/OutlineButtonTheme"
             />
     </LinearLayout>
 

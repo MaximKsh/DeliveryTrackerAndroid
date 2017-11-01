@@ -4,6 +4,7 @@ import com.kvteam.deliverytracker.core.dagger.modules.SessionServiceModule
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
 import com.kvteam.deliverytracker.core.session.SessionService
+import com.kvteam.deliverytracker.managerapp.AddCompanyActivity
 import com.kvteam.deliverytracker.managerapp.LoginActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -14,6 +15,10 @@ internal abstract class AndroidBindingModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = arrayOf(LoginActivityModule::class))
     internal abstract fun loginActivity(): LoginActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = arrayOf(AddCompanyActivityModule::class))
+    internal abstract fun addCompanyActivity(): AddCompanyActivity
 
     @ServiceScope
     @ContributesAndroidInjector(modules = arrayOf(SessionServiceModule::class))

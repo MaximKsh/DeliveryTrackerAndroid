@@ -1,15 +1,13 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
-import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.managerapp.LoginActivity
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
-import dagger.android.AndroidInjector
-import dagger.android.ActivityKey
-import dagger.multibindings.IntoMap
 import dagger.Binds
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import dagger.android.ActivityKey
+import dagger.android.AndroidInjector
+import dagger.multibindings.IntoMap
 
 
 @Module(subcomponents = arrayOf(LoginActivitySubcomponent::class))

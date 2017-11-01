@@ -14,4 +14,30 @@
         <item name="android:windowFullscreen">false</item>
     </style>
 
+    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+    </style>
+
+    <style name="PrimaryButtonTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="OutlineButtonTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@drawable/button_border</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="LinearLayoutContainerTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:padding">30dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/colorWhite</item>
+    </style>
+
 </resources>
