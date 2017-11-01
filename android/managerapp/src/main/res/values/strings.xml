@@ -2,6 +2,13 @@
     <string name="app_name">DeliveryTracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="first_fragment">FIRST FRAGMENT</string>
-    <string name="second_fragment">SECOND FRAGMENT</string>
+    <string name="enter_code_hint">Введите код приглашения</string>
+    <string name="enter_password_hint">Придумайте пароль</string>
+    <string name="login">Войти</string>
+    <string name="forgot_password">забыли пароль</string>
+    <string name="add_your_company">Хотите добавить свою компанию?</string>
+    <string name="add">Добавить</string>
+    <string name="code_hint_icon">Code hint icon</string>
+    <string name="password_hint_icon">Password hint icon</string>
+
 </resources>
