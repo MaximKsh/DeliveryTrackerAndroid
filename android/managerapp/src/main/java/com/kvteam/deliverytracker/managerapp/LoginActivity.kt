@@ -28,6 +28,7 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     fun onLoginClick(view: View) {
-
+        val intent = Intent(this, ApproveUserInfoActivity::class.java)
+        startActivity(intent)
     }
 }

@@ -10,8 +10,7 @@
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"
-        />
+        android:required="true" />
 
     <application
         android:name=".ManagerApplication"
@@ -21,7 +20,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -48,11 +46,20 @@
 
         <activity
             android:name=".AddCompanyActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBzt6RkXyoAk7t91NVupbST9GwM4ST_wps"/>
+            android:value="AIzaSyBzt6RkXyoAk7t91NVupbST9GwM4ST_wps" />
+
+        <activity
+            android:name=".ApproveUserInfoActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        />
     </application>
+
 </manifest>

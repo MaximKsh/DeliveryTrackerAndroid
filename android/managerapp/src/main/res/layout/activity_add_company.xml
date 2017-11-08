@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
+    android:id="@+id/testScroll"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -35,24 +36,10 @@
                 app:layout_collapseMode="parallax"/>
 
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_top"
-                android:layout_height="60dp"
-                android:layout_width="match_parent"
-                android:theme="@style/ToolbarColoredBackArrow"
-                android:background="@color/colorPrimary"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/company_addition"
-                android:gravity = "center"
-                android:textSize="18sp"
-                android:textColor="@color/colorWhite"
-                android:id="@+id/toolbar_title" />
-            </android.support.v7.widget.Toolbar>
+            <include
+                layout="@layout/toolbar"
+                app:layout_collapseMode="pin"
+                />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -189,7 +176,7 @@
                 android:layout_marginTop="13dp"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_local_phone_black_24dp" />
+                android:src="@drawable/ic_phone_black_24dp" />
 
         </RelativeLayout>
 

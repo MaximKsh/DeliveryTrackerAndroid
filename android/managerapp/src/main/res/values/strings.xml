@@ -17,8 +17,21 @@
     <string name="enter_surname_hint">Фамилия</string>
     <string name="enter_phone_number_hint">Номер телефона</string>
     <string name="done">Продолжить</string>
+    <string name="user_data_approval">Подтвердите ваши данные</string>
+    <string name="tasks">Задачи</string>
+    <string name="managers">Руководители</string>
+    <string name="performers">Исполнители</string>
+    <string name="my_tasks">Мои задачи</string>
+    <string name="edit">Изменить</string>
+    <string name="add_user">Добавить</string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>
