@@ -14,8 +14,8 @@ interface IInstanceManager {
     fun getUser(username: String): UserModel?
     fun inviteManager(preliminaryUserInfo: UserModel): InvitationModel?
     fun invitePerformer(preliminaryUserInfo: UserModel): InvitationModel?
-    fun getPerformers(): List<UserModel>?
-    fun getManagers(): List<UserModel>?
+    fun getPerformers(resetCache: Boolean = false): List<UserModel>?
+    fun getManagers(resetCache: Boolean = false): List<UserModel>?
     fun deleteManager(username: String): Boolean
     fun deletePerformer(username: String): Boolean
 }

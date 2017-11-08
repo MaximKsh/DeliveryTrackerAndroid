@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat.checkSelfPermission
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import kotlinx.android.synthetic.main.fragment_users_list.*
 
 
 open class UsersListFragment : DeliveryTrackerFragment() {
@@ -71,7 +72,6 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 {
                     it?.onCallClicked = null
                 })
-
         binding.value?.viewModel = viewModel
         binding.value?.fragment = this
         binding.value?.performersList?.adapter = this.adapter.value

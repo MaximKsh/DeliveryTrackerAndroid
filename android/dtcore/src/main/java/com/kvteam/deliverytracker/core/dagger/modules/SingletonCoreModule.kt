@@ -8,6 +8,8 @@ import com.kvteam.deliverytracker.core.instance.InstanceManager
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.ISessionInfo
 import com.kvteam.deliverytracker.core.session.Session
+import com.kvteam.deliverytracker.core.storage.IStorage
+import com.kvteam.deliverytracker.core.storage.Storage
 import com.kvteam.deliverytracker.core.webservice.HttpManager
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
 import com.kvteam.deliverytracker.core.webservice.IWebservice
@@ -52,7 +54,13 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun instanceManager(webservice: IWebservice): IInstanceManager {
-        return InstanceManager(webservice)
+    fun instanceManager(webservice: IWebservice, storage: IStorage): IInstanceManager {
+        return InstanceManager(webservice, storage)
+    }
+
+    @Provides
+    @Singleton
+    fun storage(app: T): IStorage {
+        return Storage(app.applicationContext)
     }
 }

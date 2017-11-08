@@ -9,7 +9,7 @@ import com.kvteam.deliverytracker.core.session.ISession
 import javax.inject.Inject
 
 class LoginViewModel
-@Inject constructor(val session: ISession) : ViewModel() {
+@Inject constructor() : ViewModel() {
     val username = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val usernameWatcher = DefaultTextWatcher(username)

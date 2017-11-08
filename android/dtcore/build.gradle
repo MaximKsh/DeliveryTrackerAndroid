@@ -38,7 +38,7 @@ kapt {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation "android.arch.lifecycle:extensions:1.0.0-rc1"
+    implementation "android.arch.lifecycle:extensions:1.0.0"
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
 
@@ -66,6 +66,11 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:1.1.51"
 
     kapt 'com.android.databinding:compiler:3.0.0-rc2'
+
+    compile "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    kapt "android.arch.persistence.room:compiler:1.0.0"
+
 }
 repositories {
     mavenCentral()
