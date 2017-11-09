@@ -9,6 +9,11 @@ import com.kvteam.deliverytracker.core.ui.DataBoundListAdapter
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.databinding.FragmentManagerListItemBinding
 import java.util.*
+import android.databinding.ViewDataBinding
+import android.databinding.OnRebindCallback
+import android.support.transition.AutoTransition
+import android.support.transition.TransitionManager
+
 
 class UsersListAdapter(private val userListViewModel: UsersListViewModel)
     : DataBoundListAdapter<UserModel, FragmentManagerListItemBinding>() {
@@ -24,6 +29,15 @@ class UsersListAdapter(private val userListViewModel: UsersListViewModel)
     override fun bind(binding: FragmentManagerListItemBinding, item: UserModel) {
         binding.user = item
         binding.userListViewModel = this.userListViewModel
+
+        binding.addOnRebindCallback(object: OnRebindCallback<FragmentManagerListItemBinding>() {
+            override fun onPreBind(binding: FragmentManagerListItemBinding?): Boolean {
+                val autoTransaction = AutoTransition()
+                autoTransaction.duration = 100
+                TransitionManager.beginDelayedTransition(binding!!.root as ViewGroup, autoTransaction)
+                return super.onPreBind(binding)
+            }
+        })
     }
 
     override fun areItemsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {

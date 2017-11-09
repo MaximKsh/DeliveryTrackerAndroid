@@ -24,6 +24,8 @@
     <string name="my_tasks">Мои задачи</string>
     <string name="edit">Изменить</string>
     <string name="add_user">Добавить</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отменить</string>
 
 
 

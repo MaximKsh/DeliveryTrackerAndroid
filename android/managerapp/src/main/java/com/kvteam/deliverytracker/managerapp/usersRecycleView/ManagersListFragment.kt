@@ -57,7 +57,10 @@ class ManagersListFragment : DeliveryTrackerFragment() {
 
     fun startEditMode() {
         this.userListViewModel.isInEditMode.set(true)
+    }
 
+    fun stopEditMode() {
+        this.userListViewModel.isInEditMode.set(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
