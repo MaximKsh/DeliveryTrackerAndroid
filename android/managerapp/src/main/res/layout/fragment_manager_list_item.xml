@@ -18,12 +18,15 @@
         android:gravity="center_vertical">
 
         <CheckBox
+            android:checked="@{UserListViewModel.selectedUsersList.contains(User.username)}"
             android:visibility="@{UserListViewModel.isInEditMode ? View.VISIBLE : View.GONE}"
             android:id="@+id/selectUser"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
-            android:theme="@style/BrandedCheckBox" />
+            android:theme="@style/BrandedCheckBox"
+            android:tag="@{User.username}"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
