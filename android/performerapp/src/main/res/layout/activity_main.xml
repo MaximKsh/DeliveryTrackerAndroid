@@ -1,40 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kvteam.deliverytracker.performerapp.ui.main.MainActivity">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.MainViewModel" />
-
-        <variable
-            name="activity"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.MainActivity" />
-    </data>
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/flMainActivityContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.kvteam.deliverytracker.performerapp.ui.main.MainActivity">
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bnvNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigation" />
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:selectedItemId="@{viewModel.selectedBottomMenu.value}"
-            app:setOnNavigationItemSelectedListener="@{viewModel.selectedBottomMenuListener}"
-            android:background="?android:attr/windowBackground"
-            app:menu="@menu/bottom_navigation" />
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

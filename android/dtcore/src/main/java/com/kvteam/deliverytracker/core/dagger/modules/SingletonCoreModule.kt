@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.core.dagger.modules
 
 import android.arch.lifecycle.ViewModel
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerViewModelFactory
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.instance.InstanceManager
 import com.kvteam.deliverytracker.core.session.ISession
@@ -21,13 +20,6 @@ import javax.inject.Singleton
 
 @Module
 abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
-    @Provides
-    @Singleton
-    fun viewModelFactory(
-            creators: MutableMap<Class<out ViewModel>, Provider<ViewModel>>): DeliveryTrackerViewModelFactory {
-        return DeliveryTrackerViewModelFactory(creators)
-    }
-
     @Provides
     @Singleton
     fun httpManager(): IHttpManager {

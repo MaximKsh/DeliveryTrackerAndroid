@@ -1,39 +1,19 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="fragment"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment">
 
-        <variable
-            name="viewModel"
-            type="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListViewModel" />
-    </data>
-
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvUsersList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context="com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/fragment_users_item" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.header}"
-            android:textAlignment="center"
-            android:typeface="monospace" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/performersList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:layoutManager="LinearLayoutManager"
-            app:addItemDecoration="@{fragment.divider}"
-            tools:listitem="@layout/fragment_users_item"/>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>
 
 

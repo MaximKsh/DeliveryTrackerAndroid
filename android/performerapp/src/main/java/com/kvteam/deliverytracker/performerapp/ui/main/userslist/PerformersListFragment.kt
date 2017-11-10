@@ -17,11 +17,16 @@ class PerformersListFragment: UsersListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.value?.viewModel?.header?.set("Performers")
+        if(savedInstanceState != null) {
+            return
+        }
         invokeAsync({
             instanceManager.getPerformers()
         }, {
-            adapter.value?.replace(it)
+            if(it != null) {
+                adapter.value?.items?.addAll(it)
+                adapter.value?.notifyDataSetChanged()
+            }
         })
     }
 }

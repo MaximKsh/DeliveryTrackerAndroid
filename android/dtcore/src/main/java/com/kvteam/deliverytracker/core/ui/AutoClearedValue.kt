@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.arch.lifecycle.OnLifecycleEvent
-import android.databinding.ViewDataBinding
 
 
 class AutoClearedValue<T> {

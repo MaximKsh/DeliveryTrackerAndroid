@@ -7,9 +7,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
-    dataBinding {
-        enabled = true
-    }
+
     defaultConfig {
         applicationId "com.kvteam.deliverytracker.performerapp"
         minSdkVersion 19
@@ -50,21 +48,16 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile project(path: ':dtcore')
 
-    //Dagger 2
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.1'
     compile 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    //Dagger-Android
     compile 'com.google.dagger:dagger-android:2.11'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
     compile 'com.google.dagger:dagger-android-support:2.11'
 
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
 
     kapt 'com.google.dagger:dagger-compiler:2.11'
     kapt "com.google.dagger:dagger-android-processor:2.11"
-
-
-    kapt 'com.android.databinding:compiler:3.0.0-rc2'
 }
 kotlin {
     experimental {
