@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.managerapp.usersRecycleView
 
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
@@ -11,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -31,12 +33,6 @@ import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
-data class MockUserData(
-    val name: String,
-    val surname: String,
-    val avatarUrl: String
-)
-
 class ManagersListFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var vmFactory: DeliveryTrackerViewModelFactory
@@ -46,8 +42,9 @@ class ManagersListFragment : DeliveryTrackerFragment() {
     lateinit var mAddMenuItem: MenuItem
     lateinit var mRemoveMenuItem: MenuItem
     lateinit var mEditMenuItem: MenuItem
+    lateinit var adapt: UsersListAdapter
 
-    val fakeUserList = mutableListOf<UserModel>()
+    var fakeUserList = mutableListOf<UserModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -91,8 +88,24 @@ class ManagersListFragment : DeliveryTrackerFragment() {
                 this.activity.invalidateOptionsMenu()
             }
             R.id.action_remove -> {
-                this.stopEditMode()
-                this.activity.invalidateOptionsMenu()
+               val deleteUsersDialog = AlertDialog.Builder(activity)
+               deleteUsersDialog.setMessage(R.string.delete_users_modal)
+                       .setPositiveButton("Удалить", { dialogInterface, id ->
+                           val userCopied = this.fakeUserList.filter { userModel ->
+                               !this.userListViewModel.selectedUsersList.contains(userModel.username)
+                           }
+                           this.fakeUserList = userCopied as MutableList<UserModel>
+                           if (this.fakeUserList.size == 0) {
+                               this.activity.empty_user_list.visibility = View.VISIBLE
+                           }
+                           adapt.replace(userCopied)
+                           this.stopEditMode()
+                           this.clearSelectedUsers()
+                       })
+                       .setNegativeButton("Отменить", { dialogInterface, id ->
+
+                       })
+               deleteUsersDialog.show()
             }
             R.id.action_add -> {
 
@@ -176,7 +189,7 @@ class ManagersListFragment : DeliveryTrackerFragment() {
 
         this.userListViewModel.selectedUsersList.addOnListChangedCallback(onListChangedCallback)
 
-        val adapt = UsersListAdapter(userListViewModel)
+        adapt = UsersListAdapter(userListViewModel)
         usersList.adapter = adapt
 
         adapt.replace(fakeUserList)
