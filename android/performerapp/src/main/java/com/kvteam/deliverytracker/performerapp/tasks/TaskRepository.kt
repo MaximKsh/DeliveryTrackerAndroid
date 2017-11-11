@@ -2,12 +2,14 @@ package com.kvteam.deliverytracker.performerapp.tasks
 
 import com.google.gson.reflect.TypeToken
 import com.kvteam.deliverytracker.core.models.TaskModel
+import com.kvteam.deliverytracker.core.storage.IStorage
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import java.util.*
 
 class TaskRepository(
-        private val webservice: IWebservice)
+        private val webservice: IWebservice,
+        private val storage: IStorage)
     : ITaskRepository {
 
     override fun reserveTask(taskId: UUID): TaskModel? {
@@ -58,19 +60,49 @@ class TaskRepository(
         return result.responseEntity
     }
 
-    override fun getMyTasks(): List<TaskModel>? {
+    override fun getMyTasks(resetCache: Boolean): List<TaskModel>? {
+        val cacheKey = "my_tasks"
+        if(resetCache) {
+            storage.deleteTasks(cacheKey)
+        } else {
+            val tasks = storage.getTasks(cacheKey)
+            if(tasks.isNotEmpty()) {
+                return tasks
+            }
+        }
+
         val result = this.webservice.get<List<TaskModel>>(
                 "/api/performer/my_tasks",
                 object : TypeToken<ArrayList<TaskModel>>(){}.type,
                 true)
-        return result.responseEntity
+        val newTasks = result.responseEntity
+        if(result.statusCode == 200
+                && newTasks != null) {
+            storage.setTasks(cacheKey, newTasks)
+        }
+        return newTasks
     }
 
-    override fun getUndistributedTasks(): List<TaskModel>? {
+    override fun getUndistributedTasks(resetCache: Boolean): List<TaskModel>? {
+        val cacheKey = "undistributed_tasks"
+        if(resetCache) {
+            storage.deleteTasks(cacheKey)
+        } else {
+            val tasks = storage.getTasks(cacheKey)
+            if(tasks.isNotEmpty()) {
+                return tasks
+            }
+        }
+
         val result = this.webservice.get<List<TaskModel>>(
                 "/api/performer/undistributed_tasks",
                 object : TypeToken<ArrayList<TaskModel>>(){}.type,
                 true)
-        return result.responseEntity
+        val newTasks = result.responseEntity
+        if(result.statusCode == 200
+                && newTasks != null) {
+            storage.setTasks(cacheKey, newTasks)
+        }
+        return newTasks
     }
 }

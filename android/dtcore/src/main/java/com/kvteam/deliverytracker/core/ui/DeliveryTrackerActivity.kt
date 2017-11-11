@@ -32,12 +32,4 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
             finish()
         }
     }
-
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-    }
-
-
 }

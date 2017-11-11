@@ -1,34 +1,28 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.task
 
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
+import com.kvteam.deliverytracker.core.models.TaskModel
+import com.kvteam.deliverytracker.core.tasks.TaskState
+import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerViewModelFactory
-
 import com.kvteam.deliverytracker.performerapp.R
-import com.kvteam.deliverytracker.performerapp.databinding.FragmentTaskBinding
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_task.*
 import java.util.*
 import javax.inject.Inject
 
 class TaskFragment : DeliveryTrackerFragment() {
     @Inject
-    lateinit var vmFactory: DeliveryTrackerViewModelFactory
-    @Inject
     lateinit var taskRepository: ITaskRepository
     @Inject
     lateinit var navigationController: NavigationController
-
-    private lateinit var binding: AutoClearedValue<FragmentTaskBinding>
 
     lateinit var taskId: UUID
         private set
@@ -40,110 +34,93 @@ class TaskFragment : DeliveryTrackerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val dataBinding = DataBindingUtil.inflate<FragmentTaskBinding>(
-                inflater,
+        return inflater?.inflate(
                 R.layout.fragment_task,
                 container,
                 false)
-        binding = AutoClearedValue(
-                this,
-                dataBinding,
-                {
-                    it?.executePendingBindings()
-                    it?.unbind()
-                    it?.fragment = null
-                    it?.viewModel = null
-                })
-        return dataBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProviders
-                .of(this, vmFactory)
-                .get(TaskViewModel::class.java)
-
-        binding.value?.viewModel = viewModel
-        binding.value?.fragment = this
-
         invokeAsync({
-            taskRepository.getTask(taskId)
+            this@TaskFragment.taskRepository.getTask(taskId)
         }, {
-            binding.value?.viewModel?.task?.set(it)
+            if(it != null) {
+                this@TaskFragment.initTask(it)
+            }
         })
     }
 
-    fun onReserveButtonClicked(v: View) {
-        val taskId = binding.value?.viewModel?.task?.get()?.id
-        binding.value?.viewModel?.operationPending?.set(true)
-        if(taskId == null) {
-            return
-        }
+    private fun performTaskAction(action: ((taskId: UUID)-> TaskModel?)) {
+        this.setProcessingState()
         invokeAsync({
-            taskRepository.reserveTask(taskId)
+            action(this@TaskFragment.taskId)
         }, {
             if(it != null) {
-                navigationController.closeCurrentFragment()
+                this@TaskFragment.navigationController.closeCurrentFragment()
             } else {
-                Toast.makeText(activity, "someError", Toast.LENGTH_LONG).show()
+                Toast
+                        .makeText(
+                                this@TaskFragment.activity,
+                                "someError",
+                                Toast.LENGTH_LONG)
+                        .show()
             }
-            binding.value?.viewModel?.operationPending?.set(false)
-        })
-
-    }
-
-    fun onTakeIntoWorkButtonClicked(v: View) {
-        val taskId = binding.value?.viewModel?.task?.get()?.id
-        binding.value?.viewModel?.operationPending?.set(true)
-        if(taskId == null) {
-            return
-        }
-        invokeAsync({
-            taskRepository.takeTaskToWork(taskId)
-        }, {
-            if(it != null) {
-                navigationController.closeCurrentFragment()
-            } else {
-                Toast.makeText(activity, "someError", Toast.LENGTH_LONG).show()
-            }
-            binding.value?.viewModel?.operationPending?.set(false)
+            this@TaskFragment.setProcessingState(false)
         })
     }
 
-    fun onPerformButtonClicked(v: View) {
-        val taskId = binding.value?.viewModel?.task?.get()?.id
-        binding.value?.viewModel?.operationPending?.set(true)
-        if(taskId == null) {
-            return
-        }
-        invokeAsync({
-            taskRepository.performTask(taskId)
-        }, {
-            if(it != null) {
-                navigationController.closeCurrentFragment()
-            } else {
-                Toast.makeText(activity, "someError", Toast.LENGTH_LONG).show()
+    private fun initTask(task: TaskModel) {
+        this@TaskFragment.tvTaskNumber.text = task.number
+        this@TaskFragment.tvShippingDesc.text = task.shippingDesc
+        this@TaskFragment.tvTaskDetails.text = task.details
+        this@TaskFragment.tvTaskAddress.text = task.address
+
+        val state = task.state?.toTaskState()
+        if(state != null) {
+            this@TaskFragment.tvTaskState.text =
+                    this@TaskFragment.getString(state.localizationStringId)
+            when(state) {
+                TaskState.NewUndistributed -> {
+                    this@TaskFragment.bttnReserveTask.visibility = View.VISIBLE
+                    this@TaskFragment.bttnReserveTask.setOnClickListener {
+                        this@TaskFragment.performTaskAction {
+                            this@TaskFragment.taskRepository.reserveTask(it)
+                        }
+                    }
+                }
+                TaskState.New -> {
+                    this@TaskFragment.bttnTakeIntoWorkTask.visibility = View.VISIBLE
+                    this@TaskFragment.bttnTakeIntoWorkTask.setOnClickListener {
+                        this@TaskFragment.performTaskAction {
+                            this@TaskFragment.taskRepository.takeTaskToWork(it)
+                        }
+                    }
+                }
+                TaskState.InWork -> {
+                    this@TaskFragment.bttnPerformTask.visibility = View.VISIBLE
+                    this@TaskFragment.bttnPerformTask.setOnClickListener {
+                        this@TaskFragment.performTaskAction {
+                            this@TaskFragment.taskRepository.performTask(it)
+                        }
+                    }
+                    this@TaskFragment.bttnCancelTask.visibility = View.VISIBLE
+                    this@TaskFragment.bttnCancelTask.setOnClickListener {
+                        this@TaskFragment.performTaskAction {
+                            this@TaskFragment.taskRepository.cancelTask(it)
+                        }
+                    }
+                }
+                else -> {}
             }
-            binding.value?.viewModel?.operationPending?.set(false)
-        })
+        }
     }
 
-    fun onCancelButtonClicked(v: View) {
-        val taskId = binding.value?.viewModel?.task?.get()?.id
-        binding.value?.viewModel?.operationPending?.set(true)
-        if(taskId == null) {
-            return
-        }
-        invokeAsync({
-            taskRepository.cancelTask(taskId)
-        }, {
-            if(it != null) {
-                navigationController.closeCurrentFragment()
-            } else {
-                Toast.makeText(activity, "someError", Toast.LENGTH_LONG).show()
-            }
-            binding.value?.viewModel?.operationPending?.set(false)
-        })
+    private fun setProcessingState(processing: Boolean = true){
+        this.bttnReserveTask.isEnabled = !processing
+        this.bttnTakeIntoWorkTask.isEnabled = !processing
+        this.bttnPerformTask.isEnabled = !processing
+        this.bttnCancelTask.isEnabled = !processing
     }
 
     companion object {

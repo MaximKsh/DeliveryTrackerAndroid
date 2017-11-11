@@ -5,7 +5,7 @@ import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
 @Subcomponent
-interface SessionServiceSubcomponent : AndroidInjector<SessionService> {
+interface ServiceSubcomponents : AndroidInjector<SessionService> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<SessionService>()
 }

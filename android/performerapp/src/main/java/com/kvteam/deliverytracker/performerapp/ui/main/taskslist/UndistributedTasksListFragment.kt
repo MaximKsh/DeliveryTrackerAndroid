@@ -11,11 +11,17 @@ class UndistributedTasksListFragment: TasksListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.value?.viewModel?.header?.set("Undistributed Tasks")
+        if(savedInstanceState != null) {
+            return
+        }
+
         invokeAsync({
             taskRepository.getUndistributedTasks()
         }, {
-            adapter.value?.replace(it)
+            if(it != null) {
+                adapter.value?.items?.addAll(it)
+                adapter.value?.notifyDataSetChanged()
+            }
         })
     }
 }

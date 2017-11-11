@@ -11,11 +11,17 @@ class MyTasksListFragment: TasksListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.value?.viewModel?.header?.set("MyTasks")
+        if(savedInstanceState != null) {
+            return
+        }
+
         invokeAsync({
             taskRepository.getMyTasks()
         }, {
-            adapter.value?.replace(it)
+            if(it != null) {
+                adapter.value?.items?.addAll(it)
+                adapter.value?.notifyDataSetChanged()
+            }
         })
     }
 }

@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import com.kvteam.deliverytracker.core.dagger.modules.SingletonCoreModule
 import com.kvteam.deliverytracker.core.session.ISessionInfo
+import com.kvteam.deliverytracker.core.storage.IStorage
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import com.kvteam.deliverytracker.performerapp.PerformerApplication
 import com.kvteam.deliverytracker.performerapp.session.SessionInfo
@@ -21,7 +22,7 @@ class SingletonModule : SingletonCoreModule<PerformerApplication>() {
 
     @Provides
     @Singleton
-    fun taskRepository(webservice: IWebservice): ITaskRepository {
-        return TaskRepository(webservice)
+    fun taskRepository(webservice: IWebservice, storage: IStorage): ITaskRepository {
+        return TaskRepository(webservice, storage)
     }
 }

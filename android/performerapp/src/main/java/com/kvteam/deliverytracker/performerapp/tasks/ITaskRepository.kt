@@ -11,6 +11,6 @@ interface ITaskRepository {
     fun cancelTask(taskId: UUID): TaskModel?
 
     fun getTask(taskId: UUID): TaskModel?
-    fun getMyTasks(): List<TaskModel>?
-    fun getUndistributedTasks(): List<TaskModel>?
+    fun getMyTasks(resetCache: Boolean = false): List<TaskModel>?
+    fun getUndistributedTasks(resetCache: Boolean = false): List<TaskModel>?
 }

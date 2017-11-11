@@ -11,7 +11,7 @@ import java.util.*
 
 class NavigationController (private val mainActivity: MainActivity) {
     private val containerId: Int
-        get() = mainActivity.container.id
+        get() = mainActivity.flMainActivityContainer.id
     private val fragmentManager: FragmentManager
         get() = mainActivity.supportFragmentManager
 

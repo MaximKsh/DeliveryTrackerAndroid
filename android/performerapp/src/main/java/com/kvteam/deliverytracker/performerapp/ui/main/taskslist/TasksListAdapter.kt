@@ -1,44 +1,56 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.taskslist
 
-import android.databinding.DataBindingUtil
-import android.databinding.adapters.Converters
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
-import com.kvteam.deliverytracker.core.ui.DataBoundListAdapter
 import com.kvteam.deliverytracker.performerapp.R
-import com.kvteam.deliverytracker.performerapp.databinding.FragmentTasksItemBinding
+import kotlinx.android.synthetic.main.fragment_tasks_item.view.*
 
 class TasksListAdapter(
-        var onClick: ((task: TaskModel) -> Unit)? = null)
-    : DataBoundListAdapter<TaskModel, FragmentTasksItemBinding>() {
+        var onTaskClick: ((task: TaskModel) -> Unit)?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
 
-    override fun createBinding(parent: ViewGroup): FragmentTasksItemBinding {
-        return DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.fragment_tasks_item,
-                parent,
-                false)
+    class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
+        val tvNumber = v.tvTaskItemNumber!!
+        val tvState = v.tvTaskItemState!!
+        val llRowLayout = v.llTaskRowLayout!!
     }
 
-    override fun bind(binding: FragmentTasksItemBinding, item: TaskModel) {
-        binding.task = item
-        binding.taskState = item.state?.toTaskState()
-        binding.onClick =  onClick ?: {}
+    val items = mutableListOf<TaskModel>()
+
+    override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int): TasksListAdapter.ViewHolder {
+        val view = LayoutInflater
+                .from(parent.context)
+                .inflate(
+                        R.layout.fragment_tasks_item,
+                        parent,
+                        false)
+        return ViewHolder(view)
     }
 
-    override fun areItemsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
-        return oldItem.id == newItem.id
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val task = this.items[position]
+        val state = task.state?.toTaskState()
+        holder.tvNumber.text = task.number
+        holder.tvState.text = task.state
+
+        holder.llRowLayout.setBackgroundResource(when(state) {
+            TaskState.NewUndistributed -> R.color.taskNewUndistributedColor
+            TaskState.New -> R.color.taskNewColor
+            TaskState.InWork -> R.color.taskInWorkColor
+            TaskState.Performed -> R.color.taskPerformedColor
+            TaskState.Cancelled -> R.color.taskCancelledColor
+            TaskState.CancelledByManager -> R.color.taskCancelledByManagerColor
+            else -> R.color.transparent
+        })
+        holder.llRowLayout.setOnClickListener { this.onTaskClick?.invoke(task) }
     }
 
-    override fun areContentsTheSame(oldItem: TaskModel, newItem: TaskModel): Boolean {
-        return oldItem.id == newItem.id
-                && oldItem.number === newItem.number
-                && oldItem.details === newItem.details
-                && oldItem.shippingDesc === newItem.shippingDesc
-                && oldItem.address === newItem.address
-                && oldItem.state === newItem.state
-    }
+    override fun getItemCount(): Int = items.size
 }
+

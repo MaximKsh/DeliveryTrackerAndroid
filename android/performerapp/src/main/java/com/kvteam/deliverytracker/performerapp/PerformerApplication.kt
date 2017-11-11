@@ -12,11 +12,4 @@ class PerformerApplication: DeliveryTrackerApplication() {
     override val loginActivityType: Type
         get() = LoginActivity::class.java
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        super.onConfigurationChanged(newConfig)
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

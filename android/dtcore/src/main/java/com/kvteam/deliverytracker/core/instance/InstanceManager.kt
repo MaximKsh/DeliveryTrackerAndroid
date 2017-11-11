@@ -2,11 +2,13 @@ package com.kvteam.deliverytracker.core.instance
 
 import com.google.gson.reflect.TypeToken
 import com.kvteam.deliverytracker.core.models.*
+import com.kvteam.deliverytracker.core.storage.IStorage
 import com.kvteam.deliverytracker.core.webservice.*
 
 
 class InstanceManager(
-        private val webservice: IWebservice): IInstanceManager {
+        private val webservice: IWebservice,
+        private val storage: IStorage): IInstanceManager {
     override fun create(
             instance: InstanceModel,
             user: UserModel,
@@ -45,20 +47,50 @@ class InstanceManager(
         return result.responseEntity
     }
 
-    override fun getPerformers(): List<UserModel>? {
+    override fun getPerformers(resetCache: Boolean): List<UserModel>? {
+        val cacheKey = "performers"
+        if(resetCache) {
+            storage.deleteUsers(cacheKey)
+        } else {
+            val performers = storage.getUsers(cacheKey)
+            if(performers.isNotEmpty()) {
+                return performers
+            }
+        }
+
         val result = this.webservice.get<List<UserModel>>(
                 "/api/instance/performers",
                 object : TypeToken<ArrayList<UserModel>>(){}.type,
                 true)
-        return result.responseEntity
+        val newPerformers = result.responseEntity
+        if(result.statusCode == 200
+                && newPerformers != null) {
+            storage.setUsers(cacheKey, newPerformers)
+        }
+        return newPerformers
     }
 
-    override fun getManagers(): List<UserModel>? {
+    override fun getManagers(resetCache: Boolean): List<UserModel>? {
+        val cacheKey = "managers"
+        if(resetCache) {
+            storage.deleteUsers(cacheKey)
+        } else {
+            val performers = storage.getUsers(cacheKey)
+            if(performers.isNotEmpty()) {
+                return performers
+            }
+        }
+
         val result = this.webservice.get<List<UserModel>>(
                 "/api/instance/managers",
                 object : TypeToken<ArrayList<UserModel>>(){}.type,
                 true)
-        return result.responseEntity
+        val newManagers = result.responseEntity
+        if(result.statusCode == 200
+                && newManagers != null) {
+            storage.setUsers(cacheKey, newManagers)
+        }
+        return newManagers
     }
 
     override fun deleteManager(username: String): Boolean {
