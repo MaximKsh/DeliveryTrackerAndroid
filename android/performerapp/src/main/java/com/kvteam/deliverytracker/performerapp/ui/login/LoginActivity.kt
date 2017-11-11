@@ -11,6 +11,7 @@ import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.performerapp.R
 import dagger.android.AndroidInjection
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
+import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -75,7 +76,7 @@ class LoginActivity : DeliveryTrackerActivity() {
                 }
                 LoginResult.Success -> {
                     if (!fromSettings) {
-                        val intent = Intent(ctx, ConfirmDataActivity::class.java)
+                        val intent = Intent(ctx, MainActivity::class.java)
                         ctx.startActivity(intent)
                     }
                     ctx.finish()
