@@ -31,6 +31,13 @@ class LoginActivity : DeliveryTrackerActivity() {
         if(savedInstanceState == null) {
             this.usernameEditText.setText("Rdpasz26f3")
             this.passwordEditText.setText("123qQ!")
+        } else {
+            savedInstanceState.apply {
+                this@LoginActivity.usernameEditText.setText(
+                        getString(usernameKey, ""))
+                this@LoginActivity.passwordEditText.setText(
+                        getString(passwordKey, ""))
+            }
         }
         this.bttnSignIn.setOnClickListener { onSignInClicked() }
     }
@@ -43,16 +50,6 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         outState.putString(usernameKey, this.usernameEditText.text.toString())
         outState.putString(passwordKey, this.passwordEditText.text.toString())
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        if(savedInstanceState == null){
-            return
-        }
-
-        this.usernameEditText.setText(savedInstanceState.getString(usernameKey, ""))
-        this.passwordEditText.setText(savedInstanceState.getString(passwordKey, ""))
     }
 
     private fun onSignInClicked() {

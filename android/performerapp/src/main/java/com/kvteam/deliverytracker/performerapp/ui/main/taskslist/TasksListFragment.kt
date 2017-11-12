@@ -19,12 +19,14 @@ import javax.inject.Inject
 
 open class TasksListFragment : DeliveryTrackerFragment() {
     protected val layoutManagerKey = "layoutManager"
-    protected val tasksList = "tasksList"
+    protected val tasksListKey = "tasksListKey"
 
     @Inject
     lateinit var navigationController: NavigationController
 
     protected lateinit var adapter: AutoClearedValue<TasksListAdapter>
+
+    protected var ignoreSavedState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -57,32 +59,40 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                     it?.onTaskClick = null
                 })
         this.rvTasksList.adapter = this.adapter.value
+
+        savedInstanceState?.apply {
+            val adapter = this@TasksListFragment.adapter.value
+            val layoutManager = this@TasksListFragment.rvTasksList?.layoutManager
+            if(adapter != null
+                    && layoutManager != null) {
+                if(containsKey(tasksListKey)
+                        && containsKey(layoutManagerKey)) {
+                    val savedTasks = getParcelableArray(tasksListKey).map { it as TaskModel }
+                    adapter.items.clear()
+                    adapter.items.addAll(savedTasks)
+                    layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
+                } else {
+                    this@TasksListFragment.ignoreSavedState = true
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null) {
-            return
+        outState?.apply {
+            val adapter = this@TasksListFragment.adapter.value
+            val layoutManager = this@TasksListFragment.rvTasksList?.layoutManager
+            if(adapter != null
+                    && layoutManager != null) {
+                putParcelableArray(
+                        tasksListKey,
+                        adapter.items.toTypedArray())
+                putParcelable(
+                        layoutManagerKey,
+                        layoutManager.onSaveInstanceState())
+            }
         }
-        outState.putParcelableArray(
-                tasksList,
-                this.adapter.value?.items?.toTypedArray())
-        outState.putParcelable(
-                layoutManagerKey,
-                this.rvTasksList.layoutManager.onSaveInstanceState())
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState == null) {
-            return
-        }
-
-        this.adapter.value?.items?.clear()
-        this.adapter.value?.items?.addAll(
-                savedInstanceState.getParcelableArray(tasksList).map { it as TaskModel })
-        this.rvTasksList.layoutManager.onRestoreInstanceState(
-                savedInstanceState.getParcelable(layoutManagerKey))
     }
 
     private fun onTaskClicked(task: TaskModel) {

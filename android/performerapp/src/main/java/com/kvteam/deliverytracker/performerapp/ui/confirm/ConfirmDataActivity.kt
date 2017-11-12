@@ -28,33 +28,24 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         setContentView(R.layout.activity_confirm_data)
 
         if(savedInstanceState == null) {
-            this.etConfirmSurname.setText(this.session.surname ?: "")
-            this.etConfirmName.setText(this.session.name ?: "")
-            this.etConfirmPhoneNumber.setText(this.session.phoneNumber ?: "")
+            etConfirmSurname.setText(session.surname ?: "")
+            etConfirmName.setText(session.name ?: "")
+            etConfirmPhoneNumber.setText(session.phoneNumber ?: "")
+        } else {
+            etConfirmSurname.setText(savedInstanceState.getString(surnameKey, ""))
+            etConfirmName.setText(savedInstanceState.getString(nameKey, ""))
+            etConfirmPhoneNumber.setText(savedInstanceState.getString(phoneNumberKey, ""))
         }
-        this.bttnConfirm.setOnClickListener { onSaveClicked() }
+        bttnConfirm.setOnClickListener { onSaveClicked() }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null){
-            return
+        outState?.apply {
+            putString(surnameKey, etConfirmSurname.text.toString())
+            putString(nameKey, etConfirmName.text.toString())
+            putString(phoneNumberKey, etConfirmPhoneNumber.text.toString())
         }
-
-        outState.putString(surnameKey, this.etConfirmSurname.text.toString())
-        outState.putString(nameKey, this.etConfirmName.text.toString())
-        outState.putString(phoneNumberKey, this.etConfirmPhoneNumber.text.toString())
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        if(savedInstanceState == null){
-            return
-        }
-
-        this.etConfirmSurname.setText(savedInstanceState.getString(surnameKey, ""))
-        this.etConfirmName.setText(savedInstanceState.getString(nameKey, ""))
-        this.etConfirmPhoneNumber.setText(savedInstanceState.getString(phoneNumberKey, ""))
     }
 
     private fun onSaveClicked() {
@@ -69,7 +60,9 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         }, {
             if(it) {
                 if(settingsContext) {
-                    val intent = Intent(this@ConfirmDataActivity, MainActivity::class.java)
+                    val intent = Intent(
+                            this@ConfirmDataActivity,
+                            MainActivity::class.java)
                     startActivity(intent)
                 }
                 finish()

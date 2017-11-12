@@ -17,9 +17,12 @@ class PerformersListFragment: UsersListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if(savedInstanceState != null) {
+        if(savedInstanceState != null
+                && !this.ignoreSavedState) {
             return
         }
+        this.ignoreSavedState = false
+
         invokeAsync({
             instanceManager.getPerformers()
         }, {

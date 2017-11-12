@@ -19,6 +19,11 @@ import java.util.*
 import javax.inject.Inject
 
 class TaskFragment : DeliveryTrackerFragment() {
+    private val taskIdKey = "taskId"
+    private val taskKey = "task"
+
+    private lateinit var currentTask: TaskModel
+
     @Inject
     lateinit var taskRepository: ITaskRepository
     @Inject
@@ -42,13 +47,75 @@ class TaskFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        invokeAsync({
-            this@TaskFragment.taskRepository.getTask(taskId)
-        }, {
-            if(it != null) {
-                this@TaskFragment.initTask(it)
+        if(savedInstanceState != null) {
+            taskId = savedInstanceState.getSerializable(taskIdKey) as UUID
+            val savedTask = savedInstanceState.getParcelable<TaskModel>(taskKey) as TaskModel
+            this.initTask(savedTask)
+        } else {
+            invokeAsync({
+                this@TaskFragment.taskRepository.getTask(taskId)
+            }, {
+                if(it != null) {
+                    this@TaskFragment.initTask(it)
+                }
+            })
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.apply {
+            putSerializable(taskIdKey, taskId)
+            putParcelable(taskKey, currentTask)
+        }
+    }
+
+
+    private fun initTask(task: TaskModel) {
+        this.currentTask = task
+        this.tvTaskNumber.text = task.number
+        this.tvShippingDesc.text = task.shippingDesc
+        this.tvTaskDetails.text = task.details
+        this.tvTaskAddress.text = task.address
+
+        val state = task.state?.toTaskState()
+        if(state != null) {
+            this.tvTaskState.text =
+                    this.getString(state.localizationStringId)
+            when(state) {
+                TaskState.NewUndistributed -> {
+                    this.bttnReserveTask.visibility = View.VISIBLE
+                    this.bttnReserveTask.setOnClickListener {
+                        this.performTaskAction {
+                            this.taskRepository.reserveTask(it)
+                        }
+                    }
+                }
+                TaskState.New -> {
+                    this.bttnTakeIntoWorkTask.visibility = View.VISIBLE
+                    this.bttnTakeIntoWorkTask.setOnClickListener {
+                        this.performTaskAction {
+                            this.taskRepository.takeTaskToWork(it)
+                        }
+                    }
+                }
+                TaskState.InWork -> {
+                    this.bttnPerformTask.visibility = View.VISIBLE
+                    this.bttnPerformTask.setOnClickListener {
+                        this.performTaskAction {
+                            this.taskRepository.performTask(it)
+                        }
+                    }
+                    this.bttnCancelTask.visibility = View.VISIBLE
+                    this.bttnCancelTask.setOnClickListener {
+                        this.performTaskAction {
+                            this.taskRepository.cancelTask(it)
+                        }
+                    }
+                }
+                else -> {}
             }
-        })
+        }
     }
 
     private fun performTaskAction(action: ((taskId: UUID)-> TaskModel?)) {
@@ -68,52 +135,6 @@ class TaskFragment : DeliveryTrackerFragment() {
             }
             this@TaskFragment.setProcessingState(false)
         })
-    }
-
-    private fun initTask(task: TaskModel) {
-        this@TaskFragment.tvTaskNumber.text = task.number
-        this@TaskFragment.tvShippingDesc.text = task.shippingDesc
-        this@TaskFragment.tvTaskDetails.text = task.details
-        this@TaskFragment.tvTaskAddress.text = task.address
-
-        val state = task.state?.toTaskState()
-        if(state != null) {
-            this@TaskFragment.tvTaskState.text =
-                    this@TaskFragment.getString(state.localizationStringId)
-            when(state) {
-                TaskState.NewUndistributed -> {
-                    this@TaskFragment.bttnReserveTask.visibility = View.VISIBLE
-                    this@TaskFragment.bttnReserveTask.setOnClickListener {
-                        this@TaskFragment.performTaskAction {
-                            this@TaskFragment.taskRepository.reserveTask(it)
-                        }
-                    }
-                }
-                TaskState.New -> {
-                    this@TaskFragment.bttnTakeIntoWorkTask.visibility = View.VISIBLE
-                    this@TaskFragment.bttnTakeIntoWorkTask.setOnClickListener {
-                        this@TaskFragment.performTaskAction {
-                            this@TaskFragment.taskRepository.takeTaskToWork(it)
-                        }
-                    }
-                }
-                TaskState.InWork -> {
-                    this@TaskFragment.bttnPerformTask.visibility = View.VISIBLE
-                    this@TaskFragment.bttnPerformTask.setOnClickListener {
-                        this@TaskFragment.performTaskAction {
-                            this@TaskFragment.taskRepository.performTask(it)
-                        }
-                    }
-                    this@TaskFragment.bttnCancelTask.visibility = View.VISIBLE
-                    this@TaskFragment.bttnCancelTask.setOnClickListener {
-                        this@TaskFragment.performTaskAction {
-                            this@TaskFragment.taskRepository.cancelTask(it)
-                        }
-                    }
-                }
-                else -> {}
-            }
-        }
     }
 
     private fun setProcessingState(processing: Boolean = true){

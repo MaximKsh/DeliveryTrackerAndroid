@@ -24,6 +24,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     protected val usersListKey = "usersList"
 
     protected lateinit var adapter: AutoClearedValue<UsersListAdapter>
+    protected var ignoreSavedState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -53,32 +54,41 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                     it?.onCallClick = null
                 })
         this.rvUsersList.adapter = this.adapter.value
+
+        savedInstanceState?.apply {
+            val adapter = this@UsersListFragment.adapter.value
+            val layoutManager = this@UsersListFragment.rvUsersList?.layoutManager
+            if(adapter != null
+                    && layoutManager != null) {
+                if(containsKey(usersListKey)
+                        && containsKey(layoutManagerKey)) {
+                    val savedUsers = getParcelableArray(usersListKey).map { it as UserModel }
+                    adapter.items.clear()
+                    adapter.items.addAll(savedUsers)
+                    layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
+                } else {
+                    this@UsersListFragment.ignoreSavedState = true
+                }
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null) {
-            return
-        }
-        outState.putParcelableArray(
-                usersListKey,
-                this.adapter.value?.items?.toTypedArray())
-        outState.putParcelable(
-                layoutManagerKey,
-                this.rvUsersList.layoutManager.onSaveInstanceState())
-    }
+        outState?.apply {
+            val adapter = this@UsersListFragment.adapter.value
+            val layoutManager = this@UsersListFragment.rvUsersList?.layoutManager
+            if(adapter != null
+                    && layoutManager != null) {
+                putParcelableArray(
+                        usersListKey,
+                        adapter.items.toTypedArray())
+                putParcelable(
+                        layoutManagerKey,
+                        layoutManager.onSaveInstanceState())
+            }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState == null) {
-            return
         }
-
-        this.adapter.value?.items?.clear()
-        this.adapter.value?.items?.addAll(
-                savedInstanceState.getParcelableArray(usersListKey).map { it as UserModel })
-        this.rvUsersList.layoutManager.onRestoreInstanceState(
-                savedInstanceState.getParcelable(layoutManagerKey))
     }
 
     private fun onCallClicked(user: UserModel) {

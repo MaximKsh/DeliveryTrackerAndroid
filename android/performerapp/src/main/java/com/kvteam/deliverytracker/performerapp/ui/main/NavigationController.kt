@@ -23,7 +23,7 @@ class NavigationController (private val mainActivity: MainActivity) {
         val fragment = TaskFragment.create(taskId)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
-                .addToBackStack(null)
+                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 

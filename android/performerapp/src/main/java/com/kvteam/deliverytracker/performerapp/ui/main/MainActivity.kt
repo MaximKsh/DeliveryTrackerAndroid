@@ -36,6 +36,9 @@ class MainActivity : DeliveryTrackerActivity() {
         if (savedInstanceState == null) {
             this.menuItemMapper[defaultItem]?.invoke()
             this.bnvNavigation.selectedItemId = defaultItem
+        } else {
+            this.bnvNavigation.selectedItemId =
+                    savedInstanceState.getInt(bnvSelectedItemKey, defaultItem)
         }
 
         this.bnvNavigation.setOnNavigationItemSelectedListener {
@@ -48,19 +51,8 @@ class MainActivity : DeliveryTrackerActivity() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null) {
-            return
+        outState?.apply {
+            putInt(bnvSelectedItemKey, this@MainActivity.bnvNavigation.selectedItemId)
         }
-        outState.putInt(bnvSelectedItemKey, this.bnvNavigation.selectedItemId)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        if(savedInstanceState == null){
-            return
-        }
-
-        this.bnvNavigation.selectedItemId =
-                savedInstanceState.getInt(bnvSelectedItemKey, defaultItem)
     }
 }
