@@ -4,7 +4,10 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 
-@Database(entities = arrayOf(StorageUserEntry::class, StorageTaskEntry::class), version = 1)
+@Database(
+        entities = arrayOf(StorageUserEntry::class, StorageTaskEntry::class),
+        version = 1,
+        exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class StorageDatabase : RoomDatabase() {
     abstract fun userDao(): StorageUserDao
