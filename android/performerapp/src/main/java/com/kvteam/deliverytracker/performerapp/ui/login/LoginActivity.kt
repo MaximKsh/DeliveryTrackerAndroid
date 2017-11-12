@@ -22,41 +22,37 @@ class LoginActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         if(savedInstanceState == null) {
-            this.usernameEditText.setText("Rdpasz26f3")
-            this.passwordEditText.setText("123qQ!")
+            etLoginUsername.setText("Rdpasz26f3")
+            etLoginPassword.setText("123qQ!")
         } else {
             savedInstanceState.apply {
-                this@LoginActivity.usernameEditText.setText(
+                etLoginUsername.setText(
                         getString(usernameKey, ""))
-                this@LoginActivity.passwordEditText.setText(
+                etLoginPassword.setText(
                         getString(passwordKey, ""))
             }
         }
-        this.bttnSignIn.setOnClickListener { onSignInClicked() }
+        bttnSignIn.setOnClickListener { onSignInClicked() }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null){
-            return
+        outState?.apply {
+            putString(usernameKey, etLoginUsername.text.toString())
+            putString(passwordKey, etLoginPassword.text.toString())
         }
-
-        outState.putString(usernameKey, this.usernameEditText.text.toString())
-        outState.putString(passwordKey, this.passwordEditText.text.toString())
     }
 
     private fun onSignInClicked() {
-        val ctx = this
-        val fromSettings = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
-        val username = this.usernameEditText.text.toString()
-        val password = this.passwordEditText.text.toString()
+        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        val username = etLoginUsername.text.toString()
+        val password = etLoginPassword.text.toString()
 
         setProcessingState()
         invokeAsync({
@@ -64,35 +60,44 @@ class LoginActivity : DeliveryTrackerActivity() {
         }, {
             when (it) {
                 LoginResult.Registered -> {
-                    val intent = Intent(ctx, ConfirmDataActivity::class.java)
+                    val intent = Intent(
+                            this@LoginActivity,
+                            ConfirmDataActivity::class.java)
                     if (fromSettings) {
                         intent.putExtra(SETTINGS_CONTEXT, true)
                     }
-                    ctx.startActivity(intent)
-                    ctx.finish()
+                    startActivity(intent)
+                    finish()
                 }
                 LoginResult.Success -> {
                     if (!fromSettings) {
-                        val intent = Intent(ctx, MainActivity::class.java)
-                        ctx.startActivity(intent)
+                        val intent = Intent(
+                                this@LoginActivity,
+                                MainActivity::class.java)
+                        startActivity(intent)
                     }
-                    ctx.finish()
+                    finish()
                 }
                 LoginResult.RoleMismatch -> {
-                    Toast.makeText(ctx, "Не твоя роль", Toast.LENGTH_LONG).show()
+                    showError(getString(R.string.PerformerApp_LoginActivity_IncorrectRole))
+
                 }
                 LoginResult.Error -> {
-                    Toast.makeText(ctx, "Неверные данные", Toast.LENGTH_LONG).show()
+                    showError(getString(R.string.PerformerApp_LoginActivity_WrongCredentials))
                 }
-                else -> {
-                    Toast.makeText(ctx, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
-                }
+                else -> {}
             }
             setProcessingState(false)
         })
     }
 
     private fun setProcessingState(processing: Boolean = true){
-        this.bttnSignIn.isEnabled = !processing
+        bttnSignIn.isEnabled = !processing
+    }
+
+    private fun showError(text: String) {
+        Toast
+                .makeText(this, text,Toast.LENGTH_LONG)
+                .show()
     }
 }

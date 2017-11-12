@@ -49,11 +49,11 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
     }
 
     private fun onSaveClicked() {
-        val settingsContext = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val userInfo = UserModel(
-                surname = this.etConfirmSurname.text.toString(),
-                name = this.etConfirmName.text.toString(),
-                phoneNumber = this.etConfirmPhoneNumber.text.toString())
+                surname = etConfirmSurname.text.toString(),
+                name = etConfirmName.text.toString(),
+                phoneNumber = etConfirmPhoneNumber.text.toString())
 
         invokeAsync({
             session.updateUserInfo(userInfo)

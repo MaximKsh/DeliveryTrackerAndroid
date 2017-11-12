@@ -7,4 +7,6 @@
     <string name="PerformerApp_TaskFragment_InWorkButton">Взять в работу</string>
     <string name="PerformerApp_TaskFragment_PerformButton">Завершить</string>
     <string name="PerformerApp_TaskFragment_CancelButton">Отменить</string>
+    <string name="PerformerApp_LoginActivity_WrongCredentials">Неверные имя/пароль</string>
+    <string name="PerformerApp_LoginActivity_IncorrectRole">Неправильная роль</string>
 </resources>
