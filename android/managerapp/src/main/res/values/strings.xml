@@ -2,6 +2,40 @@
     <string name="app_name">DeliveryTracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="first_fragment">FIRST FRAGMENT</string>
-    <string name="second_fragment">SECOND FRAGMENT</string>
+    <string name="enter_code_hint">Код приглашения</string>
+    <string name="enter_password_hint">Пароль</string>
+    <string name="login">Войти</string>
+    <string name="forgot_password">забыли пароль</string>
+    <string name="add_your_company">Вы можете зарегистрировать свою компанию</string>
+    <string name="company_addition">Добавление компании</string>
+    <string name="add">Зарегистрировать</string>
+    <string name="code_hint_icon">Code hint icon</string>
+    <string name="password_hint_icon">Password hint icon</string>
+    <string name="main_logo">Main logo</string>
+    <string name="enter_company_name_hint">Название компании</string>
+    <string name="enter_name_hint">Имя</string>
+    <string name="enter_surname_hint">Фамилия</string>
+    <string name="enter_phone_number_hint">Номер телефона</string>
+    <string name="done">Продолжить</string>
+    <string name="user_data_approval">Подтвердите ваши данные</string>
+    <string name="tasks">Задачи</string>
+    <string name="managers">Руководители</string>
+    <string name="performers">Исполнители</string>
+    <string name="my_tasks">Мои задачи</string>
+    <string name="edit">Изменить</string>
+    <string name="add_user">Добавить</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отменить</string>
+    <string name="empty_user_list">Пока тут никого нет</string>
+    <string name="delete_users_modal">Вы уверены что хотите удалить выбранных пользователей?</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
 </resources>
