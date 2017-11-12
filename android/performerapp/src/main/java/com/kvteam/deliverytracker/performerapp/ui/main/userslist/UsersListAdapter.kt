@@ -32,10 +32,10 @@ class UsersListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = this.items[position]
+        val user = items[position]
         holder.tvSurname.text = user.surname
         holder.tvPhoneNumber.text = user.phoneNumber
-        holder.ivCall.setOnClickListener{ this.onCallClick?.invoke(user) }
+        holder.ivCall.setOnClickListener{ onCallClick?.invoke(user) }
     }
 
     override fun getItemCount(): Int = items.size

@@ -4,7 +4,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
@@ -12,8 +11,6 @@ import com.kvteam.deliverytracker.core.models.CredentialsModel
 import com.kvteam.deliverytracker.core.models.TokenModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
-import com.kvteam.deliverytracker.core.webservice.NetworkResponse
-
 
 class Session (
         private val httpManager: IHttpManager,
@@ -86,9 +83,9 @@ class Session (
         } catch (e: JsonSyntaxException) {
             return LoginResult.Error
         }
-        val role = token.user.role
-        if(role != null
-                && !sessionInfo.allowRoles.contains(role)) {
+        val tokenRole = token.user.role
+        if(tokenRole != null
+                && !sessionInfo.allowRoles.contains(tokenRole)) {
             return LoginResult.RoleMismatch
         }
 
@@ -106,6 +103,7 @@ class Session (
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                                 accountManager.removeAccountExplicitly(it)
                             } else {
+                                @Suppress("DEPRECATION")
                                 accountManager.removeAccount(it, null, null)
                             }
                         }
@@ -115,10 +113,10 @@ class Session (
         }
 
         this.username = username
-        this.surname = token.user.surname ?: "no surname"
-        this.name = token.user.name ?: "no name"
-        this.phoneNumber = token.user.phoneNumber ?: "no phone number"
-        this.role = token.user.role ?: "no role"
+        surname = token.user.surname ?: "no surname"
+        name = token.user.name ?: "no name"
+        phoneNumber = token.user.phoneNumber ?: "no phone number"
+        role = tokenRole ?: "no role"
 
         return if(tokenResponse.statusCode == 201) LoginResult.Registered  else LoginResult.Success
     }
@@ -199,6 +197,7 @@ class Session (
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         accountManager.removeAccountExplicitly(it)
                     } else {
+                        @Suppress("DEPRECATION")
                         accountManager.removeAccount(it, null, null)
                     }
                 }

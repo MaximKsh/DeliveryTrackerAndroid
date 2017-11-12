@@ -34,7 +34,7 @@ class TasksListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val task = this.items[position]
+        val task = items[position]
         val state = task.state?.toTaskState()
         holder.tvNumber.text = task.number
         holder.tvState.text = task.state
@@ -48,7 +48,7 @@ class TasksListAdapter(
             TaskState.CancelledByManager -> R.color.taskCancelledByManagerColor
             else -> R.color.transparent
         })
-        holder.llRowLayout.setOnClickListener { this.onTaskClick?.invoke(task) }
+        holder.llRowLayout.setOnClickListener { onTaskClick?.invoke(task) }
     }
 
     override fun getItemCount(): Int = items.size

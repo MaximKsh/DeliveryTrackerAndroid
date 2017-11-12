@@ -14,7 +14,7 @@ class InstanceManager(
             user: UserModel,
             credentials: CredentialsModel): UserModel? {
         val requestObj = CreateInstanceModel(instance, credentials, user)
-        val result = this.webservice.post<UserModel>(
+        val result = webservice.post<UserModel>(
                 "/api/instance/create",
                 requestObj,
                 UserModel::class.java)
@@ -22,7 +22,7 @@ class InstanceManager(
     }
 
     override fun getUser(username: String): UserModel? {
-        val result = this.webservice.get<UserModel>(
+        val result = webservice.get<UserModel>(
                 "/api/instance/get_user/{$username}",
                 UserModel::class.java,
                 true)
@@ -30,7 +30,7 @@ class InstanceManager(
     }
 
     override fun inviteManager(preliminaryUserInfo: UserModel): InvitationModel? {
-        val result = this.webservice.post<InvitationModel>(
+        val result = webservice.post<InvitationModel>(
                 "/api/instance/invite_manager",
                 preliminaryUserInfo,
                 InvitationModel::class.java,
@@ -39,7 +39,7 @@ class InstanceManager(
     }
 
     override fun invitePerformer(preliminaryUserInfo: UserModel): InvitationModel? {
-        val result = this.webservice.post<InvitationModel>(
+        val result = webservice.post<InvitationModel>(
                 "/api/instance/invite_performer",
                 preliminaryUserInfo,
                 InvitationModel::class.java,
@@ -58,7 +58,7 @@ class InstanceManager(
             }
         }
 
-        val result = this.webservice.get<List<UserModel>>(
+        val result = webservice.get<List<UserModel>>(
                 "/api/instance/performers",
                 object : TypeToken<ArrayList<UserModel>>(){}.type,
                 true)
@@ -81,7 +81,7 @@ class InstanceManager(
             }
         }
 
-        val result = this.webservice.get<List<UserModel>>(
+        val result = webservice.get<List<UserModel>>(
                 "/api/instance/managers",
                 object : TypeToken<ArrayList<UserModel>>(){}.type,
                 true)
@@ -95,7 +95,7 @@ class InstanceManager(
 
     override fun deleteManager(username: String): Boolean {
         val obj = UserModel(username = username)
-        val result = this.webservice.post(
+        val result = webservice.post(
                 "/api/instance/delete_manager",
                 obj,
                 true)
@@ -104,7 +104,7 @@ class InstanceManager(
 
     override fun deletePerformer(username: String): Boolean {
         val obj = UserModel(username = username)
-        val result = this.webservice.post(
+        val result = webservice.post(
                 "/api/instance/delete_performer",
                 obj,
                 true)

@@ -34,16 +34,16 @@ class MainActivity : DeliveryTrackerActivity() {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            this.menuItemMapper[defaultItem]?.invoke()
-            this.bnvNavigation.selectedItemId = defaultItem
+            menuItemMapper[defaultItem]?.invoke()
+            bnvNavigation.selectedItemId = defaultItem
         } else {
-            this.bnvNavigation.selectedItemId =
+            bnvNavigation.selectedItemId =
                     savedInstanceState.getInt(bnvSelectedItemKey, defaultItem)
         }
 
-        this.bnvNavigation.setOnNavigationItemSelectedListener {
-            if(this.bnvNavigation.selectedItemId != it.itemId) {
-                this.menuItemMapper[it.itemId]?.invoke()
+        bnvNavigation.setOnNavigationItemSelectedListener {
+            if(bnvNavigation.selectedItemId != it.itemId) {
+                menuItemMapper[it.itemId]?.invoke()
             }
             true
         }
@@ -52,7 +52,7 @@ class MainActivity : DeliveryTrackerActivity() {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.apply {
-            putInt(bnvSelectedItemKey, this@MainActivity.bnvNavigation.selectedItemId)
+            putInt(bnvSelectedItemKey, bnvNavigation.selectedItemId)
         }
     }
 }

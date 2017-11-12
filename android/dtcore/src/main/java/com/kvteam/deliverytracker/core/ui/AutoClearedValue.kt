@@ -16,12 +16,13 @@ class AutoClearedValue<T> {
                 object : FragmentManager.FragmentLifecycleCallbacks() {
                     override fun onFragmentViewDestroyed(fm: FragmentManager?, f: Fragment?) {
                         if (f === fragment) {
-                            clearFunc?.invoke(this@AutoClearedValue.value)
-                            this@AutoClearedValue.value = null
+                            clearFunc?.invoke(value)
+                            value = null
                             fragmentManager.unregisterFragmentLifecycleCallbacks(this)
                         }
                     }
-                }, false)
+                },
+                false)
     }
 
     constructor(activity: AppCompatActivity, mValue: T?, clearFunc: ((value: T?) -> Unit)? = null){
@@ -39,5 +40,4 @@ class AutoClearedValue<T> {
 
     var value: T?
         private set
-
 }

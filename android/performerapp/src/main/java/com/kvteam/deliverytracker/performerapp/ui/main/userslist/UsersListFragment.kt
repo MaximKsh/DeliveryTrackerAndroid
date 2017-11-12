@@ -40,24 +40,24 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        this.rvUsersList.layoutManager = LinearLayoutManager(
-                this.activity.applicationContext,
+        rvUsersList.layoutManager = LinearLayoutManager(
+                activity.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
-        this.rvUsersList.addItemDecoration(
-                DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+        rvUsersList.addItemDecoration(
+                DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        this.adapter = AutoClearedValue(
+        adapter = AutoClearedValue(
                 this,
                 UsersListAdapter(this::onCallClicked),
                 {
                     it?.onCallClick = null
                 })
-        this.rvUsersList.adapter = this.adapter.value
+        rvUsersList.adapter = adapter.value
 
         savedInstanceState?.apply {
-            val adapter = this@UsersListFragment.adapter.value
-            val layoutManager = this@UsersListFragment.rvUsersList?.layoutManager
+            val adapter = adapter.value
+            val layoutManager = rvUsersList?.layoutManager
             if(adapter != null
                     && layoutManager != null) {
                 if(containsKey(usersListKey)
@@ -67,7 +67,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                     adapter.items.addAll(savedUsers)
                     layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
                 } else {
-                    this@UsersListFragment.ignoreSavedState = true
+                    ignoreSavedState = true
                 }
             }
         }
@@ -76,8 +76,8 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.apply {
-            val adapter = this@UsersListFragment.adapter.value
-            val layoutManager = this@UsersListFragment.rvUsersList?.layoutManager
+            val adapter = adapter.value
+            val layoutManager = rvUsersList?.layoutManager
             if(adapter != null
                     && layoutManager != null) {
                 putParcelableArray(

@@ -58,5 +58,4 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
     }
-
 }

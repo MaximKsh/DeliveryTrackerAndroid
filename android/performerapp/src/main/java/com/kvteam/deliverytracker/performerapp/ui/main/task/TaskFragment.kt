@@ -50,13 +50,13 @@ class TaskFragment : DeliveryTrackerFragment() {
         if(savedInstanceState != null) {
             taskId = savedInstanceState.getSerializable(taskIdKey) as UUID
             val savedTask = savedInstanceState.getParcelable<TaskModel>(taskKey) as TaskModel
-            this.initTask(savedTask)
+            initTask(savedTask)
         } else {
             invokeAsync({
-                this@TaskFragment.taskRepository.getTask(taskId)
+                taskRepository.getTask(taskId)
             }, {
                 if(it != null) {
-                    this@TaskFragment.initTask(it)
+                    initTask(it)
                 }
             })
         }
@@ -72,45 +72,36 @@ class TaskFragment : DeliveryTrackerFragment() {
 
 
     private fun initTask(task: TaskModel) {
-        this.currentTask = task
-        this.tvTaskNumber.text = task.number
-        this.tvShippingDesc.text = task.shippingDesc
-        this.tvTaskDetails.text = task.details
-        this.tvTaskAddress.text = task.address
+        currentTask = task
+        tvTaskNumber.text = task.number
+        tvShippingDesc.text = task.shippingDesc
+        tvTaskDetails.text = task.details
+        tvTaskAddress.text = task.address
 
         val state = task.state?.toTaskState()
         if(state != null) {
-            this.tvTaskState.text =
-                    this.getString(state.localizationStringId)
+            tvTaskState.text = getString(state.localizationStringId)
             when(state) {
                 TaskState.NewUndistributed -> {
-                    this.bttnReserveTask.visibility = View.VISIBLE
-                    this.bttnReserveTask.setOnClickListener {
-                        this.performTaskAction {
-                            this.taskRepository.reserveTask(it)
-                        }
+                    bttnReserveTask.visibility = View.VISIBLE
+                    bttnReserveTask.setOnClickListener {
+                        performTaskAction { taskRepository.reserveTask(it) }
                     }
                 }
                 TaskState.New -> {
-                    this.bttnTakeIntoWorkTask.visibility = View.VISIBLE
-                    this.bttnTakeIntoWorkTask.setOnClickListener {
-                        this.performTaskAction {
-                            this.taskRepository.takeTaskToWork(it)
-                        }
+                    bttnTakeIntoWorkTask.visibility = View.VISIBLE
+                    bttnTakeIntoWorkTask.setOnClickListener {
+                        performTaskAction { taskRepository.takeTaskToWork(it) }
                     }
                 }
                 TaskState.InWork -> {
-                    this.bttnPerformTask.visibility = View.VISIBLE
-                    this.bttnPerformTask.setOnClickListener {
-                        this.performTaskAction {
-                            this.taskRepository.performTask(it)
-                        }
+                    bttnPerformTask.visibility = View.VISIBLE
+                    bttnPerformTask.setOnClickListener {
+                        performTaskAction { taskRepository.performTask(it) }
                     }
-                    this.bttnCancelTask.visibility = View.VISIBLE
-                    this.bttnCancelTask.setOnClickListener {
-                        this.performTaskAction {
-                            this.taskRepository.cancelTask(it)
-                        }
+                    bttnCancelTask.visibility = View.VISIBLE
+                    bttnCancelTask.setOnClickListener {
+                        performTaskAction { taskRepository.cancelTask(it) }
                     }
                 }
                 else -> {}
@@ -119,29 +110,29 @@ class TaskFragment : DeliveryTrackerFragment() {
     }
 
     private fun performTaskAction(action: ((taskId: UUID)-> TaskModel?)) {
-        this.setProcessingState()
+        setProcessingState()
         invokeAsync({
-            action(this@TaskFragment.taskId)
+            action(taskId)
         }, {
             if(it != null) {
-                this@TaskFragment.navigationController.closeCurrentFragment()
+                navigationController.closeCurrentFragment()
             } else {
                 Toast
                         .makeText(
-                                this@TaskFragment.activity,
+                                activity,
                                 "someError",
                                 Toast.LENGTH_LONG)
                         .show()
             }
-            this@TaskFragment.setProcessingState(false)
+            setProcessingState(false)
         })
     }
 
     private fun setProcessingState(processing: Boolean = true){
-        this.bttnReserveTask.isEnabled = !processing
-        this.bttnTakeIntoWorkTask.isEnabled = !processing
-        this.bttnPerformTask.isEnabled = !processing
-        this.bttnCancelTask.isEnabled = !processing
+        bttnReserveTask.isEnabled = !processing
+        bttnTakeIntoWorkTask.isEnabled = !processing
+        bttnPerformTask.isEnabled = !processing
+        bttnCancelTask.isEnabled = !processing
     }
 
     companion object {

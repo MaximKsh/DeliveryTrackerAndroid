@@ -14,7 +14,7 @@ class TaskRepository(
 
     override fun reserveTask(taskId: UUID): TaskModel? {
         val requestObj = TaskModel(taskId)
-        val result = this.webservice.post<TaskModel>(
+        val result = webservice.post<TaskModel>(
                 "/api/performer/reserve_task",
                 requestObj,
                 TaskModel::class.java,
@@ -24,7 +24,7 @@ class TaskRepository(
 
     override fun takeTaskToWork(taskId: UUID): TaskModel? {
         val requestObj = TaskModel(taskId)
-        val result = this.webservice.post<TaskModel>(
+        val result = webservice.post<TaskModel>(
                 "/api/performer/take_task_to_work",
                 requestObj,
                 TaskModel::class.java,
@@ -34,7 +34,7 @@ class TaskRepository(
 
     override fun performTask(taskId: UUID): TaskModel? {
         val requestObj = TaskModel(taskId, state = TaskState.Performed.simpleName)
-        val result = this.webservice.post<TaskModel>(
+        val result = webservice.post<TaskModel>(
                 "/api/performer/complete_task",
                 requestObj,
                 TaskModel::class.java,
@@ -44,7 +44,7 @@ class TaskRepository(
 
     override fun cancelTask(taskId: UUID): TaskModel? {
         val requestObj = TaskModel(taskId, state = TaskState.Cancelled.simpleName)
-        val result = this.webservice.post<TaskModel>(
+        val result = webservice.post<TaskModel>(
                 "/api/performer/complete_task",
                 requestObj,
                 TaskModel::class.java,
@@ -53,7 +53,7 @@ class TaskRepository(
     }
 
     override fun getTask(taskId: UUID): TaskModel? {
-        val result = this.webservice.get<TaskModel>(
+        val result = webservice.get<TaskModel>(
                 "/api/performer/task/{$taskId}",
                 TaskModel::class.java,
                 true)
@@ -71,7 +71,7 @@ class TaskRepository(
             }
         }
 
-        val result = this.webservice.get<List<TaskModel>>(
+        val result = webservice.get<List<TaskModel>>(
                 "/api/performer/my_tasks",
                 object : TypeToken<ArrayList<TaskModel>>(){}.type,
                 true)
@@ -94,7 +94,7 @@ class TaskRepository(
             }
         }
 
-        val result = this.webservice.get<List<TaskModel>>(
+        val result = webservice.get<List<TaskModel>>(
                 "/api/performer/undistributed_tasks",
                 object : TypeToken<ArrayList<TaskModel>>(){}.type,
                 true)
