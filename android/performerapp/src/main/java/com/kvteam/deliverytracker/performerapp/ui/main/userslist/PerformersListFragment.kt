@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_users_list.*
 import javax.inject.Inject
 
 class PerformersListFragment: UsersListFragment() {
@@ -30,6 +31,20 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(it)
                 adapter.value?.notifyDataSetChanged()
             }
+        })
+        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
+    }
+
+    private fun refresh() {
+        invokeAsync({
+            instanceManager.getPerformers(true)
+        }, {
+            if(it != null) {
+                adapter.value?.items?.clear()
+                adapter.value?.items?.addAll(it)
+                adapter.value?.notifyDataSetChanged()
+            }
+            srlSwipeRefreshUsers.isRefreshing = false
         })
     }
 }

@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.performerapp.ui.main.taskslist
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
+import kotlinx.android.synthetic.main.fragment_tasks_list.*
 import javax.inject.Inject
 
 class UndistributedTasksListFragment: TasksListFragment() {
@@ -24,6 +25,21 @@ class UndistributedTasksListFragment: TasksListFragment() {
                 adapter.value?.items?.addAll(it)
                 adapter.value?.notifyDataSetChanged()
             }
+        })
+
+        srlSwipeRefreshTasks.setOnRefreshListener { refresh() }
+    }
+
+    private fun refresh() {
+        invokeAsync({
+            taskRepository.getUndistributedTasks(true)
+        }, {
+            if(it != null) {
+                adapter.value?.items?.clear()
+                adapter.value?.items?.addAll(it)
+                adapter.value?.notifyDataSetChanged()
+            }
+            srlSwipeRefreshTasks.isRefreshing = false
         })
     }
 }
