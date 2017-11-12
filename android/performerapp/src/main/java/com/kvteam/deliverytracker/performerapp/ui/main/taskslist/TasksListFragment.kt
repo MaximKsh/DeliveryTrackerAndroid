@@ -54,9 +54,10 @@ open class TasksListFragment : DeliveryTrackerFragment() {
 
         adapter = AutoClearedValue(
                 this,
-                TasksListAdapter(this::onTaskClicked),
+                TasksListAdapter(this::onTaskClicked, context::getString),
                 {
                     it?.onTaskClick = null
+                    it?.getLocalizedString = null
                 })
         rvTasksList.adapter = adapter.value
 

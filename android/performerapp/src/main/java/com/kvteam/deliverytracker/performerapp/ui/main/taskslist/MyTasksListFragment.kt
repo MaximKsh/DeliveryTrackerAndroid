@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
-import kotlinx.android.synthetic.main.fragment_users_list.*
 import javax.inject.Inject
 
 class MyTasksListFragment: TasksListFragment() {

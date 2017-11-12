@@ -96,8 +96,6 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun showError(text: String) {
-        Toast
-                .makeText(this, text,Toast.LENGTH_LONG)
-                .show()
+        tvLoginError.text = text
     }
 }

@@ -13,7 +13,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvUserItemSurname"
+            android:id="@+id/tvUserItemFullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvUserItemRole"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -27,6 +32,7 @@
         android:id="@+id/ivCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/PerformerApp_UsersListFragment_CallUserContentDescription"
         app:srcCompat="@android:drawable/sym_action_call" />
 </LinearLayout>
 

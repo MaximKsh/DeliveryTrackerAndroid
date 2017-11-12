@@ -2,7 +2,7 @@
     <string name="Core_EmptyString" translatable="false" />
     <string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>
 
-    <string name="app_name">DTCore</string>
+    <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_TaskState_NewUndistributed">New undistributed</string>
     <string name="Core_TaskState_New">New</string>
     <string name="Core_TaskState_InWork">In work</string>
@@ -29,4 +29,7 @@
     <string name="ServerMessage_ServerError_AccessDenied">Access denied</string>
     <string name="ServerMessage_ServerError_UserDeleted">User was deleted</string>
     <string name="ServerMessage_ServerError_RoleRange">Specify correct role</string>
+    <string name="Core_Role_CreatorRole">Creator</string>
+    <string name="Core_Role_ManagerRole">Manager</string>
+    <string name="Core_Role_PerformerRole">Performer</string>
 </resources>

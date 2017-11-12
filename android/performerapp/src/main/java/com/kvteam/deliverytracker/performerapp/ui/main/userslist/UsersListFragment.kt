@@ -49,9 +49,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
         adapter = AutoClearedValue(
                 this,
-                UsersListAdapter(this::onCallClicked),
+                UsersListAdapter(this::onCallClicked, context::getString),
                 {
                     it?.onCallClick = null
+                    it?.getLocalizedString = null
                 })
         rvUsersList.adapter = adapter.value
 

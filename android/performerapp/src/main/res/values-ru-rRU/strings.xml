@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">performerapp</string>
-    <string name="title_activity_main">11</string>
-    <string name="hello_blank_fragment">11</string>
+    <string name="PerformerApp_AppName">Delivery Tracker</string>
     <string name="PerformerApp_TaskFragment_ReserveButton">Зарезервировать</string>
     <string name="PerformerApp_TaskFragment_InWorkButton">Взять в работу</string>
     <string name="PerformerApp_TaskFragment_PerformButton">Завершить</string>
     <string name="PerformerApp_TaskFragment_CancelButton">Отменить</string>
     <string name="PerformerApp_LoginActivity_WrongCredentials">Неверные имя/пароль</string>
     <string name="PerformerApp_LoginActivity_IncorrectRole">Неправильная роль</string>
+    <string name="PerformerApp_LoginActivity_SignInButton">Войти</string>
+    <string name="PerformerApp_LoginActivity_LoginLabel">Код</string>
+    <string name="PerformerApp_LoginActivity_PasswordLabel">Пароль</string>
+    <string name="PerformerApp_ConfirmDataActivity_ConfirmButton">Подтвердить</string>
+    <string name="PerformerApp_ConfirmDataActivity_UnknownError">Произошла неопределенная ошибка</string>
+    <string name="PerformerApp_ConfirmDataActivity_Surname">Фамилия</string>
+    <string name="PerformerApp_ConfirmDataActivity_PhoneNumber">Номер телефона</string>
+    <string name="PerformerApp_ConfirmDataActivity_Name">Имя</string>
+    <string name="PerformerApp_MainActivity_ManagerMenuItem">Управляющие</string>
+    <string name="PerformerApp_MainActivity_UndistibutedTasksMenuItem">Нераспр.</string>
+    <string name="PerformerApp_MainActivity_MyTasksMenuItem">Мои задания</string>
+    <string name="PerformerApp_MainActivity_PerformersMenuItem">Исполнители</string>
+    <string name="PerformerApp_UsersListFragment_CallUserContentDescription">Позвонить</string>
 </resources>

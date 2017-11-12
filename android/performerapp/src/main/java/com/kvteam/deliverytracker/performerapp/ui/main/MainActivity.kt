@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.performerapp.R
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,6 +33,7 @@ class MainActivity : DeliveryTrackerActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        removeShiftMode(bnvNavigation)
 
         if (savedInstanceState == null) {
             menuItemMapper[defaultItem]?.invoke()

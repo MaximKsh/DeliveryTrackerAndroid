@@ -11,7 +11,8 @@ import com.kvteam.deliverytracker.performerapp.R
 import kotlinx.android.synthetic.main.fragment_tasks_item.view.*
 
 class TasksListAdapter(
-        var onTaskClick: ((task: TaskModel) -> Unit)?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
+        var onTaskClick: ((task: TaskModel) -> Unit)?,
+        var getLocalizedString: ((id: Int) -> String)?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
         val tvNumber = v.tvTaskItemNumber!!
@@ -37,7 +38,10 @@ class TasksListAdapter(
         val task = items[position]
         val state = task.state?.toTaskState()
         holder.tvNumber.text = task.number
-        holder.tvState.text = task.state
+        val stateId = task.state?.toTaskState()?.localizationStringId
+        holder.tvState.text =
+                if(stateId != null) getLocalizedString?.invoke(stateId) ?: ""
+                else ""
 
         holder.llRowLayout.setBackgroundResource(when(state) {
             TaskState.NewUndistributed -> R.color.taskNewUndistributedColor

@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.performerapp.R
 import kotlinx.android.synthetic.main.fragment_users_item.view.*
 
 class UsersListAdapter(
-        var onCallClick: ((task: UserModel) -> Unit)?): RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
+        var onCallClick: ((task: UserModel) -> Unit)?,
+        var getLocalizedString: ((id: Int) -> String)?): RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
-        val tvSurname = v.tvUserItemSurname!!
+        val tvFullname = v.tvUserItemFullname!!
+        val tvRole = v.tvUserItemRole!!
         val tvPhoneNumber = v.tvUserItemPhoneNumber!!
         val ivCall = v.ivCall!!
     }
@@ -33,7 +36,14 @@ class UsersListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = items[position]
-        holder.tvSurname.text = user.surname
+        holder.tvFullname.text = String.format(
+                getLocalizedString?.invoke(R.string.PerformerApp_UsersListFragment_FullnameFormat) ?: "\$s \$s",
+                user.surname,
+                user.name)
+        val roleStringId = user.role?.toRole()?.localizationStringId
+        holder.tvRole.text =
+                if(roleStringId != null) getLocalizedString?.invoke(roleStringId) ?: ""
+                else ""
         holder.tvPhoneNumber.text = user.phoneNumber
         holder.ivCall.setOnClickListener{ onCallClick?.invoke(user) }
     }

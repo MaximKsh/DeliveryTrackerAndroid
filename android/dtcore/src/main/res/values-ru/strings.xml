@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DTCore</string>
+    <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_TaskState_NewUndistributed">Новое нераспределенное</string>
     <string name="Core_TaskState_New">Новое</string>
     <string name="Core_TaskState_InWork">В работе</string>
@@ -27,4 +27,7 @@
     <string name="ServerMessage_ServerError_AccessDenied">Доступ запрещен</string>
     <string name="ServerMessage_ServerError_UserDeleted">Пользователь был удален</string>
     <string name="ServerMessage_ServerError_RoleRange">Укажите корректную роль</string>
+    <string name="Core_Role_CreatorRole">Создатель</string>
+    <string name="Core_Role_ManagerRole">Управляющий</string>
+    <string name="Core_Role_PerformerRole">Исполнитель</string>
 </resources>

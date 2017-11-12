@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.performerapp.ui.confirm
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
@@ -59,7 +58,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
             session.updateUserInfo(userInfo)
         }, {
             if(it) {
-                if(settingsContext) {
+                if(!settingsContext) {
                     val intent = Intent(
                             this@ConfirmDataActivity,
                             MainActivity::class.java)
@@ -67,13 +66,12 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 }
                 finish()
             } else {
-                Toast
-                        .makeText(
-                                this@ConfirmDataActivity,
-                                "LOCME ERROR",
-                                Toast.LENGTH_LONG)
-                        .show()
+                showError(getString(R.string.PerformerApp_ConfirmDataActivity_UnknownError))
             }
         })
+    }
+
+    private fun showError(text: String) {
+        tvConfirmError.text = text
     }
 }

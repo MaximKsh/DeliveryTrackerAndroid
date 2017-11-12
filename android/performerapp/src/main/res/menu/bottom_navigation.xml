@@ -3,20 +3,20 @@
     <item
         android:id="@+id/navigation_managers"
         android:icon="@drawable/ic_launcher_background"
-        android:title="LOCME: менеджеры" />
+        android:title="@string/PerformerApp_MainActivity_ManagerMenuItem" />
 
     <item
         android:id="@+id/navigation_performers"
         android:icon="@drawable/ic_launcher_background"
-        android:title="LOCME: исполнители" />
+        android:title="@string/PerformerApp_MainActivity_PerformersMenuItem" />
 
     <item
         android:id="@+id/navigation_my_tasks"
         android:icon="@drawable/ic_launcher_background"
-        android:title="LOCME: мои задания" />
+        android:title="@string/PerformerApp_MainActivity_MyTasksMenuItem" />
 
     <item
         android:id="@+id/navigation_undistributed_tasks"
         android:icon="@drawable/ic_launcher_background"
-        android:title="LOCME: нераспределенные задания" />
+        android:title="@string/PerformerApp_MainActivity_UndistibutedTasksMenuItem" />
 </menu>
