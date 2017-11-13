@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
-import com.kvteam.deliverytracker.managerapp.LoginActivity
+import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
 import dagger.Binds
 import dagger.Module

@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorWhite"
-    android:padding="30dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingStart="80dp"
+    android:paddingEnd="80dp"
     android:gravity="center_horizontal"
     tools:context="com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity">
 
@@ -14,16 +17,16 @@
     <ImageView
         android:contentDescription="@string/main_logo"
         android:id="@+id/imageView"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
         android:src="@drawable/main_logo"
-        android:layout_marginTop="50dp"
         />
 
     <RelativeLayout
+        android:layout_marginTop="-10dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         >
 
@@ -32,7 +35,7 @@
             android:layout_width="match_parent"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:inputType="text"
             android:theme="@style/EditTextTheme"
@@ -45,7 +48,7 @@
             android:alpha="0.3"
             android:layout_marginTop="13dp"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:src="@drawable/ic_insert_invitation_black_24dp" />
 
     </RelativeLayout>
@@ -53,7 +56,7 @@
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         >
 
@@ -62,7 +65,7 @@
             android:layout_width="match_parent"
             android:paddingStart="45dp"
             android:paddingEnd="45dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:inputType="textPassword"
             android:theme="@style/EditTextTheme"
@@ -75,7 +78,7 @@
             android:alpha="0.3"
             android:layout_marginTop="13dp"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:src="@drawable/ic_lock_black_24dp" />
 
     </RelativeLayout>
@@ -83,7 +86,7 @@
     <Button
         android:id="@+id/btnLogin"
         android:onClick="onLoginClick"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
@@ -94,7 +97,6 @@
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="@string/forgot_password" />
 
     <LinearLayout
@@ -105,7 +107,6 @@
 
         <TextView
             android:id="@+id/textView"
-            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_your_company" />
@@ -115,7 +116,7 @@
             android:onClick="onAddCompanyClick"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="@string/add"
             android:background="@drawable/button_border"
             android:theme="@style/OutlineButtonTheme"

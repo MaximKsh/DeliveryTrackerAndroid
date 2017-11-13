@@ -26,9 +26,14 @@
     <string name="add_user">Добавить</string>
     <string name="remove">Удалить</string>
     <string name="cancel">Отменить</string>
+    <string name="finish">Готово</string>
     <string name="empty_user_list">Пока тут никого нет</string>
     <string name="delete_users_modal">Вы уверены что хотите удалить выбранных пользователей?</string>
 
+    <string-array name="roles_array">
+        <item>Руководитель</item>
+        <item>Исполнитель</item>
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->

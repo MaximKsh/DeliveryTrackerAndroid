@@ -1,131 +1,115 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
 
-    <data>
-        <import type="android.view.View"/>
-        <variable
-            name="UserListViewModel"
-            type="com.kvteam.deliverytracker.managerapp.usersRecycleView.UsersListViewModel" />
-        <variable
-            name="User"
-            type="com.kvteam.deliverytracker.core.models.UserModel" />
-    </data>
+    <CheckBox
+        android:id="@+id/cbSelectUser"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:theme="@style/BrandedCheckBox" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-
-        <CheckBox
-            android:checked="@{UserListViewModel.selectedUsersList.contains(User.username)}"
-            android:visibility="@{UserListViewModel.isInEditMode ? View.VISIBLE : View.GONE}"
-            android:id="@+id/selectUser"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:theme="@style/BrandedCheckBox"
-            android:tag="@{User.username}"
-            />
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="80dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="User avatar"
+                    android:src="@drawable/empty_avatar" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="2dp"
+                    android:contentDescription="Online status"
+                    android:src="@drawable/circle" />
+                <!--<ImageView-->
+                <!--android:contentDescription="Admin status"-->
+                <!--android:src="@drawable/ic_star_gold_40dp"-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="15dp"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_alignParentEnd="true" />-->
+            </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
 
-                <RelativeLayout
-                    android:layout_width="70dp"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="match_parent"
-                        android:contentDescription="User avatar"
-                        android:src="@drawable/empty_avatar" />
-
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="2dp"
-                        android:contentDescription="Online status"
-                        android:src="@drawable/circle" />
-                    <!--<ImageView-->
-                    <!--android:contentDescription="Admin status"-->
-                    <!--android:src="@drawable/ic_star_gold_40dp"-->
-                    <!--android:layout_width="15dp"-->
-                    <!--android:layout_height="15dp"-->
-                    <!--android:layout_alignParentTop="true"-->
-                    <!--android:layout_alignParentEnd="true" />-->
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{User.surname}"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@{User.name}"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="@{UserListViewModel.isInEditMode ? View.GONE : View.VISIBLE}"
+                <TextView
+                    android:id="@+id/tvName"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="end|center_vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="20dp"
-                        android:alpha="0.4"
-                        android:contentDescription="Chat icon"
-                        android:src="@drawable/ic_chat_black_24dp" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="10dp"
-                        android:alpha="0.4"
-                        android:contentDescription="Phone icon"
-                        android:src="@drawable/ic_phone_black_24dp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvSurname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="80dp"
-                android:background="@drawable/rectangle" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="end|center_vertical">
+
+                <ImageView
+                    android:id="@+id/ivChatIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:alpha="0.4"
+                    android:contentDescription="Chat icon"
+                    android:src="@drawable/ic_chat_black_24dp" />
+
+                <ImageView
+                    android:id="@+id/ivPhoneIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:alpha="0.4"
+                    android:contentDescription="Phone icon"
+                    android:src="@drawable/ic_phone_black_24dp" />
+            </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/rectangle" />
     </LinearLayout>
-</layout>
+</LinearLayout>

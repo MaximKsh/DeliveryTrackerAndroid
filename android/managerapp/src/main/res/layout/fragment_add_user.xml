@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:padding="30dp"
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etNameField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/enter_name_hint" />
+
+
+        <ImageView
+            android:contentDescription="@string/code_hint_icon"
+            android:id="@+id/ivNameHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etSurnameField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/enter_surname_hint" />
+
+
+        <ImageView
+            android:contentDescription="@string/code_hint_icon"
+            android:id="@+id/ivSurnameHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etPhoneNumberField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="phone"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/enter_phone_number_hint" />
+
+
+        <ImageView
+            android:contentDescription="@string/code_hint_icon"
+            android:id="@+id/ivPhoneNumberHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_phone_black_24dp" />
+
+    </RelativeLayout>
+
+    <Spinner
+        android:layout_marginTop="15dp"
+        android:layout_gravity="end"
+        android:id="@+id/sUserRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -1,23 +1,13 @@
 package com.kvteam.deliverytracker.managerapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import android.databinding.adapters.CompoundButtonBindingAdapter.setChecked
-import android.support.annotation.RestrictTo
 import android.support.design.internal.BottomNavigationItemView
-import java.lang.reflect.AccessibleObject.setAccessible
-import java.lang.reflect.Array.setBoolean
 import android.support.design.internal.BottomNavigationMenuView
-import android.support.v4.app.Fragment
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.managerapp.usersRecycleView.ManagersListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import kotlinx.android.synthetic.main.toolbar.*
 
 

@@ -3,8 +3,9 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.managerapp.MainActivity
-import com.kvteam.deliverytracker.managerapp.usersRecycleView.ManagersListFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.ActivityKey
@@ -25,4 +26,8 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(ManagersListFragmentModule::class))
     internal abstract fun managersListFragment(): ManagersListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(AddUserFragmentModule::class))
+    internal abstract fun addUserFragment(): AddUserFragment
 }
