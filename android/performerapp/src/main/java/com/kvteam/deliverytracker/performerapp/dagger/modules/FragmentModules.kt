@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.performerapp.dagger.components.*
 import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
 import dagger.Binds
@@ -43,8 +44,8 @@ abstract class TaskFragmentModule {
 abstract class UndistributedTasksListFragmentModule {
     @Binds
     @IntoMap
-    @FragmentKey(MyTasksListFragment::class)
-    internal abstract fun undistributedTasksListFragmentInjector(builder: MyTasksListFragmentSubcomponent.Builder):
+    @FragmentKey(UndistributedTasksListFragment::class)
+    internal abstract fun undistributedTasksListFragmentInjector(builder: UndistributedTasksListFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

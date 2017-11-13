@@ -24,11 +24,7 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
@@ -59,8 +55,13 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

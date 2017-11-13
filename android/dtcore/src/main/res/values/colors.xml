@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#80000000</color>
+
+    <color name="taskNewUndistributedColor">#ffffff</color>
+    <color name="taskNewColor">#ffffff</color>
+    <color name="taskInWorkColor">#ffff66</color>
+    <color name="taskPerformedColor">#66cdaa</color>
+    <color name="taskCancelledColor">#f6456a</color>
+    <color name="taskCancelledByManagerColor">#ff0000</color>
+
+    <color name="errorText">#FF0000</color>
 </resources>

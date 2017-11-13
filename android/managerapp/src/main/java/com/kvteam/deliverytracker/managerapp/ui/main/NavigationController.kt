@@ -2,7 +2,12 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -13,17 +18,13 @@ class NavigationController (private val mainActivity: MainActivity) {
     private val fragmentManager: FragmentManager
         get() = mainActivity.supportFragmentManager
 
+    val info = mutableMapOf<String, Any>()
+
     fun closeCurrentFragment() {
         fragmentManager.popBackStack()
     }
 
-//    fun navigateToTask(taskId: UUID) {
-//        val fragment = TaskFragment.create(taskId)
-//        fragmentManager.beginTransaction()
-//                .replace(containerId, fragment)
-//                .addToBackStack(null)
-//                .commitAllowingStateLoss()
-//    }
+
 
     fun navigateToManagers() {
         val fragment = ManagersListFragment()
@@ -49,20 +50,44 @@ class NavigationController (private val mainActivity: MainActivity) {
 //                .commitAllowingStateLoss()
 //    }
 
-//    fun navigateToMyTasks() {
-//        val fragment = MyTasksListFragment()
-//        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//        fragmentManager.beginTransaction()
-//                .replace(containerId, fragment)
-//                .commitAllowingStateLoss()
-//    }
+    fun navigateToMyTasks() {
+        val fragment = MyTasksListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
+    }
 
-//    fun navigateToUndistributedTasks() {
-//        val fragment = UndistributedTasksListFragment()
-//        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//        fragmentManager.beginTransaction()
-//                .replace(containerId, fragment)
-//                .commitAllowingStateLoss()
-//    }
+    fun navigateToAllTasks() {
+        val fragment = AllTasksListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToAddTask() {
+        val fragment = AddTaskFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToSelectPerformer() {
+        val fragment = SelectPerformerFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToTask(taskId: UUID) {
+        val fragment = TaskFragment.create(taskId)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
 
 }

@@ -66,7 +66,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 }
                 finish()
             } else {
-                showError(getString(R.string.PerformerApp_ConfirmDataActivity_UnknownError))
+                showError(getString(R.string.Core_UnknownError))
             }
         })
     }

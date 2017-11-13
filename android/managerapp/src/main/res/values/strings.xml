@@ -43,4 +43,13 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+
+    <string name="ManagerApp_TaskFragment_CancelTask">Cancel task</string>
+    <string name="ManagerApp_AddTaskFragment_Number">Number*</string>
+    <string name="ManagerApp_AddTaskFragment_ShippingDesc">Shipping description</string>
+    <string name="ManagerApp_AddTaskFragment_Details">Details</string>
+    <string name="ManagerApp_AddTaskFragment_Address">Address</string>
+    <string name="ManagerApp_AddTaskFragment_Performer">Performer</string>
+    <string name="ManagerApp_AddTaskFragment_AddTaskButton">Add task</string>
+
 </resources>
