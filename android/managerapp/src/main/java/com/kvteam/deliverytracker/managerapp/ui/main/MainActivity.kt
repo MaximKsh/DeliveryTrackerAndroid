@@ -7,53 +7,34 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.util.Log
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 
 class MainActivity : DeliveryTrackerActivity() {
-    fun removeShiftMode(view: BottomNavigationView) {
-        val menuView = view.getChildAt(0) as BottomNavigationMenuView
-        try {
-            val shiftingMode = menuView.javaClass.getDeclaredField("mShiftingMode")
-            shiftingMode.isAccessible = true
-            shiftingMode.setBoolean(menuView, false)
-            shiftingMode.isAccessible = false
-            for (i in 0 until menuView.childCount) {
-                val item = menuView.getChildAt(i) as BottomNavigationItemView
-                item.setShiftingMode(false)
-                item.setChecked(item.itemData.isChecked)
-            }
-        } catch (e: NoSuchFieldException) {
-            Log.e("ERROR NO SUCH FIELD", "Unable to get shift mode field")
-        } catch (e: IllegalAccessException) {
-            Log.e("ERROR ILLEGAL ALG", "Unable to change value of shift mode")
-        }
-
-    }
+    @Inject
+    lateinit var navigationController: NavigationController
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_managers -> {
-                val managersListFragment = ManagersListFragment()
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.add(R.id.mainContainer, managersListFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
-                return@OnNavigationItemSelectedListener true
+                navigationController.navigateToManagers()
+                true
             }
             R.id.navigation_performers -> {
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.navigation_tasks -> {
-                return@OnNavigationItemSelectedListener true
+                true
             }
             R.id.navigation_my_tasks -> {
-                return@OnNavigationItemSelectedListener true
+                true
             }
+            else -> false
         }
-        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

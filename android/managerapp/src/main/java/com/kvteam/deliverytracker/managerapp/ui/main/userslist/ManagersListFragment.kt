@@ -8,6 +8,7 @@ import android.view.MenuItem
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.toolbar.*

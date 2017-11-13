@@ -12,14 +12,17 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_manager_list_item.*
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 interface UserItemActions {
     fun onCallClick(user: UserModel)
@@ -37,6 +40,9 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     lateinit var mAddMenuItem: MenuItem
     lateinit var mRemoveMenuItem: MenuItem
     lateinit var mEditMenuItem: MenuItem
+
+    @Inject
+    lateinit var navigationController: NavigationController
 
     val userItemActions = object: UserItemActions {
         override fun onCallClick(user: UserModel) {
@@ -198,14 +204,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 deleteUsersDialog.show()
             }
             R.id.action_add -> {
-                val addUserFragment = AddUserFragment()
-                val data = Bundle()
-                data.putString("isFor", "managers")
-                addUserFragment.arguments = data
-                val transaction = activity.supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.mainContainer, addUserFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                navigationController.navigateToAddUser(Role.Manager)
             }
         }
         return super.onOptionsItemSelected(item)

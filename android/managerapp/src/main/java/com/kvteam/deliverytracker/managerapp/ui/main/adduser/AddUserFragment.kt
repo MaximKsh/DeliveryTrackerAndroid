@@ -13,10 +13,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.*
 import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserItemActions
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserListModel
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListAdapter
@@ -24,20 +26,23 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.fragment_add_user.*
+import javax.inject.Inject
 
 
 // TODO: rename managersList xml to userslist
 open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedListener {
+    @Inject
+    lateinit var navigationController: NavigationController
+
     private val layoutManagerKey = "layoutManager"
     private val usersListKey = "addingUser"
     private lateinit var savedUserData: UserModel
     private lateinit var mSubmitItem: MenuItem
-    private lateinit var isFor: String
+    private lateinit var role: Role
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
-        isFor = arguments.getString("isFor")
         this.activity.toolbar_title.text = resources.getString(R.string.add_user)
         super.onCreate(savedInstanceState)
     }
@@ -93,7 +98,7 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
         when (item.itemId) {
             R.id.action_finish -> {
                 Toast.makeText(this.activity, "Приглашение успешно отправлено", Toast.LENGTH_LONG).show()
-                fragmentManager.popBackStack()
+                navigationController.closeCurrentFragment()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -105,10 +110,18 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
         this.mSubmitItem = menu.findItem(R.id.action_finish)
 
         this.activity.toolbar_left_action.setOnClickListener { _ ->
-            fragmentManager.popBackStack()
+            navigationController.closeCurrentFragment()
         }
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    companion object {
+        fun create(role: Role): AddUserFragment {
+            val fragment = AddUserFragment()
+            fragment.role = role
+            return fragment
+        }
     }
 }
 

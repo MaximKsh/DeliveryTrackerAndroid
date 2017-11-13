@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,11 +33,11 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToAddUser() {
-        val fragment = AddUserFragment()
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    fun navigateToAddUser(role: Role) {
+        val fragment = AddUserFragment.create(role)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 

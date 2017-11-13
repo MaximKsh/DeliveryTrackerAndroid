@@ -31,8 +31,8 @@
     <string name="delete_users_modal">Вы уверены что хотите удалить выбранных пользователей?</string>
 
     <string-array name="roles_array">
-        <item>Руководитель</item>
-        <item>Исполнитель</item>
+        <item>@string/Core_Role_ManagerRole</item>
+        <item>@string/Core_Role_PerformerRole</item>
     </string-array>
 
 
