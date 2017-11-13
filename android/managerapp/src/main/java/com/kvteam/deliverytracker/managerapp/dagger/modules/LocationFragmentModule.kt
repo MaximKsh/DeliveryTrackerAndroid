@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
-import com.kvteam.deliverytracker.managerapp.LocationFragment
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.LocationFragmentSubcomponent
 import dagger.Binds
 import dagger.Module

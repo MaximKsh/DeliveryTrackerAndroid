@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
-import com.kvteam.deliverytracker.managerapp.LocationFragment
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 

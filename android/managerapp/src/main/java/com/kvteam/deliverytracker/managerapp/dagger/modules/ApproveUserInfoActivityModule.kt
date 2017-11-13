@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
-import com.kvteam.deliverytracker.managerapp.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
 import com.kvteam.deliverytracker.managerapp.dagger.components.ApproveUserInfoActivitySubcomponent
 import dagger.android.AndroidInjector
 import dagger.android.ActivityKey

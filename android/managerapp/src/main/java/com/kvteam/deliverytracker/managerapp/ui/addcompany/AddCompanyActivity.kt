@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.managerapp.LocationFragment
-import com.kvteam.deliverytracker.managerapp.MainActivity
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.toolbar.*
 

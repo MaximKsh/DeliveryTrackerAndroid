@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp
+package com.kvteam.deliverytracker.managerapp.ui.addcompany
 
 import android.Manifest
 import android.content.Context
@@ -17,6 +17,7 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.managerapp.R
 
 class LocationFragment : DeliveryTrackerFragment() {
 

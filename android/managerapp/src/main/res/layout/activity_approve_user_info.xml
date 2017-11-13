@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/colorWhite"
     android:gravity="center_horizontal"
-    tools:context="com.kvteam.deliverytracker.managerapp.ApproveUserInfoActivity">
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity">
 
     <include layout="@layout/toolbar" />
 
