@@ -1,11 +1,13 @@
-package com.kvteam.deliverytracker.managerapp
+package com.kvteam.deliverytracker.managerapp.ui.login.addcompany
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import kotlinx.android.synthetic.main.activity_add_company.*
+import com.kvteam.deliverytracker.managerapp.LocationFragment
+import com.kvteam.deliverytracker.managerapp.MainActivity
+import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.toolbar.*
 
 
@@ -17,8 +19,8 @@ class AddCompanyActivity : DeliveryTrackerActivity() {
 
         setSupportActionBar(this.toolbar_top)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         this.toolbar_title.text = resources.getString(R.string.company_addition)
-
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, LocationFragment())
         transaction.addToBackStack(null)

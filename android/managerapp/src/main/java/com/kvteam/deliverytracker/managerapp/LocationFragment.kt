@@ -26,8 +26,6 @@ class LocationFragment : DeliveryTrackerFragment() {
 
     private val locationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location?) {
-            Log.i("LOCATION_INFO", "Unknown location")
-
             if (googleMap != null) {
                 if (location != null) {
                     val city = LatLng(location.latitude, location.longitude)
@@ -63,12 +61,9 @@ class LocationFragment : DeliveryTrackerFragment() {
 
             val bestProvider = (locationManager as LocationManager).getBestProvider(Criteria(), false)
 
-//            (locationManager as LocationManager).requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener);
-//            (locationManager as LocationManager).requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener);
-
             (locationManager as LocationManager).requestLocationUpdates(bestProvider, 300, 0f, this.locationListener)
         }
 
-            return rootView
+        return rootView
     }
 }

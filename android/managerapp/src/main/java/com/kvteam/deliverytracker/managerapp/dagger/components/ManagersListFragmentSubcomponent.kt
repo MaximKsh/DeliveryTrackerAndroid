@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
-import com.kvteam.deliverytracker.managerapp.usersRecycleView.ManagersListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
 
