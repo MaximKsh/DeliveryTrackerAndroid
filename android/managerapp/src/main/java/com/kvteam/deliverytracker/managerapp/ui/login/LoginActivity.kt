@@ -11,7 +11,7 @@ import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivity
-import com.kvteam.deliverytracker.managerapp.MainActivity
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*

@@ -1,17 +1,14 @@
-package com.kvteam.deliverytracker.managerapp
+package com.kvteam.deliverytracker.managerapp.ui.approveuserinfo
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.managerapp.R.id.action_bar
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_approve_user_info.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class ApproveUserInfoActivity : DeliveryTrackerActivity() {

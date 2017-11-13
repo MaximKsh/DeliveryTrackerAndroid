@@ -2,7 +2,7 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
-import com.kvteam.deliverytracker.managerapp.MainActivity
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment

@@ -6,7 +6,7 @@ import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
 import com.kvteam.deliverytracker.core.session.SessionService
 import com.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivity
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
-import com.kvteam.deliverytracker.managerapp.MainActivity
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

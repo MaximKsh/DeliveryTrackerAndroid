@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp
+package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -7,6 +7,7 @@ import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.util.Log
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
 import kotlinx.android.synthetic.main.toolbar.*
 
