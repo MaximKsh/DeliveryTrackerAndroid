@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.login.addcompany
+package com.kvteam.deliverytracker.managerapp.ui.addcompany
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,10 +13,7 @@ import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
-import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
-import com.kvteam.deliverytracker.core.session.Session
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.activity_add_company.*

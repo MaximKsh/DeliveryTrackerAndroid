@@ -30,7 +30,7 @@
     <string name="share_code">Share code with your collegue</string>
     <string name="empty_user_list">Nothing\'s here yet</string>
     <string name="delete_users_modal">Are you sure you want to delete selected users?</string>
-
+    <string name="deleteButton">delete</string>
     <string-array name="roles_array">
         <item>@string/Core_Role_ManagerRole</item>
         <item>@string/Core_Role_PerformerRole</item>
