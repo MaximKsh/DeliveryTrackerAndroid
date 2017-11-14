@@ -11,7 +11,6 @@
     <string name="PerformerApp_LoginActivity_LoginLabel">Код</string>
     <string name="PerformerApp_LoginActivity_PasswordLabel">Пароль</string>
     <string name="PerformerApp_ConfirmDataActivity_ConfirmButton">Подтвердить</string>
-    <string name="PerformerApp_ConfirmDataActivity_UnknownError">Произошла неопределенная ошибка</string>
     <string name="PerformerApp_ConfirmDataActivity_Surname">Фамилия</string>
     <string name="PerformerApp_ConfirmDataActivity_PhoneNumber">Номер телефона</string>
     <string name="PerformerApp_ConfirmDataActivity_Name">Имя</string>

@@ -12,7 +12,6 @@
     <string name="PerformerApp_LoginActivity_LoginLabel">Login</string>
     <string name="PerformerApp_LoginActivity_PasswordLabel">Password</string>
     <string name="PerformerApp_ConfirmDataActivity_ConfirmButton">Confirm</string>
-    <string name="PerformerApp_ConfirmDataActivity_UnknownError">Unknown error</string>
     <string name="PerformerApp_ConfirmDataActivity_Surname">Surname</string>
     <string name="PerformerApp_ConfirmDataActivity_Name">Name</string>
     <string name="PerformerApp_ConfirmDataActivity_PhoneNumber">Phone number</string>

@@ -32,4 +32,7 @@
     <string name="Core_Role_CreatorRole">Creator</string>
     <string name="Core_Role_ManagerRole">Manager</string>
     <string name="Core_Role_PerformerRole">Performer</string>
+    <string name="Core_ThreeDots" translatable="false">...</string>
+
+    <string name="Core_UnknownError">Unknown error</string>
 </resources>

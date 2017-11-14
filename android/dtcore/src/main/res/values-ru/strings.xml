@@ -30,4 +30,5 @@
     <string name="Core_Role_CreatorRole">Создатель</string>
     <string name="Core_Role_ManagerRole">Управляющий</string>
     <string name="Core_Role_PerformerRole">Исполнитель</string>
+    <string name="Core_UnknownError">Неизвестная ошибка</string>
 </resources>

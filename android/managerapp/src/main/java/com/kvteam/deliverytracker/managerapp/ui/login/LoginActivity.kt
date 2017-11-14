@@ -33,7 +33,7 @@ class LoginActivity : DeliveryTrackerActivity() {
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         if(savedInstanceState == null) {
-            this.etLoginField.setText("Rdpasz26f3")
+            this.etLoginField.setText("z5Twn9ZRMG")
             this.etPasswordField.setText("123qQ!")
         }
     }

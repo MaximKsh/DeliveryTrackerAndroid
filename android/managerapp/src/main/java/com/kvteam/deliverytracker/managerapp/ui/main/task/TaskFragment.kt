@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.performerapp.ui.main.task
+package com.kvteam.deliverytracker.managerapp.ui.main.task
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,13 +10,14 @@ import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.performerapp.R
-import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
-import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task.*
 import java.util.*
 import javax.inject.Inject
+
 
 class TaskFragment : DeliveryTrackerFragment() {
     private val taskIdKey = "taskId"
@@ -39,7 +40,7 @@ class TaskFragment : DeliveryTrackerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(
+        return view ?: inflater?.inflate(
                 R.layout.fragment_task,
                 container,
                 false)
@@ -70,7 +71,6 @@ class TaskFragment : DeliveryTrackerFragment() {
         }
     }
 
-
     private fun initTask(task: TaskModel) {
         currentTask = task
         tvTaskNumber.text = task.number
@@ -81,30 +81,11 @@ class TaskFragment : DeliveryTrackerFragment() {
         val state = task.state?.toTaskState()
         if(state != null) {
             tvTaskState.text = getString(state.localizationStringId)
-            when(state) {
-                TaskState.NewUndistributed -> {
-                    bttnReserveTask.visibility = View.VISIBLE
-                    bttnReserveTask.setOnClickListener {
-                        performTaskAction { taskRepository.reserveTask(it) }
-                    }
+            if(state in arrayOf(TaskState.NewUndistributed, TaskState.New, TaskState.InWork)) {
+                bttnCancelTask.visibility = View.VISIBLE
+                bttnCancelTask.setOnClickListener {
+                    performTaskAction { taskRepository.cancelTask(it) }
                 }
-                TaskState.New -> {
-                    bttnTakeIntoWorkTask.visibility = View.VISIBLE
-                    bttnTakeIntoWorkTask.setOnClickListener {
-                        performTaskAction { taskRepository.takeTaskToWork(it) }
-                    }
-                }
-                TaskState.InWork -> {
-                    bttnPerformTask.visibility = View.VISIBLE
-                    bttnPerformTask.setOnClickListener {
-                        performTaskAction { taskRepository.performTask(it) }
-                    }
-                    bttnCancelTask.visibility = View.VISIBLE
-                    bttnCancelTask.setOnClickListener {
-                        performTaskAction { taskRepository.cancelTask(it) }
-                    }
-                }
-                else -> {}
             }
         }
     }
@@ -129,9 +110,6 @@ class TaskFragment : DeliveryTrackerFragment() {
     }
 
     private fun setProcessingState(processing: Boolean = true){
-        bttnReserveTask.isEnabled = !processing
-        bttnTakeIntoWorkTask.isEnabled = !processing
-        bttnPerformTask.isEnabled = !processing
         bttnCancelTask.isEnabled = !processing
     }
 
