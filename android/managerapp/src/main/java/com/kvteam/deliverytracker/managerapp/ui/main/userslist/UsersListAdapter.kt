@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.fragment_manager_list_item.view.*
 
@@ -16,6 +17,7 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
         val ivPhoneIcon = v.ivPhoneIcon!!
         val cbSelectUser = v.cbSelectUser!!
         val ivChatIcon = v.ivChatIcon!!
+        val ivAdminStatusIcon = v.ivAdminStatusIcon!!
     }
 
     val items = mutableListOf<UserListModel>()
@@ -50,6 +52,11 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
         holder.tvName.text = userListModel.userModel.name
         holder.tvSurname.text = userListModel.userModel.surname
         holder.cbSelectUser.isChecked = userListModel.isSelected
+
+        holder.ivAdminStatusIcon.visibility = if (userListModel.userModel.role == Role.Creator.simpleName)
+            View.VISIBLE
+        else
+            View.INVISIBLE
 
         this.toggleVisibility(holder, userListModel)
 
