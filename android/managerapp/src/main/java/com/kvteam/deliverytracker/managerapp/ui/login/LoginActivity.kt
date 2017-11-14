@@ -54,6 +54,7 @@ class LoginActivity : DeliveryTrackerActivity() {
     fun onAddCompanyClick() {
         val intent = Intent(this, AddCompanyActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     fun onLoginClick() {

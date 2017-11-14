@@ -4,14 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_approve_user_info.*
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class ApproveUserInfoActivity : DeliveryTrackerActivity() {
+    private val surnameKey = "surname"
+    private val nameKey = "name"
+    private val phoneNumberKey = "phoneNumber"
+
+    @Inject
+    lateinit var session: ISession
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -19,8 +31,27 @@ class ApproveUserInfoActivity : DeliveryTrackerActivity() {
         setContentView(R.layout.activity_approve_user_info)
 
         setSupportActionBar(this.toolbar_top)
-        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         this.toolbar_title.text = resources.getString(R.string.user_data_approval)
+
+        if(savedInstanceState == null) {
+            etSurnameField.setText(session.surname ?: "")
+            etNameField.setText(session.name ?: "")
+            etPhoneNumberField.setText(session.phoneNumber ?: "")
+        } else {
+            etSurnameField.setText(savedInstanceState.getString(surnameKey, ""))
+            etNameField.setText(savedInstanceState.getString(nameKey, ""))
+            etPhoneNumberField.setText(savedInstanceState.getString(phoneNumberKey, ""))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.apply {
+            putString(surnameKey, etSurnameField.text.toString())
+            putString(nameKey, etNameField.text.toString())
+            putString(phoneNumberKey, etPhoneNumberField.text.toString())
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -29,8 +60,27 @@ class ApproveUserInfoActivity : DeliveryTrackerActivity() {
                 finish()
             }
             action_done -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                val userInfo = UserModel(
+                        surname = etSurnameField.text.toString(),
+                        name = etNameField.text.toString(),
+                        phoneNumber = etPhoneNumberField.text.toString())
+
+                invokeAsync({
+                    session.updateUserInfo(userInfo)
+                }, {
+                    if (it) {
+                            val intent = Intent(
+                                    this@ApproveUserInfoActivity,
+                                    MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                    } else {
+                        Toast.makeText(
+                                this@ApproveUserInfoActivity,
+                                getString(R.string.Core_UnknownError),
+                                Toast.LENGTH_LONG).show()
+                    }
+                })
             }
         }
         return super.onOptionsItemSelected(item)

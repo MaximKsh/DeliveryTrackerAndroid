@@ -224,10 +224,6 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun startAddUserFragment() {
-
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_managers_tab_menu, menu)
 
