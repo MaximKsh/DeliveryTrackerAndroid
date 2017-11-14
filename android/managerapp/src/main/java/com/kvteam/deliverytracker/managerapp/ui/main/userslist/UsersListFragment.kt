@@ -6,9 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.checkSelfPermission
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.kvteam.deliverytracker.core.models.UserModel
@@ -17,9 +15,7 @@ import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_manager_list_item.*
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
@@ -153,21 +149,21 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     }
 
     private fun setEditButtonVisible() {
-        mAddMenuItem.setVisible(false)
-        mEditMenuItem.setVisible(true)
-        mRemoveMenuItem.setVisible(false)
+        mAddMenuItem.isVisible = false
+        mEditMenuItem.isVisible = true
+        mRemoveMenuItem.isVisible = false
     }
 
     private fun setRemoveButtonVisible() {
-        mAddMenuItem.setVisible(false)
-        mEditMenuItem.setVisible(false)
-        mRemoveMenuItem.setVisible(true)
+        mAddMenuItem.isVisible = false
+        mEditMenuItem.isVisible = false
+        mRemoveMenuItem.isVisible = true
     }
 
     private fun setAddButtonVisible() {
-        mAddMenuItem.setVisible(true)
-        mEditMenuItem.setVisible(false)
-        mRemoveMenuItem.setVisible(false)
+        mAddMenuItem.isVisible = true
+        mEditMenuItem.isVisible = false
+        mRemoveMenuItem.isVisible = false
     }
 
     private fun setCancelButtonVisible(visibility: Boolean) {
@@ -204,7 +200,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             R.id.action_remove -> {
                 val deleteUsersDialog = AlertDialog.Builder(activity)
                 deleteUsersDialog.setMessage(R.string.delete_users_modal)
-                        .setPositiveButton("Удалить", { dialogInterface, id ->
+                        .setPositiveButton(getString(R.string.deleteButton), { _, _ ->
                             this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
                             this.adapter.value?.notifyDataSetChanged()
                             this.stopEditMode()
@@ -212,7 +208,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                             this.setCancelButtonVisible(false)
                             this.clearSelectedUsers()
                         })
-                        .setNegativeButton("Отменить", { dialogInterface, id ->
+                        .setNegativeButton(getString(R.string.cancel), { _, _ ->
 
                         })
                 deleteUsersDialog.show()
@@ -238,7 +234,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             this.clearSelectedUsers()
         }
 
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }
 

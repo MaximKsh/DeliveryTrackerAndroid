@@ -35,4 +35,5 @@
     <string name="ManagerApp_AddTaskFragment_AddTaskButton">Добавить задание</string>
     <string name="ManagerApp_LoginActivity_WrongRole">Некорректная роль</string>
     <string name="ManagerApp_LoginActivity_WrongCredentials">Неверный логин/пароль</string>
+    <string name="deleteButton">Удалить</string>
 </resources>

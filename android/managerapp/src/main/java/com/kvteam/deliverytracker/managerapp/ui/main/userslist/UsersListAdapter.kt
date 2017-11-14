@@ -1,16 +1,11 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.transition.AutoTransition
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.R.id.rvUsersList
 import kotlinx.android.synthetic.main.fragment_manager_list_item.view.*
 
 class UsersListAdapter(var userItemActions: UserItemActions?)

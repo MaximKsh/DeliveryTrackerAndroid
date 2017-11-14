@@ -2,11 +2,10 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 

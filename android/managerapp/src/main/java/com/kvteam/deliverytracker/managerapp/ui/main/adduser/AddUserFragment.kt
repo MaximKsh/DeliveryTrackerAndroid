@@ -1,35 +1,22 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.adduser
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserItemActions
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserListModel
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListAdapter
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_managers_list.*
-import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.fragment_add_user.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
@@ -150,7 +137,7 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
             navigationController.closeCurrentFragment()
         }
 
-        super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     companion object {

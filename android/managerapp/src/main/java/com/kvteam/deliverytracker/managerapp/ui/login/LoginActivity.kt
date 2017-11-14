@@ -9,7 +9,7 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
-import com.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivity
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.AddCompanyActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
