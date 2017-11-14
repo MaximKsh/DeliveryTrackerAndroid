@@ -104,4 +104,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible"
+        android:text="@string/share_code"
+        android:id="@+id/tvInvitationCodeInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:id="@+id/tvInvitationCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

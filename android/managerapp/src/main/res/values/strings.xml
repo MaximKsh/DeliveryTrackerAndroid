@@ -27,6 +27,7 @@
     <string name="remove">Удалить</string>
     <string name="cancel">Отменить</string>
     <string name="finish">Готово</string>
+    <string name="share_code">Поделитесь этим кодом c вашим коллегой</string>
     <string name="empty_user_list">Пока тут никого нет</string>
     <string name="delete_users_modal">Вы уверены что хотите удалить выбранных пользователей?</string>
 

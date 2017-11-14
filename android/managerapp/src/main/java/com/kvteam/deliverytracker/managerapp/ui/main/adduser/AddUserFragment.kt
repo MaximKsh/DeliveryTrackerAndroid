@@ -11,7 +11,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
@@ -33,6 +36,9 @@ import javax.inject.Inject
 open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedListener {
     @Inject
     lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var instanceManager: IInstanceManager
 
     private val layoutManagerKey = "layoutManager"
     private val usersListKey = "addingUser"
@@ -97,8 +103,24 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_finish -> {
-                Toast.makeText(this.activity, "Приглашение успешно отправлено", Toast.LENGTH_LONG).show()
-                navigationController.closeCurrentFragment()
+                invokeAsync({
+                    instanceManager.inviteManager(UserModel(
+                            name = etNameField.text.toString(),
+                            surname = etSurnameField.text.toString(),
+                            phoneNumber = etPhoneNumberField.text.toString()
+                    ))
+                }, {
+                   if (it != null) {
+                       val view =  this@AddUserFragment.activity.currentFocus
+                       if (view != null) {
+                           val imm = this@AddUserFragment.activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                           imm.hideSoftInputFromWindow(view.windowToken, 0)
+                       }
+                       this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
+                       this@AddUserFragment.tvInvitationCode.text = it.invitationCode
+                   }
+                })
+//                navigationController.closeCurrentFragment()
             }
         }
         return super.onOptionsItemSelected(item)

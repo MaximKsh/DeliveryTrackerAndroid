@@ -10,7 +10,11 @@ import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.CredentialsModel
 import com.kvteam.deliverytracker.core.models.InstanceModel
 import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.LoginResult
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
+import com.kvteam.deliverytracker.core.session.Session
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
@@ -23,6 +27,9 @@ import javax.inject.Inject
 class AddCompanyActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var instanceManager: IInstanceManager
+
+    @Inject
+    lateinit var session: ISession
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +58,38 @@ class AddCompanyActivity : DeliveryTrackerActivity() {
                             UserModel(
                                     surname = etSurnameField.text.toString(),
                                     name = etNameField.text.toString(),
-                                    phoneNumber = etPhoneNumberField.text.toString()),
+                                    phoneNumber = etPhoneNumberField.text.toString(),
+                                    role = Role.Creator.simpleName),
                             CredentialsModel(
                                     password = etPasswordField.text.toString())
                     )
                 }, {
                     if (it != null) {
-                        val intent = Intent(this@AddCompanyActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        Toast.makeText(this@AddCompanyActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
+                        invokeAsync({
+                            session.login(it.username!!, etPasswordField.text.toString())
+                        }, {
+                            when (it) {
+                                LoginResult.Registered -> {
+                                    val intent = Intent(this@AddCompanyActivity, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Toast.makeText(this@AddCompanyActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
+                                }
+                                LoginResult.Success -> {
+                                    val intent = Intent(this@AddCompanyActivity, MainActivity::class.java)
+                                    startActivity(intent)
+                                    Toast.makeText(this@AddCompanyActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
+                                }
+                                LoginResult.RoleMismatch -> {
+                                    Toast.makeText(this@AddCompanyActivity, "Не твоя роль", Toast.LENGTH_LONG).show()
+                                }
+                                LoginResult.Error -> {
+                                    Toast.makeText(this@AddCompanyActivity, "Неверные данные", Toast.LENGTH_LONG).show()
+                                }
+                                else -> {
+                                    Toast.makeText(this@AddCompanyActivity, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        })
                     }
                 })
             }
