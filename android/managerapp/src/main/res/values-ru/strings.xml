@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeliveryTracker</string>
+    <string name="enter_code_hint">Код приглашения</string>
+    <string name="enter_password_hint">Пароль</string>
+    <string name="login">Войти</string>
+    <string name="forgot_password">Забыли пароль</string>
+    <string name="add_your_company">Вы можете добавить свою компанию</string>
+    <string name="company_addition">Добавление компании</string>
+    <string name="add">Зарегистрировать</string>
+    <string name="enter_company_name_hint">Название компании</string>
+    <string name="enter_name_hint">Имя</string>
+    <string name="enter_surname_hint">Фамилия</string>
+    <string name="enter_phone_number_hint">Номер телефона</string>
+    <string name="done">Продолжить</string>
+    <string name="user_data_approval">Подтвердить</string>
+    <string name="tasks">Задания</string>
+    <string name="managers">Управляющие</string>
+    <string name="performers">Исполнители</string>
+    <string name="my_tasks">Мои задания</string>
+    <string name="edit">Редактировать</string>
+    <string name="add_user">Добавить</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="finish">Завершить</string>
+    <string name="share_code">Поделить этим кодом с вашим коллегой</string>
+    <string name="empty_user_list">Здесь пока ничего нет</string>
+    <string name="delete_users_modal">Вы уверены, что хотите удалить выбранных пользователей?</string>
+    <string name="ManagerApp_TaskFragment_CancelTask">Отменить задание</string>
+    <string name="ManagerApp_AddTaskFragment_Number">Номер*</string>
+    <string name="ManagerApp_AddTaskFragment_ShippingDesc">Описание доставки</string>
+    <string name="ManagerApp_AddTaskFragment_Details">Детали</string>
+    <string name="ManagerApp_AddTaskFragment_Address">Адрес</string>
+    <string name="ManagerApp_AddTaskFragment_Performer">Исполнитель</string>
+    <string name="ManagerApp_AddTaskFragment_AddTaskButton">Добавить задание</string>
+    <string name="ManagerApp_LoginActivity_WrongRole">Некорректная роль</string>
+    <string name="ManagerApp_LoginActivity_WrongCredentials">Неверный логин/пароль</string>
+</resources>

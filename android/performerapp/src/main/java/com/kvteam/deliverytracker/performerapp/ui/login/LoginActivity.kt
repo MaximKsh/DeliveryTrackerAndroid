@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.performerapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.ISession
@@ -27,10 +26,7 @@ class LoginActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if(savedInstanceState == null) {
-            etLoginUsername.setText("Rdpasz26f3")
-            etLoginPassword.setText("123qQ!")
-        } else {
+        if(savedInstanceState != null) {
             savedInstanceState.apply {
                 etLoginUsername.setText(
                         getString(usernameKey, ""))
