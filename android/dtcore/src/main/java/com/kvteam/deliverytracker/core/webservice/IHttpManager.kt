@@ -1,7 +1,5 @@
 package com.kvteam.deliverytracker.core.webservice
 
-import java.lang.reflect.Type
-
 interface IHttpManager {
     fun get(
             url: String,

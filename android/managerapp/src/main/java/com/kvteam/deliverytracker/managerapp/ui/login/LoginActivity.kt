@@ -3,7 +3,6 @@ package com.kvteam.deliverytracker.managerapp.ui.login
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
@@ -31,10 +30,9 @@ class LoginActivity : DeliveryTrackerActivity() {
         setContentView(R.layout.activity_login)
 
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-        if(savedInstanceState == null) {
-            this.etLoginField.setText("z5Twn9ZRMG")
-            this.etPasswordField.setText("123qQ!")
+        if(savedInstanceState != null){
+            etLoginField.setText(savedInstanceState.getString(usernameKey, ""))
+            etPasswordField.setText(savedInstanceState.getString(passwordKey, ""))
         }
     }
 
@@ -48,22 +46,12 @@ class LoginActivity : DeliveryTrackerActivity() {
         outState.putString(passwordKey, this.etPasswordField.text.toString())
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        if(savedInstanceState == null){
-            return
-        }
-
-        this.etLoginField.setText(savedInstanceState.getString(usernameKey, ""))
-        this.etPasswordField.setText(savedInstanceState.getString(passwordKey, ""))
-    }
-
-    fun onAddCompanyClick(view: View) {
+    fun onAddCompanyClick() {
         val intent = Intent(this, AddCompanyActivity::class.java)
         startActivity(intent)
     }
 
-    fun onLoginClick(view: View) {
+    fun onLoginClick() {
         val ctx = this
         val fromSettings = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val username = this.etLoginField.text.toString()
@@ -90,13 +78,22 @@ class LoginActivity : DeliveryTrackerActivity() {
                     ctx.finish()
                 }
                 LoginResult.RoleMismatch -> {
-                    Toast.makeText(ctx, "Не твоя роль", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                            ctx,
+                            getString(R.string.ManagerApp_LoginActivity_WrongRole),
+                            Toast.LENGTH_LONG).show()
                 }
                 LoginResult.Error -> {
-                    Toast.makeText(ctx, "Неверные данные", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                            ctx,
+                            getString(R.string.ManagerApp_LoginActivity_WrongCredentials),
+                            Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    Toast.makeText(ctx, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                            ctx,
+                            getString(R.string.Core_UnknownError),
+                            Toast.LENGTH_LONG).show()
                 }
             }
             setProcessingState(false)
