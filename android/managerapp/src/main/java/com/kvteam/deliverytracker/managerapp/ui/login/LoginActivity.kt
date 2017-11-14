@@ -13,6 +13,7 @@ import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
@@ -75,7 +76,7 @@ class LoginActivity : DeliveryTrackerActivity() {
         }, {
             when (it) {
                 LoginResult.Registered -> {
-                    val intent = Intent(ctx, AddCompanyActivity::class.java)
+                    val intent = Intent(ctx, ApproveUserInfoActivity::class.java)
                     if (fromSettings) {
                         intent.putExtra(SETTINGS_CONTEXT, true)
                     }
