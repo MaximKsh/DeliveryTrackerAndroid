@@ -17,14 +17,14 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class ManagersListFragment: UsersListFragment() {
+class PerformersListFragment: UsersListFragment() {
     @Inject
     lateinit var instanceManager: IInstanceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        this.role = Role.Manager
+        this.role = Role.Performer
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,10 +33,10 @@ class ManagersListFragment: UsersListFragment() {
             return
         }
 
-        this.activity.toolbar_title.text = resources.getString(R.string.managers)
+        this.activity.toolbar_title.text = resources.getString(R.string.performers)
 
         invokeAsync({
-            instanceManager.getManagers(true)
+            instanceManager.getPerformers(true)
         }, {
             if (it != null) {
                 val modelUserList = it.map { userModel ->

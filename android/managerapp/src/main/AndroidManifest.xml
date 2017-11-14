@@ -54,6 +54,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ui.main.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

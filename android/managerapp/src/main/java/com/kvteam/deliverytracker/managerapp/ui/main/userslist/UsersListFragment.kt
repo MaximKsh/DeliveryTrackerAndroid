@@ -35,6 +35,7 @@ interface UserItemActions {
 open class UsersListFragment : DeliveryTrackerFragment() {
     protected val layoutManagerKey = "layoutManager"
     protected val usersListKey = "usersList"
+    lateinit var role: Role
     var isInEditMode: Boolean = false
 
     lateinit var mAddMenuItem: MenuItem
@@ -98,19 +99,31 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                     it?.userItemActions = null
                 })
         this.rvUsersList.adapter = this.adapter.value
+
+        savedInstanceState?.apply {
+            if(rvUsersList?.layoutManager != null){
+                adapter.value?.items?.clear()
+                adapter.value?.items?.addAll(
+                        savedInstanceState.getParcelableArray(usersListKey).map { it as UserListModel })
+                rvUsersList.layoutManager.onRestoreInstanceState(
+                        savedInstanceState.getParcelable(layoutManagerKey))
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        if(outState == null) {
-            return
+
+        outState?.apply {
+            if(rvUsersList?.layoutManager != null) {
+                putParcelableArray(
+                        usersListKey,
+                        adapter.value?.items?.toTypedArray())
+                putParcelable(
+                        layoutManagerKey,
+                        rvUsersList.layoutManager.onSaveInstanceState())
+            }
         }
-        outState.putParcelableArray(
-                usersListKey,
-                this.adapter.value?.items?.toTypedArray())
-        outState.putParcelable(
-                layoutManagerKey,
-                this.rvUsersList.layoutManager.onSaveInstanceState())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -119,11 +132,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             return
         }
 
-        this.adapter.value?.items?.clear()
-        this.adapter.value?.items?.addAll(
-                savedInstanceState.getParcelableArray(usersListKey).map { it as UserListModel })
-        this.rvUsersList.layoutManager.onRestoreInstanceState(
-                savedInstanceState.getParcelable(layoutManagerKey))
+
     }
 
     private fun startEditMode() {
@@ -181,6 +190,11 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        this.setCancelButtonVisible(false)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_edit -> {
@@ -204,7 +218,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 deleteUsersDialog.show()
             }
             R.id.action_add -> {
-                navigationController.navigateToAddUser(Role.Manager)
+                navigationController.navigateToAddUser(this.role)
             }
         }
         return super.onOptionsItemSelected(item)

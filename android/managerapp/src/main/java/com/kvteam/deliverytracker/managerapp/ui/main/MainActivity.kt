@@ -28,6 +28,7 @@ class MainActivity : DeliveryTrackerActivity() {
                 true
             }
             R.id.navigation_performers -> {
+                navigationController.navigateToPerformers()
                 true
             }
             R.id.navigation_tasks -> {

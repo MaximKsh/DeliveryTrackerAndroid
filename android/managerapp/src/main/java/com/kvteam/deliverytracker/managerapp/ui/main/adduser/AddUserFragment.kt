@@ -17,6 +17,7 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 
@@ -40,16 +41,17 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     @Inject
     lateinit var instanceManager: IInstanceManager
 
-    private val layoutManagerKey = "layoutManager"
-    private val usersListKey = "addingUser"
-    private lateinit var savedUserData: UserModel
+    private val userRoleKey = "userRoleKey"
+    private val userNameKey = "userNameKey"
+    private val userSurnameKey = "userSurnameKey"
+    private val userPhoneKey = "userPhoneKey"
+
     private lateinit var mSubmitItem: MenuItem
     private lateinit var role: Role
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
-        this.activity.toolbar_title.text = resources.getString(R.string.add_user)
         super.onCreate(savedInstanceState)
     }
 
@@ -65,9 +67,15 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
         if(outState == null) {
             return
         }
-        outState.putParcelable(
-                usersListKey,
-                this.savedUserData)
+        outState.putString(
+                userRoleKey, this.role.simpleName
+        )
+        outState.putString(
+                userNameKey, etNameField.text.toString())
+        outState.putString(
+                userSurnameKey, etSurnameField.text.toString())
+        outState.putString(
+                userPhoneKey, etPhoneNumberField.text.toString())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -76,13 +84,15 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sUserRole.adapter = adapter
-    }
+        this.activity.toolbar_title.text = resources.getString(R.string.add_user)
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState == null) {
-            return
+        if (savedInstanceState != null) {
+            this.role = savedInstanceState.getString(userRoleKey).toRole()!!
+            this.etNameField.setText(savedInstanceState.getString(userNameKey, ""))
+            this.etSurnameField.setText(savedInstanceState.getString(userSurnameKey, ""))
+            this.etPhoneNumberField.setText(savedInstanceState.getString(userPhoneKey, ""))
         }
+        sUserRole.setSelection(adapter.getPosition(getString(this.role.localizationStringId)))
     }
 
     // Role selection callbacks
@@ -101,10 +111,15 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val inviteFunction = if (role == Role.Performer)
+            instanceManager::invitePerformer
+        else
+            instanceManager::inviteManager
+
         when (item.itemId) {
             R.id.action_finish -> {
                 invokeAsync({
-                    instanceManager.inviteManager(UserModel(
+                    inviteFunction(UserModel(
                             name = etNameField.text.toString(),
                             surname = etSurnameField.text.toString(),
                             phoneNumber = etPhoneNumberField.text.toString()

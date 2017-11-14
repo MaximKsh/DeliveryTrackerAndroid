@@ -9,6 +9,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.PerformersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -28,6 +29,14 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     fun navigateToManagers() {
         val fragment = ManagersListFragment()
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToPerformers() {
+        val fragment = PerformersListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
