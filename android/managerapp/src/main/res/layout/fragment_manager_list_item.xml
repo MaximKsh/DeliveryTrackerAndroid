@@ -42,13 +42,15 @@
                     android:layout_marginEnd="2dp"
                     android:contentDescription="Online status"
                     android:src="@drawable/circle" />
-                <!--<ImageView-->
-                <!--android:contentDescription="Admin status"-->
-                <!--android:src="@drawable/ic_star_gold_40dp"-->
-                <!--android:layout_width="15dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_alignParentEnd="true" />-->
+                <ImageView
+                    android:id="@+id/ivAdminStatusIcon"
+                    android:visibility="invisible"
+                    android:contentDescription="Admin status"
+                    android:src="@drawable/ic_star_gold_40dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true" />
             </RelativeLayout>
 
             <LinearLayout
