@@ -6,6 +6,7 @@ import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class PerformersListFragment: UsersListFragment() {
         }
 
         this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
-
+        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
         invokeAsync({
             instanceManager.getPerformers(true)
         }, {
@@ -37,6 +38,22 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
             }
+        })
+    }
+
+    private fun refresh() {
+        invokeAsync({
+            instanceManager.getPerformers(true)
+        }, {
+            if(it != null) {
+                adapter.value?.items?.clear()
+                val modelUserList = it.map { userModel ->
+                    UserListModel(false,false, userModel)
+                }
+                adapter.value?.items?.addAll(modelUserList)
+                adapter.value?.notifyDataSetChanged()
+            }
+            srlSwipeRefreshUsers.isRefreshing = false
         })
     }
 }
