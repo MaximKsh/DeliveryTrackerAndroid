@@ -1,6 +1,6 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
-    <string name="Core_WebserviceUrl" translatable="false">http://80.93.177.160:5000</string>
+    <string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_TaskState_NewUndistributed">New undistributed</string>

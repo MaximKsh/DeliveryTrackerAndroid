@@ -3,10 +3,17 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
+import com.kvteam.deliverytracker.managerapp.dagger.components.AddCompanyActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.dagger.components.ApproveUserInfoActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.AddCompanyActivity
+import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
+import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
@@ -21,6 +28,40 @@ import dagger.android.ActivityKey
 import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
+
+@Module(subcomponents = arrayOf(AddCompanyActivitySubcomponent::class))
+abstract class AddCompanyActivityModule {
+    @Binds
+    @IntoMap
+    @ActivityKey(AddCompanyActivity::class)
+    internal abstract fun addCompanyActivityInjector(builder: AddCompanyActivitySubcomponent.Builder):
+            AndroidInjector.Factory<out Activity>
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(LocationFragmentModule::class))
+    internal abstract fun locationFragment(): LocationFragment
+
+}
+
+@Module(subcomponents = arrayOf(ApproveUserInfoActivitySubcomponent::class))
+abstract class ApproveUserInfoActivityModule {
+    @Binds
+    @IntoMap
+    @ActivityKey(ApproveUserInfoActivity::class)
+    internal abstract fun approveUserInfoActivityInjector(builder: ApproveUserInfoActivitySubcomponent.Builder):
+            AndroidInjector.Factory<out Activity>
+
+}
+
+@Module(subcomponents = arrayOf(LoginActivitySubcomponent::class))
+abstract class LoginActivityModule {
+    @Binds
+    @IntoMap
+    @ActivityKey(LoginActivity::class)
+    internal abstract fun loginActivityInjector(builder: LoginActivitySubcomponent.Builder):
+            AndroidInjector.Factory<out Activity>
+
+}
 
 
 @Module(subcomponents = arrayOf(MainActivitySubcomponent::class),
