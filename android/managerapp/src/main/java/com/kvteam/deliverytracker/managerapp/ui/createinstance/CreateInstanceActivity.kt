@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.addcompany
+package com.kvteam.deliverytracker.managerapp.ui.createinstance
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,14 +14,14 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.R
-import kotlinx.android.synthetic.main.activity_add_company.*
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
+import kotlinx.android.synthetic.main.activity_create_instance.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
-class AddCompanyActivity : DeliveryTrackerActivity() {
+class CreateInstanceActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var instanceManager: IInstanceManager
 
@@ -30,7 +30,7 @@ class AddCompanyActivity : DeliveryTrackerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_company)
+        setContentView(R.layout.activity_create_instance)
 
         setSupportActionBar(this.toolbar_top)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -67,23 +67,23 @@ class AddCompanyActivity : DeliveryTrackerActivity() {
                         }, {
                             when (it) {
                                 LoginResult.Registered -> {
-                                    val intent = Intent(this@AddCompanyActivity, MainActivity::class.java)
+                                    val intent = Intent(this@CreateInstanceActivity, MainActivity::class.java)
                                     startActivity(intent)
-                                    Toast.makeText(this@AddCompanyActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@CreateInstanceActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
                                 }
                                 LoginResult.Success -> {
-                                    val intent = Intent(this@AddCompanyActivity, MainActivity::class.java)
+                                    val intent = Intent(this@CreateInstanceActivity, MainActivity::class.java)
                                     startActivity(intent)
-                                    Toast.makeText(this@AddCompanyActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@CreateInstanceActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
                                 }
                                 LoginResult.RoleMismatch -> {
-                                    Toast.makeText(this@AddCompanyActivity, "Не твоя роль", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@CreateInstanceActivity, "Не твоя роль", Toast.LENGTH_LONG).show()
                                 }
                                 LoginResult.Error -> {
-                                    Toast.makeText(this@AddCompanyActivity, "Неверные данные", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@CreateInstanceActivity, "Неверные данные", Toast.LENGTH_LONG).show()
                                 }
                                 else -> {
-                                    Toast.makeText(this@AddCompanyActivity, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@CreateInstanceActivity, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
                                 }
                             }
                         })

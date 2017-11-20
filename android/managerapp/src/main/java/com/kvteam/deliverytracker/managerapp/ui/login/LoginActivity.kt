@@ -4,15 +4,15 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.widget.Toast
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
-import com.kvteam.deliverytracker.managerapp.ui.addcompany.AddCompanyActivity
-import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
@@ -37,8 +37,7 @@ class LoginActivity : DeliveryTrackerActivity() {
         }
 
         btnLogin.setOnClickListener { onLoginClick() }
-
-        btnAddCompany.setOnClickListener { onAddCompanyClick() }
+        btnAddCompany.setOnClickListener { onCreateInstanceClick() }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -51,13 +50,13 @@ class LoginActivity : DeliveryTrackerActivity() {
         outState.putString(passwordKey, this.etPasswordField.text.toString())
     }
 
-    fun onAddCompanyClick() {
-        val intent = Intent(this, AddCompanyActivity::class.java)
+    private fun onCreateInstanceClick() {
+        val intent = Intent(this, CreateInstanceActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    fun onLoginClick() {
+    private fun onLoginClick() {
         val ctx = this
         val fromSettings = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val username = this.etLoginField.text.toString()

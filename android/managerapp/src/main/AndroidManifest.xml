@@ -42,7 +42,7 @@
         </service>
 
         <activity
-            android:name=".ui.addcompany.AddCompanyActivity"
+            android:name=".ui.createinstance.CreateInstanceActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <meta-data

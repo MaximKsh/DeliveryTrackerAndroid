@@ -3,13 +3,13 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
-import com.kvteam.deliverytracker.managerapp.dagger.components.AddCompanyActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.ApproveUserInfoActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.dagger.components.CreateInstanceActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
-import com.kvteam.deliverytracker.managerapp.ui.addcompany.AddCompanyActivity
-import com.kvteam.deliverytracker.managerapp.ui.addcompany.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
+import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -29,12 +29,12 @@ import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
-@Module(subcomponents = arrayOf(AddCompanyActivitySubcomponent::class))
-abstract class AddCompanyActivityModule {
+@Module(subcomponents = arrayOf(CreateInstanceActivitySubcomponent::class))
+abstract class CreateInstanceActivityModule {
     @Binds
     @IntoMap
-    @ActivityKey(AddCompanyActivity::class)
-    internal abstract fun addCompanyActivityInjector(builder: AddCompanyActivitySubcomponent.Builder):
+    @ActivityKey(CreateInstanceActivity::class)
+    internal abstract fun createInstanceActivityInjector(builder: CreateInstanceActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
     @FragmentScope
@@ -85,15 +85,6 @@ abstract class MainActivityModule {
     @ContributesAndroidInjector(modules = arrayOf(AddUserFragmentModule::class))
     internal abstract fun addUserFragment(): AddUserFragment
 
-    @Module
-    class MainActivityNavigationControllerModule {
-        @Provides
-        @ActivityScope
-        fun navigationController(activity: MainActivity): NavigationController {
-            return NavigationController(activity)
-        }
-    }
-
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AllTasksListFragmentModule::class))
     internal abstract fun allTaskListFragment(): AllTasksListFragment
@@ -113,4 +104,14 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskFragmentModule::class))
     internal abstract fun taskFragment(): TaskFragment
+
+    @Module
+    class MainActivityNavigationControllerModule {
+        @Provides
+        @ActivityScope
+        fun navigationController(activity: MainActivity): NavigationController {
+            return NavigationController(activity)
+        }
+    }
+
 }
