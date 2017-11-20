@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
@@ -40,8 +41,8 @@ class TasksListAdapter(
         holder.tvNumber.text = task.number
         val stateId = task.state?.toTaskState()?.localizationStringId
         holder.tvState.text =
-                if(stateId != null) getLocalizedString?.invoke(stateId) ?: ""
-                else ""
+                if(stateId != null) getLocalizedString?.invoke(stateId) ?: EMPTY_STRING
+                else EMPTY_STRING
 
         holder.llRowLayout.setBackgroundResource(when(state) {
             TaskState.NewUndistributed -> R.color.taskNewUndistributedColor

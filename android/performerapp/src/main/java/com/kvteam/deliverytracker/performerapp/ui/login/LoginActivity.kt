@@ -2,15 +2,16 @@ package com.kvteam.deliverytracker.performerapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.performerapp.R
-import dagger.android.AndroidInjection
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -29,9 +30,9 @@ class LoginActivity : DeliveryTrackerActivity() {
         if(savedInstanceState != null) {
             savedInstanceState.apply {
                 etLoginUsername.setText(
-                        getString(usernameKey, ""))
+                        getString(usernameKey, EMPTY_STRING))
                 etLoginPassword.setText(
-                        getString(passwordKey, ""))
+                        getString(passwordKey, EMPTY_STRING))
             }
         }
         bttnSignIn.setOnClickListener { onSignInClicked() }

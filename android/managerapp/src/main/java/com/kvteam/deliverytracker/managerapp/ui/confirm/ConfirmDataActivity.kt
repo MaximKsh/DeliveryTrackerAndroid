@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
@@ -35,13 +36,13 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         this.toolbar_title.text = resources.getString(R.string.user_data_approval)
 
         if(savedInstanceState == null) {
-            etSurnameField.setText(session.surname ?: "")
-            etNameField.setText(session.name ?: "")
-            etPhoneNumberField.setText(session.phoneNumber ?: "")
+            etSurnameField.setText(session.surname ?: EMPTY_STRING)
+            etNameField.setText(session.name ?: EMPTY_STRING)
+            etPhoneNumberField.setText(session.phoneNumber ?: EMPTY_STRING)
         } else {
-            etSurnameField.setText(savedInstanceState.getString(surnameKey, ""))
-            etNameField.setText(savedInstanceState.getString(nameKey, ""))
-            etPhoneNumberField.setText(savedInstanceState.getString(phoneNumberKey, ""))
+            etSurnameField.setText(savedInstanceState.getString(surnameKey, EMPTY_STRING))
+            etNameField.setText(savedInstanceState.getString(nameKey, EMPTY_STRING))
+            etPhoneNumberField.setText(savedInstanceState.getString(phoneNumberKey, EMPTY_STRING))
         }
     }
 

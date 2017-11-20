@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -50,11 +51,11 @@ class AddTaskFragment : DeliveryTrackerFragment() {
 
         savedInstanceState?.apply {
             if(view != null) {
-                etTaskNumber.setText(getString(taskNumberKey, ""))
-                etShippingDesc.setText(getString(shippingDescKey, ""))
-                etDetails.setText(getString(detailsKey, ""))
-                etAddress.setText(getString(addressKey, ""))
-                etSelectPerformer.setText(getString(selectedPerformerKey, ""))
+                etTaskNumber.setText(getString(taskNumberKey, EMPTY_STRING))
+                etShippingDesc.setText(getString(shippingDescKey, EMPTY_STRING))
+                etDetails.setText(getString(detailsKey, EMPTY_STRING))
+                etAddress.setText(getString(addressKey, EMPTY_STRING))
+                etSelectPerformer.setText(getString(selectedPerformerKey, EMPTY_STRING))
                 selectedPerformerUsername = getString(selectedPerformerUsernameKey, null)
             }
         }
@@ -99,7 +100,7 @@ class AddTaskFragment : DeliveryTrackerFragment() {
             task.address = etAddress.text.toString()
             task.details = etAddress.text.toString()
             if(selectedPerformerUsername != null
-                    && selectedPerformerUsername != "") {
+                    && selectedPerformerUsername != EMPTY_STRING) {
                 task.performer = UserModel(username = selectedPerformerUsername)
             }
             taskRepository.addTask(task)

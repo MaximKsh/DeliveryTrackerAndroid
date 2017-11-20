@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
@@ -75,9 +76,9 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
 
         if (savedInstanceState != null) {
             this.role = savedInstanceState.getString(userRoleKey).toRole()!!
-            this.etNameField.setText(savedInstanceState.getString(userNameKey, ""))
-            this.etSurnameField.setText(savedInstanceState.getString(userSurnameKey, ""))
-            this.etPhoneNumberField.setText(savedInstanceState.getString(userPhoneKey, ""))
+            this.etNameField.setText(savedInstanceState.getString(userNameKey, EMPTY_STRING))
+            this.etSurnameField.setText(savedInstanceState.getString(userSurnameKey, EMPTY_STRING))
+            this.etPhoneNumberField.setText(savedInstanceState.getString(userPhoneKey, EMPTY_STRING))
         }
         sUserRole.setSelection(adapter.getPosition(getString(this.role.localizationStringId)))
     }

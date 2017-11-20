@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
@@ -167,7 +168,9 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     }
 
     private fun setCancelButtonVisible(visibility: Boolean) {
-        this.activity.toolbar_left_action.text = if (visibility) resources.getString(R.string.cancel) else ""
+        this.activity.toolbar_left_action.text =
+                if (visibility) resources.getString(R.string.cancel)
+                else EMPTY_STRING
     }
 
     // MENU CALLBACKS

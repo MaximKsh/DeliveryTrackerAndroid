@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.performerapp.ui.confirm
 import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
@@ -27,13 +28,13 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         setContentView(R.layout.activity_confirm_data)
 
         if(savedInstanceState == null) {
-            etConfirmSurname.setText(session.surname ?: "")
-            etConfirmName.setText(session.name ?: "")
-            etConfirmPhoneNumber.setText(session.phoneNumber ?: "")
+            etConfirmSurname.setText(session.surname ?: EMPTY_STRING)
+            etConfirmName.setText(session.name ?: EMPTY_STRING)
+            etConfirmPhoneNumber.setText(session.phoneNumber ?: EMPTY_STRING)
         } else {
-            etConfirmSurname.setText(savedInstanceState.getString(surnameKey, ""))
-            etConfirmName.setText(savedInstanceState.getString(nameKey, ""))
-            etConfirmPhoneNumber.setText(savedInstanceState.getString(phoneNumberKey, ""))
+            etConfirmSurname.setText(savedInstanceState.getString(surnameKey, EMPTY_STRING))
+            etConfirmName.setText(savedInstanceState.getString(nameKey, EMPTY_STRING))
+            etConfirmPhoneNumber.setText(savedInstanceState.getString(phoneNumberKey, EMPTY_STRING))
         }
         bttnConfirm.setOnClickListener { onSaveClicked() }
     }

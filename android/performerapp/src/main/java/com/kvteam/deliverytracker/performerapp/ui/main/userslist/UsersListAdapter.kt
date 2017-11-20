@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.performerapp.R
@@ -42,8 +43,8 @@ class UsersListAdapter(
                 user.name)
         val roleStringId = user.role?.toRole()?.localizationStringId
         holder.tvRole.text =
-                if(roleStringId != null) getLocalizedString?.invoke(roleStringId) ?: ""
-                else ""
+                if(roleStringId != null) getLocalizedString?.invoke(roleStringId) ?: EMPTY_STRING
+                else EMPTY_STRING
         holder.tvPhoneNumber.text = user.phoneNumber
         holder.ivCall.setOnClickListener{ onCallClick?.invoke(user) }
     }

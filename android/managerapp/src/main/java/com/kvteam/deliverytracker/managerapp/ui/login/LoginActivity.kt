@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
@@ -32,8 +33,8 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         if(savedInstanceState != null){
-            etLoginField.setText(savedInstanceState.getString(usernameKey, ""))
-            etPasswordField.setText(savedInstanceState.getString(passwordKey, ""))
+            etLoginField.setText(savedInstanceState.getString(usernameKey, EMPTY_STRING))
+            etPasswordField.setText(savedInstanceState.getString(passwordKey, EMPTY_STRING))
         }
 
         btnLogin.setOnClickListener { onLoginClick() }
