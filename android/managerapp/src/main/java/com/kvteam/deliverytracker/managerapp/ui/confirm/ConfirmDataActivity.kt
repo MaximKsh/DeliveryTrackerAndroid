@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.approveuserinfo
+package com.kvteam.deliverytracker.managerapp.ui.confirm
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,11 +13,11 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_approve_user_info.*
+import kotlinx.android.synthetic.main.activity_confirm_data.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-class ApproveUserInfoActivity : DeliveryTrackerActivity() {
+class ConfirmDataActivity : DeliveryTrackerActivity() {
     private val surnameKey = "surname"
     private val nameKey = "name"
     private val phoneNumberKey = "phoneNumber"
@@ -28,7 +28,7 @@ class ApproveUserInfoActivity : DeliveryTrackerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_approve_user_info)
+        setContentView(R.layout.activity_confirm_data)
 
         setSupportActionBar(this.toolbar_top)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
@@ -70,13 +70,13 @@ class ApproveUserInfoActivity : DeliveryTrackerActivity() {
                 }, {
                     if (it) {
                             val intent = Intent(
-                                    this@ApproveUserInfoActivity,
+                                    this@ConfirmDataActivity,
                                     MainActivity::class.java)
                             startActivity(intent)
                             finish()
                     } else {
                         Toast.makeText(
-                                this@ApproveUserInfoActivity,
+                                this@ConfirmDataActivity,
                                 getString(R.string.Core_UnknownError),
                                 Toast.LENGTH_LONG).show()
                     }

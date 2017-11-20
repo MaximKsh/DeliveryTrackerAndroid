@@ -3,11 +3,11 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
-import com.kvteam.deliverytracker.managerapp.dagger.components.ApproveUserInfoActivitySubcomponent
+import com.kvteam.deliverytracker.managerapp.dagger.components.ConfirmDataActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.CreateInstanceActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
-import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
@@ -43,12 +43,12 @@ abstract class CreateInstanceActivityModule {
 
 }
 
-@Module(subcomponents = arrayOf(ApproveUserInfoActivitySubcomponent::class))
-abstract class ApproveUserInfoActivityModule {
+@Module(subcomponents = arrayOf(ConfirmDataActivitySubcomponent::class))
+abstract class ConfirmDataActivityModule {
     @Binds
     @IntoMap
-    @ActivityKey(ApproveUserInfoActivity::class)
-    internal abstract fun approveUserInfoActivityInjector(builder: ApproveUserInfoActivitySubcomponent.Builder):
+    @ActivityKey(ConfirmDataActivity::class)
+    internal abstract fun approveUserInfoActivityInjector(builder: ConfirmDataActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
 }

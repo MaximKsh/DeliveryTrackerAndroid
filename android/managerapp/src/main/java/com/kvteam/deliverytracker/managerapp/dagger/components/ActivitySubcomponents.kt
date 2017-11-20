@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
-import com.kvteam.deliverytracker.managerapp.ui.approveuserinfo.ApproveUserInfoActivity
+import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
@@ -14,9 +14,9 @@ interface CreateInstanceActivitySubcomponent : AndroidInjector<CreateInstanceAct
 }
 
 @Subcomponent
-interface ApproveUserInfoActivitySubcomponent : AndroidInjector<ApproveUserInfoActivity> {
+interface ConfirmDataActivitySubcomponent : AndroidInjector<ConfirmDataActivity> {
     @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<ApproveUserInfoActivity>()
+    abstract class Builder : AndroidInjector.Builder<ConfirmDataActivity>()
 }
 
 @Subcomponent

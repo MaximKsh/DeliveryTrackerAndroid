@@ -50,7 +50,7 @@
             android:value="AIzaSyBzt6RkXyoAk7t91NVupbST9GwM4ST_wps" />
 
         <activity
-            android:name=".ui.approveuserinfo.ApproveUserInfoActivity"
+            android:name=".ui.confirm.ConfirmDataActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ui.main.MainActivity"
