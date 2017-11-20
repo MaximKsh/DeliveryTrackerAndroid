@@ -13,7 +13,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class CoreModule : SingletonCoreModule<ManagerApplication>() {
+class SingletonModule : SingletonCoreModule<ManagerApplication>() {
     @Provides
     @Singleton
     fun sessionInfo(): ISessionInfo {

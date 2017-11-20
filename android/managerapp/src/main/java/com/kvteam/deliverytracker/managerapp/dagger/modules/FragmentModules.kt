@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
