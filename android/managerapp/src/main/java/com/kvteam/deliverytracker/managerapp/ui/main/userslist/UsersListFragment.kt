@@ -21,13 +21,6 @@ import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-interface UserItemActions {
-    fun onCallClick(user: UserModel)
-    fun onChatClick(user: UserModel)
-    fun onSelectClick(userListModel: UserListModel)
-    fun onItemClick(user: UserModel)
-}
-
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment() {
     protected val layoutManagerKey = "layoutManager"
