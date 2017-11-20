@@ -33,7 +33,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
         setSupportActionBar(this.toolbar_top)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        this.toolbar_title.text = resources.getString(R.string.user_data_approval)
+        this.toolbar_title.text = resources.getString(R.string.ManagerApp_ConfirmDataActivity_Confirm)
 
         if(savedInstanceState == null) {
             etSurnameField.setText(session.surname ?: EMPTY_STRING)

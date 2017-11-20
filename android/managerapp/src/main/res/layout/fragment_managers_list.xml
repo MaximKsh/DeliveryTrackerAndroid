@@ -17,13 +17,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty_user_list"
+            android:text="@string/ManagerApp_UserListFragment_EmptyList"
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_user"
+            android:text="@string/ManagerApp_Toolbar_AddUser"
             android:textAppearance="?android:textAppearanceMedium" />
     </LinearLayout>
 

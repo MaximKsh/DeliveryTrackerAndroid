@@ -4,19 +4,19 @@
 
     <item
         android:id="@+id/action_edit"
-        android:title="@string/edit"
+        android:title="@string/ManagerApp_Toolbar_Edit"
         app:showAsAction="ifRoom"/>
 
     <item
         android:visible="false"
         android:id="@+id/action_add"
-        android:title="@string/add_user"
+        android:title="@string/ManagerApp_Toolbar_AddUser"
         app:showAsAction="ifRoom"/>
 
     <item
         android:visible="false"
         android:id="@+id/action_remove"
-        android:title="@string/remove"
+        android:title="@string/ManagerApp_Toolbar_DeleteUser"
         app:showAsAction="ifRoom"/>
 
 </menu>

@@ -72,7 +72,7 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sUserRole.adapter = adapter
-        this.activity.toolbar_title.text = resources.getString(R.string.add_user)
+        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_Toolbar_AddUser)
 
         if (savedInstanceState != null) {
             this.role = savedInstanceState.getString(userRoleKey).toRole()!!

@@ -25,7 +25,7 @@ class PerformersListFragment: UsersListFragment() {
             return
         }
 
-        this.activity.toolbar_title.text = resources.getString(R.string.performers)
+        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
 
         invokeAsync({
             instanceManager.getPerformers(true)

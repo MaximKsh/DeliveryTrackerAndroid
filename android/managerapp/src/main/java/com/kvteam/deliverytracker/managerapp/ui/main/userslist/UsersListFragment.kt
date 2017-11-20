@@ -162,7 +162,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
     private fun setCancelButtonVisible(visibility: Boolean) {
         this.activity.toolbar_left_action.text =
-                if (visibility) resources.getString(R.string.cancel)
+                if (visibility) resources.getString(R.string.ManagerApp_Cancel)
                 else EMPTY_STRING
     }
 
@@ -195,8 +195,8 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             }
             R.id.action_remove -> {
                 val deleteUsersDialog = AlertDialog.Builder(activity)
-                deleteUsersDialog.setMessage(R.string.delete_users_modal)
-                        .setPositiveButton(getString(R.string.deleteButton), { _, _ ->
+                deleteUsersDialog.setMessage(R.string.ManagerApp_UserListFragment_DeleteUserModalContent)
+                        .setPositiveButton(getString(R.string.ManagerApp_DeleteButton), { _, _ ->
                             this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
                             this.adapter.value?.notifyDataSetChanged()
                             this.stopEditMode()
@@ -204,7 +204,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                             this.setCancelButtonVisible(false)
                             this.clearSelectedUsers()
                         })
-                        .setNegativeButton(getString(R.string.cancel), { _, _ ->
+                        .setNegativeButton(getString(R.string.ManagerApp_Cancel), { _, _ ->
 
                         })
                 deleteUsersDialog.show()

@@ -14,7 +14,7 @@
 
 
     <ImageView
-        android:contentDescription="@string/main_logo"
+        android:contentDescription="@string/ManagerApp_MainActivity"
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="75dp"
@@ -38,11 +38,11 @@
             android:ems="10"
             android:inputType="text"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/enter_code_hint" />
+            android:hint="@string/ManagerApp_LoginActivity_EnterCodeHint" />
 
 
         <ImageView
-            android:contentDescription="@string/code_hint_icon"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
             android:id="@+id/ivInvitationHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -68,11 +68,11 @@
             android:ems="10"
             android:inputType="textPassword"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/enter_password_hint" />
+            android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint" />
 
 
         <ImageView
-            android:contentDescription="@string/password_hint_icon"
+            android:contentDescription="@string/ManagerApp_PasswordHintIcon"
             android:id="@+id/ivPasswordHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -87,7 +87,7 @@
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="@string/ManagerApp_LoginActivity_Login"
         android:theme="@style/PrimaryButtonTheme"
         />
 
@@ -95,7 +95,7 @@
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/forgot_password" />
+        android:text="@string/ManagerApp_LoginActivity_ForgotPassword" />
 
     <LinearLayout
         android:gravity="bottom|center"
@@ -107,14 +107,14 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_your_company" />
+            android:text="@string/ManagerApp_LoginActivity_CreateInstance" />
 
         <Button
             android:id="@+id/btnAddCompany"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:text="@string/add"
+            android:text="@string/ManagerApp_LoginActivity_Register"
             android:background="@drawable/button_border"
             android:theme="@style/OutlineButtonTheme"
             />

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_finish"
-        android:title="@string/finish"
+        android:title="@string/ManagerApp_Toolbar_Finish"
         app:showAsAction="ifRoom"/>
 
 </menu>

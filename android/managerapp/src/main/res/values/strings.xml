@@ -2,48 +2,39 @@
     <string name="app_name">DeliveryTracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="enter_code_hint">Invitation code</string>
-    <string name="enter_password_hint">Password</string>
-    <string name="login">Sign in</string>
-    <string name="forgot_password">Forgot password</string>
-    <string name="add_your_company">You can add your company</string>
-    <string name="company_addition">Company registration</string>
-    <string name="add">Register</string>
-    <string name="code_hint_icon" translatable="false">Code hint icon</string>
-    <string name="password_hint_icon" translatable="false">Password hint icon</string>
-    <string name="main_logo" translatable="false">Main logo</string>
-    <string name="enter_company_name_hint">Company name</string>
-    <string name="enter_name_hint">Name</string>
-    <string name="enter_surname_hint">Surname</string>
-    <string name="enter_phone_number_hint">Phone number</string>
-    <string name="done">Continue</string>
-    <string name="user_data_approval">Confirm</string>
-    <string name="tasks">Tasks</string>
-    <string name="managers">Managers</string>
-    <string name="performers">Performers</string>
-    <string name="my_tasks">My tasks</string>
-    <string name="edit">Edit</string>
-    <string name="add_user">Add user</string>
-    <string name="remove">Delete</string>
-    <string name="cancel">Cancel</string>
-    <string name="finish">Finish</string>
-    <string name="share_code">Share code with your collegue</string>
-    <string name="empty_user_list">Nothing\'s here yet</string>
-    <string name="delete_users_modal">Are you sure you want to delete selected users?</string>
-    <string name="deleteButton">delete</string>
+    <string name="ManagerApp_LoginActivity_EnterCodeHint">Invitation code</string>
+    <string name="ManagerApp_LoginActivity_EnterPasswordHint">Password</string>
+    <string name="ManagerApp_LoginActivity_Login">Sign in</string>
+    <string name="ManagerApp_LoginActivity_ForgotPassword">Forgot password</string>
+    <string name="ManagerApp_LoginActivity_CreateInstance">You can add your company</string>
+    <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
+    <string name="ManagerApp_LoginActivity_Register">Register</string>
+    <string name="ManagerApp_CodeHintIcon" translatable="false">Code hint icon</string>
+    <string name="ManagerApp_PasswordHintIcon" translatable="false">Password hint icon</string>
+    <string name="ManagerApp_MainActivity" translatable="false">Main logo</string>
+    <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Company name</string>
+    <string name="ManagerApp_EnterNameHint">Name</string>
+    <string name="ManagerApp_EnterSurnameHint">Surname</string>
+    <string name="ManagerApp_EnterPhoneNumberHint">Phone number</string>
+    <string name="ManagerApp_Toolbar_Done">Continue</string>
+    <string name="ManagerApp_ConfirmDataActivity_Confirm">Confirm</string>
+    <string name="ManagerApp_MainActivity_Tasks">Tasks</string>
+    <string name="ManagerApp_MainActivity_Managers">Managers</string>
+    <string name="ManagerApp_MainActivity_Performers">Performers</string>
+    <string name="ManagerApp_MainActivity_MyTasks">My tasks</string>
+    <string name="ManagerApp_Toolbar_Edit">Edit</string>
+    <string name="ManagerApp_Toolbar_AddUser">Add user</string>
+    <string name="ManagerApp_Toolbar_DeleteUser">Delete</string>
+    <string name="ManagerApp_Cancel">Cancel</string>
+    <string name="ManagerApp_Toolbar_Finish">Finish</string>
+    <string name="ManagerApp_AddUserFragment_ShareCode">Share code with your colleague</string>
+    <string name="ManagerApp_UserListFragment_EmptyList">Nothing\'s here yet</string>
+    <string name="ManagerApp_UserListFragment_DeleteUserModalContent">Are you sure you want to delete selected users?</string>
+    <string name="ManagerApp_DeleteButton">delete</string>
     <string-array name="roles_array">
         <item>@string/Core_Role_ManagerRole</item>
         <item>@string/Core_Role_PerformerRole</item>
     </string-array>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="title_activity_main" translatable="false">MainActivity</string>
-    <string name="title_home" translatable="false">Home</string>
-    <string name="title_dashboard" translatable="false">Dashboard</string>
-    <string name="title_notifications" translatable="false">Notifications</string>
-
 
     <string name="ManagerApp_TaskFragment_CancelTask">Cancel task</string>
     <string name="ManagerApp_AddTaskFragment_Number">Number*</string>
@@ -56,6 +47,12 @@
 
     <string name="ManagerApp_LoginActivity_WrongRole">Wrong role</string>
     <string name="ManagerApp_LoginActivity_WrongCredentials">Wrong login/password</string>
+    <string name="ManagerApp_UserListFragment_UserAvatarContentDesc">User avatar</string>
+    <string name="ManagerApp_UserListFragment_OnlineStatusContentDesc">OnlineStatus</string>
+    <string name="ManagerApp_UserListFragment_AdminContentDesc">Admin status</string>
+    <string name="ManagerApp_UserListFragment_ChatContentDesc">Chat</string>
+    <string name="ManagerApp_UserListFragment_PhoneContentDesc">Phone</string>
+    <string name="ManagerApp_TasksListFragment_AddTaskButton">Add task</string>
 
 
 </resources>

@@ -35,7 +35,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
         setSupportActionBar(this.toolbar_top)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        this.toolbar_title.text = resources.getString(R.string.company_addition)
+        this.toolbar_title.text = resources.getString(R.string.ManagerApp_CreateInstanceActivity_CompanyRegistration)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, LocationFragment())
         transaction.addToBackStack(null)

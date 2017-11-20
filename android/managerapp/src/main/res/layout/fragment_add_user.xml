@@ -23,11 +23,11 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/enter_name_hint" />
+            android:hint="@string/ManagerApp_EnterNameHint" />
 
 
         <ImageView
-            android:contentDescription="@string/code_hint_icon"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
             android:id="@+id/ivNameHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -53,11 +53,11 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/enter_surname_hint" />
+            android:hint="@string/ManagerApp_EnterSurnameHint" />
 
 
         <ImageView
-            android:contentDescription="@string/code_hint_icon"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
             android:id="@+id/ivSurnameHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -83,11 +83,11 @@
             android:ems="10"
             android:inputType="phone"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/enter_phone_number_hint" />
+            android:hint="@string/ManagerApp_EnterPhoneNumberHint" />
 
 
         <ImageView
-            android:contentDescription="@string/code_hint_icon"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
             android:id="@+id/ivPhoneNumberHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -108,7 +108,7 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:visibility="invisible"
-        android:text="@string/share_code"
+        android:text="@string/ManagerApp_AddUserFragment_ShareCode"
         android:id="@+id/tvInvitationCodeInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
