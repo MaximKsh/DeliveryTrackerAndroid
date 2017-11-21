@@ -13,6 +13,7 @@ import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
@@ -65,27 +66,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                         invokeAsync({
                             session.login(it.username!!, etPasswordField.text.toString())
                         }, {
-                            when (it) {
-                                LoginResult.Registered -> {
-                                    val intent = Intent(this@CreateInstanceActivity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    Toast.makeText(this@CreateInstanceActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
-                                }
-                                LoginResult.Success -> {
-                                    val intent = Intent(this@CreateInstanceActivity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    Toast.makeText(this@CreateInstanceActivity, "Ваша компания успешно добавлена", Toast.LENGTH_LONG).show()
-                                }
-                                LoginResult.RoleMismatch -> {
-                                    Toast.makeText(this@CreateInstanceActivity, "Не твоя роль", Toast.LENGTH_LONG).show()
-                                }
-                                LoginResult.Error -> {
-                                    Toast.makeText(this@CreateInstanceActivity, "Неверные данные", Toast.LENGTH_LONG).show()
-                                }
-                                else -> {
-                                    Toast.makeText(this@CreateInstanceActivity, "Неизвестная ошибка", Toast.LENGTH_LONG).show()
-                                }
-                            }
+                            navigateToMainActivity(it)
                         })
                     }
                 })
@@ -97,5 +78,22 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
+    }
+
+    private fun navigateToMainActivity(it: LoginResult) {
+        val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        when (it) {
+            LoginResult.Success -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, settingsContext)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            else -> {
+                // Сразу после создания если не получилось залогинится, значит какой-то косяк
+                // надо разбираться
+                Toast.makeText(this, getString(R.string.Core_UnknownError), Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }

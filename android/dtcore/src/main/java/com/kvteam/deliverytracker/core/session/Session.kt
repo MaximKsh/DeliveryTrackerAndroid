@@ -91,22 +91,24 @@ class Session (
 
         val account = Account(username, sessionInfo.accountType)
         try{
+            // Сначала удаляются все предыдущие
+            accountManager.getAccountsByType(sessionInfo.accountType)
+                    .filter { it != account }
+                    .forEach {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                            accountManager.removeAccountExplicitly(it)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            accountManager.removeAccount(it, null, null)
+                        }
+                    }
+
             if (!hasAccount(username)) {
                 val authtokenType = sessionInfo.accountType
                 accountManager.addAccountExplicitly(account, password, null)
                 accountManager.setAuthToken(account, authtokenType, token.token)
             } else {
                 accountManager.setPassword(account, password)
-                accountManager.getAccountsByType(sessionInfo.accountType)
-                        .filter { it != account }
-                        .forEach {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                                accountManager.removeAccountExplicitly(it)
-                            } else {
-                                @Suppress("DEPRECATION")
-                                accountManager.removeAccount(it, null, null)
-                            }
-                        }
             }
         } catch (e: Exception) {
             return LoginResult.Error

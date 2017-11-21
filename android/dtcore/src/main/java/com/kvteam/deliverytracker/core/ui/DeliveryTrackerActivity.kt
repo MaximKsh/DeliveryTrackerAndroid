@@ -2,9 +2,9 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -16,9 +16,17 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
     protected open val checkHasAccountOnResume
         get() = false
 
+    protected open val allowSettingsContext
+        get() = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        if(!allowSettingsContext
+                && intent.getBooleanExtra(SETTINGS_CONTEXT, false)) {
+            finishAffinity()
+        }
     }
 
     override fun onResume() {

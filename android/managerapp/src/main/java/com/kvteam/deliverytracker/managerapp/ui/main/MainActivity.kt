@@ -45,6 +45,9 @@ class MainActivity : DeliveryTrackerActivity() {
     override val checkHasAccountOnResume
         get() = true
 
+    override val allowSettingsContext: Boolean
+        get() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -52,16 +52,19 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun onCreateInstanceClick() {
+        val fromSettings = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val intent = Intent(this, CreateInstanceActivity::class.java)
+        if (fromSettings) {
+            intent.putExtra(SETTINGS_CONTEXT, true)
+        }
         startActivity(intent)
-        finish()
     }
 
     private fun onLoginClick() {
         val ctx = this
-        val fromSettings = this.intent.getBooleanExtra(SETTINGS_CONTEXT, false)
-        val username = this.etLoginField.text.toString()
-        val password = this.etPasswordField.text.toString()
+        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        val username = etLoginField.text.toString()
+        val password = etPasswordField.text.toString()
 
         setProcessingState()
         invokeAsync({
@@ -70,18 +73,15 @@ class LoginActivity : DeliveryTrackerActivity() {
             when (it) {
                 LoginResult.Registered -> {
                     val intent = Intent(ctx, ConfirmDataActivity::class.java)
-                    if (fromSettings) {
-                        intent.putExtra(SETTINGS_CONTEXT, true)
-                    }
+                    intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     ctx.startActivity(intent)
-                    ctx.finish()
                 }
                 LoginResult.Success -> {
-                    if (!fromSettings) {
-                        val intent = Intent(ctx, MainActivity::class.java)
-                        ctx.startActivity(intent)
-                    }
-                    ctx.finish()
+                    val intent = Intent(ctx, MainActivity::class.java)
+                    intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    ctx.startActivity(intent)
                 }
                 LoginResult.RoleMismatch -> {
                     Toast.makeText(

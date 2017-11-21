@@ -9,6 +9,7 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
@@ -69,18 +70,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 invokeAsync({
                     session.updateUserInfo(userInfo)
                 }, {
-                    if (it) {
-                            val intent = Intent(
-                                    this@ConfirmDataActivity,
-                                    MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                    } else {
-                        Toast.makeText(
-                                this@ConfirmDataActivity,
-                                getString(R.string.Core_UnknownError),
-                                Toast.LENGTH_LONG).show()
-                    }
+                    navigateToMainAcitity(it)
                 })
             }
         }
@@ -90,5 +80,21 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
+    }
+
+    private fun navigateToMainAcitity(success: Boolean) {
+        val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+
+        if (success) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(SETTINGS_CONTEXT, settingsContext)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        } else {
+            Toast.makeText(
+                    this,
+                    getString(R.string.Core_UnknownError),
+                    Toast.LENGTH_LONG).show()
+        }
     }
 }

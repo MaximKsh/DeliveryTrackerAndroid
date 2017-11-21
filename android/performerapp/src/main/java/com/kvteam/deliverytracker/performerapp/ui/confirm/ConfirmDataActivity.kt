@@ -59,13 +59,10 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
             session.updateUserInfo(userInfo)
         }, {
             if(it) {
-                if(!settingsContext) {
-                    val intent = Intent(
-                            this@ConfirmDataActivity,
-                            MainActivity::class.java)
-                    startActivity(intent)
-                }
-                finish()
+                val intent = Intent(this@ConfirmDataActivity, MainActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, settingsContext)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             } else {
                 showError(getString(R.string.Core_UnknownError))
             }

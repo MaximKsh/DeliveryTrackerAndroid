@@ -27,13 +27,11 @@ class LoginActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if(savedInstanceState != null) {
-            savedInstanceState.apply {
-                etLoginUsername.setText(
-                        getString(usernameKey, EMPTY_STRING))
-                etLoginPassword.setText(
-                        getString(passwordKey, EMPTY_STRING))
-            }
+        savedInstanceState?.apply {
+            etLoginUsername.setText(
+                    getString(usernameKey, EMPTY_STRING))
+            etLoginPassword.setText(
+                    getString(passwordKey, EMPTY_STRING))
         }
         bttnSignIn.setOnClickListener { onSignInClicked() }
     }
@@ -47,7 +45,6 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun onSignInClicked() {
-        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val username = etLoginUsername.text.toString()
         val password = etLoginPassword.text.toString()
 
@@ -55,35 +52,7 @@ class LoginActivity : DeliveryTrackerActivity() {
         invokeAsync({
             session.login(username, password)
         }, {
-            when (it) {
-                LoginResult.Registered -> {
-                    val intent = Intent(
-                            this@LoginActivity,
-                            ConfirmDataActivity::class.java)
-                    if (fromSettings) {
-                        intent.putExtra(SETTINGS_CONTEXT, true)
-                    }
-                    startActivity(intent)
-                    finish()
-                }
-                LoginResult.Success -> {
-                    if (!fromSettings) {
-                        val intent = Intent(
-                                this@LoginActivity,
-                                MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                    finish()
-                }
-                LoginResult.RoleMismatch -> {
-                    showError(getString(R.string.PerformerApp_LoginActivity_IncorrectRole))
-
-                }
-                LoginResult.Error -> {
-                    showError(getString(R.string.PerformerApp_LoginActivity_WrongCredentials))
-                }
-                else -> {}
-            }
+            navigateToNextActivity(it)
             setProcessingState(false)
         })
     }
@@ -94,5 +63,31 @@ class LoginActivity : DeliveryTrackerActivity() {
 
     private fun showError(text: String) {
         tvLoginError.text = text
+    }
+
+    private fun navigateToNextActivity(result: LoginResult) {
+        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        when (result) {
+            LoginResult.Registered -> {
+                val intent = Intent(this, ConfirmDataActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            LoginResult.Success -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            LoginResult.RoleMismatch -> {
+                showError(getString(R.string.PerformerApp_LoginActivity_IncorrectRole))
+
+            }
+            LoginResult.Error -> {
+                showError(getString(R.string.PerformerApp_LoginActivity_WrongCredentials))
+            }
+            else -> {}
+        }
     }
 }

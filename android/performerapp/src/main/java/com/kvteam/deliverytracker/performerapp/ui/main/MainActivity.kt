@@ -29,6 +29,9 @@ class MainActivity : DeliveryTrackerActivity() {
     override val checkHasAccountOnResume
             get() = true
 
+    override val allowSettingsContext: Boolean
+        get() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
