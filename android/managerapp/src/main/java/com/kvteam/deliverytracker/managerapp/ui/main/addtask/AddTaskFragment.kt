@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -33,6 +34,9 @@ class AddTaskFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var taskRepository: ITaskRepository
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -105,15 +109,14 @@ class AddTaskFragment : DeliveryTrackerFragment() {
             }
             taskRepository.addTask(task)
         }, {
-            if(it != null){
+            if(it.success){
                 navigationController.closeCurrentFragment()
             } else {
-                Toast
-                        .makeText(
-                                activity,
-                                getString(R.string.Core_UnknownError),
-                                Toast.LENGTH_LONG)
-                        .show()
+                val dialog = ErrorDialog(this@AddTaskFragment.context)
+                if(it.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                }
+                dialog.show()
             }
         })
     }

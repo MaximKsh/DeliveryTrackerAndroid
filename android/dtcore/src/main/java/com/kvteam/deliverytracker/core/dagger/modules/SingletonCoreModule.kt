@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.core.dagger.modules
 
-import android.arch.lifecycle.ViewModel
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
+import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.instance.InstanceManager
 import com.kvteam.deliverytracker.core.session.ISession
@@ -15,7 +15,6 @@ import com.kvteam.deliverytracker.core.webservice.IWebservice
 import com.kvteam.deliverytracker.core.webservice.Webservice
 import dagger.Module
 import dagger.Provides
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -29,10 +28,17 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Provides
     @Singleton
     fun session(
+            localizationManager: ILocalizationManager,
+            errorManager: IErrorManager,
             httpManager: IHttpManager,
             app: T,
             sessionInfo: ISessionInfo): ISession {
-        return Session(httpManager, sessionInfo, app.applicationContext)
+        return Session(
+                localizationManager,
+                errorManager,
+                httpManager,
+                sessionInfo,
+                app.applicationContext)
     }
 
     @Provides
@@ -46,13 +52,29 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun instanceManager(webservice: IWebservice, storage: IStorage): IInstanceManager {
-        return InstanceManager(webservice, storage)
+    fun instanceManager(
+            webservice: IWebservice,
+            storage: IStorage,
+            errorManager: IErrorManager,
+            localizationManager: ILocalizationManager): IInstanceManager {
+        return InstanceManager(webservice, storage, errorManager, localizationManager)
     }
 
     @Provides
     @Singleton
     fun storage(app: T): IStorage {
         return Storage(app.applicationContext)
+    }
+
+    @Provides
+    @Singleton
+    fun errorManager(): IErrorManager {
+        return ErrorManager()
+    }
+
+    @Provides
+    @Singleton
+    fun localizationManager(ext: ILocalizationManagerExtension, app: T): ILocalizationManager {
+        return LocalizationManager(ext, app)
     }
 }

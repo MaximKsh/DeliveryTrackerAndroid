@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
+import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -21,6 +24,9 @@ class LoginActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -61,33 +67,28 @@ class LoginActivity : DeliveryTrackerActivity() {
         bttnSignIn.isEnabled = !processing
     }
 
-    private fun showError(text: String) {
-        tvLoginError.text = text
-    }
-
     private fun navigateToNextActivity(result: LoginResult) {
         val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
-        when (result) {
-            LoginResult.Registered -> {
+        when (result.loginResultType) {
+            LoginResultType.Registered -> {
                 val intent = Intent(this, ConfirmDataActivity::class.java)
                 intent.putExtra(SETTINGS_CONTEXT, fromSettings)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
-            LoginResult.Success -> {
+            LoginResultType.Success -> {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra(SETTINGS_CONTEXT, fromSettings)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
-            LoginResult.RoleMismatch -> {
-                showError(getString(R.string.PerformerApp_LoginActivity_IncorrectRole))
-
+            else -> {
+                val dialog = ErrorDialog(this)
+                if(result.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(result.errorChainId!!)!!)
+                }
+                dialog.show()
             }
-            LoginResult.Error -> {
-                showError(getString(R.string.PerformerApp_LoginActivity_WrongCredentials))
-            }
-            else -> {}
         }
     }
 }

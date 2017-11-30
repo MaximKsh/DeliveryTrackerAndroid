@@ -5,8 +5,6 @@
     <string name="PerformerApp_TaskFragment_InWorkButton">Взять в работу</string>
     <string name="PerformerApp_TaskFragment_PerformButton">Завершить</string>
     <string name="PerformerApp_TaskFragment_CancelButton">Отменить</string>
-    <string name="PerformerApp_LoginActivity_WrongCredentials">Неверные имя/пароль</string>
-    <string name="PerformerApp_LoginActivity_IncorrectRole">Неправильная роль</string>
     <string name="PerformerApp_LoginActivity_SignInButton">Войти</string>
     <string name="PerformerApp_LoginActivity_LoginLabel">Код</string>
     <string name="PerformerApp_LoginActivity_PasswordLabel">Пароль</string>
@@ -19,4 +17,6 @@
     <string name="PerformerApp_MainActivity_MyTasksMenuItem">Мои задания</string>
     <string name="PerformerApp_MainActivity_PerformersMenuItem">Исполнители</string>
     <string name="PerformerApp_UsersListFragment_CallUserContentDescription">Позвонить</string>
+
+    <string name="PerformerApp_TaskRepository_Error_ErrorTitle">Действие с заданием</string>
 </resources>

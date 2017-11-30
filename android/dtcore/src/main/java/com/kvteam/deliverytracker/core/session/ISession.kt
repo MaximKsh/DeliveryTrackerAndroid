@@ -1,10 +1,7 @@
 package com.kvteam.deliverytracker.core.session
 
+import com.kvteam.deliverytracker.core.common.SimpleResult
 import com.kvteam.deliverytracker.core.models.UserModel
-
-/**
- * Created by maxim on 18.10.17.
- */
 
 interface ISession {
     fun getToken(): String?
@@ -13,8 +10,8 @@ interface ISession {
     fun login(username: String, password: String): LoginResult
     fun hasAccount(): Boolean
     fun hasAccount(username: String?): Boolean
-    fun refreshUserInfo(): Boolean
-    fun updateUserInfo(userInfo: UserModel): Boolean
+    fun refreshUserInfo(): SimpleResult
+    fun editUserInfo(userInfo: UserModel): SimpleResult
     fun logout()
 
     val username: String?

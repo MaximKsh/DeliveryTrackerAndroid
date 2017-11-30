@@ -3,13 +3,15 @@ package com.kvteam.deliverytracker.managerapp.ui.login
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
+import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
@@ -25,6 +27,8 @@ class LoginActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -61,8 +65,6 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun onLoginClick() {
-        val ctx = this
-        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
         val username = etLoginField.text.toString()
         val password = etPasswordField.text.toString()
 
@@ -70,40 +72,34 @@ class LoginActivity : DeliveryTrackerActivity() {
         invokeAsync({
             session.login(username, password)
         }, {
-            when (it) {
-                LoginResult.Registered -> {
-                    val intent = Intent(ctx, ConfirmDataActivity::class.java)
-                    intent.putExtra(SETTINGS_CONTEXT, fromSettings)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    ctx.startActivity(intent)
-                }
-                LoginResult.Success -> {
-                    val intent = Intent(ctx, MainActivity::class.java)
-                    intent.putExtra(SETTINGS_CONTEXT, fromSettings)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    ctx.startActivity(intent)
-                }
-                LoginResult.RoleMismatch -> {
-                    Toast.makeText(
-                            ctx,
-                            getString(R.string.ManagerApp_LoginActivity_WrongRole),
-                            Toast.LENGTH_LONG).show()
-                }
-                LoginResult.Error -> {
-                    Toast.makeText(
-                            ctx,
-                            getString(R.string.ManagerApp_LoginActivity_WrongCredentials),
-                            Toast.LENGTH_LONG).show()
-                }
-                else -> {
-                    Toast.makeText(
-                            ctx,
-                            getString(R.string.Core_UnknownError),
-                            Toast.LENGTH_LONG).show()
-                }
-            }
-            setProcessingState(false)
+            afterLogin(it)
         })
+    }
+
+    private fun afterLogin(result: LoginResult) {
+        val fromSettings = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
+        when (result.loginResultType) {
+            LoginResultType.Registered -> {
+                val intent = Intent(this, ConfirmDataActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                this.startActivity(intent)
+            }
+            LoginResultType.Success -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(SETTINGS_CONTEXT, fromSettings)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                this.startActivity(intent)
+            }
+            else -> {
+                val dialog = ErrorDialog(this)
+                if(result.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(result.errorChainId!!)!!)
+                }
+                dialog.show()
+            }
+        }
+        setProcessingState(false)
     }
 
     private fun setProcessingState(processing: Boolean = true){

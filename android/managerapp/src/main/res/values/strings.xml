@@ -53,6 +53,7 @@
     <string name="ManagerApp_UserListFragment_ChatContentDesc">Chat</string>
     <string name="ManagerApp_UserListFragment_PhoneContentDesc">Phone</string>
     <string name="ManagerApp_TasksListFragment_AddTaskButton">Add task</string>
+    <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
 
 
 </resources>

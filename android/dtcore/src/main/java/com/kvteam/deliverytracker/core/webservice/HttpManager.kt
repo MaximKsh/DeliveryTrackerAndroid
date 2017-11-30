@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.webservice
 
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -46,7 +47,7 @@ class HttpManager: IHttpManager {
             NetworkResponse(
                     fetched = true,
                     statusCode = response.code(),
-                    responseEntity = response.body()?.string() ?: "")
+                    responseEntity = response.body()?.string() ?: EMPTY_STRING)
         } catch (e: IOException) {
             NetworkResponse()
         }

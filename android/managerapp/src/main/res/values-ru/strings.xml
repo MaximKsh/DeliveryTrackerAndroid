@@ -42,4 +42,6 @@
     <string name="ManagerApp_UserListFragment_ChatContentDesc">Чат</string>
     <string name="ManagerApp_UserListFragment_PhoneContentDesc">Телефон</string>
     <string name="ManagerApp_TasksListFragment_AddTaskButton">Добавить задание</string>
+    <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
+
 </resources>

@@ -54,6 +54,7 @@ dependencies {
     compile 'com.google.dagger:dagger-android-support:2.11'
     compile "org.jetbrains.kotlin:kotlin-reflect:1.1.51"
     compile "android.arch.persistence.room:runtime:1.0.0"
+    compile 'com.thoughtbot:expandablecheckrecyclerview:1.4'
 
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'

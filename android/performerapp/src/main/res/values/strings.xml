@@ -6,8 +6,6 @@
     <string name="PerformerApp_TaskFragment_InWorkButton">Take into work</string>
     <string name="PerformerApp_TaskFragment_PerformButton">Perform</string>
     <string name="PerformerApp_TaskFragment_CancelButton">Cancel</string>
-    <string name="PerformerApp_LoginActivity_WrongCredentials">Invalid username/password</string>
-    <string name="PerformerApp_LoginActivity_IncorrectRole">Incorrect role</string>
     <string name="PerformerApp_LoginActivity_SignInButton">Sign in</string>
     <string name="PerformerApp_LoginActivity_LoginLabel">Login</string>
     <string name="PerformerApp_LoginActivity_PasswordLabel">Password</string>
@@ -21,4 +19,6 @@
     <string name="PerformerApp_MainActivity_UndistibutedTasksMenuItem">Und. tasks</string>
     <string name="PerformerApp_UsersListFragment_CallUserContentDescription">Call</string>
     <string name="PerformerApp_UsersListFragment_FullnameFormat" translatable="false">%s %s</string>
+
+    <string name="PerformerApp_TaskRepository_Error_ErrorTitle">Task action</string>
 </resources>
