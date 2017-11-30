@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EntityResult
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
@@ -26,8 +28,12 @@ class TaskFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var taskRepository: ITaskRepository
+
     @Inject
     lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     lateinit var taskId: UUID
         private set
@@ -55,8 +61,14 @@ class TaskFragment : DeliveryTrackerFragment() {
             invokeAsync({
                 taskRepository.getTask(taskId)
             }, {
-                if(it != null) {
-                    initTask(it)
+                if(it.success) {
+                    initTask(it.entity!!)
+                } else {
+                    val dialog = ErrorDialog(this@TaskFragment.context)
+                    if(it.errorChainId != null) {
+                        dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                    }
+                    dialog.show()
                 }
             })
         }
@@ -72,7 +84,6 @@ class TaskFragment : DeliveryTrackerFragment() {
 
 
     private fun initTask(task: TaskModel) {
-        currentTask = task
         tvTaskNumber.text = task.number
         tvShippingDesc.text = task.shippingDesc
         tvTaskDetails.text = task.details
@@ -109,20 +120,19 @@ class TaskFragment : DeliveryTrackerFragment() {
         }
     }
 
-    private fun performTaskAction(action: ((taskId: UUID)-> TaskModel?)) {
+    private fun performTaskAction(action: ((taskId: UUID)-> EntityResult<TaskModel?>)) {
         setProcessingState()
         invokeAsync({
             action(taskId)
         }, {
-            if(it != null) {
+            if(it.success) {
                 navigationController.closeCurrentFragment()
             } else {
-                Toast
-                        .makeText(
-                                activity,
-                                getString(R.string.Core_UnknownError),
-                                Toast.LENGTH_LONG)
-                        .show()
+                val dialog = ErrorDialog(this@TaskFragment.context)
+                if(it.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                }
+                dialog.show()
             }
             setProcessingState(false)
         })

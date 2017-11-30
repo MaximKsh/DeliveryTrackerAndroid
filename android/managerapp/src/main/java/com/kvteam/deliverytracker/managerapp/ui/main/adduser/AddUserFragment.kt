@@ -8,11 +8,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -28,6 +30,9 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
 
     @Inject
     lateinit var instanceManager: IInstanceManager
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     private val userRoleKey = "userRoleKey"
     private val userNameKey = "userNameKey"
@@ -113,14 +118,20 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
                             phoneNumber = etPhoneNumberField.text.toString()
                     ))
                 }, {
-                   if (it != null) {
+                   if (it.success) {
                        val view =  this@AddUserFragment.activity.currentFocus
                        if (view != null) {
                            val imm = this@AddUserFragment.activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                            imm.hideSoftInputFromWindow(view.windowToken, 0)
                        }
                        this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
-                       this@AddUserFragment.tvInvitationCode.text = it.invitationCode
+                       this@AddUserFragment.tvInvitationCode.text = it.entity?.invitationCode
+                   } else {
+                       val dialog = ErrorDialog(this@AddUserFragment.context)
+                       if(it.errorChainId != null) {
+                           dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                       }
+                       dialog.show()
                    }
                 })
 //                navigationController.closeCurrentFragment()

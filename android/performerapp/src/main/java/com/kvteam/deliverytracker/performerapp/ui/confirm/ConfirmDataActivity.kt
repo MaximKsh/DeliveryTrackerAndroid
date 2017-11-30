@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
@@ -21,6 +23,9 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -56,20 +61,20 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 phoneNumber = etConfirmPhoneNumber.text.toString())
 
         invokeAsync({
-            session.updateUserInfo(userInfo)
+            session.editUserInfo(userInfo)
         }, {
-            if(it) {
+            if(it.success) {
                 val intent = Intent(this@ConfirmDataActivity, MainActivity::class.java)
                 intent.putExtra(SETTINGS_CONTEXT, settingsContext)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             } else {
-                showError(getString(R.string.Core_UnknownError))
+                val dialog = ErrorDialog(this@ConfirmDataActivity)
+                if(it.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                }
+                dialog.show()
             }
         })
-    }
-
-    private fun showError(text: String) {
-        tvConfirmError.text = text
     }
 }

@@ -1,5 +1,7 @@
 package com.kvteam.deliverytracker.core.instance
 
+import com.kvteam.deliverytracker.core.common.EntityResult
+import com.kvteam.deliverytracker.core.common.SimpleResult
 import com.kvteam.deliverytracker.core.models.CredentialsModel
 import com.kvteam.deliverytracker.core.models.InstanceModel
 import com.kvteam.deliverytracker.core.models.InvitationModel
@@ -9,13 +11,13 @@ interface IInstanceManager {
     fun create(
             instance: InstanceModel,
             user: UserModel,
-            credentials: CredentialsModel): UserModel?
+            credentials: CredentialsModel): EntityResult<UserModel?>
 
-    fun getUser(username: String): UserModel?
-    fun inviteManager(preliminaryUserInfo: UserModel): InvitationModel?
-    fun invitePerformer(preliminaryUserInfo: UserModel): InvitationModel?
-    fun getPerformers(resetCache: Boolean = false): List<UserModel>?
-    fun getManagers(resetCache: Boolean = false): List<UserModel>?
-    fun deleteManager(username: String): Boolean
-    fun deletePerformer(username: String): Boolean
+    fun getUser(username: String): EntityResult<UserModel?>
+    fun inviteManager(preliminaryUserInfo: UserModel): EntityResult<InvitationModel?>
+    fun invitePerformer(preliminaryUserInfo: UserModel): EntityResult<InvitationModel?>
+    fun getPerformers(resetCache: Boolean = false): EntityResult<List<UserModel>?>
+    fun getManagers(resetCache: Boolean = false): EntityResult<List<UserModel>?>
+    fun deleteManager(username: String): SimpleResult
+    fun deletePerformer(username: String): SimpleResult
 }

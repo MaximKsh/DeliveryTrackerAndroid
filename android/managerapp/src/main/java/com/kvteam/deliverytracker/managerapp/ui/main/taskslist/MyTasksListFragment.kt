@@ -2,6 +2,8 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.IErrorManager
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 import javax.inject.Inject
@@ -9,6 +11,9 @@ import javax.inject.Inject
 class MyTasksListFragment: TasksListFragment() {
     @Inject
     lateinit var taskRepository: ITaskRepository
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -21,9 +26,15 @@ class MyTasksListFragment: TasksListFragment() {
         invokeAsync({
             taskRepository.getMyTasks()
         }, {
-            if(it != null) {
-                adapter.value?.items?.addAll(it)
+            if(it.success) {
+                adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
+            } else {
+                val dialog = ErrorDialog(this@MyTasksListFragment.context)
+                if(it.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                }
+                dialog.show()
             }
         })
 
@@ -34,10 +45,16 @@ class MyTasksListFragment: TasksListFragment() {
         invokeAsync({
             taskRepository.getMyTasks(true)
         }, {
-            if(it != null) {
+            if(it.success) {
                 adapter.value?.items?.clear()
-                adapter.value?.items?.addAll(it)
+                adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
+            } else {
+                val dialog = ErrorDialog(this@MyTasksListFragment.context)
+                if(it.errorChainId != null) {
+                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                }
+                dialog.show()
             }
             srlSwipeRefreshTasks.isRefreshing = false
         })

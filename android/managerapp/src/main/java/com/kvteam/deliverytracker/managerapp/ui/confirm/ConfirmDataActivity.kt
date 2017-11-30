@@ -4,13 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IErrorManager
+import com.kvteam.deliverytracker.core.common.SimpleResult
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
@@ -26,6 +28,9 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -68,7 +73,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                         phoneNumber = etPhoneNumberField.text.toString())
 
                 invokeAsync({
-                    session.updateUserInfo(userInfo)
+                    session.editUserInfo(userInfo)
                 }, {
                     navigateToMainAcitity(it)
                 })
@@ -82,19 +87,20 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         return true
     }
 
-    private fun navigateToMainAcitity(success: Boolean) {
+    private fun navigateToMainAcitity(result: SimpleResult) {
         val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
 
-        if (success) {
+        if (result.success) {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra(SETTINGS_CONTEXT, settingsContext)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
-            Toast.makeText(
-                    this,
-                    getString(R.string.Core_UnknownError),
-                    Toast.LENGTH_LONG).show()
+            val dialog = ErrorDialog(this@ConfirmDataActivity)
+            if(result.errorChainId != null) {
+                dialog.addChain(errorManager.getAndRemove(result.errorChainId!!)!!)
+            }
+            dialog.show()
         }
     }
 }

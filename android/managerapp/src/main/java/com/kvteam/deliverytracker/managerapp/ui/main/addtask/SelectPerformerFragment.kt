@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -27,6 +29,9 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var taskRepository: ITaskRepository
+
+    @Inject
+    lateinit var errorManager: IErrorManager
 
     protected lateinit var adapter: AutoClearedValue<SelectPerformerAdapter>
 
@@ -64,9 +69,15 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
             invokeAsync({
                 taskRepository.getAvailablePerformers()
             }, {
-                if(it != null) {
-                    adapter.value?.items?.addAll(it)
+                if(it.success) {
+                    adapter.value?.items?.addAll(it.entity!!)
                     adapter.value?.notifyDataSetChanged()
+                } else {
+                    val dialog = ErrorDialog(this@SelectPerformerFragment.context)
+                    if(it.errorChainId != null) {
+                        dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+                    }
+                    dialog.show()
                 }
             })
         } else {
