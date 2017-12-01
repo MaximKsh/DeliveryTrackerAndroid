@@ -4,6 +4,7 @@ import com.kvteam.deliverytracker.core.dagger.modules.ServiceModules
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
 import com.kvteam.deliverytracker.core.session.SessionService
+import com.kvteam.deliverytracker.performerapp.geoposition.GeopositionSender
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -28,4 +29,7 @@ internal abstract class AndroidBindingModule {
     @ServiceScope
     @ContributesAndroidInjector(modules = arrayOf(ServiceModules::class))
     internal abstract fun sessionService(): SessionService
+
+    @ContributesAndroidInjector(modules = arrayOf(GeopositionSenderModule::class))
+    internal abstract fun geopositionSenderBroadcastReceiver(): GeopositionSender
 }
