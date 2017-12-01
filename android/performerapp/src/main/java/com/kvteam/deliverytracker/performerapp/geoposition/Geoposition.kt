@@ -8,7 +8,7 @@ import java.util.*
 
 
 const val GEOPOSITION_REQUEST_CODE = 0
-const val GEOPOSITION_TIME_INTERVAL = 10 * 1000L //AlarmManager.INTERVAL_FIFTEEN_MINUTES
+const val GEOPOSITION_TIME_INTERVAL = 5 * 60 * 1000L //AlarmManager.INTERVAL_FIFTEEN_MINUTES
 
 fun startSendingGeoposition(ctx: Context) {
     val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
