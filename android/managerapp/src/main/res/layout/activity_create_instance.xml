@@ -26,14 +26,14 @@
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleMarginEnd="64dp"
             android:fitsSystemWindows="true">
-
+            <!--
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="300dp"
                 app:layout_collapseMode="parallax"/>
-
+            -->
             <include
                 layout="@layout/toolbar"
                 app:layout_collapseMode="pin"

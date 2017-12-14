@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.async
 
+import android.util.Log
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.channels.Channel
@@ -12,15 +13,28 @@ fun <T> invokeAsync(
     if(continueWith != null) {
         val channel = Channel<T>()
         launch(CommonPool) {
-            val res = task()
-            channel.send(res)
+            try {
+                val res = task()
+                channel.send(res)
+            } catch (e: Exception) {
+                Log.e("InvokeAsync", e.message, e)
+            }
+
         }.attachChild(launch(UI) {
-            val res = channel.receive()
-            continueWith(res)
+            try {
+                val res = channel.receive()
+                continueWith(res)
+            } catch (e: Exception) {
+                Log.e("InvokeAsync", e.message, e)
+            }
         })
     } else {
         launch {
-            task()
+            try {
+                task()
+            } catch (e: Exception) {
+                Log.e("InvokeAsync", e.message, e)
+            }
         }
     }
 }

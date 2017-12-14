@@ -6,7 +6,9 @@ import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.performerapp.R
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import javax.inject.Inject
+
 
 class MainActivity : DeliveryTrackerActivity() {
     private val managersMenu = R.id.navigation_managers
@@ -46,6 +48,11 @@ class MainActivity : DeliveryTrackerActivity() {
                     savedInstanceState.getInt(bnvSelectedItemKey, defaultItem)
         }
 
+        if(intent.action == showTaskAction) {
+            navigationController.navigateToTask(
+                    UUID.fromString(intent.extras[showTaskActionId] as String))
+        }
+
         bnvNavigation.setOnNavigationItemSelectedListener {
             if(bnvNavigation.selectedItemId != it.itemId) {
                 menuItemMapper[it.itemId]?.invoke()
@@ -59,5 +66,12 @@ class MainActivity : DeliveryTrackerActivity() {
         outState?.apply {
             putInt(bnvSelectedItemKey, bnvNavigation.selectedItemId)
         }
+    }
+
+    companion object {
+        @JvmStatic
+        val showTaskAction = "showTaskAction"
+        @JvmStatic
+        val showTaskActionId = "showTaskActionId"
     }
 }
