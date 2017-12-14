@@ -43,6 +43,24 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.ACCESS_COARSE_LOCATION|android.permission.ACCESS_FINE_LOCATION" />
+
+        <service
+            android:name=".notification.PerformerFirebaseInstanceIdService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".notification.PerformerFirebaseMessageService"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

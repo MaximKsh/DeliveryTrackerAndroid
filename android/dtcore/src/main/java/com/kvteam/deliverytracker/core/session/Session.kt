@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.os.Build
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
@@ -12,6 +13,7 @@ import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.common.SimpleResult
 import com.kvteam.deliverytracker.core.models.CredentialsModel
+import com.kvteam.deliverytracker.core.models.DeviceModel
 import com.kvteam.deliverytracker.core.models.TokenModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
@@ -73,7 +75,12 @@ class Session (
     }
 
     override fun login(username: String, password: String): LoginResult {
-        val credentials = CredentialsModel(username, password)
+        val device = try {
+            DeviceModel(FirebaseInstanceId.getInstance().token)
+        } catch (e: IllegalStateException) {
+            DeviceModel()
+        }
+        val credentials = CredentialsModel(username, password, device)
         val rawRequestBody = gson.toJson(credentials)
         val tokenResponse = httpManager.post(
                 baseUrl + "/api/session/login",

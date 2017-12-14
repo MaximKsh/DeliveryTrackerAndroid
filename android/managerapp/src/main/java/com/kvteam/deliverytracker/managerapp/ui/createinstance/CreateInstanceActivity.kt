@@ -42,10 +42,10 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         this.toolbar_title.text = resources.getString(R.string.ManagerApp_CreateInstanceActivity_CompanyRegistration)
-        val transaction = supportFragmentManager.beginTransaction()
+        /*val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, LocationFragment())
         transaction.addToBackStack(null)
-        transaction.commit()
+        transaction.commit()*/
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

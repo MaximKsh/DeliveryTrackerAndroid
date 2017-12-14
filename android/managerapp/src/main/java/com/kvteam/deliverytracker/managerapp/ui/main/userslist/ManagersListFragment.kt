@@ -45,11 +45,11 @@ class ManagersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@ManagersListFragment.context)
+                /*val dialog = ErrorDialog(this@ManagersListFragment.context)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
+                }*/
+                // dialog.show()
             }
         })
     }
