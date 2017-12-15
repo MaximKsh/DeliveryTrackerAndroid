@@ -1,10 +1,9 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
@@ -50,19 +49,13 @@ interface MyTasksListFragmentSubcomponent : AndroidInjector<MyTasksListFragment>
 }
 
 @Subcomponent
-interface AddTaskFragmentSubcomponent : AndroidInjector<AddTaskFragment> {
+interface AddTaskFragmentSubcomponent : AndroidInjector<TaskDetailsFragment> {
     @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<AddTaskFragment>()
+    abstract class Builder : AndroidInjector.Builder<TaskDetailsFragment>()
 }
 
 @Subcomponent
 interface SelectPerformerFragmentSubcomponent : AndroidInjector<SelectPerformerFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<SelectPerformerFragment>()
-}
-
-@Subcomponent
-interface TaskFragmentSubcomponent : AndroidInjector<TaskFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<TaskFragment>()
 }
