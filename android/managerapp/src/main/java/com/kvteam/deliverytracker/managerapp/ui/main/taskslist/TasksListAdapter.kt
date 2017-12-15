@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
@@ -13,11 +14,13 @@ import kotlinx.android.synthetic.main.fragment_tasks_item.view.*
 
 class TasksListAdapter(
         var onTaskClick: ((task: TaskModel) -> Unit)?,
-        var getLocalizedString: ((id: Int) -> String)?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
+        var lm: ILocalizationManager?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
         val tvNumber = v.tvTaskItemNumber!!
         val tvState = v.tvTaskItemState!!
+        val tvShippingDesc = v.tvTaskItemShippingDesc!!
+        val tvAddress = v.tvTaskItemAddress!!
         val llRowLayout = v.llTaskRowLayout!!
     }
 
@@ -41,8 +44,10 @@ class TasksListAdapter(
         holder.tvNumber.text = task.number
         val stateId = task.state?.toTaskState()?.localizationStringId
         holder.tvState.text =
-                if(stateId != null) getLocalizedString?.invoke(stateId) ?: EMPTY_STRING
+                if(stateId != null) lm?.getString(stateId) ?: EMPTY_STRING
                 else EMPTY_STRING
+        holder.tvShippingDesc.text = task.shippingDesc ?: EMPTY_STRING
+        holder.tvAddress.text = task.address ?: EMPTY_STRING
 
         holder.llRowLayout.setBackgroundResource(when(state) {
             TaskState.NewUndistributed -> R.color.taskNewUndistributedColor

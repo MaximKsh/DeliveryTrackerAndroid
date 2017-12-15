@@ -4,13 +4,42 @@
     android:id="@+id/llTaskRowLayout"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvTaskItemState"
+            android:textSize="10pt"
+            android:maxLength="15"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvTaskItemNumber"
+            android:textSize="10pt"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
     <TextView
-        android:id="@+id/tvTaskItemNumber"
+        android:id="@+id/tvTaskItemShippingDesc"
+        android:textSize="9pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
-        android:id="@+id/tvTaskItemState"
+        android:id="@+id/tvTaskItemAddress"
+        android:textSize="9pt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:autoLink="map"/>
+
 </LinearLayout>

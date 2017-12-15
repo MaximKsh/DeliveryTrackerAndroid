@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -20,6 +21,9 @@ import javax.inject.Inject
 open class TasksListFragment : DeliveryTrackerFragment() {
     protected val layoutManagerKey = "layoutManager"
     protected val tasksListKey = "tasksListKey"
+
+    @Inject
+    lateinit var lm: ILocalizationManager
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -54,10 +58,10 @@ open class TasksListFragment : DeliveryTrackerFragment() {
 
         adapter = AutoClearedValue(
                 this,
-                TasksListAdapter(this::onTaskClicked, context::getString),
+                TasksListAdapter(this::onTaskClicked, lm),
                 {
                     it?.onTaskClick = null
-                    it?.getLocalizedString = null
+                    it?.lm = null
                 })
         rvTasksList.adapter = adapter.value
 
