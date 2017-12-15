@@ -5,10 +5,9 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
@@ -82,7 +81,7 @@ abstract class MyTasksListFragmentModule {
 abstract class AddTaskFragmentModule {
     @Binds
     @IntoMap
-    @FragmentKey(AddTaskFragment::class)
+    @FragmentKey(TaskDetailsFragment::class)
     internal abstract fun addTaskFragmentInjector(builder: AddTaskFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
@@ -93,14 +92,5 @@ abstract class SelectPerformerFragmentModule {
     @IntoMap
     @FragmentKey(SelectPerformerFragment::class)
     internal abstract fun selectPerformerFragmentInjector(builder: SelectPerformerFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
-@Module(subcomponents = arrayOf(TaskFragmentSubcomponent::class))
-abstract class TaskFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(TaskFragment::class)
-    internal abstract fun taskFragmentInjector(builder: TaskFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }

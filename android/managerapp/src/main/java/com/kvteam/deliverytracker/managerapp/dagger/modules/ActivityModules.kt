@@ -15,10 +15,9 @@ import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.AddTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.addtask.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
@@ -97,15 +96,11 @@ abstract class MainActivityModule {
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AddTaskFragmentModule::class))
-    internal abstract fun addTaskFragment(): AddTaskFragment
+    internal abstract fun addTaskFragment(): TaskDetailsFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(SelectPerformerFragmentModule::class))
     internal abstract fun selectPerformerFragment(): SelectPerformerFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(TaskFragmentModule::class))
-    internal abstract fun taskFragment(): TaskFragment
 
     @Module
     class MainActivityNavigationControllerModule {
