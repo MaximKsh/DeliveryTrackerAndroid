@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.addtask
 
+import android.location.Geocoder
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.IErrorManager
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -17,6 +19,7 @@ import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_select_performers_list.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -32,6 +35,9 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var errorManager: IErrorManager
+
+    @Inject
+    lateinit var lm: ILocalizationManager
 
     protected lateinit var adapter: AutoClearedValue<SelectPerformerAdapter>
 
@@ -57,10 +63,13 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
         rvAvailablePerformersList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
+        val geocoder = Geocoder(this.context, Locale.getDefault())
         adapter = AutoClearedValue(
                 this,
-                SelectPerformerAdapter(this::onClick),
+                SelectPerformerAdapter(geocoder, lm, this::onClick),
                 {
+                    it?.geocoder = null
+                    it?.lm = null
                     it?.onClick = null
                 })
         rvAvailablePerformersList.adapter = adapter.value

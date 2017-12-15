@@ -56,4 +56,5 @@
     <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
 
 
+    <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>
 </resources>
