@@ -11,6 +11,9 @@ const val GEOPOSITION_REQUEST_CODE = 0
 const val GEOPOSITION_TIME_INTERVAL = 5 * 60 * 1000L //AlarmManager.INTERVAL_FIFTEEN_MINUTES
 
 fun startSendingGeoposition(ctx: Context) {
+    if(isSendingGeoposition(ctx)) {
+        return
+    }
     val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val pendingIntent = PendingIntent.getBroadcast(
             ctx,
