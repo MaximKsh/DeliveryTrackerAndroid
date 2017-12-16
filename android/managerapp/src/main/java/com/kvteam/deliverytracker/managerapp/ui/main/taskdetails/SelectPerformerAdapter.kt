@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskdetails
 
 import android.location.Geocoder
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.kvteam.deliverytracker.core.models.GeopositionModel
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.fragment_select_performers_item.view.*
+import java.io.IOException
 
 
 class SelectPerformerAdapter(
@@ -58,15 +60,20 @@ class SelectPerformerAdapter(
             return lm?.getString(R.string.ManagerApp_SelectPerformersFragment_EmptyAddress) ?: EMPTY_STRING
         }
 
-        val addresses = geocoder?.getFromLocation(pos.latitude, pos.longitude, 1)
-        if(addresses?.isNotEmpty() == true) {
-            val address = addresses.first()
-            var addressString = EMPTY_STRING
-            for(i in address.maxAddressLineIndex downTo 0) {
-                addressString += "${address.getAddressLine(i)} "
+        try {
+            val addresses = geocoder?.getFromLocation(pos.latitude, pos.longitude, 1)
+            if(addresses?.isNotEmpty() == true) {
+                val address = addresses.first()
+                var addressString = EMPTY_STRING
+                for(i in address.maxAddressLineIndex downTo 0) {
+                    addressString += "${address.getAddressLine(i)} "
+                }
+                return addressString
             }
-            return addressString
+        } catch(e: IOException) {
+            Log.e("Geocoder", e.message, e)
         }
+
         return lm?.getString(R.string.ManagerApp_SelectPerformersFragment_EmptyAddress) ?: EMPTY_STRING
     }
 }
