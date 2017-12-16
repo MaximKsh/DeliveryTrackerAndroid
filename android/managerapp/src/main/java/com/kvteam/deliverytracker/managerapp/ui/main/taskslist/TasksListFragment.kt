@@ -4,9 +4,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
@@ -15,6 +13,7 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
@@ -28,12 +27,15 @@ open class TasksListFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    private lateinit var addTaskMenuItem: MenuItem
+
     protected lateinit var adapter: AutoClearedValue<TasksListAdapter>
 
     protected var ignoreSavedState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
+        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
 
@@ -64,8 +66,6 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                     it?.lm = null
                 })
         rvTasksList.adapter = adapter.value
-
-        bttnAddNewTask.setOnClickListener { navigationController.navigateToAddTask() }
 
         savedInstanceState?.apply {
             val adapter = adapter.value
@@ -100,6 +100,27 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                         layoutManager.onSaveInstanceState())
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_addTask -> {
+                navigationController.navigateToAddTask()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_tasks_tab_menu, menu)
+
+        this.addTaskMenuItem = menu.findItem(R.id.action_addTask)
+        this.addTaskMenuItem.isVisible = true
+        this.activity.toolbar_left_action.setOnClickListener { _ ->
+
+        }
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun onTaskClicked(task: TaskModel) {

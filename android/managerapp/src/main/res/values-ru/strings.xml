@@ -20,6 +20,7 @@
     <string name="ManagerApp_MainActivity_MyTasks">Мои задания</string>
     <string name="ManagerApp_Toolbar_Edit">Редактировать</string>
     <string name="ManagerApp_Toolbar_AddUser">Добавить</string>
+    <string name="ManagerApp_Toolbar_AddTask">Добавить</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Удалить</string>
     <string name="ManagerApp_Cancel">Отмена</string>
     <string name="ManagerApp_Toolbar_Finish">Завершить</string>

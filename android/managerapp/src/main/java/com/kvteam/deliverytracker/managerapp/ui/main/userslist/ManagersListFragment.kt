@@ -31,12 +31,12 @@ class ManagersListFragment: UsersListFragment() {
             return
         }
 
-        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Managers)
+        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Managers)
 
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
 
         invokeAsync({
-            instanceManager.getManagers(true)
+            instanceManager.getManagers()
         }, {
             if (it.success) {
                 val modelUserList = it.entity!!.map { userModel ->

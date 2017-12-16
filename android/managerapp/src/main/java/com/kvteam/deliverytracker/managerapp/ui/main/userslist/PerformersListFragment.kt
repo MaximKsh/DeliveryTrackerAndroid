@@ -34,7 +34,7 @@ class PerformersListFragment: UsersListFragment() {
         this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
         invokeAsync({
-            instanceManager.getPerformers(true)
+            instanceManager.getPerformers()
         }, {
             if (it.success) {
                 val modelUserList = it.entity!!.map { userModel ->

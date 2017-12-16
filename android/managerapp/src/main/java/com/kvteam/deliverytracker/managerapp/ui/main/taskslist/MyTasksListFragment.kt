@@ -4,8 +4,10 @@ import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.ui.ErrorDialog
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 class MyTasksListFragment: TasksListFragment() {
@@ -22,6 +24,7 @@ class MyTasksListFragment: TasksListFragment() {
             return
         }
         ignoreSavedState = false
+        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_MyTasks)
 
         invokeAsync({
             taskRepository.getMyTasks()

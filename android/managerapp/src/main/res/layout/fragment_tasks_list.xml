@@ -20,10 +20,4 @@
             tools:listitem="@layout/fragment_tasks_item" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <Button
-        android:id="@+id/bttnAddNewTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ManagerApp_TasksListFragment_AddTaskButton" />
-
 </LinearLayout>

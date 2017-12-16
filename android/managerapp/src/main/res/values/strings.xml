@@ -24,6 +24,7 @@
     <string name="ManagerApp_MainActivity_MyTasks">My tasks</string>
     <string name="ManagerApp_Toolbar_Edit">Edit</string>
     <string name="ManagerApp_Toolbar_AddUser">Add user</string>
+    <string name="ManagerApp_Toolbar_AddTask">Add Task</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Delete</string>
     <string name="ManagerApp_Cancel">Cancel</string>
     <string name="ManagerApp_Toolbar_Finish">Finish</string>
