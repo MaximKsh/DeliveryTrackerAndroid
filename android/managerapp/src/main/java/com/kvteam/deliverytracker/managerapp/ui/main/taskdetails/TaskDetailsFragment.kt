@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.addtask
+package com.kvteam.deliverytracker.managerapp.ui.main.taskdetails
 
 
 import android.os.Bundle

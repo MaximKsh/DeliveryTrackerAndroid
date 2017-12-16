@@ -5,9 +5,9 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.SelectPerformerFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.addtask.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
