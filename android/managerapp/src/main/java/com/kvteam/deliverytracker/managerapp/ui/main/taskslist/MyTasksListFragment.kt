@@ -19,12 +19,12 @@ class MyTasksListFragment: TasksListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_MyTasks)
         if(savedInstanceState != null
                 && !ignoreSavedState) {
             return
         }
         ignoreSavedState = false
-        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_MyTasks)
 
         invokeAsync({
             taskRepository.getMyTasks()

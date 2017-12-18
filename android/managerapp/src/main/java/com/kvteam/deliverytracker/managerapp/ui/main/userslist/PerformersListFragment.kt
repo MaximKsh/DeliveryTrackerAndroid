@@ -27,11 +27,13 @@ class PerformersListFragment: UsersListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if(savedInstanceState != null) {
+        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
+        if(savedInstanceState != null
+                && !ignoreSavedState) {
             return
         }
+        ignoreSavedState = false
 
-        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
         invokeAsync({
             instanceManager.getPerformers()

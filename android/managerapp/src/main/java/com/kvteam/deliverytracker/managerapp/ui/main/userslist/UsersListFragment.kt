@@ -35,6 +35,8 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    protected var ignoreSavedState = false
+
     val userItemActions = object: UserItemActions {
         override fun onCallClick(user: UserModel) {
             if(user.phoneNumber != null
@@ -93,10 +95,14 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         savedInstanceState?.apply {
             if(rvUsersList?.layoutManager != null){
                 adapter.value?.items?.clear()
-                adapter.value?.items?.addAll(
-                        savedInstanceState.getParcelableArray(usersListKey).map { it as UserListModel })
-                rvUsersList.layoutManager.onRestoreInstanceState(
-                        savedInstanceState.getParcelable(layoutManagerKey))
+                if(containsKey(usersListKey)) {
+                    adapter.value?.items?.addAll(
+                            getParcelableArray(usersListKey).map { it as UserListModel })
+                    rvUsersList.layoutManager.onRestoreInstanceState(
+                            getParcelable(layoutManagerKey))
+                } else {
+                    ignoreSavedState = true
+                }
             }
         }
     }
