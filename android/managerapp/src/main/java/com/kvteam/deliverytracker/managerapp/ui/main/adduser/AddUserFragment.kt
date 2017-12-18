@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IErrorManager
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.roles.Role
@@ -23,8 +24,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
-// TODO: rename managersList xml to userslist
-open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedListener {
+class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedListener {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -34,10 +34,19 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     @Inject
     lateinit var errorManager: IErrorManager
 
+    @Inject
+    lateinit var lm: ILocalizationManager
+
     private val userRoleKey = "userRoleKey"
     private val userNameKey = "userNameKey"
     private val userSurnameKey = "userSurnameKey"
     private val userPhoneKey = "userPhoneKey"
+    private val inviteCodeKey = "inviteCodeKey"
+
+    private val selectedRoleMapper = mapOf(
+            0 to Role.Manager,
+            1 to Role.Performer
+    )
 
     private lateinit var mSubmitItem: MenuItem
     private lateinit var role: Role
@@ -69,6 +78,11 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
                 userSurnameKey, etSurnameField.text.toString())
         outState.putString(
                 userPhoneKey, etPhoneNumberField.text.toString())
+        val invitationCode = tvInvitationCode.text.toString()
+        if(invitationCode != EMPTY_STRING) {
+            outState.putString(
+                    inviteCodeKey, tvInvitationCode.text.toString())
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -80,10 +94,15 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
         this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_Toolbar_AddUser)
 
         if (savedInstanceState != null) {
-            this.role = savedInstanceState.getString(userRoleKey).toRole()!!
-            this.etNameField.setText(savedInstanceState.getString(userNameKey, EMPTY_STRING))
-            this.etSurnameField.setText(savedInstanceState.getString(userSurnameKey, EMPTY_STRING))
-            this.etPhoneNumberField.setText(savedInstanceState.getString(userPhoneKey, EMPTY_STRING))
+            role = savedInstanceState.getString(userRoleKey).toRole()!!
+            etNameField.setText(savedInstanceState.getString(userNameKey, EMPTY_STRING))
+            etSurnameField.setText(savedInstanceState.getString(userSurnameKey, EMPTY_STRING))
+            etPhoneNumberField.setText(savedInstanceState.getString(userPhoneKey, EMPTY_STRING))
+            val invitationCode = savedInstanceState.getString(inviteCodeKey, EMPTY_STRING)
+            if(invitationCode != EMPTY_STRING) {
+                tvInvitationCodeInfo.visibility = View.VISIBLE
+                tvInvitationCode.text = invitationCode
+            }
         }
         sUserRole.setSelection(adapter.getPosition(getString(this.role.localizationStringId)))
     }
@@ -104,7 +123,14 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val inviteFunction = if (role == Role.Performer)
+        if (tvInvitationCodeInfo.visibility == View.VISIBLE) {
+            navigationController.closeCurrentFragment()
+            return super.onOptionsItemSelected(item)
+        }
+
+        item.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
+        val selectedRole = selectedRoleMapper[sUserRole.selectedItemId.toInt()]
+        val inviteFunction = if (selectedRole == Role.Performer)
             instanceManager::invitePerformer
         else
             instanceManager::inviteManager
@@ -143,10 +169,14 @@ open class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelect
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_user_menu, menu)
 
-        this.mSubmitItem = menu.findItem(R.id.action_finish)
+        mSubmitItem = menu.findItem(R.id.action_finish)
 
-        this.activity.toolbar_left_action.setOnClickListener { _ ->
+        activity.toolbar_left_action.setOnClickListener { _ ->
             navigationController.closeCurrentFragment()
+        }
+
+        if(tvInvitationCodeInfo.visibility == View.VISIBLE) {
+            mSubmitItem.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
         }
 
         super.onCreateOptionsMenu(menu, inflater)

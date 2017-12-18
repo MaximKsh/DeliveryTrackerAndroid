@@ -3,8 +3,8 @@ package com.kvteam.deliverytracker.core.webservice
 import android.content.Context
 import android.text.TextUtils
 import com.google.gson.Gson
-import com.kvteam.deliverytracker.core.R
 import com.google.gson.JsonSyntaxException
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.models.ErrorListModel
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.getAuthorizationHeaders
@@ -71,7 +71,11 @@ class Webservice(context: Context,
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
-            result = httpManager.get(baseUrl + url, headers)
+            result = httpManager.post(
+                    baseUrl + url,
+                    body,
+                    headers,
+                    "application/json")
         }
         return processResponse(result)
     }
@@ -95,7 +99,11 @@ class Webservice(context: Context,
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
-            result = httpManager.get(baseUrl + url, headers)
+            result = httpManager.post(
+                    baseUrl + url,
+                    body,
+                    headers,
+                    "application/json")
         }
         return processResponse(result, responseType)
     }
