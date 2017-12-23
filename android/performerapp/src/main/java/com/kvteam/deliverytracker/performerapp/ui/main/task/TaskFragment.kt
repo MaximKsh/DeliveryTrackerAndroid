@@ -84,6 +84,7 @@ class TaskFragment : DeliveryTrackerFragment() {
 
 
     private fun initTask(task: TaskModel) {
+        currentTask = task
         tvTaskNumber.text = task.number
         tvShippingDesc.text = task.shippingDesc
         tvTaskDetails.text = task.details
