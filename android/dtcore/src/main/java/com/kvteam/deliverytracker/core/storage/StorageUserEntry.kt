@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.storage
 
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import com.kvteam.deliverytracker.core.models.UserModel
 import java.util.*
@@ -15,6 +16,7 @@ class StorageUserEntry() {
     @Embedded
     var user: UserModel? = null
 
+    @Ignore
     constructor(cacheKey: String, expirationDate: Date, user: UserModel): this() {
         this.cacheKey = cacheKey
         this.expirationDate = expirationDate

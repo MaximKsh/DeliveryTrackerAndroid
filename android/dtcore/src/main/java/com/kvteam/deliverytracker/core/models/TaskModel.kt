@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.models
 
 import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
 import java.util.*
@@ -31,6 +32,7 @@ data class TaskModel(
         }
     }
 
+    @Ignore
     constructor(parcelIn: Parcel) : this(
             UUID.fromString(parcelIn.readString()),
             parcelIn.readString(),

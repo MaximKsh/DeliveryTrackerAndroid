@@ -4,7 +4,7 @@ import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
 
-data class InstanceModel(var instanceName: String? = null): Parcelable {
+data class InstanceModel (var instanceName: String? = null): Parcelable {
 
     companion object {
         @JvmField
@@ -15,6 +15,7 @@ data class InstanceModel(var instanceName: String? = null): Parcelable {
         }
     }
 
+    @Ignore
     constructor(parcelIn: Parcel) : this(
             parcelIn.readString()
     )

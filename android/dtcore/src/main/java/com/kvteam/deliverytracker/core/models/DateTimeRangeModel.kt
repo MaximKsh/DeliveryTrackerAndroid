@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
+import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
 import java.util.*
@@ -18,6 +19,7 @@ data class DateTimeRangeModel(
         }
     }
 
+    @Ignore
     constructor(parcelIn: Parcel) : this(
             parcelIn.readSerializable() as Date,
             parcelIn.readSerializable() as Date

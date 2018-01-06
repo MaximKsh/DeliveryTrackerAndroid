@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
+import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -15,6 +16,7 @@ data class GeopositionModel(
         }
     }
 
+    @Ignore
     constructor(parcelIn: Parcel) : this(
             parcelIn.readDouble(),
             parcelIn.readDouble()
