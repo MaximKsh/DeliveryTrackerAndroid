@@ -56,7 +56,7 @@ dependencies {
     compile 'com.google.dagger:dagger:2.14.1'
     compile 'com.google.dagger:dagger-android:2.14.1'
     compile 'com.google.dagger:dagger-android-support:2.14.1'
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.1.51"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.2.10"
     compile "android.arch.persistence.room:runtime:1.0.0"
     compile 'com.thoughtbot:expandablecheckrecyclerview:1.4'
 
@@ -76,4 +76,3 @@ kotlin {
         coroutines "enable"
     }
 }
-
