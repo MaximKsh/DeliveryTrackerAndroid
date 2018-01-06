@@ -27,7 +27,7 @@ class PerformersListFragment: UsersListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
+        this.activity!!.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Performers)
         if(savedInstanceState != null
                 && !ignoreSavedState) {
             return
@@ -45,7 +45,7 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context)
+                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }
@@ -66,7 +66,7 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context)
+                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

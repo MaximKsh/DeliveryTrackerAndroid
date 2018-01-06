@@ -54,10 +54,10 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return this.view ?: inflater
-                        ?.inflate(R.layout.fragment_task_details, container, false)
+                        .inflate(R.layout.fragment_task_details, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -93,7 +93,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                             else EMPTY_STRING)
                     selectedPerformerUsername = task.performer?.username
                 } else {
-                    val dialog = ErrorDialog(this@TaskDetailsFragment.context)
+                    val dialog = ErrorDialog(this@TaskDetailsFragment.context!!)
                     if(it.errorChainId != null) {
                         dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                     }
@@ -163,9 +163,9 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.apply {
+        outState.apply {
             if(view != null) {
                 putSerializable(taskIdKey, taskId)
                 putSerializable(modeKey, mode)
@@ -194,7 +194,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
             if(it.success) {
                 navigationController.closeCurrentFragment()
             } else {
-                val dialog = ErrorDialog(this@TaskDetailsFragment.context)
+                val dialog = ErrorDialog(this@TaskDetailsFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

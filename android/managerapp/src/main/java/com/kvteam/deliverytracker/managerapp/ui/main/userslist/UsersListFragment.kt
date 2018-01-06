@@ -37,13 +37,13 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
     protected var ignoreSavedState = false
 
-    val userItemActions = object: UserItemActions {
+    private val userItemActions = object: UserItemActions {
         override fun onCallClick(user: UserModel) {
             if(user.phoneNumber != null
-                    && (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)) {
+                    && (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)) {
                 val intent = Intent(Intent.ACTION_CALL)
                 intent.data = Uri.parse("tel:${user.phoneNumber}")
-                activity.startActivity(intent)
+                activity!!.startActivity(intent)
             }
         }
 
@@ -56,7 +56,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
 
         override fun onSelectClick(userListModel: UserListModel) {
-            activity.invalidateOptionsMenu()
+            activity?.invalidateOptionsMenu()
             userListModel.isSelected = !userListModel.isSelected
         }
     }
@@ -70,16 +70,16 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_managers_list, container, false)
+        return inflater.inflate(R.layout.fragment_managers_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.rvUsersList.layoutManager = LinearLayoutManager(
-                this.activity.applicationContext,
+                this.activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
 
@@ -107,10 +107,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState?.apply {
+        outState.apply {
             if(rvUsersList?.layoutManager != null) {
                 putParcelableArray(
                         usersListKey,
@@ -167,7 +167,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     }
 
     private fun setCancelButtonVisible(visibility: Boolean) {
-        this.activity.toolbar_left_action.text =
+        this.activity?.toolbar_left_action?.text =
                 if (visibility) resources.getString(R.string.ManagerApp_Cancel)
                 else EMPTY_STRING
     }
@@ -197,10 +197,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         when (item.itemId) {
             R.id.action_edit -> {
                 this.startEditMode()
-                this.activity.invalidateOptionsMenu()
+                this.activity?.invalidateOptionsMenu()
             }
             R.id.action_remove -> {
-                val deleteUsersDialog = AlertDialog.Builder(activity)
+                val deleteUsersDialog = AlertDialog.Builder(activity?.applicationContext!!)
                 deleteUsersDialog.setMessage(R.string.ManagerApp_UserListFragment_DeleteUserModalContent)
                         .setPositiveButton(getString(R.string.ManagerApp_DeleteButton), { _, _ ->
                             this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
@@ -229,7 +229,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         this.mEditMenuItem = menu.findItem(R.id.action_edit)
         this.mRemoveMenuItem = menu.findItem(R.id.action_remove)
 
-        this.activity.toolbar_left_action.setOnClickListener { _ ->
+        this.activity?.toolbar_left_action?.setOnClickListener { _ ->
             this.setCancelButtonVisible(false)
             this.setEditButtonVisible()
             this.stopEditMode()

@@ -19,7 +19,7 @@ class AllTasksListFragment : TasksListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Tasks)
+        activity!!.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Tasks)
         if(savedInstanceState != null
                 && !ignoreSavedState) {
             return
@@ -33,7 +33,7 @@ class AllTasksListFragment : TasksListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@AllTasksListFragment.context)
+                val dialog = ErrorDialog(this@AllTasksListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }
@@ -53,7 +53,7 @@ class AllTasksListFragment : TasksListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@AllTasksListFragment.context)
+                val dialog = ErrorDialog(this@AllTasksListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

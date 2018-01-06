@@ -30,7 +30,7 @@ class MyTasksListFragment: TasksListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@MyTasksListFragment.context)
+                val dialog = ErrorDialog(this@MyTasksListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }
@@ -50,7 +50,7 @@ class MyTasksListFragment: TasksListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@MyTasksListFragment.context)
+                val dialog = ErrorDialog(this@MyTasksListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

@@ -2,17 +2,17 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.arch.lifecycle.OnLifecycleEvent
 
 
 class AutoClearedValue<T> {
     constructor(fragment: Fragment, mValue: T?, clearFunc: ((value: T?) -> Unit)? = null) {
         value = mValue
         val fragmentManager = fragment.fragmentManager
-        fragmentManager.registerFragmentLifecycleCallbacks(
+        fragmentManager?.registerFragmentLifecycleCallbacks(
                 object : FragmentManager.FragmentLifecycleCallbacks() {
                     override fun onFragmentViewDestroyed(fm: FragmentManager?, f: Fragment?) {
                         if (f === fragment) {

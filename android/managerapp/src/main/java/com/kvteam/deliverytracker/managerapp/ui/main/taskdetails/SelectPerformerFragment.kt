@@ -47,17 +47,17 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
         return view ?: inflater
-                ?.inflate(R.layout.fragment_select_performers_list, container, false)
+                .inflate(R.layout.fragment_select_performers_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         rvAvailablePerformersList.layoutManager = LinearLayoutManager(
-                activity.applicationContext,
+                activity!!.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
         rvAvailablePerformersList.addItemDecoration(
@@ -82,7 +82,7 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
                     adapter.value?.items?.addAll(it.entity!!)
                     adapter.value?.notifyDataSetChanged()
                 } else {
-                    val dialog = ErrorDialog(this@SelectPerformerFragment.context)
+                    val dialog = ErrorDialog(this@SelectPerformerFragment.context!!)
                     if(it.errorChainId != null) {
                         dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                     }
@@ -107,9 +107,9 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.apply {
+        outState.apply {
             val adapter = adapter.value
             val layoutManager = rvAvailablePerformersList?.layoutManager
             if(adapter != null

@@ -32,16 +32,16 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_users_list, container, false)
+        return inflater.inflate(R.layout.fragment_users_list, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         rvUsersList.layoutManager = LinearLayoutManager(
-                activity.applicationContext,
+                activity!!.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
         rvUsersList.addItemDecoration(
@@ -49,7 +49,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
         adapter = AutoClearedValue(
                 this,
-                UsersListAdapter(this::onCallClicked, context::getString),
+                UsersListAdapter(this::onCallClicked, { context!!.getString(it) }),
                 {
                     it?.onCallClick = null
                     it?.getLocalizedString = null
@@ -74,9 +74,9 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.apply {
+        outState.apply {
             val adapter = adapter.value
             val layoutManager = rvUsersList?.layoutManager
             if(adapter != null
@@ -94,10 +94,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
     private fun onCallClicked(user: UserModel) {
         if(user.phoneNumber != null
-                && checkSelfPermission(activity, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                && checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             val intent = Intent(Intent.ACTION_CALL)
             intent.data = Uri.parse("tel:${user.phoneNumber}")
-            activity.startActivity(intent)
+            activity!!.startActivity(intent)
         }
     }
 }

@@ -27,7 +27,7 @@ class ManagersListFragment: UsersListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Managers)
+        activity!!.toolbar_title.text = resources.getString(R.string.ManagerApp_MainActivity_Managers)
         if(savedInstanceState != null
                 && !ignoreSavedState) {
             return
@@ -68,7 +68,7 @@ class ManagersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@ManagersListFragment.context)
+                val dialog = ErrorDialog(this@ManagersListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

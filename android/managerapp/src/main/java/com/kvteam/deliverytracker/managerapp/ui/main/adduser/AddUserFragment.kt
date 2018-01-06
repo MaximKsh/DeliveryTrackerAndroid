@@ -58,17 +58,15 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_add_user, container, false)
+        return inflater.inflate(R.layout.fragment_add_user, container, false)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(outState == null) {
-            return
-        }
+
         outState.putString(
                 userRoleKey, this.role.simpleName
         )
@@ -91,7 +89,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sUserRole.adapter = adapter
-        this.activity.toolbar_title.text = resources.getString(R.string.ManagerApp_Toolbar_AddUser)
+        this.activity?.toolbar_title?.text = resources.getString(R.string.ManagerApp_Toolbar_AddUser)
 
         if (savedInstanceState != null) {
             role = savedInstanceState.getString(userRoleKey).toRole()!!
@@ -145,15 +143,15 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                     ))
                 }, {
                    if (it.success) {
-                       val view =  this@AddUserFragment.activity.currentFocus
+                       val view =  this@AddUserFragment.activity!!.currentFocus
                        if (view != null) {
-                           val imm = this@AddUserFragment.activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                           val imm = this@AddUserFragment.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                            imm.hideSoftInputFromWindow(view.windowToken, 0)
                        }
                        this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                        this@AddUserFragment.tvInvitationCode.text = it.entity?.invitationCode
                    } else {
-                       val dialog = ErrorDialog(this@AddUserFragment.context)
+                       val dialog = ErrorDialog(this@AddUserFragment.context!!)
                        if(it.errorChainId != null) {
                            dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                        }
@@ -171,7 +169,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
         mSubmitItem = menu.findItem(R.id.action_finish)
 
-        activity.toolbar_left_action.setOnClickListener { _ ->
+        activity!!.toolbar_left_action.setOnClickListener { _ ->
             navigationController.closeCurrentFragment()
         }
 

@@ -36,7 +36,7 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context)
+                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }
@@ -55,7 +55,7 @@ class PerformersListFragment: UsersListFragment() {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context)
+                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }

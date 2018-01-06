@@ -34,10 +34,10 @@ open class TasksListFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(
+        return inflater.inflate(
                 R.layout.fragment_tasks_list,
                 container,
                 false)
@@ -46,7 +46,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         rvTasksList.layoutManager = LinearLayoutManager(
-                activity.applicationContext,
+                activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
         rvTasksList.addItemDecoration(
@@ -54,7 +54,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
 
         adapter = AutoClearedValue(
                 this,
-                TasksListAdapter(this::onTaskClicked, context::getString),
+                TasksListAdapter(this::onTaskClicked, { context!!.getString(it) }),
                 {
                     it?.onTaskClick = null
                     it?.getLocalizedString = null
@@ -79,9 +79,9 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.apply {
+        outState.apply {
             val adapter = adapter.value
             val layoutManager = rvTasksList?.layoutManager
             if(adapter != null

@@ -44,7 +44,7 @@ class LocationFragment : DeliveryTrackerFragment() {
         override fun onProviderDisabled(provider: String) {}
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
@@ -57,10 +57,10 @@ class LocationFragment : DeliveryTrackerFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.fragment_location, container, false)
 
-        if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this.activity!!, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
-            locationManager = this.activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager = this.activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             val bestProvider = (locationManager as LocationManager).getBestProvider(Criteria(), false)
 

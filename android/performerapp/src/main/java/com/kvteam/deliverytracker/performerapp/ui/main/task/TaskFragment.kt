@@ -43,9 +43,9 @@ class TaskFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(
+        return inflater.inflate(
                 R.layout.fragment_task,
                 container,
                 false)
@@ -64,7 +64,7 @@ class TaskFragment : DeliveryTrackerFragment() {
                 if(it.success) {
                     initTask(it.entity!!)
                 } else {
-                    val dialog = ErrorDialog(this@TaskFragment.context)
+                    val dialog = ErrorDialog(this@TaskFragment.context!!)
                     if(it.errorChainId != null) {
                         dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                     }
@@ -74,9 +74,9 @@ class TaskFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.apply {
+        outState.apply {
             putSerializable(taskIdKey, taskId)
             putParcelable(taskKey, currentTask)
         }
@@ -129,7 +129,7 @@ class TaskFragment : DeliveryTrackerFragment() {
             if(it.success) {
                 navigationController.closeCurrentFragment()
             } else {
-                val dialog = ErrorDialog(this@TaskFragment.context)
+                val dialog = ErrorDialog(this@TaskFragment.context!!)
                 if(it.errorChainId != null) {
                     dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
                 }
