@@ -27,7 +27,7 @@ class NavigationController (private val mainActivity: MainActivity) {
 
 
 
-    fun navigateToManagers() {
+    fun navigateToStaff() {
         val fragment = ManagersListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
@@ -35,7 +35,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToPerformers() {
+    fun navigateToTasks() {
         val fragment = PerformersListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
@@ -51,7 +51,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToMyTasks() {
+    fun navigateToSettings() {
         val fragment = MyTasksListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
@@ -59,7 +59,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToAllTasks() {
+    fun navigateToCatalogs() {
         val fragment = AllTasksListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()

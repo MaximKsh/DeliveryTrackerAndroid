@@ -6,40 +6,48 @@
     tools:context=".ui.main.userslist.ManagersListFragment">
 
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:id="@+id/empty_user_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:visibility="invisible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ManagerApp_UserListFragment_EmptyList"
-            android:textAppearance="?android:textAppearanceMedium" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ManagerApp_Toolbar_AddUser"
-            android:textAppearance="?android:textAppearanceMedium" />
-    </LinearLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/srlSwipeRefreshUsers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvUsersList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/fragment_manager_list_item" />
+        android:orientation="vertical">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <include layout="@layout/dropdown_top"/>
+
+        <LinearLayout
+            android:id="@+id/empty_user_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ManagerApp_UserListFragment_EmptyList"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ManagerApp_Toolbar_AddUser"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/srlSwipeRefreshUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvUsersList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/fragment_manager_list_item" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </FrameLayout>

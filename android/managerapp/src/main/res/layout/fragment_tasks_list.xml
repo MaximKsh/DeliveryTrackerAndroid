@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment">
 
+    <include layout="@layout/dropdown_top"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/srlSwipeRefreshTasks"
