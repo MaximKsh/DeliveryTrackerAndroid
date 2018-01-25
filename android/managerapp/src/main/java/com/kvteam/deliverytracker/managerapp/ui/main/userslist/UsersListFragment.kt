@@ -20,6 +20,25 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import java.util.*
+import java.util.Arrays.asList
+import java.util.Arrays.asList
+import android.view.ViewGroup
+import android.animation.ValueAnimator
+import kotlin.collections.ArrayList
+import android.animation.ObjectAnimator
+import android.R.attr.scaleHeight
+import android.R.attr.scaleWidth
+import android.graphics.drawable.ScaleDrawable
+import android.graphics.drawable.Drawable
+import android.widget.TextView
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
+import kotlinx.android.synthetic.main.dropdown_top.*
+import kotlinx.android.synthetic.main.dropdown_top_item.*
+import kotlinx.android.synthetic.main.dropdown_top_item.view.*
+
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment() {
@@ -82,6 +101,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 this.activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
+
+        val categories = arrayListOf<String>("Managers", "Performers")
+
+        DropdownTop(categories, activity!!)
 
         this.adapter = AutoClearedValue(
                 this,

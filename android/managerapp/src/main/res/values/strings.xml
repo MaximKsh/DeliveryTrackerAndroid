@@ -19,11 +19,15 @@
     <string name="ManagerApp_Toolbar_Done">Continue</string>
     <string name="ManagerApp_ConfirmDataActivity_Confirm">Confirm</string>
     <string name="ManagerApp_MainActivity_Tasks">Tasks</string>
+    <string name="ManagerApp_MainActivity_Staff">Staff</string>
+    <string name="ManagerApp_MainActivity_Catalogs">Catalogs</string>
+    <string name="ManagerApp_MainActivity_Settings">Settings</string>
     <string name="ManagerApp_MainActivity_Managers">Managers</string>
     <string name="ManagerApp_MainActivity_Performers">Performers</string>
     <string name="ManagerApp_MainActivity_MyTasks">My tasks</string>
     <string name="ManagerApp_Toolbar_Edit">Edit</string>
     <string name="ManagerApp_Toolbar_AddUser">Add user</string>
+    <string name="ManagerApp_Toolbar_ShowOnMap">Show on map</string>
     <string name="ManagerApp_Toolbar_AddTask">Add Task</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Delete</string>
     <string name="ManagerApp_Cancel">Cancel</string>
@@ -55,6 +59,7 @@
     <string name="ManagerApp_UserListFragment_PhoneContentDesc">Phone</string>
     <string name="ManagerApp_TasksListFragment_AddTaskButton">Add task</string>
     <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
+    <string name="ManagerApp_Dropdown_Top_Quantity"> (%d)</string>
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>

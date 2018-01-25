@@ -2,14 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_managers"
+        android:id="@+id/navigation_staff"
         android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/ManagerApp_MainActivity_Managers" />
-
-    <item
-        android:id="@+id/navigation_performers"
-        android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/ManagerApp_MainActivity_Performers" />
+        android:title="@string/ManagerApp_MainActivity_Staff" />
 
     <item
         android:id="@+id/navigation_tasks"
@@ -17,8 +12,13 @@
         android:title="@string/ManagerApp_MainActivity_Tasks" />
 
     <item
-        android:id="@+id/navigation_my_tasks"
-        android:icon="@drawable/ic_tasks_black_24dp"
-        android:title="@string/ManagerApp_MainActivity_MyTasks" />
+        android:id="@+id/navigation_catalogs"
+        android:icon="@drawable/ic_library_books_black_24dp"
+        android:title="@string/ManagerApp_MainActivity_Catalogs" />
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/ManagerApp_MainActivity_Settings" />
 
 </menu>

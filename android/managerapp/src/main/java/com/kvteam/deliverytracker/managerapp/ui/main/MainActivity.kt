@@ -22,20 +22,20 @@ class MainActivity : DeliveryTrackerActivity() {
         }
 
         when (item.itemId) {
-            R.id.navigation_managers -> {
-                navigationController.navigateToManagers()
-                true
-            }
-            R.id.navigation_performers -> {
-                navigationController.navigateToPerformers()
+            R.id.navigation_staff -> {
+                navigationController.navigateToStaff()
                 true
             }
             R.id.navigation_tasks -> {
-                navigationController.navigateToAllTasks()
+                navigationController.navigateToTasks()
                 true
             }
-            R.id.navigation_my_tasks -> {
-                navigationController.navigateToMyTasks()
+            R.id.navigation_catalogs -> {
+                navigationController.navigateToCatalogs()
+                true
+            }
+            R.id.navigation_settings -> {
+                navigationController.navigateToSettings()
                 true
             }
             else -> false
@@ -56,8 +56,8 @@ class MainActivity : DeliveryTrackerActivity() {
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         if (savedInstanceState == null) {
-            navigationController.navigateToManagers()
-            navigation.selectedItemId = R.id.navigation_managers
+            navigationController.navigateToStaff()
+            navigation.selectedItemId = R.id.navigation_staff
         } else {
             navigation.selectedItemId =
                     savedInstanceState.getInt(bnvSelectedItemKey)
