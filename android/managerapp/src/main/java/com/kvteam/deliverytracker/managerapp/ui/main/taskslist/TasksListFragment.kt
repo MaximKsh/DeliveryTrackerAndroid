@@ -10,6 +10,7 @@ import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -50,6 +51,14 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                 false)
     }
 
+    private fun showMine() {
+
+    }
+
+    private fun showAll() {
+
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         rvTasksList.layoutManager = LinearLayoutManager(
@@ -59,7 +68,10 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         rvTasksList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val categories = arrayListOf<String>("Mine", "All")
+        val categories = arrayListOf<DropdownItem>(
+                DropdownItem("Mine", 2, ::showMine),
+                DropdownItem("All", 12, ::showAll)
+        )
 
         DropdownTop(categories, activity!!)
 

@@ -1,23 +1,49 @@
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:gravity="center_vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_dropdown_top_item"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/ivCategoryIcon"
         android:layout_width="45dp"
         android:layout_height="30dp"
         android:alpha="0.3"
-        android:contentDescription="@string/ManagerApp_CodeHintIcon"/>
+        android:contentDescription="@string/ManagerApp_CodeHintIcon" />
 
     <TextView
         android:id="@+id/tvCategoryName"
         android:layout_width="wrap_content"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:textColor="@color/colorBlack" />
 
     <TextView
         android:id="@+id/tvCategoryQuantity"
         android:layout_width="wrap_content"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/colorBlack" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end|center_vertical">
+
+        <ImageView
+            android:id="@+id/ivSelectedIcon"
+            android:layout_width="35dp"
+            android:layout_height="25dp"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:src="@drawable/ic_done_black_24dp"
+            android:visibility="gone" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/aviLoadingIndicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:indicatorColor="@color/colorGray"
+            app:indicatorName="LineSpinFadeLoaderIndicator" />
+    </LinearLayout>
 </LinearLayout>

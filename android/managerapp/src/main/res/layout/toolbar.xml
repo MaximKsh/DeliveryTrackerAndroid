@@ -22,10 +22,9 @@
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:drawableEnd="@drawable/show_more_rotate"
         android:layout_gravity="center"
         android:gravity="center_vertical"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
 </android.support.v7.widget.Toolbar>

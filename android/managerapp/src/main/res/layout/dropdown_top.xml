@@ -1,8 +1,23 @@
-<LinearLayout android:id="@+id/ll_dropdown_top"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:background="@drawable/border_bottom"
-    android:orientation="vertical"
-    android:padding="5dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_dropdown_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/border_bottom"
+        android:orientation="vertical"
+        android:padding="5dp" />
+
+    <View
+        android:id="@+id/vBlackView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "1"
+        android:alpha="0"
+        android:background="@color/colorBlack"/>
+
+</LinearLayout>
 
