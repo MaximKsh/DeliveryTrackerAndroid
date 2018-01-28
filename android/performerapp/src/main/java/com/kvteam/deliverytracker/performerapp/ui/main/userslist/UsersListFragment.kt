@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.performerapp.R
@@ -63,7 +63,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                     && layoutManager != null) {
                 if(containsKey(usersListKey)
                         && containsKey(layoutManagerKey)) {
-                    val savedUsers = getParcelableArray(usersListKey).map { it as UserModel }
+                    val savedUsers = getParcelableArray(usersListKey).map { it as User }
                     adapter.items.clear()
                     adapter.items.addAll(savedUsers)
                     layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
@@ -92,7 +92,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    private fun onCallClicked(user: UserModel) {
+    private fun onCallClicked(user: User) {
         if(user.phoneNumber != null
                 && checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             val intent = Intent(Intent.ACTION_CALL)

@@ -1,13 +1,17 @@
 package com.kvteam.deliverytracker.core.session
 
-import com.kvteam.deliverytracker.core.common.SimpleResult
-import java.util.*
+import com.kvteam.deliverytracker.core.models.IError
+import com.kvteam.deliverytracker.core.webservice.NetworkResult
+import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 
 open class LoginResult(
         val loginResultType: LoginResultType,
-        fromNetwork : Boolean,
-        errorChainId: UUID?) : SimpleResult(
-            loginResultType in arrayOf(LoginResultType.Registered, LoginResultType.Success),
-            fromNetwork,
-            false,
-            errorChainId)
+        entity: AccountResponse? = null,
+        fetched : Boolean = false,
+        statusCode: Int = 0,
+        errors: List<IError> = listOf()) :
+            NetworkResult<AccountResponse>(
+                entity,
+                fetched,
+                statusCode,
+                errors)

@@ -2,12 +2,12 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 
 data class UserListModel(
     var isSelected: Boolean,
     var isInEditMode: Boolean,
-    val userModel: UserModel
+    val user: User
 ) : Parcelable {
     companion object {
         @JvmField
@@ -21,13 +21,13 @@ data class UserListModel(
     constructor(parcelIn: Parcel) : this(
             parcelIn.readValue(null) as Boolean,
             parcelIn.readValue(null) as Boolean,
-            parcelIn.readParcelable(UserModel::class.java.classLoader)
+            parcelIn.readParcelable(User::class.java.classLoader)
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeValue(isSelected)
         dest.writeValue(isInEditMode)
-        dest.writeParcelable(userModel, flags)
+        dest.writeParcelable(user, flags)
     }
 
     override fun describeContents() = 0

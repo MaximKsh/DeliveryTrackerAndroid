@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.GeopositionModel
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.Geoposition
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.fragment_select_performers_item.view.*
 import java.io.IOException
@@ -18,7 +18,7 @@ import java.io.IOException
 class SelectPerformerAdapter(
         var geocoder: Geocoder?,
         var lm: ILocalizationManager?,
-        var onClick: ((task: UserModel) -> Unit)?)
+        var onClick: ((task: User) -> Unit)?)
     : RecyclerView.Adapter<SelectPerformerAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
@@ -29,7 +29,7 @@ class SelectPerformerAdapter(
         val llSelectPerformer = v.llSelectPerformerLayout!!
     }
 
-    val items = mutableListOf<UserModel>()
+    val items = mutableListOf<User>()
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -55,7 +55,7 @@ class SelectPerformerAdapter(
     override fun getItemCount(): Int = items.size
 
 
-    private fun decodeLocation(pos: GeopositionModel?) : String {
+    private fun decodeLocation(pos: Geoposition?) : String {
         if(pos == null) {
             return lm?.getString(R.string.ManagerApp_SelectPerformersFragment_EmptyAddress) ?: EMPTY_STRING
         }

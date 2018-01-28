@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.performerapp.R
 import kotlinx.android.synthetic.main.fragment_users_item.view.*
 
 class UsersListAdapter(
-        var onCallClick: ((task: UserModel) -> Unit)?,
+        var onCallClick: ((task: User) -> Unit)?,
         var getLocalizedString: ((id: Int) -> String)?): RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
@@ -21,7 +21,7 @@ class UsersListAdapter(
         val ivCall = v.ivCall!!
     }
 
-    val items = mutableListOf<UserModel>()
+    val items = mutableListOf<User>()
 
     override fun onCreateViewHolder(
             parent: ViewGroup,

@@ -5,5 +5,5 @@ import com.kvteam.deliverytracker.core.session.ISessionInfo
 class SessionInfo: ISessionInfo {
     override val accountType = "com.kvteam.deliverytracker.performerapp"
     override val authToken = "full_access"
-    override val allowRoles = listOf("PerformerRole")
+    override val allowRoles = listOf("PerformerRole", "CreatorRole")
 }

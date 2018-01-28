@@ -2,19 +2,15 @@ package com.kvteam.deliverytracker.performerapp.ui.main.userslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
+import com.kvteam.deliverytracker.core.models.User
+import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_users_list.*
 import javax.inject.Inject
 
 class PerformersListFragment: UsersListFragment() {
     @Inject
-    lateinit var instanceManager: IInstanceManager
-
-    @Inject
-    lateinit var errorManager: IErrorManager
+    lateinit var viewWebservice: IViewWebservice
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -30,17 +26,16 @@ class PerformersListFragment: UsersListFragment() {
         ignoreSavedState = false
 
         invokeAsync({
-            instanceManager.getPerformers()
+            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
         }, {
             if(it.success) {
-                adapter.value?.items?.addAll(it.entity!!)
+                val performers = it.entity?.viewResult?.map{
+                    val u = User()
+                    u.fromMap(it)
+                    u
+                }?.toList()
+                adapter.value?.items?.addAll(performers!!)
                 adapter.value?.notifyDataSetChanged()
-            } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
         })
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
@@ -48,18 +43,17 @@ class PerformersListFragment: UsersListFragment() {
 
     private fun refresh() {
         invokeAsync({
-            instanceManager.getPerformers(true)
+            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
         }, {
             if(it.success) {
+                val performers = it.entity?.viewResult?.map{
+                    val u = User()
+                    u.fromMap(it)
+                    u
+                }?.toList()
                 adapter.value?.items?.clear()
-                adapter.value?.items?.addAll(it.entity!!)
+                adapter.value?.items?.addAll(performers!!)
                 adapter.value?.notifyDataSetChanged()
-            } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
             srlSwipeRefreshUsers.isRefreshing = false
         })
