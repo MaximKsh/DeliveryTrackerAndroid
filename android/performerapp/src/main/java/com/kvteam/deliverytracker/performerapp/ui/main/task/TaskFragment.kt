@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EntityResult
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.tasks.TaskState
 import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
@@ -32,8 +30,6 @@ class TaskFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     lateinit var taskId: UUID
         private set
@@ -63,12 +59,6 @@ class TaskFragment : DeliveryTrackerFragment() {
             }, {
                 if(it.success) {
                     initTask(it.entity!!)
-                } else {
-                    val dialog = ErrorDialog(this@TaskFragment.context!!)
-                    if(it.errorChainId != null) {
-                        dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                    }
-                    dialog.show()
                 }
             })
         }
@@ -129,11 +119,6 @@ class TaskFragment : DeliveryTrackerFragment() {
             if(it.success) {
                 navigationController.closeCurrentFragment()
             } else {
-                val dialog = ErrorDialog(this@TaskFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
             setProcessingState(false)
         })

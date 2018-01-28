@@ -8,14 +8,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
+import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -29,10 +27,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
     lateinit var navigationController: NavigationController
 
     @Inject
-    lateinit var instanceManager: IInstanceManager
-
-    @Inject
-    lateinit var errorManager: IErrorManager
+    lateinit var invitationWebservice: IInvitationWebservice
 
     @Inject
     lateinit var lm: ILocalizationManager
@@ -128,18 +123,15 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
         item.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
         val selectedRole = selectedRoleMapper[sUserRole.selectedItemId.toInt()]
-        val inviteFunction = if (selectedRole == Role.Performer)
-            instanceManager::invitePerformer
-        else
-            instanceManager::inviteManager
 
         when (item.itemId) {
             R.id.action_finish -> {
                 invokeAsync({
-                    inviteFunction(UserModel(
+                    invitationWebservice.create(User(
                             name = etNameField.text.toString(),
                             surname = etSurnameField.text.toString(),
-                            phoneNumber = etPhoneNumberField.text.toString()
+                            phoneNumber = etPhoneNumberField.text.toString(),
+                            role = selectedRole?.simpleName
                     ))
                 }, {
                    if (it.success) {
@@ -149,13 +141,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                            imm.hideSoftInputFromWindow(view.windowToken, 0)
                        }
                        this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
-                       this@AddUserFragment.tvInvitationCode.text = it.entity?.invitationCode
-                   } else {
-                       val dialog = ErrorDialog(this@AddUserFragment.context!!)
-                       if(it.errorChainId != null) {
-                           dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                       }
-                       dialog.show()
+                       this@AddUserFragment.tvInvitationCode.text = it.entity?.invitation?.invitationCode
                    }
                 })
 //                navigationController.closeCurrentFragment()

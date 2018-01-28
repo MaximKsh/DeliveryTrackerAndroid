@@ -8,12 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -33,8 +31,6 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var taskRepository: ITaskRepository
 
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     @Inject
     lateinit var lm: ILocalizationManager
@@ -81,12 +77,6 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
                 if(it.success) {
                     adapter.value?.items?.addAll(it.entity!!)
                     adapter.value?.notifyDataSetChanged()
-                } else {
-                    val dialog = ErrorDialog(this@SelectPerformerFragment.context!!)
-                    if(it.errorChainId != null) {
-                        dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                    }
-                    dialog.show()
                 }
             })
         } else {
@@ -97,7 +87,7 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
                         && layoutManager != null) {
                     if(containsKey(performersListKey)
                             && containsKey(layoutManagerKey)) {
-                        val savedUsers = getParcelableArray(performersListKey).map { it as UserModel }
+                        val savedUsers = getParcelableArray(performersListKey).map { it as User }
                         adapter.items.clear()
                         adapter.items.addAll(savedUsers)
                         layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
@@ -125,7 +115,7 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
         }
     }
 
-    private fun onClick(user: UserModel) {
+    private fun onClick(user: User) {
         if(navigationController.info.containsKey(SELECTED_USERS_KEY)) {
             navigationController.info.remove(SELECTED_USERS_KEY)
         }

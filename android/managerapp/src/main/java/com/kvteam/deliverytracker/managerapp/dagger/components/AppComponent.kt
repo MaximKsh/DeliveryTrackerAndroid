@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
 
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import com.kvteam.deliverytracker.managerapp.ManagerApplication
 import com.kvteam.deliverytracker.managerapp.dagger.modules.AndroidBindingModule
@@ -22,5 +21,4 @@ internal interface AppComponent : AndroidInjector<ManagerApplication> {
     abstract class Builder : AndroidInjector.Builder<ManagerApplication>()
 
     fun webservice(): IWebservice
-    fun instanceManager(): IInstanceManager
 }

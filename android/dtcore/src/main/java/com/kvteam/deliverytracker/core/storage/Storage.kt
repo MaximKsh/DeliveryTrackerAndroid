@@ -3,7 +3,7 @@ package com.kvteam.deliverytracker.core.storage
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.kvteam.deliverytracker.core.models.TaskModel
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import java.util.*
 
 class Storage(context: Context): IStorage {
@@ -14,14 +14,14 @@ class Storage(context: Context): IStorage {
             .databaseBuilder(context, StorageDatabase::class.java, "dt-storage")
             .build()
 
-    override fun setUsers(key: String, users: List<UserModel>, expirationMs: Long?) {
+    override fun setUsers(key: String, users: List<User>, expirationMs: Long?) {
         db.userDao().deleteUsers(key)
         val expirationDate = Date(
                 Calendar.getInstance().timeInMillis + (expirationMs ?: defaultExpirationMs))
         users.forEach({db.userDao().insertUser(StorageUserEntry(key, expirationDate, it))})
     }
 
-    override fun getUsers(key: String): List<UserModel> {
+    override fun getUsers(key: String): List<User> {
         val entries = db.userDao().selectUsers(key)
         val currentDate = Date()
         if(entries.any { it.expirationDate.before(currentDate) }) {

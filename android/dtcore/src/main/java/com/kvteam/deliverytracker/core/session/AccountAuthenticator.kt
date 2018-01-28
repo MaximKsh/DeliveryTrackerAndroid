@@ -1,17 +1,18 @@
 package com.kvteam.deliverytracker.core.session
 
+import android.R.attr.accountType
 import android.accounts.AbstractAccountAuthenticator
 import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
-import android.os.Bundle
 import android.accounts.AccountManager
-import android.R.attr.accountType
 import android.content.Intent
+import android.os.Bundle
 import android.text.TextUtils
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.models.CredentialsModel
+import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.webservice.IWebservice
-import com.kvteam.deliverytracker.core.models.TokenModel
+import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
+import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 
 class AccountAuthenticator(
         private val application: DeliveryTrackerApplication,
@@ -60,12 +61,12 @@ class AccountAuthenticator(
 
         if (TextUtils.isEmpty(authToken)) {
             // В кэше токена нет, логинимся по новой
-            val credentials = CredentialsModel(account.name, am.getPassword(account))
-            val tokenResponse = webservice.post<TokenModel>(
+            val codePassword = CodePassword(account.name, am.getPassword(account))
+            val accountResponse = webservice.post<AccountResponse>(
                     "/api/session/login",
-                    credentials,
-                    TokenModel::class.java)
-            authToken = tokenResponse.responseEntity?.token
+                    AccountRequest(codePassword = codePassword),
+                    AccountResponse::class.java)
+            authToken = accountResponse.entity?.token
         }
 
         if (!TextUtils.isEmpty(authToken)) {

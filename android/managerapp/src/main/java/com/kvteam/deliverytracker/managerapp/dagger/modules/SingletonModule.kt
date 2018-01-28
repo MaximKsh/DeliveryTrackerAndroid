@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.common.ILocalizationManagerExtension
 import com.kvteam.deliverytracker.core.dagger.modules.SingletonCoreModule
@@ -35,8 +34,7 @@ class SingletonModule : SingletonCoreModule<ManagerApplication>() {
     fun taskRepository(
             webservice: IWebservice,
             storage: IStorage,
-            errorManager: IErrorManager,
             localizationManager: ILocalizationManager): ITaskRepository {
-        return TaskRepository(webservice, storage, errorManager, localizationManager)
+        return TaskRepository(webservice, storage, localizationManager)
     }
 }

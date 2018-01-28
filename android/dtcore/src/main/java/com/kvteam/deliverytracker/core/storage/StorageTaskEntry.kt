@@ -10,7 +10,7 @@ import java.util.*
 @Entity(tableName = TASK_TABLE)
 class StorageTaskEntry() {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+    var rowId: Int = 0
     var cacheKey: String? = null
     var expirationDate: Date = Date()
     @Embedded(prefix = "task_")

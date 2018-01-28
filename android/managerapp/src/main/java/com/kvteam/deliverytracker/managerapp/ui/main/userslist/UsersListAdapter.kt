@@ -49,11 +49,11 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val userListModel = this.items[position]
-        holder.tvName.text = userListModel.userModel.name
-        holder.tvSurname.text = userListModel.userModel.surname
+        holder.tvName.text = userListModel.user.name
+        holder.tvSurname.text = userListModel.user.surname
         holder.cbSelectUser.isChecked = userListModel.isSelected
 
-        holder.ivAdminStatusIcon.visibility = if (userListModel.userModel.role == Role.Creator.simpleName)
+        holder.ivAdminStatusIcon.visibility = if (userListModel.user.role == Role.Creator.simpleName)
             View.VISIBLE
         else
             View.INVISIBLE
@@ -61,7 +61,7 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
         this.toggleVisibility(holder, userListModel)
 
         holder.cbSelectUser.setOnClickListener{ this.userItemActions?.onSelectClick(userListModel) }
-        holder.ivPhoneIcon.setOnClickListener{ this.userItemActions?.onCallClick(userListModel.userModel) }
+        holder.ivPhoneIcon.setOnClickListener{ this.userItemActions?.onCallClick(userListModel.user) }
 
         // TODO: add animation
 //        val autoTransaction = AutoTransition()

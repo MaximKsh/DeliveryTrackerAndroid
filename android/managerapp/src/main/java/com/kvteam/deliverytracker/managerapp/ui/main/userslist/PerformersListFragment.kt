@@ -2,10 +2,9 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
+import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
@@ -14,10 +13,7 @@ import javax.inject.Inject
 
 class PerformersListFragment: UsersListFragment() {
     @Inject
-    lateinit var instanceManager: IInstanceManager
-
-    @Inject
-    lateinit var errorManager: IErrorManager
+    lateinit var viewWebservice: IViewWebservice
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -36,41 +32,39 @@ class PerformersListFragment: UsersListFragment() {
 
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
         invokeAsync({
-            instanceManager.getPerformers()
+            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
         }, {
             if (it.success) {
-                val modelUserList = it.entity!!.map { userModel ->
+                val performers = it.entity?.viewResult?.map{
+                    val u = User()
+                    u.fromMap(it)
+                    u
+                }?.toList()
+                val modelUserList = performers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
-            } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
         })
     }
 
     private fun refresh() {
         invokeAsync({
-            instanceManager.getPerformers(true)
+            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
         }, {
             if(it.success) {
+                val performers = it.entity?.viewResult?.map{
+                    val u = User()
+                    u.fromMap(it)
+                    u
+                }?.toList()
                 adapter.value?.items?.clear()
-                val modelUserList = it.entity!!.map { userModel ->
+                val modelUserList = performers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
                 adapter.value?.items?.addAll(modelUserList)
                 adapter.value?.notifyDataSetChanged()
-            } else {
-                val dialog = ErrorDialog(this@PerformersListFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
             srlSwipeRefreshUsers.isRefreshing = false
         })
