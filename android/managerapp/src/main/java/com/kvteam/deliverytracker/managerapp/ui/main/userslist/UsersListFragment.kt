@@ -21,8 +21,16 @@ import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import android.view.ViewGroup
+import android.animation.ValueAnimator
+import kotlin.collections.ArrayList
+import android.animation.ObjectAnimator
+import android.R.attr.scaleHeight
+import android.R.attr.scaleWidth
+import android.graphics.drawable.ScaleDrawable
+import android.graphics.drawable.Drawable
+import android.widget.TextView
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
-
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment() {
@@ -79,6 +87,38 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_managers_list, container, false)
     }
 
+    private fun showManagers() {
+        val modelUserList = ArrayList<UserListModel>()
+        for (i in 1..10) {
+            val testUser = UserListModel(
+                    false,
+                    false,
+                    UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+            modelUserList.add(testUser)
+        }
+
+        this.rvUsersList.scrollToPosition(0)
+        adapter.value?.items?.clear()
+        adapter.value?.items?.addAll(modelUserList)
+        adapter.value?.notifyDataSetChanged()
+    }
+
+    private fun showPerformers() {
+        val modelUserList = ArrayList<UserListModel>()
+        for (i in 10..20) {
+            val testUser = UserListModel(
+                    false,
+                    false,
+                    UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+            modelUserList.add(testUser)
+        }
+
+        this.rvUsersList.scrollToPosition(0)
+        adapter.value?.items?.clear()
+        adapter.value?.items?.addAll(modelUserList)
+        adapter.value?.notifyDataSetChanged()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         this.rvUsersList.layoutManager = LinearLayoutManager(
@@ -86,7 +126,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 LinearLayoutManager.VERTICAL,
                 false)
 
-        val categories = arrayListOf<String>("Managers", "Performers")
+        val categories = arrayListOf<DropdownItem>(
+                DropdownItem("Managers", 5, ::showManagers),
+                DropdownItem("Performers", 8, ::showPerformers)
+        )
 
         DropdownTop(categories, activity!!)
 

@@ -2,6 +2,9 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.IErrorManager
+import com.kvteam.deliverytracker.core.instance.IInstanceManager
+import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
@@ -10,6 +13,7 @@ import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.awt.font.NumericShaper
 import javax.inject.Inject
 
 class ManagersListFragment: UsersListFragment() {
@@ -31,9 +35,37 @@ class ManagersListFragment: UsersListFragment() {
         }
         ignoreSavedState = false
 
+        val modelUserList = ArrayList<UserListModel>()
+        for (i in 1..10) {
+          val testUser = UserListModel(
+                  false,
+                  false,
+                  UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+            modelUserList.add(testUser)
+        }
+
+        adapter.value?.items?.addAll(modelUserList)
+        adapter.value?.notifyDataSetChanged()
 
         srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
-
+//
+//        invokeAsync({
+//            instanceManager.getManagers()
+//        }, {
+//            if (it.success) {
+//                val modelUserList = it.entity!!.map { userModel ->
+//                    UserListModel(false,false, userModel)
+//                }
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
+//            } else {
+//                /*val dialog = ErrorDialog(this@ManagersListFragment.context)
+//                if(it.errorChainId != null) {
+//                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
+//                }*/
+//                // dialog.show()
+//            }
+//        })
         invokeAsync({
             viewWebservice.getViewResult("UserViewGroup", "ManagersView")
         }, {
