@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.webservice
 
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.networkError
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,9 +15,9 @@ class HttpManager: IHttpManager {
             url: String,
             content: String?,
             headers: Map<String, String>,
-            mediaType: String): NetworkResponse<String> {
-        val body = content ?: ""
-        val parsedMediaType = MediaType.parse(mediaType) ?: return NetworkResponse()
+            mediaType: String): RawNetworkResult {
+        val body = content ?: EMPTY_STRING
+        val parsedMediaType = MediaType.parse(mediaType) ?: return RawNetworkResult()
 
         val request = Request.Builder().apply {
             url(url)
@@ -30,7 +31,7 @@ class HttpManager: IHttpManager {
 
     override fun get(
             url: String,
-            headers: Map<String, String>): NetworkResponse<String> {
+            headers: Map<String, String>): RawNetworkResult {
         val request = Request.Builder().apply {
             url(url)
             get()
@@ -41,15 +42,17 @@ class HttpManager: IHttpManager {
         return execute(request)
     }
 
-    private fun execute(request: Request): NetworkResponse<String> {
+    private fun execute(request: Request): RawNetworkResult {
         return try {
             val response = client.newCall(request).execute()
-            NetworkResponse(
+            RawNetworkResult(
                     fetched = true,
                     statusCode = response.code(),
-                    responseEntity = response.body()?.string() ?: EMPTY_STRING)
+                    bodyContent = response.body()?.string() ?: EMPTY_STRING)
         } catch (e: IOException) {
-            NetworkResponse()
+            RawNetworkResult(
+                    errors = listOf(networkError())
+            )
         }
     }
 

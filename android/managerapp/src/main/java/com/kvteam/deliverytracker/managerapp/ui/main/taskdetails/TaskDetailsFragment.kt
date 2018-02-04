@@ -8,11 +8,9 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.EntityResult
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.models.TaskModel
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -38,9 +36,6 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var taskRepository: ITaskRepository
-
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     var taskId: UUID? = null
         private set
@@ -91,14 +86,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                     etSelectPerformer.setText(
                             if(performer != null) formatPerformerName(performer)
                             else EMPTY_STRING)
-                    selectedPerformerUsername = task.performer?.username
-                } else {
-                    val dialog = ErrorDialog(this@TaskDetailsFragment.context!!)
-                    if(it.errorChainId != null) {
-                        dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                    }
-                    dialog.show()
-                    navigationController.closeCurrentFragment()
+                    selectedPerformerUsername = task.performer?.code
                 }
             })
         }
@@ -114,7 +102,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                     task.details = etAddress.text.toString()
                     if(selectedPerformerUsername != null
                             && selectedPerformerUsername != EMPTY_STRING) {
-                        task.performer = UserModel(username = selectedPerformerUsername)
+                        task.performer = User(code = selectedPerformerUsername)
                     }
                     taskRepository.addTask(task)
                 }
@@ -127,7 +115,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                     if(it != null) {
                         taskRepository.cancelTask(it)
                     } else {
-                        EntityResult(null, false, false, null)
+                        EntityResult(null, false, false)
                     }
                 }
             }
@@ -145,7 +133,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                     if(it != null) {
                         taskRepository.cancelTask(it)
                     } else {
-                        EntityResult(null, false, false, null)
+                        EntityResult(null, false, false)
                     }
                 }
             }
@@ -156,9 +144,9 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
     override fun onResume() {
         super.onResume()
         if(navigationController.info.containsKey(SELECTED_USERS_KEY)) {
-            val user = navigationController.info[SELECTED_USERS_KEY] as UserModel
+            val user = navigationController.info[SELECTED_USERS_KEY] as User
             navigationController.info.remove(SELECTED_USERS_KEY)
-            selectedPerformerUsername = user.username
+            selectedPerformerUsername = user.code
             etSelectPerformer.setText(formatPerformerName(user))
         }
     }
@@ -183,7 +171,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
         navigationController.navigateToSelectPerformer()
     }
 
-    private fun formatPerformerName(performer: UserModel) =
+    private fun formatPerformerName(performer: User) =
         "${performer.surname} ${performer.name}"
 
     private fun performTaskAction(action: ((taskId: UUID?)-> EntityResult<TaskModel?>)) {
@@ -193,12 +181,6 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
         }, {
             if(it.success) {
                 navigationController.closeCurrentFragment()
-            } else {
-                val dialog = ErrorDialog(this@TaskDetailsFragment.context!!)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
             setProcessingState(false)
         })

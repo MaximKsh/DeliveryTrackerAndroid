@@ -5,18 +5,16 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
-import com.kvteam.deliverytracker.core.models.CredentialsModel
-import com.kvteam.deliverytracker.core.models.InstanceModel
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.CodePassword
+import com.kvteam.deliverytracker.core.models.Instance
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
+import com.kvteam.deliverytracker.core.webservice.IInstanceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_create_instance.*
@@ -26,13 +24,10 @@ import javax.inject.Inject
 
 class CreateInstanceActivity : DeliveryTrackerActivity() {
     @Inject
-    lateinit var instanceManager: IInstanceManager
+    lateinit var instanceWebservice: IInstanceWebservice
 
     @Inject
     lateinit var session: ISession
-
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,28 +50,24 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
             }
             R.id.action_done -> {
                 invokeAsync({
-                    instanceManager.create(
-                            InstanceModel(
-                                    instanceName = etCompanyNameField.text.toString()),
-                            UserModel(
+                    instanceWebservice.create(
+                            Instance(
+                                    name = etCompanyNameField.text.toString()),
+                            User(
                                     surname = etSurnameField.text.toString(),
                                     name = etNameField.text.toString(),
                                     phoneNumber = etPhoneNumberField.text.toString(),
                                     role = Role.Creator.simpleName),
-                            CredentialsModel(
+                            CodePassword(
                                     password = etPasswordField.text.toString())
                     )
                 }, {
                     if (it.success) {
                         invokeAsync({
-                            session.login(it.entity?.username!!, etPasswordField.text.toString())
+                            session.login(it.entity?.creator?.code!!, etPasswordField.text.toString())
                         }, {
                             navigateToMainActivity(it)
                         })
-                    } else {
-                        ErrorDialog(this@CreateInstanceActivity)
-                                .addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                                .show()
                     }
                 })
             }
@@ -97,13 +88,6 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                 intent.putExtra(SETTINGS_CONTEXT, settingsContext)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-            }
-            else -> {
-                val dialog = ErrorDialog(this)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
         }
     }

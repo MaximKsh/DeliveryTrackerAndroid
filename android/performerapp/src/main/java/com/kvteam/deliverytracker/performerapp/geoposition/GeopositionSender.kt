@@ -12,7 +12,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.models.GeopositionModel
+import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class GeopositionSender : BroadcastReceiver() {
                             try {
                                 webservice.post(
                                         "/api/performer/update_position",
-                                        GeopositionModel(location.longitude, location.latitude),
+                                        Geoposition(location.longitude, location.latitude),
                                         true)
                             } catch (ex: Exception) {
                                 Log.e("Update position", "${ex.message}\n${ex.stackTrace}")

@@ -10,7 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -20,11 +20,6 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import java.util.*
-import java.util.Arrays.asList
-import java.util.Arrays.asList
 import android.view.ViewGroup
 import android.animation.ValueAnimator
 import kotlin.collections.ArrayList
@@ -36,9 +31,6 @@ import android.graphics.drawable.Drawable
 import android.widget.TextView
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
-import kotlinx.android.synthetic.main.dropdown_top.*
-import kotlinx.android.synthetic.main.dropdown_top_item.*
-import kotlinx.android.synthetic.main.dropdown_top_item.view.*
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment() {
@@ -57,7 +49,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     protected var ignoreSavedState = false
 
     private val userItemActions = object: UserItemActions {
-        override fun onCallClick(user: UserModel) {
+        override fun onCallClick(user: User) {
             if(user.phoneNumber != null
                     && (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)) {
                 val intent = Intent(Intent.ACTION_CALL)
@@ -66,11 +58,11 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             }
         }
 
-        override fun onChatClick(user: UserModel) {
+        override fun onChatClick(user: User) {
             TODO("not implemented")
         }
 
-        override fun onItemClick(user: UserModel) {
+        override fun onItemClick(user: User) {
             TODO("not implemented")
         }
 

@@ -5,9 +5,10 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
-import com.kvteam.deliverytracker.core.models.ErrorListModel
+import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.getAuthorizationHeaders
+import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 import java.lang.reflect.Type
 
 class Webservice(context: Context,
@@ -20,34 +21,34 @@ class Webservice(context: Context,
 
     override fun get(
             url: String,
-            withToken: Boolean): NetworkResponse<String> {
+            withToken: Boolean): RawNetworkResult {
         var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResponse()
+                if(withToken) getAuthorizationHeaders(session) ?: return RawNetworkResult()
                 else mapOf()
         var result = httpManager.get(baseUrl + url, headers)
 
         // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
+            headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
             result = httpManager.get(baseUrl + url, headers)
         }
-        return processResponse(result)
+        return result
     }
 
-    override fun <T : Any> get(
+    override fun <T : ResponseBase> get(
             url: String,
             responseType: Type,
-            withToken: Boolean): NetworkResponse<T> {
+            withToken: Boolean): NetworkResult<T> {
         var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResponse()
+                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResult()
                 else mapOf()
         var result = httpManager.get(baseUrl + url, headers)
 
         // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
+            headers = getAuthorizationHeaders(session) ?: return NetworkResult()
             result = httpManager.get(baseUrl + url, headers)
         }
         return processResponse(result, responseType)
@@ -56,9 +57,9 @@ class Webservice(context: Context,
     override fun post(
             url: String,
             content: Any?,
-            withToken: Boolean): NetworkResponse<String> {
+            withToken: Boolean): RawNetworkResult {
         var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResponse()
+                if(withToken) getAuthorizationHeaders(session) ?: return RawNetworkResult()
                 else mapOf()
 
         val body = if(content != null) gson.toJson(content) else ""
@@ -70,23 +71,23 @@ class Webservice(context: Context,
         // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
+            headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
             result = httpManager.post(
                     baseUrl + url,
                     body,
                     headers,
                     "application/json")
         }
-        return processResponse(result)
+        return result
     }
 
-    override fun <T : Any> post(
+    override fun <T : ResponseBase> post(
             url: String,
             content: Any?,
             responseType: Type,
-            withToken: Boolean): NetworkResponse<T> {
+            withToken: Boolean): NetworkResult<T> {
         var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResponse()
+                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResult()
                 else mapOf()
 
         val body = if(content != null) gson.toJson(content) else ""
@@ -98,7 +99,7 @@ class Webservice(context: Context,
         // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
         if(withToken && result.statusCode == 401) {
             session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResponse()
+            headers = getAuthorizationHeaders(session) ?: return NetworkResult()
             result = httpManager.post(
                     baseUrl + url,
                     body,
@@ -108,66 +109,28 @@ class Webservice(context: Context,
         return processResponse(result, responseType)
     }
 
-    private fun processResponse(response: NetworkResponse<String>): NetworkResponse<String> {
-        if(!response.fetched) {
-            return NetworkResponse(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errorList = response.errorList)
+    private fun <T : ResponseBase> processResponse(
+            result: RawNetworkResult,
+            responseType: Type): NetworkResult<T> {
+        if(!result.fetched
+                || TextUtils.isEmpty(result.entity)) {
+            return NetworkResult(
+                    fetched = result.fetched,
+                    statusCode = result.statusCode,
+                    errors = result.errors)
         }
 
         return try {
-            if(response.statusCode in 200..299) {
-                response
-            } else {
-                val errors = gson.fromJson<ErrorListModel>(
-                        response.responseEntity,
-                        ErrorListModel::class.java)
-                NetworkResponse(
-                        fetched = true,
-                        statusCode = response.statusCode,
-                        errorList = errors)
-            }
-        } catch (e: JsonSyntaxException) {
-            NetworkResponse(
+            val obj = gson.fromJson<T>(result.entity, responseType)
+            NetworkResult(
+                    obj,
                     fetched = true,
-                    statusCode = response.statusCode,
-                    errorList = ErrorListModel(listOf(invalidResponseBody())))
-        }
-    }
-
-    private fun <T : Any> processResponse(
-            response: NetworkResponse<String>,
-            responseType: Type): NetworkResponse<T> {
-        if(!response.fetched
-                || TextUtils.isEmpty(response.responseEntity)) {
-            return NetworkResponse(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errorList = response.errorList)
-        }
-
-        return try {
-            if(response.statusCode in 200..299) {
-                val obj = gson.fromJson<T>(response.responseEntity, responseType)
-                NetworkResponse(
-                        fetched = true,
-                        statusCode = response.statusCode,
-                        responseEntity = obj)
-            } else {
-                val errors = gson.fromJson<ErrorListModel>(
-                        response.responseEntity,
-                        ErrorListModel::class.java)
-                NetworkResponse(
-                        fetched = true,
-                        statusCode = response.statusCode,
-                        errorList = errors)
-            }
+                    statusCode = result.statusCode)
         } catch (e: JsonSyntaxException) {
-            NetworkResponse(
+            NetworkResult(
                     fetched = true,
-                    statusCode = response.statusCode,
-                    errorList = ErrorListModel(listOf(invalidResponseBody())))
+                    statusCode = result.statusCode,
+                    errors = listOf(invalidResponseBody()))
         }
     }
 }

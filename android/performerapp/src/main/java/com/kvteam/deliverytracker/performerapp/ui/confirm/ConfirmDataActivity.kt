@@ -4,12 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
@@ -23,9 +21,6 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
-
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -55,7 +50,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
     private fun onSaveClicked() {
         val settingsContext = intent.getBooleanExtra(SETTINGS_CONTEXT, false)
-        val userInfo = UserModel(
+        val userInfo = User(
                 surname = etConfirmSurname.text.toString(),
                 name = etConfirmName.text.toString(),
                 phoneNumber = etConfirmPhoneNumber.text.toString())
@@ -69,11 +64,6 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             } else {
-                val dialog = ErrorDialog(this@ConfirmDataActivity)
-                if(it.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(it.errorChainId!!)!!)
-                }
-                dialog.show()
             }
         })
     }

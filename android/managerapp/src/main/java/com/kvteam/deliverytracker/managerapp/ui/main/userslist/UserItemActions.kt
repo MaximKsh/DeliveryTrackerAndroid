@@ -1,11 +1,11 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
-import com.kvteam.deliverytracker.core.models.UserModel
+import com.kvteam.deliverytracker.core.models.User
 
 
 interface UserItemActions {
-    fun onCallClick(user: UserModel)
-    fun onChatClick(user: UserModel)
+    fun onCallClick(user: User)
+    fun onChatClick(user: User)
     fun onSelectClick(userListModel: UserListModel)
-    fun onItemClick(user: UserModel)
+    fun onItemClick(user: User)
 }

@@ -5,13 +5,11 @@ import android.graphics.Paint
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IErrorManager
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.core.ui.ErrorDialog
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
@@ -21,14 +19,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
 class LoginActivity : DeliveryTrackerActivity() {
-    private val usernameKey = "username"
+    private val usernameKey = "code"
     private val passwordKey = "password"
 
     @Inject
     lateinit var session: ISession
-
-    @Inject
-    lateinit var errorManager: IErrorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -91,13 +86,7 @@ class LoginActivity : DeliveryTrackerActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 this.startActivity(intent)
             }
-            else -> {
-                val dialog = ErrorDialog(this)
-                if(result.errorChainId != null) {
-                    dialog.addChain(errorManager.getAndRemove(result.errorChainId!!)!!)
-                }
-                dialog.show()
-            }
+
         }
         setProcessingState(false)
     }

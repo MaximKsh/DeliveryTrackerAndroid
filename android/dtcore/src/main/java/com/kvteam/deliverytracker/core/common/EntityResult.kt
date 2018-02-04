@@ -1,13 +1,12 @@
 package com.kvteam.deliverytracker.core.common
 
-import java.util.*
+import com.kvteam.deliverytracker.core.models.IError
 
 open class EntityResult<out T : Any?>(
-        val entity : T,
+        val entity : T?,
         fromNetwork : Boolean,
         fromCache : Boolean,
-        errorChainId: UUID?) : SimpleResult(
-            entity != null,
+        errors: List<IError> = listOf()) : BasicResult(
             fromNetwork,
             fromCache,
-            errorChainId)
+            errors)
