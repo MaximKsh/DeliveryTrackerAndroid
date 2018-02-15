@@ -30,7 +30,7 @@ class PerformersListFragment: UsersListFragment() {
         }
         ignoreSavedState = false
 
-        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
+//        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
         invokeAsync({
             viewWebservice.getViewResult("UserViewGroup", "PerformersView")
         }, {
@@ -43,8 +43,8 @@ class PerformersListFragment: UsersListFragment() {
                 val modelUserList = performers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             }
         })
     }
@@ -59,14 +59,14 @@ class PerformersListFragment: UsersListFragment() {
                     u.fromMap(it)
                     u
                 }?.toList()
-                adapter.value?.items?.clear()
+//                adapter.value?.items?.clear()
                 val modelUserList = performers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             }
-            srlSwipeRefreshUsers.isRefreshing = false
+//            srlSwipeRefreshUsers.isRefreshing = false
         })
     }
 }

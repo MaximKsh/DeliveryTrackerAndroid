@@ -2,9 +2,6 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
-import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
@@ -40,14 +37,14 @@ class ManagersListFragment: UsersListFragment() {
           val testUser = UserListModel(
                   false,
                   false,
-                  UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                  User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 
-        adapter.value?.items?.addAll(modelUserList)
-        adapter.value?.notifyDataSetChanged()
+//        adapter.value?.items?.addAll(modelUserList)
+//        adapter.value?.notifyDataSetChanged()
 
-        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
+//        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
 //
 //        invokeAsync({
 //            instanceManager.getManagers()
@@ -78,8 +75,8 @@ class ManagersListFragment: UsersListFragment() {
                 val modelUserList = managers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             } else {
                 /*val dialog = ErrorDialog(this@ManagersListFragment.context)
                 if(it.errorChainId != null) {
@@ -100,14 +97,14 @@ class ManagersListFragment: UsersListFragment() {
                     u.fromMap(it)
                     u
                 }?.toList()
-                adapter.value?.items?.clear()
+//                adapter.value?.items?.clear()
                 val modelUserList = managers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             }
-            srlSwipeRefreshUsers.isRefreshing = false
+//            srlSwipeRefreshUsers.isRefreshing = false
         })
     }
 

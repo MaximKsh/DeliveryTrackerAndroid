@@ -5,6 +5,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url 'http://dl.bintray.com/amulyakhare/maven'
+        }
     }
 
     dependencies {
