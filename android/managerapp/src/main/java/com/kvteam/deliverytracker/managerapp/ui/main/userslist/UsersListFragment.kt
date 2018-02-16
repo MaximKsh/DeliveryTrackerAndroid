@@ -38,12 +38,14 @@ import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import eu.davidea.flexibleadapter.databinding.BindingAdapters.setAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.SelectableAdapter
+import eu.davidea.flexibleadapter.helpers.ActionModeHelper
 import eu.davidea.flexibleadapter.items.IFlexible
 import java.util.*
 
 
 // TODO: rename managersList xml to userslist
-open class UsersListFragment : DeliveryTrackerFragment() {
+open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
 
     protected val layoutManagerKey = "layoutManager"
     protected val usersListKey = "usersList"
@@ -53,6 +55,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     lateinit var mAddMenuItem: MenuItem
     lateinit var mRemoveMenuItem: MenuItem
     lateinit var mEditMenuItem: MenuItem
+
+    private lateinit var mAdapter : UserListAdapter
+    private lateinit var mActionModeHelper: ActionModeHelper
+    private var mActivatedPosition: Int = 0
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -130,8 +136,12 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 //        adapter.value?.notifyDataSetChanged()
     }
 
-    private fun getDatabaseList(): List<IFlexible<*>> {
-        val userList = ArrayList<IFlexible<*>>()
+    override fun onItemClick(position: Int): Boolean {
+        return false
+    }
+
+    private fun getDatabaseList(): List<UserListItem> {
+        val userList = ArrayList<UserListItem>()
 
         val names = Array<String>(10) { NameGenerator.generateName() }.sortedArray()
 
@@ -164,7 +174,11 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
         val myItems = getDatabaseList()
 
-        val adapter = FlexibleAdapter<IFlexible<*>>(myItems)
+        mAdapter = UserListAdapter(myItems)
+
+        mAdapter.mode = SelectableAdapter.Mode.SINGLE
+
+        mAdapter.addListener(this)
 
         ptrFrame.setPtrHandler(object : PtrHandler {
             override fun onRefreshBegin(frame: PtrFrameLayout?) {
@@ -176,10 +190,10 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             }
         })
 
-        adapter.setDisplayHeadersAtStartUp(true)
-        adapter.setStickyHeaders(true)
+        mAdapter.setDisplayHeadersAtStartUp(true)
+        mAdapter.setStickyHeaders(true)
 
-        rvUsersList.adapter = adapter
+        rvUsersList.adapter = mAdapter
 
         val categories = arrayListOf<DropdownItem>(
                 DropdownItem("Managers", 5, ::showManagers),
