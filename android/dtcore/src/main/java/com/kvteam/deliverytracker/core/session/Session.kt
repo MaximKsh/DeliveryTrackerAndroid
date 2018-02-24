@@ -11,10 +11,12 @@ import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.common.unauthorized
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
+import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
+import java.util.*
 
 class Session (
         private val httpManager: IHttpManager,
@@ -23,6 +25,17 @@ class Session (
 
     private val gson = Gson()
     private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
+
+    override var id: UUID?
+        get() {
+            val roleOrNull = getUserDataOrNull("_id")
+            return if (roleOrNull != null) {
+                UUID.fromString(roleOrNull)
+            } else {
+                null
+            }
+        }
+        private set(v) = setUserDataOrNull("_id", v?.toString())
 
     override var code: String?
         get() = getUserDataOrNull("_username")
@@ -36,9 +49,16 @@ class Session (
     override var phoneNumber: String?
         get() = getUserDataOrNull("_phoneNumber")
         private set(v) = setUserDataOrNull("_phoneNumber", v)
-    override var role: String?
-        get() = getUserDataOrNull("_role")
-        private set(v) = setUserDataOrNull("_role", v)
+    override var role: UUID?
+        get() {
+            val roleOrNull = getUserDataOrNull("_role")
+            return if (roleOrNull != null) {
+                UUID.fromString(roleOrNull)
+            } else {
+                null
+            }
+        }
+        private set(v) = setUserDataOrNull("_role", v?.toString())
 
     private val accountManager = AccountManager.get(context)
 
@@ -130,7 +150,7 @@ class Session (
         }
         val tokenRole = accountResponse.user?.role
         if(tokenRole != null
-                && !sessionInfo.allowRoles.contains(tokenRole)) {
+                && !sessionInfo.allowRoles.contains(tokenRole.toRole())) {
             return LoginResult(
                     LoginResultType.RoleMismatch,
                     fetched = true,
@@ -169,11 +189,12 @@ class Session (
         }
 
         val user = accountResponse.user
-        this.code = username
+        id = user?.id
+        code = username
         surname = user?.surname ?: "no surname"
         name = user?.name ?: "no name"
         phoneNumber = user?.phoneNumber ?: "no phone number"
-        role = tokenRole ?: "no role"
+        role = tokenRole
 
         val resultType =
                 if(response.statusCode == 201) LoginResultType.Registered
@@ -219,7 +240,7 @@ class Session (
             surname = userInfo.surname ?: "no surname"
             name = userInfo.name ?: "no name"
             phoneNumber = userInfo.phoneNumber ?: "no phone number"
-            role = userInfo.role ?: "no role"
+            role = userInfo.role
         }
 
         return NetworkResult(
@@ -269,7 +290,7 @@ class Session (
             surname = newUserInfo.surname ?: "no surname"
             name = newUserInfo.name ?: "no name"
             phoneNumber = newUserInfo.phoneNumber ?: "no phone number"
-            role = newUserInfo.role ?: "no role"
+            role = newUserInfo.role
         }
 
         return NetworkResult(

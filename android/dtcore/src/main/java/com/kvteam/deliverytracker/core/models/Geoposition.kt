@@ -3,10 +3,11 @@ package com.kvteam.deliverytracker.core.models
 import android.arch.persistence.room.Ignore
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
 data class Geoposition(
-        var longitude: Double = 0.0,
-        var latitude: Double = 0.0) : Parcelable {
+        @SerializedName("Longitude") var longitude: Double = 0.0,
+        @SerializedName("Latitude") var latitude: Double = 0.0) : Parcelable {
     companion object {
         @JvmField
         @Suppress("unused")
@@ -28,4 +29,15 @@ data class Geoposition(
     }
 
     override fun describeContents() = 0
+
+    fun fromMap(map: Map<*, *>) {
+        val lon = map["Longitude"] as? Double
+        if(lon != null) {
+            longitude = lon
+        }
+        val lat = map["Latitude"] as? Double
+        if(lat != null) {
+            latitude = lat
+        }
+    }
 }

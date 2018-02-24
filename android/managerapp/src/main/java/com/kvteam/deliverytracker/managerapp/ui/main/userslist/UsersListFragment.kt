@@ -15,22 +15,13 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
-import android.view.ViewGroup
-import android.animation.ValueAnimator
-import kotlin.collections.ArrayList
-import android.animation.ObjectAnimator
-import android.R.attr.scaleHeight
-import android.R.attr.scaleWidth
-import android.graphics.drawable.ScaleDrawable
-import android.graphics.drawable.Drawable
-import android.widget.TextView
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment() {
@@ -93,7 +84,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             val testUser = UserListModel(
                     false,
                     false,
-                    UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                    User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 
@@ -109,7 +100,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             val testUser = UserListModel(
                     false,
                     false,
-                    UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                    User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 

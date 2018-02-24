@@ -9,5 +9,5 @@ data class Invitation(
         var created: Date? = null,
         var expires: Date? = null,
         var instanceId: UUID? = null,
-        var role: String? = null,
+        var role: UUID? = null,
         var preliminaryUser: User? = null)

@@ -2,18 +2,13 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.IErrorManager
-import com.kvteam.deliverytracker.core.instance.IInstanceManager
-import com.kvteam.deliverytracker.core.models.UserModel
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
-import com.kvteam.deliverytracker.core.webservice.ViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.awt.font.NumericShaper
 import javax.inject.Inject
 
 class ManagersListFragment: UsersListFragment() {
@@ -40,7 +35,7 @@ class ManagersListFragment: UsersListFragment() {
           val testUser = UserListModel(
                   false,
                   false,
-                  UserModel(username = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                  User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 

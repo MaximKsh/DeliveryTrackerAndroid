@@ -37,8 +37,8 @@
     <string name="ManagerApp_UserListFragment_DeleteUserModalContent">Are you sure you want to delete selected users?</string>
     <string name="ManagerApp_DeleteButton">delete</string>
     <string-array name="roles_array">
-        <item>@string/Core_Role_ManagerRole</item>
-        <item>@string/Core_Role_PerformerRole</item>
+        <item>@string/ServerMessage_Roles_ManagerRole</item>
+        <item>@string/ServerMessage_Roles_PerformerRole</item>
     </string-array>
 
     <string name="ManagerApp_TaskFragment_CancelTask">Cancel task</string>
