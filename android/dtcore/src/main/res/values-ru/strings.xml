@@ -28,9 +28,9 @@
     <string name="ServerMessage_Error_UserDeleted">Пользователь был удален</string>
     <string name="ServerMessage_Error_RoleRange">Укажите корректную роль</string>
     <string name="ServerMessage_PushMessage_AddTask">Вам добавлено новое задание</string>
-    <string name="Core_Role_CreatorRole">Создатель</string>
-    <string name="Core_Role_ManagerRole">Управляющий</string>
-    <string name="Core_Role_PerformerRole">Исполнитель</string>
+    <string name="ServerMessage_Roles_CreatorRole">Создатель</string>
+    <string name="ServerMessage_Roles_ManagerRole">Управляющий</string>
+    <string name="ServerMessage_Roles_PerformerRole">Исполнитель</string>
     <string name="Core_UnknownError">Неизвестная ошибка</string>
     <string name="Core_OK">Принять</string>
     <string name="Core_NotificationHeader">Уведомление</string>

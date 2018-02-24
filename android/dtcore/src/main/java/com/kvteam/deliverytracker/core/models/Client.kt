@@ -10,7 +10,7 @@ class Client(id: UUID? = null,
              @SerializedName("Name") var name: String? = null,
              @SerializedName("Patronymic") var patronymic: String? = null,
              @SerializedName("PhoneNumber") var phoneNumber: String? = null,
-             @SerializedName("Addresses") var addresses: MutableList<Address> = mutableListOf()) :
+             @SerializedName("Addresses") var clientAddresses: MutableList<ClientAddress> = mutableListOf()) :
         ReferenceEntityBase(id, instanceId) {
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)
@@ -21,12 +21,12 @@ class Client(id: UUID? = null,
 
         val addressesSerialized = map["Addresses"]
         if(addressesSerialized is List<*>) {
-            addresses = mutableListOf()
+            clientAddresses = mutableListOf()
             for (addr in addressesSerialized) {
                 if(addr is LinkedTreeMap<*, *>) {
-                    val address = Address()
+                    val address = ClientAddress()
                     address.fromMap(addr)
-                    addresses.add(address)
+                    clientAddresses.add(address)
                 }
             }
         }

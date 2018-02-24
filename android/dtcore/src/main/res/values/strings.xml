@@ -31,9 +31,9 @@
     <string name="ServerMessage_Error_UserDeleted">User was deleted</string>
     <string name="ServerMessage_Error_RoleRange">Specify correct role</string>
     <string name="ServerMessage_PushMessage_AddTask">You have new task</string>
-    <string name="Core_Role_CreatorRole">Creator</string>
-    <string name="Core_Role_ManagerRole">Manager</string>
-    <string name="Core_Role_PerformerRole">Performer</string>
+    <string name="ServerMessage_Roles_CreatorRole">Creator</string>
+    <string name="ServerMessage_Roles_ManagerRole">Manager</string>
+    <string name="ServerMessage_Roles_PerformerRole">Performer</string>
     <string name="Core_ThreeDots" translatable="false">...</string>
     <string name="Core_UnknownError">Unknown error</string>
     <string name="Core_OK">OK</string>

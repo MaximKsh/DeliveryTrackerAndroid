@@ -63,7 +63,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
         super.onSaveInstanceState(outState)
 
         outState.putString(
-                userRoleKey, this.role.simpleName
+                userRoleKey, this.role.roleName
         )
         outState.putString(
                 userNameKey, etNameField.text.toString())
@@ -131,7 +131,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                             name = etNameField.text.toString(),
                             surname = etSurnameField.text.toString(),
                             phoneNumber = etPhoneNumberField.text.toString(),
-                            role = selectedRole?.simpleName
+                            role = selectedRole?.id
                     ))
                 }, {
                    if (it.success) {

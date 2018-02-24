@@ -53,7 +53,7 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
         holder.tvSurname.text = userListModel.user.surname
         holder.cbSelectUser.isChecked = userListModel.isSelected
 
-        holder.ivAdminStatusIcon.visibility = if (userListModel.user.role == Role.Creator.simpleName)
+        holder.ivAdminStatusIcon.visibility = if (userListModel.user.role == Role.Creator.id)
             View.VISIBLE
         else
             View.INVISIBLE

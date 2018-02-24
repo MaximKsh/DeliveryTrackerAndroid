@@ -3,7 +3,6 @@ package com.kvteam.deliverytracker.core.models
 import android.arch.persistence.room.Embedded
 import android.os.Parcel
 import android.os.Parcelable
-import java.math.BigDecimal
 import java.util.*
 
 data class User(
@@ -13,7 +12,7 @@ data class User(
         var name: String? = null,
         var patronymic: String? = null,
         var phoneNumber: String? = null,
-        var role: String? = null,
+        var role: UUID? = null,
         var instanceId: UUID? = null,
         @Embedded var position: Geoposition? = null) : Parcelable {
 
@@ -34,8 +33,8 @@ data class User(
             parcelIn.readString(),
             parcelIn.readString(),
             parcelIn.readString(),
-            parcelIn.readString(),
-            parcelIn.readSerializable() as UUID,
+            parcelIn.readSerializable() as? UUID?,
+            parcelIn.readSerializable() as? UUID?,
             parcelIn.readParcelable(Geoposition::class.java.classLoader)
     )
 
@@ -46,7 +45,7 @@ data class User(
         dest.writeString(name)
         dest.writeString(patronymic)
         dest.writeString(phoneNumber)
-        dest.writeString(role)
+        dest.writeSerializable(role)
         dest.writeSerializable(instanceId)
         dest.writeParcelable(position, flags)
     }
@@ -70,7 +69,7 @@ data class User(
             }
         }
         code = map["Code"] as? String
-        role = map["Role"] as? String
+        role = map["Role"] as? UUID?
         surname = map["Surname"] as? String
         name = map["Name"] as? String
         patronymic = map["Patronymic"] as? String
