@@ -39,10 +39,10 @@ class ManagersListFragment: UsersListFragment() {
             modelUserList.add(testUser)
         }
 
-        adapter.value?.items?.addAll(modelUserList)
-        adapter.value?.notifyDataSetChanged()
+//        adapter.value?.items?.addAll(modelUserList)
+//        adapter.value?.notifyDataSetChanged()
 
-        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
+//        srlSwipeRefreshUsers.setOnRefreshListener { refresh() }
 //
 //        invokeAsync({
 //            instanceManager.getManagers()
@@ -73,8 +73,8 @@ class ManagersListFragment: UsersListFragment() {
                 val modelUserList = managers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             } else {
                 /*val dialog = ErrorDialog(this@ManagersListFragment.context)
                 if(it.errorChainId != null) {
@@ -95,14 +95,14 @@ class ManagersListFragment: UsersListFragment() {
                     u.fromMap(it)
                     u
                 }?.toList()
-                adapter.value?.items?.clear()
+//                adapter.value?.items?.clear()
                 val modelUserList = managers!!.map { userModel ->
                     UserListModel(false,false, userModel)
                 }
-                adapter.value?.items?.addAll(modelUserList)
-                adapter.value?.notifyDataSetChanged()
+//                adapter.value?.items?.addAll(modelUserList)
+//                adapter.value?.notifyDataSetChanged()
             }
-            srlSwipeRefreshUsers.isRefreshing = false
+//            srlSwipeRefreshUsers.isRefreshing = false
         })
     }
 

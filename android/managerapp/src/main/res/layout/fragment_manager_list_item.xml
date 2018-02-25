@@ -1,116 +1,105 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<com.chauthai.swipereveallayout.SwipeRevealLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical">
+    android:id="@+id/swipeRevealLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:mode="same_level"
+    app:dragEdge="right"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBox
-        android:id="@+id/cbSelectUser"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:theme="@style/BrandedCheckBox" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+        <TextView
+            android:id="@+id/tvDeleteUser"
+            android:layout_width="wrap_content"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:background="@color/colorRed"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:text="@string/ManagerApp_Toolbar_DeleteUser"
+            android:layout_height="65dp" />
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
+        android:layout_height="match_parent" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rlUserItem"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:padding="10dp"
-            android:baselineAligned="false">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="70dp"
-                android:layout_height="match_parent">
+            <CheckBox
+                android:id="@+id/cbSelectUser"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:theme="@style/BrandedCheckBox"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/ManagerApp_UserListFragment_UserAvatarContentDesc"
-                    android:src="@drawable/empty_avatar" />
+            <ImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/ManagerApp_UserListFragment_UserAvatarContentDesc"
+                android:src="@drawable/empty_avatar" />
 
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="2dp"
-                    android:contentDescription="@string/ManagerApp_UserListFragment_OnlineStatusContentDesc"
-                    android:src="@drawable/circle" />
-                <ImageView
-                    android:id="@+id/ivAdminStatusIcon"
-                    android:visibility="invisible"
-                    android:contentDescription="@string/ManagerApp_UserListFragment_AdminContentDesc"
-                    android:src="@drawable/ic_star_gold_40dp"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true" />
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/ivOnlineStatus"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="2dp"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:contentDescription="@string/ManagerApp_UserListFragment_OnlineStatusContentDesc"
+                android:src="@drawable/circle" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSurname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="end|center_vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/ivOnlineStatus"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
 
-                <ImageView
-                    android:id="@+id/ivChatIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
-                    android:alpha="0.4"
-                    android:contentDescription="@string/ManagerApp_UserListFragment_ChatContentDesc"
-                    android:src="@drawable/ic_chat_black_24dp" />
+            <TextView
+                android:id="@+id/tvSurname"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/tvName"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/ivPhoneIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="10dp"
-                    android:alpha="0.4"
-                    android:contentDescription="@string/ManagerApp_UserListFragment_PhoneContentDesc"
-                    android:src="@drawable/ic_phone_black_24dp" />
-            </LinearLayout>
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/ivAdminStatusIcon"
+                android:layout_centerVertical="true"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/ManagerApp_UserListFragment_AdminContentDesc"
+                android:src="@drawable/ic_star_gold_40dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="80dp"
-            android:background="@drawable/rectangle" />
-    </LinearLayout>
-</LinearLayout>
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginEnd="10dp"-->
+            <!--android:layout_marginStart="80dp"-->
+            <!--android:background="@drawable/rectangle" />-->
+        </RelativeLayout>
+    </FrameLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+

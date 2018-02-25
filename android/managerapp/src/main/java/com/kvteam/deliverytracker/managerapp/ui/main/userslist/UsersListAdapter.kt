@@ -14,9 +14,7 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
         val tvName = v.tvName!!
         val tvSurname = v.tvSurname!!
-        val ivPhoneIcon = v.ivPhoneIcon!!
         val cbSelectUser = v.cbSelectUser!!
-        val ivChatIcon = v.ivChatIcon!!
         val ivAdminStatusIcon = v.ivAdminStatusIcon!!
     }
 
@@ -38,12 +36,8 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
     fun toggleVisibility(holder: ViewHolder, userListModel: UserListModel) {
         if (userListModel.isInEditMode) {
             holder.cbSelectUser.visibility = View.VISIBLE
-            holder.ivChatIcon.visibility = View.GONE
-            holder.ivPhoneIcon.visibility = View.GONE
         } else {
             holder.cbSelectUser.visibility = View.GONE
-            holder.ivChatIcon.visibility = View.VISIBLE
-            holder.ivPhoneIcon.visibility = View.VISIBLE
         }
     }
 
@@ -61,7 +55,6 @@ class UsersListAdapter(var userItemActions: UserItemActions?)
         this.toggleVisibility(holder, userListModel)
 
         holder.cbSelectUser.setOnClickListener{ this.userItemActions?.onSelectClick(userListModel) }
-        holder.ivPhoneIcon.setOnClickListener{ this.userItemActions?.onCallClick(userListModel.user) }
 
         // TODO: add animation
 //        val autoTransaction = AutoTransition()

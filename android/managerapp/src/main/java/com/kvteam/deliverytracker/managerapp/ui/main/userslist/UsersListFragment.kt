@@ -1,5 +1,8 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
+import `in`.srain.cube.views.ptr.PtrDefaultHandler
+import `in`.srain.cube.views.ptr.PtrFrameLayout
+import `in`.srain.cube.views.ptr.PtrHandler
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,9 +25,29 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
+import android.view.ViewGroup
+import android.animation.ValueAnimator
+import kotlin.collections.ArrayList
+import android.animation.ObjectAnimator
+import android.R.attr.scaleHeight
+import android.R.attr.scaleWidth
+import android.graphics.drawable.ScaleDrawable
+import android.graphics.drawable.Drawable
+import android.util.Log
+import android.widget.TextView
+import com.kvteam.deliverytracker.core.webservice.IViewWebservice
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
+import eu.davidea.flexibleadapter.databinding.BindingAdapters.setAdapter
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.SelectableAdapter
+import eu.davidea.flexibleadapter.helpers.ActionModeHelper
+import eu.davidea.flexibleadapter.items.IFlexible
+import java.util.*
 
 // TODO: rename managersList xml to userslist
-open class UsersListFragment : DeliveryTrackerFragment() {
+open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
+
     protected val layoutManagerKey = "layoutManager"
     protected val usersListKey = "usersList"
     lateinit var role: Role
@@ -34,12 +57,16 @@ open class UsersListFragment : DeliveryTrackerFragment() {
     lateinit var mRemoveMenuItem: MenuItem
     lateinit var mEditMenuItem: MenuItem
 
+    private lateinit var mAdapter : UserListAdapter
+    private lateinit var mActionModeHelper: ActionModeHelper
+    private var mActivatedPosition: Int = 0
+
     @Inject
     lateinit var navigationController: NavigationController
 
     protected var ignoreSavedState = false
 
-    private val userItemActions = object: UserItemActions {
+    private val userItemActions: UserItemActions = object: UserItemActions {
         override fun onCallClick(user: User) {
             if(user.phoneNumber != null
                     && (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)) {
@@ -63,7 +90,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    protected lateinit var adapter: AutoClearedValue<UsersListAdapter>
+//    protected lateinit var adapter: AutoClearedValue<UsersListAdapter>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -84,14 +111,14 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             val testUser = UserListModel(
                     false,
                     false,
-                    User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                    User(code = "code" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 
         this.rvUsersList.scrollToPosition(0)
-        adapter.value?.items?.clear()
-        adapter.value?.items?.addAll(modelUserList)
-        adapter.value?.notifyDataSetChanged()
+//        adapter.value?.items?.clear()
+//        adapter.value?.items?.addAll(modelUserList)
+//        adapter.value?.notifyDataSetChanged()
     }
 
     private fun showPerformers() {
@@ -100,14 +127,44 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             val testUser = UserListModel(
                     false,
                     false,
-                    User(code = "username" + i, surname = "Surname" + i, name = "Name" + i))
+                    User(code = "code" + i, surname = "Surname" + i, name = "Name" + i))
             modelUserList.add(testUser)
         }
 
         this.rvUsersList.scrollToPosition(0)
-        adapter.value?.items?.clear()
-        adapter.value?.items?.addAll(modelUserList)
-        adapter.value?.notifyDataSetChanged()
+//        adapter.value?.items?.clear()
+//        adapter.value?.items?.addAll(modelUserList)
+//        adapter.value?.notifyDataSetChanged()
+    }
+
+    override fun onItemClick(position: Int): Boolean {
+        Log.i("POSITION", position.toString())
+        return false
+    }
+
+    private fun getDatabaseList(): MutableList<UserListItem> {
+        val userList = ArrayList<UserListItem>()
+
+        val names = Array<String>(10) { NameGenerator.generateName() }.sortedArray()
+
+        val surnames = Array<String>(10) { NameGenerator.generateName() }.sortedArray()
+
+        var letter = surnames[0][0].toString()
+        var header = UserListAlphabeticHeader(letter)
+        for (i in 0..9) {
+            if (letter != surnames[i][0].toString()) {
+                letter = surnames[i][0].toString()
+                header = UserListAlphabeticHeader(letter)
+            }
+            val testUser = UserListModel(
+                    false,
+                    false,
+                    User(code = i.toString(), surname = surnames[i], name = names[i]))
+            userList.add(UserListItem(testUser, header))
+        }
+
+
+        return userList
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -117,6 +174,29 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 LinearLayoutManager.VERTICAL,
                 false)
 
+        val myItems = getDatabaseList()
+
+        mAdapter = UserListAdapter(myItems)
+
+        mAdapter.mode = SelectableAdapter.Mode.SINGLE
+
+        mAdapter.addListener(this)
+
+        ptrFrame.setPtrHandler(object : PtrHandler {
+            override fun onRefreshBegin(frame: PtrFrameLayout?) {
+                frame?.postDelayed(Runnable { ptrFrame.refreshComplete() }, 1800)
+            }
+
+            override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        })
+
+        mAdapter.setDisplayHeadersAtStartUp(true)
+        mAdapter.setStickyHeaders(true)
+
+        rvUsersList.adapter = mAdapter
+
         val categories = arrayListOf<DropdownItem>(
                 DropdownItem("Managers", 5, ::showManagers),
                 DropdownItem("Performers", 8, ::showPerformers)
@@ -124,43 +204,43 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
         DropdownTop(categories, activity!!)
 
-        this.adapter = AutoClearedValue(
-                this,
-                UsersListAdapter(userItemActions),
-                {
-                    // TODO how correctly clean it?
-                    it?.userItemActions = null
-                })
-        this.rvUsersList.adapter = this.adapter.value
+//        this.adapter = AutoClearedValue(
+//                this,
+//                UsersListAdapter(userItemActions),
+//                {
+//                    // TODO how correctly clean it?
+//                    it?.userItemActions = null
+//                })
+        // this.rvUsersList.adapter = this.adapter.value
 
-        savedInstanceState?.apply {
-            if(rvUsersList?.layoutManager != null){
-                adapter.value?.items?.clear()
-                if(containsKey(usersListKey)) {
-                    adapter.value?.items?.addAll(
-                            getParcelableArray(usersListKey).map { it as UserListModel })
-                    rvUsersList.layoutManager.onRestoreInstanceState(
-                            getParcelable(layoutManagerKey))
-                } else {
-                    ignoreSavedState = true
-                }
-            }
-        }
+//        savedInstanceState?.apply {
+//            if(rvUsersList?.layoutManager != null){
+//                adapter.value?.items?.clear()
+//                if(containsKey(usersListKey)) {
+//                    adapter.value?.items?.addAll(
+//                            getParcelableArray(usersListKey).map { it as UserListModel })
+//                    rvUsersList.layoutManager.onRestoreInstanceState(
+//                            getParcelable(layoutManagerKey))
+//                } else {
+//                    ignoreSavedState = true
+//                }
+//            }
+//        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.apply {
-            if(rvUsersList?.layoutManager != null) {
-                putParcelableArray(
-                        usersListKey,
-                        adapter.value?.items?.toTypedArray())
-                putParcelable(
-                        layoutManagerKey,
-                        rvUsersList.layoutManager.onSaveInstanceState())
-            }
-        }
+//        outState.apply {
+//            if(rvUsersList?.layoutManager != null) {
+//                putParcelableArray(
+//                        usersListKey,
+//                        adapter.value?.items?.toTypedArray())
+//                putParcelable(
+//                        layoutManagerKey,
+//                        rvUsersList.layoutManager.onSaveInstanceState())
+//            }
+//        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -168,25 +248,23 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         if(savedInstanceState == null) {
             return
         }
-
-
     }
 
     private fun startEditMode() {
         this.isInEditMode = true
-        this.adapter.value?.items?.forEach { item -> item.isInEditMode = true }
-        this.adapter.value?.notifyDataSetChanged()
+//        this.adapter.value?.items?.forEach { item -> item.isInEditMode = true }
+//        this.adapter.value?.notifyDataSetChanged()
     }
 
     private fun stopEditMode() {
         this.isInEditMode = false
-        this.adapter.value?.items?.forEach { item -> item.isInEditMode = false }
-        this.adapter.value?.notifyDataSetChanged()
+//        this.adapter.value?.items?.forEach { item -> item.isInEditMode = false }
+//        this.adapter.value?.notifyDataSetChanged()
     }
 
     private fun clearSelectedUsers() {
-        this.adapter.value?.items?.forEach { item -> item.isSelected = false }
-        this.adapter.value?.notifyDataSetChanged()
+//        this.adapter.value?.items?.forEach { item -> item.isSelected = false }
+//        this.adapter.value?.notifyDataSetChanged()
     }
 
     private fun setEditButtonVisible() {
@@ -215,17 +293,17 @@ open class UsersListFragment : DeliveryTrackerFragment() {
 
     // MENU CALLBACKS
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (isInEditMode) {
-            this.setCancelButtonVisible(true)
-            if (this.adapter.value?.items!!.any { userListModel -> userListModel.isSelected }) {
-                this.setRemoveButtonVisible()
-            } else {
-                this.setAddButtonVisible()
-            }
-        } else {
-            this.setCancelButtonVisible(false)
-            this.setEditButtonVisible()
-        }
+//        if (isInEditMode) {
+//            this.setCancelButtonVisible(true)
+//            if (this.adapter.value?.items!!.any { userListModel -> userListModel.isSelected }) {
+//                this.setRemoveButtonVisible()
+//            } else {
+//                this.setAddButtonVisible()
+//            }
+//        } else {
+//            this.setCancelButtonVisible(false)
+//            this.setEditButtonVisible()
+//        }
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -244,8 +322,8 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                 val deleteUsersDialog = AlertDialog.Builder(activity?.applicationContext!!)
                 deleteUsersDialog.setMessage(R.string.ManagerApp_UserListFragment_DeleteUserModalContent)
                         .setPositiveButton(getString(R.string.ManagerApp_DeleteButton), { _, _ ->
-                            this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
-                            this.adapter.value?.notifyDataSetChanged()
+//                            this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
+//                            this.adapter.value?.notifyDataSetChanged()
                             this.stopEditMode()
                             this.setEditButtonVisible()
                             this.setCancelButtonVisible(false)
@@ -278,6 +356,25 @@ open class UsersListFragment : DeliveryTrackerFragment() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    object NameGenerator {
+
+        private val Beginning = arrayOf("Kr", "Ca", "Ra", "Mrok", "Cru", "Ray", "Bre", "Zed", "Drak", "Mor", "Jag", "Mer", "Jar", "Mjol", "Zork", "Mad", "Cry", "Zur", "Creo", "Azak", "Azur", "Rei", "Cro", "Mar", "Luk")
+        private val Middle = arrayOf("air", "ir", "mi", "sor", "mee", "clo", "red", "cra", "ark", "arc", "miri", "lori", "cres", "mur", "zer", "marac", "zoir", "slamar", "salmar", "urak")
+        private val End = arrayOf("d", "ed", "ark", "arc", "es", "er", "der", "tron", "med", "ure", "zur", "cred", "mur")
+
+        private val rand = Random()
+
+        fun generateName(): String {
+
+            return Beginning[rand.nextInt(Beginning.size)] +
+                    Middle[rand.nextInt(Middle.size)] +
+                    End[rand.nextInt(End.size)]
+
+        }
+
     }
 }
 
