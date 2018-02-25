@@ -34,9 +34,12 @@ class GeopositionSender : BroadcastReceiver() {
                     if(location != null){
                         invokeAsync({
                             try {
+                                val pos = Geoposition()
+                                pos.latitude = location.latitude
+                                pos.longitude = location.longitude
                                 webservice.post(
                                         "/api/performer/update_position",
-                                        Geoposition(location.longitude, location.latitude),
+                                        pos,
                                         true)
                             } catch (ex: Exception) {
                                 Log.e("Update position", "${ex.message}\n${ex.stackTrace}")

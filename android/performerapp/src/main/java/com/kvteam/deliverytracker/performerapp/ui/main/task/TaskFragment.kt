@@ -4,11 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.EntityResult
-import com.kvteam.deliverytracker.core.models.TaskModel
-import com.kvteam.deliverytracker.core.tasks.TaskState
-import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.tasks.ITaskRepository
@@ -22,7 +17,7 @@ class TaskFragment : DeliveryTrackerFragment() {
     private val taskIdKey = "taskId"
     private val taskKey = "task"
 
-    private lateinit var currentTask: TaskModel
+    //private lateinit var currentTask: TaskModel
 
     @Inject
     lateinit var taskRepository: ITaskRepository
@@ -51,29 +46,29 @@ class TaskFragment : DeliveryTrackerFragment() {
         super.onActivityCreated(savedInstanceState)
         if(savedInstanceState != null) {
             taskId = savedInstanceState.getSerializable(taskIdKey) as UUID
-            val savedTask = savedInstanceState.getParcelable<TaskModel>(taskKey) as TaskModel
-            initTask(savedTask)
+            //val savedTask = savedInstanceState.getParcelable<TaskModel>(taskKey) as TaskModel
+            //initTask(savedTask)
         } else {
-            invokeAsync({
+           /* invokeAsync({
                 taskRepository.getTask(taskId)
             }, {
                 if(it.success) {
                     initTask(it.entity!!)
                 }
-            })
+            })*/
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.apply {
+        /*outState.apply {
             putSerializable(taskIdKey, taskId)
             putParcelable(taskKey, currentTask)
-        }
+        }*/
     }
 
 
-    private fun initTask(task: TaskModel) {
+    /*private fun initTask(task: TaskModel) {
         currentTask = task
         tvTaskNumber.text = task.number
         tvShippingDesc.text = task.shippingDesc
@@ -122,7 +117,7 @@ class TaskFragment : DeliveryTrackerFragment() {
             }
             setProcessingState(false)
         })
-    }
+    }*/
 
     private fun setProcessingState(processing: Boolean = true){
         bttnReserveTask.isEnabled = !processing

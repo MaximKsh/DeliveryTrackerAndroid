@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.performerapp.R
@@ -68,7 +67,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                     && layoutManager != null) {
                 if(containsKey(tasksListKey)
                         && containsKey(layoutManagerKey)) {
-                    val savedTasks = getParcelableArray(tasksListKey).map { it as TaskModel }
+                    val savedTasks = getParcelableArray(tasksListKey).map { it /*as TaskModel*/ }
                     adapter.items.clear()
                     adapter.items.addAll(savedTasks)
                     layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
@@ -84,7 +83,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         outState.apply {
             val adapter = adapter.value
             val layoutManager = rvTasksList?.layoutManager
-            if(adapter != null
+            /*if(adapter != null
                     && layoutManager != null) {
                 putParcelableArray(
                         tasksListKey,
@@ -92,14 +91,14 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                 putParcelable(
                         layoutManagerKey,
                         layoutManager.onSaveInstanceState())
-            }
+            }*/
         }
     }
 
-    private fun onTaskClicked(task: TaskModel) {
-        val id = task.id
+    private fun onTaskClicked(task: Any) {
+        /*val id = task.id
         if(id != null) {
             navigationController.navigateToTask(id)
-        }
+        }*/
     }
 }

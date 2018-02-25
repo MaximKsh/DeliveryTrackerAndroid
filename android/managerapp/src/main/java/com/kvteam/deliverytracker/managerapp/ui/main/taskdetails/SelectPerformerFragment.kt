@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
@@ -71,14 +70,14 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
         rvAvailablePerformersList.adapter = adapter.value
 
         if(savedInstanceState == null) {
-            invokeAsync({
+            /*invokeAsync({
                 taskRepository.getAvailablePerformers()
             }, {
                 if(it.success) {
                     adapter.value?.items?.addAll(it.entity!!)
                     adapter.value?.notifyDataSetChanged()
                 }
-            })
+            })*/
         } else {
             savedInstanceState.apply {
                 val adapter = adapter.value

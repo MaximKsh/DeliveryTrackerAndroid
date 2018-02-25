@@ -14,7 +14,7 @@ data class User(
         var phoneNumber: String? = null,
         var role: UUID? = null,
         var instanceId: UUID? = null,
-        @Embedded var position: Geoposition? = null) : Parcelable {
+        @Embedded var position: Geoposition? = null) : Parcelable, IMapDeserializable {
 
 
     companion object {
@@ -52,7 +52,7 @@ data class User(
 
     override fun describeContents() = 0
 
-    open fun fromMap(map: Map<*, *>) {
+    override fun fromMap(map: Map<*, *>) {
         val idStr = map["Id"] as? String
         if(idStr != null) {
             try {

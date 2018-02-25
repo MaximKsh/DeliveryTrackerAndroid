@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.core.webservice
 
 import com.google.gson.reflect.TypeToken
-import com.kvteam.deliverytracker.core.models.ReferenceEntityBase
+import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceResponse
 import java.util.*
@@ -18,7 +18,7 @@ class ReferenceWebservice (private val webservice: IWebservice) : IReferenceWebs
         return result
     }
 
-    override fun  create(type: String, entity: ReferenceEntityBase)
+    override fun  create(type: String, entity: ModelBase)
             : NetworkResult<ReferenceResponse> {
         val request = ReferenceRequest()
         request.entity = entity
@@ -39,7 +39,7 @@ class ReferenceWebservice (private val webservice: IWebservice) : IReferenceWebs
         return result
     }
 
-    override fun edit(type: String, id: UUID, newData: ReferenceEntityBase):
+    override fun edit(type: String, id: UUID, newData: ModelBase):
             NetworkResult<ReferenceResponse> {
         val request = ReferenceRequest()
         newData.id = id

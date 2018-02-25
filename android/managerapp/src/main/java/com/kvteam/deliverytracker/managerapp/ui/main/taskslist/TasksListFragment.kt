@@ -6,12 +6,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
@@ -84,7 +83,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                 })
         rvTasksList.adapter = adapter.value
 
-        savedInstanceState?.apply {
+        /*savedInstanceState?.apply {
             val adapter = adapter.value
             val layoutManager = rvTasksList?.layoutManager
             if(adapter != null
@@ -99,7 +98,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                     ignoreSavedState = true
                 }
             }
-        }
+        }*/
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -107,7 +106,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         outState.apply {
             val adapter = adapter.value
             val layoutManager = rvTasksList?.layoutManager
-            if(adapter != null
+            /*if(adapter != null
                     && layoutManager != null) {
                 putParcelableArray(
                         tasksListKey,
@@ -115,7 +114,7 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                 putParcelable(
                         layoutManagerKey,
                         layoutManager.onSaveInstanceState())
-            }
+            }*/
         }
     }
 
@@ -140,11 +139,11 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun onTaskClicked(task: TaskModel) {
-        val id = task.id
+    private fun onTaskClicked(task: Any) {
+        /*val id = task.id
         if(id != null) {
             navigationController.navigateToTask(id)
-        }
+        }*/
     }
 
 }

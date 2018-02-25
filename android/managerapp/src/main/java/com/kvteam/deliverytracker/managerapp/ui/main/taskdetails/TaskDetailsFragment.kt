@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.EntityResult
-import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
@@ -72,7 +71,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
             }
 
         } else if(mode in arrayOf(TaskDetailsFragmentMode.EDIT, TaskDetailsFragmentMode.READONLY)) {
-            invokeAsync({
+            /*invokeAsync({
                 taskRepository.getTask(taskId!!)
             }, {
                 val task = it.entity
@@ -88,12 +87,12 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                             else EMPTY_STRING)
                     selectedPerformerUsername = task.performer?.code
                 }
-            })
+            })*/
         }
 
         if (mode == TaskDetailsFragmentMode.ADD) {
             bttnAddTask.visibility = View.VISIBLE
-            bttnAddTask.setOnClickListener {
+           /* bttnAddTask.setOnClickListener {
                 performTaskAction {
                     val task = TaskModel()
                     task.number = etTaskNumber.text.toString()
@@ -106,17 +105,18 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
                     }
                     taskRepository.addTask(task)
                 }
-            }
+            }*/
             bttnSelectPerformer.setOnClickListener { selectPerformerClicked() }
         } else if (mode == TaskDetailsFragmentMode.EDIT) {
             bttnCancelTask.visibility = View.VISIBLE
             bttnCancelTask.setOnClickListener {
                 performTaskAction {
-                    if(it != null) {
+                    /*if(it != null) {
                         taskRepository.cancelTask(it)
                     } else {
                         EntityResult(null, false, false)
-                    }
+                    }*/
+                    EntityResult(null, false, false)
                 }
             }
             bttnSelectPerformer.setOnClickListener { selectPerformerClicked() }
@@ -130,11 +130,12 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
             bttnCancelTask.visibility = View.VISIBLE
             bttnCancelTask.setOnClickListener {
                 performTaskAction {
-                    if(it != null) {
+                    /*if(it != null) {
                         taskRepository.cancelTask(it)
                     } else {
                         EntityResult(null, false, false)
-                    }
+                    }*/
+                    EntityResult(null, false, false)
                 }
             }
             bttnSelectPerformer.isEnabled = false
@@ -174,7 +175,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
     private fun formatPerformerName(performer: User) =
         "${performer.surname} ${performer.name}"
 
-    private fun performTaskAction(action: ((taskId: UUID?)-> EntityResult<TaskModel?>)) {
+    private fun performTaskAction(action: ((taskId: UUID?)-> EntityResult<Any>)) {
         setProcessingState()
         invokeAsync({
             action(taskId)

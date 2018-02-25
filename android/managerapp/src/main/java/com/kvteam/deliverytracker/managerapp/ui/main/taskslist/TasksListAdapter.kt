@@ -4,16 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.TaskModel
-import com.kvteam.deliverytracker.core.tasks.TaskState
-import com.kvteam.deliverytracker.core.tasks.toTaskState
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.fragment_tasks_item.view.*
 
 class TasksListAdapter(
-        var onTaskClick: ((task: TaskModel) -> Unit)?,
+        var onTaskClick: ((task: Any) -> Unit)?,
         var lm: ILocalizationManager?): RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
 
     class ViewHolder(v: View): RecyclerView.ViewHolder(v) {
@@ -24,7 +20,7 @@ class TasksListAdapter(
         val llRowLayout = v.llTaskRowLayout!!
     }
 
-    val items = mutableListOf<TaskModel>()
+    val items = mutableListOf<Any>()
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -40,7 +36,7 @@ class TasksListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = items[position]
-        val state = task.state?.toTaskState()
+                /*val state = task.state?.toTaskState()
         holder.tvNumber.text = task.number
         val stateId = task.state?.toTaskState()?.localizationStringId
         holder.tvState.text =
@@ -57,7 +53,7 @@ class TasksListAdapter(
             TaskState.Cancelled -> R.color.taskCancelledColor
             TaskState.CancelledByManager -> R.color.taskCancelledByManagerColor
             else -> R.color.transparent
-        })
+        })*/
         holder.llRowLayout.setOnClickListener { onTaskClick?.invoke(task) }
     }
 

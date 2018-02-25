@@ -10,6 +10,7 @@ android {
         disable 'RestrictedApi'
     }
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.kvteam.deliverytracker.managerapp"
         minSdkVersion 19
         targetSdkVersion 27

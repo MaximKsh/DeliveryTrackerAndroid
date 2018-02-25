@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.core.storage
 
 import android.arch.persistence.room.Room
 import android.content.Context
-import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.models.User
 import java.util.*
 
@@ -35,7 +34,7 @@ class Storage(context: Context): IStorage {
     override fun deleteUsers(key: String) {
         db.userDao().deleteUsers(key)
     }
-
+/*
     override fun setTasks(key: String, tasks: List<TaskModel>, expirationMs: Long?) {
         db.userDao().deleteUsers(key)
         val expirationDate = Date(
@@ -57,5 +56,5 @@ class Storage(context: Context): IStorage {
     override fun deleteTasks(key: String) {
         db.taskDao().deleteTasks(key)
     }
-
+*/
 }

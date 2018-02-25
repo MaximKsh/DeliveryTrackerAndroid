@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.os.Bundle
-import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
@@ -21,20 +20,20 @@ class MyTasksListFragment: TasksListFragment() {
         }
         ignoreSavedState = false
 
-        invokeAsync({
+        /*invokeAsync({
             taskRepository.getMyTasks()
         }, {
             if(it.success) {
                 adapter.value?.items?.addAll(it.entity!!)
                 adapter.value?.notifyDataSetChanged()
             }
-        })
+        })*/
 
         srlSwipeRefreshTasks.setOnRefreshListener { refresh() }
     }
 
     private fun refresh() {
-        invokeAsync({
+        /*invokeAsync({
             taskRepository.getMyTasks(true)
         }, {
             if(it.success) {
@@ -43,6 +42,6 @@ class MyTasksListFragment: TasksListFragment() {
                 adapter.value?.notifyDataSetChanged()
             }
             srlSwipeRefreshTasks.isRefreshing = false
-        })
+        })*/
     }
 }

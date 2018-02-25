@@ -5,9 +5,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-data class Geoposition(
-        @SerializedName("Longitude") var longitude: Double = 0.0,
-        @SerializedName("Latitude") var latitude: Double = 0.0) : Parcelable {
+class Geoposition () : Parcelable, IMapDeserializable {
+
+    @SerializedName("Longitude")
+    var longitude: Double = 0.0
+    @SerializedName("Latitude")
+    var latitude: Double = 0.0
+
     companion object {
         @JvmField
         @Suppress("unused")
@@ -18,10 +22,11 @@ data class Geoposition(
     }
 
     @Ignore
-    constructor(parcelIn: Parcel) : this(
-            parcelIn.readDouble(),
-            parcelIn.readDouble()
-    )
+    constructor(parcelIn: Parcel) : this()
+    {
+        longitude = parcelIn.readDouble()
+        latitude = parcelIn.readDouble()
+    }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeDouble(longitude)
@@ -30,14 +35,8 @@ data class Geoposition(
 
     override fun describeContents() = 0
 
-    fun fromMap(map: Map<*, *>) {
-        val lon = map["Longitude"] as? Double
-        if(lon != null) {
-            longitude = lon
-        }
-        val lat = map["Latitude"] as? Double
-        if(lat != null) {
-            latitude = lat
-        }
+    override fun fromMap(map: Map<*, *>) {
+        longitude = map["Longitude"] as? Double ?: 0.0
+        latitude = map["Latitude"] as? Double ?: 0.0
     }
 }

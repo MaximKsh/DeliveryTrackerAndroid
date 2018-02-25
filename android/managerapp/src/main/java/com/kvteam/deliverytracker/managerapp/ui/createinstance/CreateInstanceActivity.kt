@@ -50,9 +50,10 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
             }
             R.id.action_done -> {
                 invokeAsync({
+                    val instance = Instance()
+                    instance.name = etCompanyNameField.text.toString()
                     instanceWebservice.create(
-                            Instance(
-                                    name = etCompanyNameField.text.toString()),
+                            instance,
                             User(
                                     surname = etSurnameField.text.toString(),
                                     name = etNameField.text.toString(),
