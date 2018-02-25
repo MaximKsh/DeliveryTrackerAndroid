@@ -56,6 +56,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                             User(
                                     surname = etSurnameField.text.toString(),
                                     name = etNameField.text.toString(),
+                                    patronymic = etPatronymicField.text.toString(),
                                     phoneNumber = etPhoneNumberField.text.toString(),
                                     role = Role.Creator.id),
                             CodePassword(

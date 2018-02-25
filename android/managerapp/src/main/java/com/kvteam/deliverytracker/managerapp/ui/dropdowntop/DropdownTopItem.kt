@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.dropdown_top_item.view.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 class DropdownTopItem (
         val index: Int,
@@ -19,23 +20,22 @@ class DropdownTopItem (
         val activity: FragmentActivity){
 
     val layout = activity.layoutInflater.inflate(R.layout.dropdown_top_item, activity.ll_dropdown_top,false)
+    var isLoading = AtomicBoolean(false)
 
     private fun handleSelectionInner () {
+        if (isLoading.get())
+            return
         layout.aviLoadingIndicator.visibility = View.VISIBLE
+        layout.ivSelectedIcon.visibility = View.GONE
+        isLoading.set(true)
+        onSelect(index)
+    }
 
-        val timer  = object : CountDownTimer(1000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-            }
-
-            override fun onFinish() {
-                layout.ivSelectedIcon.visibility = View.VISIBLE
-                layout.aviLoadingIndicator.visibility = View.GONE
-                isSelected = true
-                onSelect(index)
-            }
-        }
-
-        timer.start()
+    fun onLoadCompleted () {
+        layout.ivSelectedIcon.visibility = View.VISIBLE
+        layout.aviLoadingIndicator.visibility = View.GONE
+        isSelected = true
+        isLoading.set(false)
     }
 
     init {
@@ -49,6 +49,8 @@ class DropdownTopItem (
 
     fun reset () {
         layout.ivSelectedIcon.visibility = View.GONE
+        layout.aviLoadingIndicator.visibility = View.GONE
+        isLoading.set(false)
         isSelected = false
     }
 }

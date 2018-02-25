@@ -15,6 +15,7 @@
     <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Company name</string>
     <string name="ManagerApp_EnterNameHint">Name</string>
     <string name="ManagerApp_EnterSurnameHint">Surname</string>
+    <string name="ManagerApp_EnterPatronymicHint">Patronymic</string>
     <string name="ManagerApp_EnterPhoneNumberHint">Phone number</string>
     <string name="ManagerApp_Toolbar_Done">Continue</string>
     <string name="ManagerApp_ConfirmDataActivity_Confirm">Confirm</string>
@@ -63,4 +64,6 @@
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>
+    <string name="ManagerApp_InvitationItem_CancelInvitation">Cancel</string>
+
 </resources>

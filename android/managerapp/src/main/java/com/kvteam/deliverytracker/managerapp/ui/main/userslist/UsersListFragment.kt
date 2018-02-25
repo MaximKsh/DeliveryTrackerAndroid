@@ -3,94 +3,56 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 import `in`.srain.cube.views.ptr.PtrDefaultHandler
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_managers_list.*
+import kotlinx.android.synthetic.main.fragment_user_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import android.view.ViewGroup
-import android.animation.ValueAnimator
 import kotlin.collections.ArrayList
-import android.animation.ObjectAnimator
-import android.R.attr.scaleHeight
-import android.R.attr.scaleWidth
-import android.graphics.drawable.ScaleDrawable
-import android.graphics.drawable.Drawable
 import android.util.Log
-import android.widget.TextView
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.models.Invitation
+import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
-import eu.davidea.flexibleadapter.databinding.BindingAdapters.setAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.davidea.flexibleadapter.helpers.ActionModeHelper
-import eu.davidea.flexibleadapter.items.IFlexible
-import java.util.*
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
 
-    protected val layoutManagerKey = "layoutManager"
-    protected val usersListKey = "usersList"
-    lateinit var role: Role
+    @Inject
+    lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var viewWebservice: IViewWebservice
+
+    @Inject
+    lateinit var lm: ILocalizationManager
+
+    // TODO: выбирать добавляемую роль по сложной логике
+    private var role: Role = Role.Manager
     var isInEditMode: Boolean = false
+
+    private lateinit var dropDownTop: DropdownTop
 
     lateinit var mAddMenuItem: MenuItem
     lateinit var mRemoveMenuItem: MenuItem
     lateinit var mEditMenuItem: MenuItem
 
-    private lateinit var mAdapter : UserListAdapter
-    private lateinit var mActionModeHelper: ActionModeHelper
-    private var mActivatedPosition: Int = 0
-
-    @Inject
-    lateinit var navigationController: NavigationController
-
-    protected var ignoreSavedState = false
-
-    private val userItemActions: UserItemActions = object: UserItemActions {
-        override fun onCallClick(user: User) {
-            if(user.phoneNumber != null
-                    && (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)) {
-                val intent = Intent(Intent.ACTION_CALL)
-                intent.data = Uri.parse("tel:${user.phoneNumber}")
-                activity!!.startActivity(intent)
-            }
-        }
-
-        override fun onChatClick(user: User) {
-            TODO("not implemented")
-        }
-
-        override fun onItemClick(user: User) {
-            TODO("not implemented")
-        }
-
-        override fun onSelectClick(userListModel: UserListModel) {
-            activity?.invalidateOptionsMenu()
-            userListModel.isSelected = !userListModel.isSelected
-        }
-    }
-
-//    protected lateinit var adapter: AutoClearedValue<UsersListAdapter>
+    private lateinit var mAdapter: FlexibleAdapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -102,39 +64,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_managers_list, container, false)
-    }
-
-    private fun showManagers() {
-        val modelUserList = ArrayList<UserListModel>()
-        for (i in 1..10) {
-            val testUser = UserListModel(
-                    false,
-                    false,
-                    User(code = "code" + i, surname = "Surname" + i, name = "Name" + i))
-            modelUserList.add(testUser)
-        }
-
-        this.rvUsersList.scrollToPosition(0)
-//        adapter.value?.items?.clear()
-//        adapter.value?.items?.addAll(modelUserList)
-//        adapter.value?.notifyDataSetChanged()
-    }
-
-    private fun showPerformers() {
-        val modelUserList = ArrayList<UserListModel>()
-        for (i in 10..20) {
-            val testUser = UserListModel(
-                    false,
-                    false,
-                    User(code = "code" + i, surname = "Surname" + i, name = "Name" + i))
-            modelUserList.add(testUser)
-        }
-
-        this.rvUsersList.scrollToPosition(0)
-//        adapter.value?.items?.clear()
-//        adapter.value?.items?.addAll(modelUserList)
-//        adapter.value?.notifyDataSetChanged()
+        return inflater.inflate(R.layout.fragment_user_list, container, false)
     }
 
     override fun onItemClick(position: Int): Boolean {
@@ -142,29 +72,98 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
         return false
     }
 
-    private fun getDatabaseList(): MutableList<UserListItem> {
-        val userList = ArrayList<UserListItem>()
+    private fun formatUsers(viewResult: List<Map<String, Any?>>): MutableList<UserListItem> {
+        var letter: Char? = null
+        var header = SubgroupListHeader("A")
 
-        val names = Array<String>(10) { NameGenerator.generateName() }.sortedArray()
+        return viewResult
+                .map { userMap ->
+                    val user = User()
+                    user.fromMap(userMap)
+                    user
+                }
+                .sortedBy { a -> a.surname }
+                .map { user ->
+                    if (letter == null || letter != user.surname!![0]) {
+                        letter = user.surname!![0]
+                        header = SubgroupListHeader(letter!!.toString())
+                    }
+                    UserListItem(user, header)
+                }.toMutableList()
+    }
 
-        val surnames = Array<String>(10) { NameGenerator.generateName() }.sortedArray()
+    private fun formatInvitations(viewResult: List<Map<String, Any?>>): MutableList<UserInvitationListItem> {
+        var role: String? = null
+        var header = SubgroupListHeader("A")
 
-        var letter = surnames[0][0].toString()
-        var header = UserListAlphabeticHeader(letter)
-        for (i in 0..9) {
-            if (letter != surnames[i][0].toString()) {
-                letter = surnames[i][0].toString()
-                header = UserListAlphabeticHeader(letter)
+        return viewResult
+                .map { invitationMap ->
+                    val invitation = Invitation()
+                    invitation.fromMap(invitationMap)
+                    invitation
+                }
+                .sortedBy { a -> lm.getString(a.role!!.toRole()!!.localizationStringId) }
+                .map { invitation ->
+                    val roleCaption = lm.getString(invitation.role!!.toRole()!!.localizationStringId)
+                    if (role == null || role != roleCaption) {
+                        role = roleCaption
+                        header = SubgroupListHeader(roleCaption)
+                    }
+                    UserInvitationListItem(invitation, header)
+                }.toMutableList()
+    }
+
+    private fun updateList(viewName: String, type: String?, groupIndex: Int) {
+        invokeAsync({
+            viewWebservice.getViewResult("UserViewGroup", viewName)
+        }, { result ->
+            if (result.success && groupIndex == dropDownTop.lastSelectedIndex.get()) {
+                when (type) {
+                    "User" -> {
+                        val userList = formatUsers(result.entity?.viewResult!!)
+                        val adapter = mAdapter as? UserListFlexibleAdapter
+                        if (adapter != null) {
+                            adapter.updateDataSet(userList)
+                        } else {
+                            mAdapter = UserListFlexibleAdapter(userList)
+                            rvUsersList.adapter = mAdapter
+                        }
+                    }
+                    "Invitation" -> {
+                        val invitationList = formatInvitations(result.entity?.viewResult!!)
+                        val adapter = mAdapter as? UserInvitationListFlexibleAdapter
+                        if (adapter != null) {
+                            adapter.updateDataSet(invitationList)
+                        } else {
+                            mAdapter = UserInvitationListFlexibleAdapter(invitationList)
+                            rvUsersList.adapter = mAdapter
+                        }
+                    }
+                }
+                dropDownTop.update()
             }
-            val testUser = UserListModel(
-                    false,
-                    false,
-                    User(code = i.toString(), surname = surnames[i], name = names[i]))
-            userList.add(UserListItem(testUser, header))
-        }
+        })
+    }
 
+    private fun setCategories() {
+        invokeAsync({
+            viewWebservice.getDigest("UserViewGroup")
+        }, { result ->
+            if (result.success) {
+                val digest = result.entity?.digest?.toList()!!
 
-        return userList
+                val categoriesEnumeration = digest.map { category ->
+
+                    DropdownTopItemInfo(lm.getString(category.second.caption!!), category.second.count!!.toInt(), { index ->
+                        updateList(category.first, category.second.entityType, index)
+                    })
+                }
+                val categories = ArrayList(categoriesEnumeration)
+                dropDownTop = DropdownTop(categories, activity!!)
+
+                updateList(digest[0].first, digest[0].second.entityType, 0)
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -174,9 +173,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                 LinearLayoutManager.VERTICAL,
                 false)
 
-        val myItems = getDatabaseList()
-
-        mAdapter = UserListAdapter(myItems)
+        mAdapter = UserListFlexibleAdapter(mutableListOf())
 
         mAdapter.mode = SelectableAdapter.Mode.SINGLE
 
@@ -197,55 +194,12 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
         rvUsersList.adapter = mAdapter
 
-        val categories = arrayListOf<DropdownItem>(
-                DropdownItem("Managers", 5, ::showManagers),
-                DropdownItem("Performers", 8, ::showPerformers)
-        )
-
-        DropdownTop(categories, activity!!)
-
-//        this.adapter = AutoClearedValue(
-//                this,
-//                UsersListAdapter(userItemActions),
-//                {
-//                    // TODO how correctly clean it?
-//                    it?.userItemActions = null
-//                })
-        // this.rvUsersList.adapter = this.adapter.value
-
-//        savedInstanceState?.apply {
-//            if(rvUsersList?.layoutManager != null){
-//                adapter.value?.items?.clear()
-//                if(containsKey(usersListKey)) {
-//                    adapter.value?.items?.addAll(
-//                            getParcelableArray(usersListKey).map { it as UserListModel })
-//                    rvUsersList.layoutManager.onRestoreInstanceState(
-//                            getParcelable(layoutManagerKey))
-//                } else {
-//                    ignoreSavedState = true
-//                }
-//            }
-//        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-//        outState.apply {
-//            if(rvUsersList?.layoutManager != null) {
-//                putParcelableArray(
-//                        usersListKey,
-//                        adapter.value?.items?.toTypedArray())
-//                putParcelable(
-//                        layoutManagerKey,
-//                        rvUsersList.layoutManager.onSaveInstanceState())
-//            }
-//        }
+        setCategories()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             return
         }
     }
@@ -314,25 +268,8 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_edit -> {
-                this.startEditMode()
-                this.activity?.invalidateOptionsMenu()
-            }
-            R.id.action_remove -> {
-                val deleteUsersDialog = AlertDialog.Builder(activity?.applicationContext!!)
-                deleteUsersDialog.setMessage(R.string.ManagerApp_UserListFragment_DeleteUserModalContent)
-                        .setPositiveButton(getString(R.string.ManagerApp_DeleteButton), { _, _ ->
-//                            this.adapter.value?.items?.removeAll { userListModel -> userListModel.isSelected }
-//                            this.adapter.value?.notifyDataSetChanged()
-                            this.stopEditMode()
-                            this.setEditButtonVisible()
-                            this.setCancelButtonVisible(false)
-                            this.clearSelectedUsers()
-                        })
-                        .setNegativeButton(getString(R.string.ManagerApp_Cancel), { _, _ ->
+            R.id.action_show_on_map -> {
 
-                        })
-                deleteUsersDialog.show()
             }
             R.id.action_add -> {
                 navigationController.navigateToAddUser(this.role)
@@ -345,8 +282,6 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
         inflater.inflate(R.menu.toolbar_managers_tab_menu, menu)
 
         this.mAddMenuItem = menu.findItem(R.id.action_add)
-        this.mEditMenuItem = menu.findItem(R.id.action_edit)
-        this.mRemoveMenuItem = menu.findItem(R.id.action_remove)
 
         this.activity?.toolbar_left_action?.setOnClickListener { _ ->
             this.setCancelButtonVisible(false)
@@ -356,25 +291,6 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
         }
 
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    object NameGenerator {
-
-        private val Beginning = arrayOf("Kr", "Ca", "Ra", "Mrok", "Cru", "Ray", "Bre", "Zed", "Drak", "Mor", "Jag", "Mer", "Jar", "Mjol", "Zork", "Mad", "Cry", "Zur", "Creo", "Azak", "Azur", "Rei", "Cro", "Mar", "Luk")
-        private val Middle = arrayOf("air", "ir", "mi", "sor", "mee", "clo", "red", "cra", "ark", "arc", "miri", "lori", "cres", "mur", "zer", "marac", "zoir", "slamar", "salmar", "urak")
-        private val End = arrayOf("d", "ed", "ark", "arc", "es", "er", "der", "tron", "med", "ure", "zur", "cred", "mur")
-
-        private val rand = Random()
-
-        fun generateName(): String {
-
-            return Beginning[rand.nextInt(Beginning.size)] +
-                    Middle[rand.nextInt(Middle.size)] +
-                    End[rand.nextInt(End.size)]
-
-        }
-
     }
 }
 

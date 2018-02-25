@@ -3,42 +3,36 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.IFlexible
 import com.chauthai.swipereveallayout.ViewBinderHelper
-import android.widget.TextView
-import com.kvteam.deliverytracker.managerapp.R.id.textView
-import com.chauthai.swipereveallayout.SwipeRevealLayout
-import eu.davidea.flexibleadapter.items.IHeader
-import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
+import kotlinx.android.synthetic.main.fragment_invitation_list_item.view.*
 
 
-class UserListFlexibleAdapter(private val list: MutableList<UserListItem>) : FlexibleAdapter<UserListItem>(list) {
+class UserInvitationListFlexibleAdapter(private val list: MutableList<UserInvitationListItem>) : FlexibleAdapter<UserInvitationListItem>(list) {
     private val viewBinderHelper = ViewBinderHelper()
 
     init {
         viewBinderHelper.setOpenOnlyOne(true);
     }
 
-    inner class CustomHolder(itemView: View, adapter: FlexibleAdapter<UserListItem>): UserListItem.UserListViewHolder(itemView, adapter) {
+    inner class CustomHolder(itemView: View, adapter: FlexibleAdapter<UserInvitationListItem>): UserInvitationListItem.UserInvitationListViewHolder(itemView, adapter) {
         val swipeRevealLayout = itemView.swipeRevealLayout!!
-        val tvDeleteUser = view.tvDeleteUser!!
-        val rlUserItem = view.rlUserItem!!
+        val tvCancelInvitation = view.tvCancelInvitation!!
+        val rlInvitationItem = view.rlInvitationItem!!
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int, payloads: MutableList<Any?>?) {
         var viewHolder = holder
 
-        if (holder is UserListItem.UserListViewHolder) {
+        if (holder is UserInvitationListItem.UserInvitationListViewHolder) {
             viewHolder = CustomHolder(holder.itemView, this)
 
-            viewHolder.tvDeleteUser.setOnClickListener { _ ->
+            viewHolder.tvCancelInvitation.setOnClickListener { _ ->
                 list.removeAt(position)
                 updateDataSet(list, true)
             }
 
-            viewHolder.rlUserItem.setOnClickListener { _ ->
+            viewHolder.rlInvitationItem.setOnClickListener { _ ->
                 Log.i("USER ITEM", "HELLO")
             }
 

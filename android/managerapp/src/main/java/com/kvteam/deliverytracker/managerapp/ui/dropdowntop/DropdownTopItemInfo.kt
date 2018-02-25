@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.dropdowntop
 
-data class DropdownItem (
+data class DropdownTopItemInfo(
         val name: String,
         val quantity: Int,
-        val onSelected: () -> Unit
+        val onSelected: (Int) -> Unit
 )

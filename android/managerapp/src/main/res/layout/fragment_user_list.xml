@@ -3,27 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!--<LinearLayout-->
-    <!--android:id="@+id/empty_user_list"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="20dp"-->
-    <!--android:gravity="center_horizontal"-->
-    <!--android:orientation="vertical"-->
-    <!--android:visibility="visible">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/ManagerApp_UserListFragment_EmptyList"-->
-    <!--android:textAppearance="?android:textAppearanceMedium" />-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/ManagerApp_Toolbar_AddUser"-->
-    <!--android:textAppearance="?android:textAppearanceMedium" />-->
-    <!--</LinearLayout>-->
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ptrFrame"
@@ -50,7 +29,7 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"
                     app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_manager_list_item" />
+                    tools:listitem="@layout/fragment_user_list_item" />
 
             </FrameLayout>
         </ScrollView>

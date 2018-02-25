@@ -30,14 +30,6 @@
             android:padding="10dp"
             android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/cbSelectUser"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:theme="@style/BrandedCheckBox"
-                android:visibility="gone" />
-
             <ImageView
                 android:id="@+id/ivUserAvatar"
                 android:layout_width="55dp"
@@ -91,12 +83,6 @@
                 android:contentDescription="@string/ManagerApp_UserListFragment_AdminContentDesc"
                 android:src="@drawable/ic_star_gold_40dp" />
 
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_marginEnd="10dp"-->
-            <!--android:layout_marginStart="80dp"-->
-            <!--android:background="@drawable/rectangle" />-->
         </RelativeLayout>
     </FrameLayout>
 

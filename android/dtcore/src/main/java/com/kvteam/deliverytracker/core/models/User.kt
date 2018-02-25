@@ -61,7 +61,7 @@ data class User(
             }
         }
 
-        val instanceIdStr = map["InstanceIdStr"] as? String
+        val instanceIdStr = map["InstanceId"] as? String
         if(instanceIdStr != null) {
             try {
                 instanceId = UUID.fromString(instanceIdStr)

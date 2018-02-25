@@ -10,7 +10,7 @@ import com.kvteam.deliverytracker.core.models.TaskModel
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -51,11 +51,11 @@ open class TasksListFragment : DeliveryTrackerFragment() {
                 false)
     }
 
-    private fun showMine() {
+    private fun showMine(index: Int) {
 
     }
 
-    private fun showAll() {
+    private fun showAll(index: Int) {
 
     }
 
@@ -68,9 +68,9 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         rvTasksList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        val categories = arrayListOf<DropdownItem>(
-                DropdownItem("Mine", 2, ::showMine),
-                DropdownItem("All", 12, ::showAll)
+        val categories = arrayListOf<DropdownTopItemInfo>(
+                DropdownTopItemInfo("Mine", 2, ::showMine),
+                DropdownTopItemInfo("All", 12, ::showAll)
         )
 
         DropdownTop(categories, activity!!)

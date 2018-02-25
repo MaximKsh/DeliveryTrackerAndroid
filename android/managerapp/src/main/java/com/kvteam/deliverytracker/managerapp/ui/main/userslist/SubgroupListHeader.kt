@@ -8,9 +8,9 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import kotlinx.android.synthetic.main.user_list_sticky_header_item.view.*
 
-class UserListAlphabeticHeader(
+class SubgroupListHeader(
         private val letter: String
-) : AbstractHeaderItem<UserListAlphabeticHeader.UserListHeaderViewHolder>() {
+) : AbstractHeaderItem<SubgroupListHeader.SubgroupListHeaderViewHolder>() {
     override fun getLayoutRes(): Int {
         return R.layout.user_list_sticky_header_item
     }
@@ -19,22 +19,22 @@ class UserListAlphabeticHeader(
         return letter.hashCode()
     }
 
-    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<out IFlexible<*>>?): UserListHeaderViewHolder {
-        return UserListHeaderViewHolder(view, adapter)
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<out IFlexible<*>>?): SubgroupListHeaderViewHolder {
+        return SubgroupListHeaderViewHolder(view, adapter)
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is UserListAlphabeticHeader) {
+        if (other is SubgroupListHeader) {
             return letter.equals(other.letter)
         }
         return false
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListHeaderViewHolder?, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: SubgroupListHeaderViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.tvLetter?.text = letter
     }
 
-    class UserListHeaderViewHolder(val view: View?, val adapter: FlexibleAdapter<out IFlexible<*>>?) : FlexibleViewHolder(view, adapter, true) {
+    class SubgroupListHeaderViewHolder(val view: View?, val adapter: FlexibleAdapter<out IFlexible<*>>?) : FlexibleViewHolder(view, adapter, true) {
         val tvLetter = view?.tvLetter
     }
 }

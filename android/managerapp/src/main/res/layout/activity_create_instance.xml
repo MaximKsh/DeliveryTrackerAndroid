@@ -1,403 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/testScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:id="@+id/testScroll"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="@color/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp"
-            android:fitsSystemWindows="true">
-            <!--
-            <FrameLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="300dp"
-                app:layout_collapseMode="parallax"/>
-            -->
             <include
                 layout="@layout/toolbar"
-                app:layout_collapseMode="pin"
-                />
+                app:layout_collapseMode="pin" />
 
-        </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scroll"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/colorWhite"
-        android:padding="30dp"
-        android:gravity="center_horizontal">
-
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            >
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="30dp">
 
-            <EditText
-                android:id="@+id/etCompanyNameField"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:theme="@style/EditTextTheme"
-                android:hint="@string/ManagerApp_CreateInstanceActivity_InstanceNameHint" />
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etCompanyNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_CreateInstanceActivity_InstanceNameHint"
+                    android:inputType="textPersonName"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <ImageView
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                android:id="@+id/ivBusinessHintIcon"
-                android:alpha="0.3"
-                android:layout_marginTop="13dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_business_black_24dp" />
+                <ImageView
+                    android:id="@+id/ivBusinessHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_business_black_24dp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            >
-
-            <EditText
-                android:id="@+id/etNameField"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:theme="@style/EditTextTheme"
-                android:hint="@string/ManagerApp_EnterNameHint" />
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_EnterNameHint"
+                    android:inputType="textPersonName"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <ImageView
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                android:id="@+id/ivNameHintIcon"
-                android:alpha="0.3"
-                android:layout_marginTop="13dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
+                <ImageView
+                    android:id="@+id/ivNameHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_assignment_ind_black_24dp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            >
-
-            <EditText
-                android:id="@+id/etSurnameField"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:theme="@style/EditTextTheme"
-                android:hint="@string/ManagerApp_EnterSurnameHint" />
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etSurnameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_EnterSurnameHint"
+                    android:inputType="textPersonName"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <ImageView
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                android:id="@+id/ivSurnameHintIcon"
-                android:alpha="0.3"
-                android:layout_marginTop="13dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
+                <ImageView
+                    android:id="@+id/ivSurnameHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_assignment_ind_black_24dp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            >
-
-            <EditText
-                android:id="@+id/etPhoneNumberField"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:ems="10"
-                android:inputType="phone"
-                android:theme="@style/EditTextTheme"
-                android:hint="@string/ManagerApp_EnterPhoneNumberHint" />
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etPatronymicField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_EnterPatronymicHint"
+                    android:inputType="textPersonName"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <ImageView
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                android:id="@+id/ivPhoneNumberHintIcon"
-                android:alpha="0.3"
-                android:layout_marginTop="13dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_phone_black_24dp" />
+                <ImageView
+                    android:id="@+id/ivPatronymicHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_assignment_ind_black_24dp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            >
-
-            <EditText
-                android:id="@+id/etPasswordField"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:theme="@style/EditTextTheme"
-                android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint" />
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etPhoneNumberField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_EnterPhoneNumberHint"
+                    android:inputType="phone"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <ImageView
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                android:id="@+id/ivPasswordHintIcon"
-                android:alpha="0.3"
-                android:layout_marginTop="13dp"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_lock_black_24dp" />
+                <ImageView
+                    android:id="@+id/ivPhoneNumberHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_phone_black_24dp" />
 
-        </RelativeLayout>
-    </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+            </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
-<!--<LinearLayout-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_width="match_parent"-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--tools:contecom.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivityvity"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--&gt;-->
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
 
-    <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar_top"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:theme="@style/ToolbarColoredBackArrow"-->
-        <!--android:background="@color/colorPrimary">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="@string/company_addition"-->
-            <!--android:gravity = "center"-->
-            <!--android:textSize="18sp"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:id="@+id/toolbar_title" />-->
-    <!--</android.support.v7.widget.Toolbar>-->
-    <!--</android.support.design.widget.AppBarLayout>-->
-
- <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical"-->
-        <!--android:background="@color/colorWhite"-->
-        <!--android:padding="30dp"-->
-        <!--android:gravity="center_horizontal">-->
-
-        <!--<RelativeLayout-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--&gt;-->
-
-            <!--<EditText-->
-                <!--android:id="@+id/etCompanyNameField"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:paddingStart="45dp"-->
-                <!--android:paddingEnd="45dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:ems="10"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:theme="@style/EditTextTheme"-->
-                <!--android:hint="@string/enter_company_name_hint" />-->
+                <EditText
+                    android:id="@+id/etPasswordField"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint"
+                    android:inputType="textPassword"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
 
 
-            <!--<ImageView-->
-                <!--android:contentDescription="@string/code_hint_icon"-->
-                <!--android:id="@+id/ivBusinessHintIcon"-->
-                <!--android:alpha="0.3"-->
-                <!--android:layout_marginTop="13dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/ic_business_black_24dp" />-->
+                <ImageView
+                    android:id="@+id/ivPasswordHintIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_lock_black_24dp" />
 
-        <!--</RelativeLayout>-->
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
-        <!--<RelativeLayout-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--&gt;-->
+</LinearLayout><!--<LinearLayout--><!--android:orientation="vertical"--><!--android:layout_height="match_parent"--><!--android:layout_width="match_parent"--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--tools:contecom.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivityvity"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--&gt;-->
 
-            <!--<EditText-->
-                <!--android:id="@+id/etNameField"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:paddingStart="45dp"-->
-                <!--android:paddingEnd="45dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:ems="10"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:theme="@style/EditTextTheme"-->
-                <!--android:hint="@string/enter_name_hint" />-->
+    <!--<android.support.design.widget.AppBarLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">--><!--<android.support.v7.widget.Toolbar--><!--android:id="@+id/toolbar_top"--><!--android:layout_height="wrap_content"--><!--android:layout_width="match_parent"--><!--android:theme="@style/ToolbarColoredBackArrow"--><!--android:background="@color/colorPrimary">-->
+
+    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:text="@string/company_addition"--><!--android:gravity = "center"--><!--android:textSize="18sp"--><!--android:textColor="@color/colorWhite"--><!--android:id="@+id/toolbar_title" />--><!--</android.support.v7.widget.Toolbar>--><!--</android.support.design.widget.AppBarLayout>-->
+
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical"--><!--android:background="@color/colorWhite"--><!--android:padding="30dp"--><!--android:gravity="center_horizontal">-->
+
+    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
+
+    <!--<EditText--><!--android:id="@+id/etCompanyNameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_company_name_hint" />-->
 
 
-            <!--<ImageView-->
-                <!--android:contentDescription="@string/code_hint_icon"-->
-                <!--android:id="@+id/ivNameHintIcon"-->
-                <!--android:alpha="0.3"-->
-                <!--android:layout_marginTop="13dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
+    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivBusinessHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_business_black_24dp" />-->
 
-        <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
 
-        <!--<RelativeLayout-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--&gt;-->
+    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
 
-            <!--<EditText-->
-                <!--android:id="@+id/etSurnameField"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:paddingStart="45dp"-->
-                <!--android:paddingEnd="45dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:ems="10"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:theme="@style/EditTextTheme"-->
-                <!--android:hint="@string/enter_surname_hint" />-->
+    <!--<EditText--><!--android:id="@+id/etNameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_name_hint" />-->
 
 
-            <!--<ImageView-->
-                <!--android:contentDescription="@string/code_hint_icon"-->
-                <!--android:id="@+id/ivSurnameHintIcon"-->
-                <!--android:alpha="0.3"-->
-                <!--android:layout_marginTop="13dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
+    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivNameHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
 
-        <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
 
-        <!--<RelativeLayout-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--&gt;-->
+    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
 
-            <!--<EditText-->
-                <!--android:id="@+id/etPhoneNumberField"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:paddingStart="45dp"-->
-                <!--android:paddingEnd="45dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:ems="10"-->
-                <!--android:inputType="phone"-->
-                <!--android:theme="@style/EditTextTheme"-->
-                <!--android:hint="@string/enter_phone_number_hint" />-->
+    <!--<EditText--><!--android:id="@+id/etSurnameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_surname_hint" />-->
 
 
-            <!--<ImageView-->
-                <!--android:contentDescription="@string/code_hint_icon"-->
-                <!--android:id="@+id/ivPhoneNumberHintIcon"-->
-                <!--android:alpha="0.3"-->
-                <!--android:layout_marginTop="13dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/ic_local_phone_black_24dp" />-->
+    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivSurnameHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
 
-        <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
 
-        <!--<RelativeLayout-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="60dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--&gt;-->
+    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
 
-            <!--<EditText-->
-                <!--android:id="@+id/etPasswordField"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:paddingStart="45dp"-->
-                <!--android:paddingEnd="45dp"-->
-                <!--android:layout_height="60dp"-->
-                <!--android:ems="10"-->
-                <!--android:inputType="textPassword"-->
-                <!--android:theme="@style/EditTextTheme"-->
-                <!--android:hint="@string/enter_password_hint" />-->
+    <!--<EditText--><!--android:id="@+id/etPhoneNumberField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="phone"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_phone_number_hint" />-->
 
 
-            <!--<ImageView-->
-                <!--android:contentDescription="@string/code_hint_icon"-->
-                <!--android:id="@+id/ivPasswordHintIcon"-->
-                <!--android:alpha="0.3"-->
-                <!--android:layout_marginTop="13dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:src="@drawable/ic_lock_black_24dp" />-->
+    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivPhoneNumberHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_local_phone_black_24dp" />-->
 
-        <!--</RelativeLayout>-->
-<!--</LinearLayout>-->
-<!--</LinearLayout>-->
+    <!--</RelativeLayout>-->
+
+    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
+
+    <!--<EditText--><!--android:id="@+id/etPasswordField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPassword"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_password_hint" />-->
+
+
+    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivPasswordHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_lock_black_24dp" />-->
+
+    <!--</RelativeLayout>--><!--</LinearLayout>--><!--</LinearLayout>-->

@@ -1,26 +1,19 @@
 package com.kvteam.deliverytracker.managerapp.ui.dropdowntop
 
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
-import android.view.View
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.R.id.ll_dropdown_top
 import kotlinx.android.synthetic.main.dropdown_top.*
-import kotlinx.android.synthetic.main.dropdown_top_item.*
-import kotlinx.android.synthetic.main.dropdown_top_item.view.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 
-class DropdownTop (val items: ArrayList<DropdownItem>, val activity: FragmentActivity) {
+class DropdownTop (val items: ArrayList<DropdownTopItemInfo>, val activity: FragmentActivity) {
+    var lastSelectedIndex = AtomicInteger(0)
     val paddingSize = 10
     val itemHeight = 45
     val density = activity.resources.displayMetrics.density
@@ -47,11 +40,22 @@ class DropdownTop (val items: ArrayList<DropdownItem>, val activity: FragmentAct
 
     var isCollapsed = false
 
-    fun onItemSelected (index: Int) {
-        closeDropdown()
+    fun update() {
+        activity.toolbar_title.text = items[lastSelectedIndex.get()].name
+        if (isCollapsed) {
+            closeDropdown()
+        }
         isCollapsed = false
-        dropdownTopItems.forEach { item -> if (item.index != index) item.reset() }
-        items[index].onSelected()
+        dropdownTopItems[lastSelectedIndex.get()].onLoadCompleted()
+        dropdownTopItems.forEach { item -> if (item.index != lastSelectedIndex.get()) item.reset() }
+    }
+
+    private fun onItemSelected (index: Int) {
+        if (index != lastSelectedIndex.get()) {
+            dropdownTopItems[lastSelectedIndex.get()].reset()
+        }
+        lastSelectedIndex.set(index)
+        items[index].onSelected(index)
     }
 
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {

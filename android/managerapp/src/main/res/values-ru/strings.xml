@@ -11,6 +11,7 @@
     <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Название компании</string>
     <string name="ManagerApp_EnterNameHint">Имя</string>
     <string name="ManagerApp_EnterSurnameHint">Фамилия</string>
+    <string name="ManagerApp_EnterPatronymicHint">Отчество</string>
     <string name="ManagerApp_EnterPhoneNumberHint">Номер телефона</string>
     <string name="ManagerApp_Toolbar_Done">Продолжить</string>
     <string name="ManagerApp_ConfirmDataActivity_Confirm">Подтвердить</string>
@@ -52,4 +53,5 @@
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Адрес не определен</string>
+    <string name="ManagerApp_InvitationItem_CancelInvitation">Отменить</string>
 </resources>

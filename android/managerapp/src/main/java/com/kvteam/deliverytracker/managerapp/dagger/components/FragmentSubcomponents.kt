@@ -6,8 +6,6 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformer
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.PerformersListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
@@ -25,23 +23,10 @@ interface AddUserFragmentSubcomponent : AndroidInjector<AddUserFragment> {
 }
 
 @Subcomponent
-interface ManagersListFragmentSubcomponent : AndroidInjector<ManagersListFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<ManagersListFragment>()
-}
-
-@Subcomponent
 interface UsersListFragmentSubcomponent : AndroidInjector<UsersListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<UsersListFragment>()
 }
-
-@Subcomponent
-interface PerformersListFragmentSubcomponent : AndroidInjector<PerformersListFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<PerformersListFragment>()
-}
-
 
 @Subcomponent
 interface AllTasksListFragmentSubcomponent : AndroidInjector<AllTasksListFragment> {

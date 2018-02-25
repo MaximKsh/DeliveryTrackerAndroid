@@ -10,8 +10,6 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformer
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.ManagersListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.PerformersListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -29,15 +27,6 @@ abstract class LocationFragmentModule {
 
 }
 
-@Module(subcomponents = arrayOf(ManagersListFragmentSubcomponent::class))
-abstract class ManagersListFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(ManagersListFragment::class)
-    internal abstract fun managersListFragmentInjector(builder: ManagersListFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-
-}
 
 @Module(subcomponents = arrayOf(UsersListFragmentSubcomponent::class))
 abstract class UsersListFragmentModule {
@@ -45,16 +34,6 @@ abstract class UsersListFragmentModule {
     @IntoMap
     @FragmentKey(UsersListFragment::class)
     internal abstract fun usersListFragmentInjector(builder: UsersListFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-
-}
-
-@Module(subcomponents = arrayOf(PerformersListFragmentSubcomponent::class))
-abstract class PerformersListFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(PerformersListFragment::class)
-    internal abstract fun performersListFragmentInjector(builder: PerformersListFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 
 }

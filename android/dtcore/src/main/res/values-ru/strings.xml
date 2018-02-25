@@ -43,4 +43,8 @@
     <string name="Core_Session_Error_RefreshUserInfo">Ошибка обновления пользовательких данных</string>
     <string name="Core_Session_Error_EditUserInfo">Ошибка изменения пользовательских данных</string>
     <string name="Core_Session_Error_Unauthorized">Вы не авторизованы</string>
+
+    <string name="ServerMessage_Views_ManagersView">Менеджеры</string>
+    <string name="ServerMessage_Views_PerformersView">Исполнители</string>
+    <string name="ServerMessage_Views_InvitationsView">Приглашения</string>
 </resources>

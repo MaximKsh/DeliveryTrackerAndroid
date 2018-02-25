@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_edit"
-        android:title="@string/ManagerApp_Toolbar_Edit"
-        app:showAsAction="collapseActionView"/>
-
-    <item
         android:id="@+id/action_add"
         android:title="@string/ManagerApp_Toolbar_AddUser"
         app:showAsAction="collapseActionView"/>
@@ -15,11 +10,6 @@
     <item
         android:id="@+id/action_show_on_map"
         android:title="@string/ManagerApp_Toolbar_ShowOnMap"
-        app:showAsAction="collapseActionView"/>
-
-    <item
-        android:id="@+id/action_remove"
-        android:title="@string/ManagerApp_Toolbar_DeleteUser"
         app:showAsAction="collapseActionView"/>
 
 </menu>
