@@ -137,10 +137,11 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
     }
 
     override fun onItemClick(position: Int): Boolean {
+        Log.i("POSITION", position.toString())
         return false
     }
 
-    private fun getDatabaseList(): List<UserListItem> {
+    private fun getDatabaseList(): MutableList<UserListItem> {
         val userList = ArrayList<UserListItem>()
 
         val names = Array<String>(10) { NameGenerator.generateName() }.sortedArray()

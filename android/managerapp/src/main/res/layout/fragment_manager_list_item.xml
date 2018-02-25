@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent" >
         <TextView
+            android:id="@+id/tvDeleteUser"
             android:layout_width="wrap_content"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rlUserItem"
             android:layout_width="match_parent"
             android:padding="10dp"
             android:layout_height="wrap_content">
