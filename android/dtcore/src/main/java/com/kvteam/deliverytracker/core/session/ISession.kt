@@ -4,6 +4,7 @@ import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
+import java.util.*
 
 interface ISession {
     fun getToken(): String?
@@ -20,9 +21,10 @@ interface ISession {
     fun changePassword(old: CodePassword,
                        new: CodePassword) : NetworkResult<AccountResponse>
 
+    val id: UUID?
     val code: String?
     val surname: String?
     val name: String?
     val phoneNumber: String?
-    val role: String?
+    val role: UUID?
 }

@@ -18,6 +18,8 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownItem
+import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
@@ -42,7 +44,6 @@ import eu.davidea.flexibleadapter.SelectableAdapter
 import eu.davidea.flexibleadapter.helpers.ActionModeHelper
 import eu.davidea.flexibleadapter.items.IFlexible
 import java.util.*
-
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {

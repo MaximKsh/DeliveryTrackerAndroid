@@ -5,12 +5,10 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
-import com.kvteam.deliverytracker.core.webservice.ViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_managers_list.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.awt.font.NumericShaper
 import javax.inject.Inject
 
 class ManagersListFragment: UsersListFragment() {
