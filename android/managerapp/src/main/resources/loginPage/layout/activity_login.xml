@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:padding="30dp"
+    android:gravity="center_horizontal"
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity">
+
+
+    <ImageView
+        android:contentDescription="@string/ManagerApp_MainActivity"
+        android:id="@+id/imageView"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/main_logo"
+        android:layout_marginTop="50dp"
+        />
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etLoginField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="text"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/ManagerApp_LoginActivity_EnterCodeHint" />
+
+
+        <ImageView
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:id="@+id/ivInvitationHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_insert_invitation_black_24dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etPasswordField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint" />
+
+
+        <ImageView
+            android:contentDescription="@string/ManagerApp_PasswordHintIcon"
+            android:id="@+id/ivPasswordHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_lock_black_24dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ManagerApp_LoginActivity_Login"
+        android:theme="@style/PrimaryButtonTheme"
+        />
+
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/ManagerApp_LoginActivity_ForgotPassword" />
+
+    <LinearLayout
+        android:gravity="bottom|center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ManagerApp_LoginActivity_CreateInstance" />
+
+        <Button
+            android:id="@+id/btnAddCompany"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ManagerApp_LoginActivity_Register"
+            android:background="@drawable/shape_border"
+            android:theme="@style/OutlineButtonTheme"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class ConfirmDataActivity : DeliveryTrackerActivity() {
     private val surnameKey = "surname"
-    private val nameKey = "name"
+    private val nameKey = "caption"
     private val phoneNumberKey = "phoneNumber"
 
     @Inject
@@ -78,7 +78,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_confirm_data_menu, menu)
         return true
     }
 

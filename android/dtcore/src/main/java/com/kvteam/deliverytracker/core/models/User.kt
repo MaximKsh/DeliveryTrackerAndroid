@@ -8,25 +8,25 @@ import java.util.*
 
 class User() : ModelBase(), Parcelable {
 
-    @SerializedName("Code")
+    @SerializedName("Code", alternate = ["code"])
     var code: String? = null
 
-    @SerializedName("Surname")
+    @SerializedName("Surname", alternate = ["surname"])
     var surname: String? = null
 
-    @SerializedName("Name")
+    @SerializedName("Name", alternate = ["name"])
     var name: String? = null
 
-    @SerializedName("Patronymic")
+    @SerializedName("Patronymic", alternate = ["patronymic"])
     var patronymic: String? = null
 
-    @SerializedName("PhoneNumber")
+    @SerializedName("PhoneNumber", alternate = ["phoneNumber"])
     var phoneNumber: String? = null
 
-    @SerializedName("Role")
+    @SerializedName("Role", alternate = ["role"])
     var role: UUID? = null
 
-    @SerializedName("Geoposition")
+    @SerializedName("Geoposition", alternate = ["geoposition"])
     @Embedded
     var geoposition: Geoposition? = null
 

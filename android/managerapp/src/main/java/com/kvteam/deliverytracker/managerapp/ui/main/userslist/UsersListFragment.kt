@@ -5,30 +5,26 @@ import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.models.User
-import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTopItemInfo
-import com.kvteam.deliverytracker.managerapp.ui.dropdowntop.DropdownTop
-import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_user_list.*
-import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
-import android.view.ViewGroup
-import kotlin.collections.ArrayList
 import android.util.Log
+import android.view.*
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Invitation
+import com.kvteam.deliverytracker.core.models.User
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
+import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTop
+import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
+import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.SelectableAdapter
-import eu.davidea.flexibleadapter.helpers.ActionModeHelper
+import kotlinx.android.synthetic.main.fragment_user_list.*
+import javax.inject.Inject
 
 // TODO: rename managersList xml to userslist
 open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
@@ -44,13 +40,8 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
     // TODO: выбирать добавляемую роль по сложной логике
     private var role: Role = Role.Manager
-    var isInEditMode: Boolean = false
 
     private lateinit var dropDownTop: DropdownTop
-
-    lateinit var mAddMenuItem: MenuItem
-    lateinit var mRemoveMenuItem: MenuItem
-    lateinit var mEditMenuItem: MenuItem
 
     private lateinit var mAdapter: FlexibleAdapter<*>
 
@@ -113,7 +104,10 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                 }.toMutableList()
     }
 
-    private fun updateList(viewName: String, type: String?, groupIndex: Int) {
+    private fun updateList(viewName: String,
+                           type: String?,
+                           groupIndex: Int,
+                           afterUpdate: (() -> Unit) = {}) {
         invokeAsync({
             viewWebservice.getViewResult("UserViewGroup", viewName)
         }, { result ->
@@ -126,7 +120,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                             adapter.updateDataSet(userList)
                         } else {
                             mAdapter = UserListFlexibleAdapter(userList)
-                            rvUsersList.adapter = mAdapter
+                            initAdapter()
                         }
                     }
                     "Invitation" -> {
@@ -136,13 +130,23 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                             adapter.updateDataSet(invitationList)
                         } else {
                             mAdapter = UserInvitationListFlexibleAdapter(invitationList)
-                            rvUsersList.adapter = mAdapter
+                            initAdapter()
                         }
                     }
                 }
+
+                afterUpdate()
                 dropDownTop.update()
             }
         })
+    }
+
+    private fun initAdapter() {
+        mAdapter.setDisplayHeadersAtStartUp(true)
+        //mAdapter.setStickyHeaders(true)
+        mAdapter.mode = SelectableAdapter.Mode.SINGLE
+        mAdapter.addListener(this)
+        rvUsersList.adapter = mAdapter
     }
 
     private fun setCategories() {
@@ -154,9 +158,12 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
                 val categoriesEnumeration = digest.map { category ->
 
-                    DropdownTopItemInfo(lm.getString(category.second.caption!!), category.second.count!!.toInt(), { index ->
-                        updateList(category.first, category.second.entityType, index)
-                    })
+                    DropdownTopItemInfo(
+                            category.first,
+                            category.second.entityType ?: EMPTY_STRING,
+                            lm.getString(category.second.caption!!),
+                            category.second.count!!.toInt(),
+                            { index -> updateList(category.first, category.second.entityType, index)})
                 }
                 val categories = ArrayList(categoriesEnumeration)
                 dropDownTop = DropdownTop(categories, activity!!)
@@ -173,27 +180,20 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                 LinearLayoutManager.VERTICAL,
                 false)
 
-        mAdapter = UserListFlexibleAdapter(mutableListOf())
-
-        mAdapter.mode = SelectableAdapter.Mode.SINGLE
-
-        mAdapter.addListener(this)
-
         ptrFrame.setPtrHandler(object : PtrHandler {
             override fun onRefreshBegin(frame: PtrFrameLayout?) {
-                frame?.postDelayed(Runnable { ptrFrame.refreshComplete() }, 1800)
+                val index = dropDownTop.lastSelectedIndex.get()
+                val selectedItem = dropDownTop.items[index]
+                updateList(selectedItem.viewName, selectedItem.entityType, index, {ptrFrame.refreshComplete()})
             }
 
             override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header)
             }
         })
 
-        mAdapter.setDisplayHeadersAtStartUp(true)
-        mAdapter.setStickyHeaders(true)
-
-        rvUsersList.adapter = mAdapter
-
+        mAdapter = UserListFlexibleAdapter(mutableListOf())
+        initAdapter()
         setCategories()
     }
 
@@ -202,68 +202,6 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
         if (savedInstanceState == null) {
             return
         }
-    }
-
-    private fun startEditMode() {
-        this.isInEditMode = true
-//        this.adapter.value?.items?.forEach { item -> item.isInEditMode = true }
-//        this.adapter.value?.notifyDataSetChanged()
-    }
-
-    private fun stopEditMode() {
-        this.isInEditMode = false
-//        this.adapter.value?.items?.forEach { item -> item.isInEditMode = false }
-//        this.adapter.value?.notifyDataSetChanged()
-    }
-
-    private fun clearSelectedUsers() {
-//        this.adapter.value?.items?.forEach { item -> item.isSelected = false }
-//        this.adapter.value?.notifyDataSetChanged()
-    }
-
-    private fun setEditButtonVisible() {
-        mAddMenuItem.isVisible = false
-        mEditMenuItem.isVisible = true
-        mRemoveMenuItem.isVisible = false
-    }
-
-    private fun setRemoveButtonVisible() {
-        mAddMenuItem.isVisible = false
-        mEditMenuItem.isVisible = false
-        mRemoveMenuItem.isVisible = true
-    }
-
-    private fun setAddButtonVisible() {
-        mAddMenuItem.isVisible = true
-        mEditMenuItem.isVisible = false
-        mRemoveMenuItem.isVisible = false
-    }
-
-    private fun setCancelButtonVisible(visibility: Boolean) {
-        this.activity?.toolbar_left_action?.text =
-                if (visibility) resources.getString(R.string.ManagerApp_Cancel)
-                else EMPTY_STRING
-    }
-
-    // MENU CALLBACKS
-    override fun onPrepareOptionsMenu(menu: Menu) {
-//        if (isInEditMode) {
-//            this.setCancelButtonVisible(true)
-//            if (this.adapter.value?.items!!.any { userListModel -> userListModel.isSelected }) {
-//                this.setRemoveButtonVisible()
-//            } else {
-//                this.setAddButtonVisible()
-//            }
-//        } else {
-//            this.setCancelButtonVisible(false)
-//            this.setEditButtonVisible()
-//        }
-        super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        this.setCancelButtonVisible(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -279,17 +217,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_managers_tab_menu, menu)
-
-        this.mAddMenuItem = menu.findItem(R.id.action_add)
-
-        this.activity?.toolbar_left_action?.setOnClickListener { _ ->
-            this.setCancelButtonVisible(false)
-            this.setEditButtonVisible()
-            this.stopEditMode()
-            this.clearSelectedUsers()
-        }
-
+        inflater.inflate(R.menu.toolbar_user_list_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

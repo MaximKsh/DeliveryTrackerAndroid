@@ -3,14 +3,8 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.IFlexible
 import com.chauthai.swipereveallayout.ViewBinderHelper
-import android.widget.TextView
-import com.kvteam.deliverytracker.managerapp.R.id.textView
-import com.chauthai.swipereveallayout.SwipeRevealLayout
-import eu.davidea.flexibleadapter.items.IHeader
+import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
 
 

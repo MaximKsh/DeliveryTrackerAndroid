@@ -25,6 +25,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res',
+                            'src/main/resources/addUserPage',
+                            'src/main/resources/common',
+                            'src/main/resources/confirmPage',
+                            'src/main/resources/createInstancePage',
+                            'src/main/resources/loginPage',
+                            'src/main/resources/usersListPage',
+                    ]
+        }
+    }
 }
 
 kapt {
@@ -76,3 +90,4 @@ kotlin {
         coroutines "enable"
     }
 }
+

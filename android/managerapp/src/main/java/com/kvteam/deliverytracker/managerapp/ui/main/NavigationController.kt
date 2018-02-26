@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment

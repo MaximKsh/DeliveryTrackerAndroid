@@ -2,14 +2,13 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.graphics.Color
 import android.view.View
+import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.viewholders.FlexibleViewHolder
-import com.amulyakhare.textdrawable.TextDrawable
-import com.kvteam.deliverytracker.core.models.Invitation
 import eu.davidea.flexibleadapter.utils.DrawableUtils
+import eu.davidea.viewholders.FlexibleViewHolder
 import kotlinx.android.synthetic.main.fragment_invitation_list_item.view.*
 
 

@@ -11,7 +11,6 @@ import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubc
 import com.kvteam.deliverytracker.managerapp.dagger.components.MainActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
-import com.kvteam.deliverytracker.managerapp.ui.createinstance.LocationFragment
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -37,9 +36,6 @@ abstract class CreateInstanceActivityModule {
     internal abstract fun createInstanceActivityInjector(builder: CreateInstanceActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(LocationFragmentModule::class))
-    internal abstract fun locationFragment(): LocationFragment
 
 }
 

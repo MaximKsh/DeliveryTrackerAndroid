@@ -11,7 +11,6 @@ import com.kvteam.deliverytracker.core.common.EntityResult
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_details.*
@@ -33,8 +32,8 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    @Inject
-    lateinit var taskRepository: ITaskRepository
+    //@Inject
+    //lateinit var taskRepository: ITaskRepository
 
     var taskId: UUID? = null
         private set

@@ -2,14 +2,12 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.tasks.ITaskRepository
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
 class MyTasksListFragment: TasksListFragment() {
-    @Inject
-    lateinit var taskRepository: ITaskRepository
+    //@Inject
+    //lateinit var taskRepository: ITaskRepository
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

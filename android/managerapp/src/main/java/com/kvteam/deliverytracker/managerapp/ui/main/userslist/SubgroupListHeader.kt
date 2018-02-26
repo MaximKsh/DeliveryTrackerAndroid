@@ -6,13 +6,13 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
-import kotlinx.android.synthetic.main.user_list_sticky_header_item.view.*
+import kotlinx.android.synthetic.main.subgroup_list_header.view.*
 
 class SubgroupListHeader(
         private val letter: String
 ) : AbstractHeaderItem<SubgroupListHeader.SubgroupListHeaderViewHolder>() {
     override fun getLayoutRes(): Int {
-        return R.layout.user_list_sticky_header_item
+        return R.layout.subgroup_list_header
     }
 
     override fun hashCode(): Int {
