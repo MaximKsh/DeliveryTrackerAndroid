@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 open class ModelBase() : IMapDeserializable {
-    @SerializedName("Id")
+    @SerializedName("Id", alternate = ["id"])
     var id: UUID? = null
-    @SerializedName("InstanceId")
+    @SerializedName("InstanceId", alternate = ["instanceId"])
     var instanceId: UUID? = null
 
     override fun fromMap(map: Map<*, *>) {

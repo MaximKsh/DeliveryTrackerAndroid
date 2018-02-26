@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 class ClientAddress : CollectionModelBase() {
 
-    @SerializedName("RawAddress")
+    @SerializedName("RawAddress", alternate = ["rawAddress"])
     var rawAddress: String? = null
-    @SerializedName("Geoposition")
+    @SerializedName("Geoposition", alternate = ["geoposition"])
     var geoposition: Geoposition? = null
 
     override fun fromMap(map: Map<*, *>) {

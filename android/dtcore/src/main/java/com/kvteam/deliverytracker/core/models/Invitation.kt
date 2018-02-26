@@ -6,22 +6,22 @@ import java.util.*
 
 class Invitation : ModelBase() {
 
-    @SerializedName("InvitationCode")
+    @SerializedName("InvitationCode", alternate = ["invitationCode"])
     var invitationCode: String? = null
 
-    @SerializedName("CreatorId")
+    @SerializedName("CreatorId", alternate = ["creatorId"])
     var creatorId: UUID? = null
 
-    @SerializedName("Created")
+    @SerializedName("Created", alternate = ["created"])
     var created: DateTime? = null
 
-    @SerializedName("Expires")
+    @SerializedName("Expires", alternate = ["expires"])
     var expires: DateTime? = null
 
-    @SerializedName("Role")
+    @SerializedName("Role", alternate = ["role"])
     var role: UUID? = null
 
-    @SerializedName("PreliminaryUser")
+    @SerializedName("PreliminaryUser", alternate = ["preliminaryUser"])
     var preliminaryUser: User? = null
 
     override fun fromMap(map: Map<*, *>) {

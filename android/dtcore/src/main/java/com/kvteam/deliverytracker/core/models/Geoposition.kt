@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName
 
 class Geoposition () : Parcelable, IMapDeserializable {
 
-    @SerializedName("Longitude")
+    @SerializedName("Longitude", alternate = ["longiture"])
     var longitude: Double = 0.0
-    @SerializedName("Latitude")
+    @SerializedName("Latitude", alternate = ["latitude"])
     var latitude: Double = 0.0
 
     companion object {

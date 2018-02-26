@@ -5,13 +5,13 @@ import java.util.*
 
 class Instance : IMapDeserializable {
 
-    @SerializedName("Id")
+    @SerializedName("Id", alternate = ["id"])
     var id: UUID? = null
 
-    @SerializedName("Name")
+    @SerializedName("Name", alternate = ["name"])
     var name: String? = null
 
-    @SerializedName("CreatorId")
+    @SerializedName("CreatorId", alternate = ["creatorId"])
     var creatorId: UUID? = null
 
     override fun fromMap(map: Map<*, *>) {

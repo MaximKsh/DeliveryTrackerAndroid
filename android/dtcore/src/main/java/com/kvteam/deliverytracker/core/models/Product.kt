@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 
 class Product : ModelBase() {
-    @SerializedName("VendorCode")
+    @SerializedName("VendorCode", alternate = ["vendorCode"])
     var vendorCode: String? = null
-    @SerializedName("Name")
+    @SerializedName("Name", alternate = ["name"])
     var name: String? = null
-    @SerializedName("Description")
+    @SerializedName("Description", alternate = ["description"])
     var description: String? = null
-    @SerializedName("Cost")
+    @SerializedName("Cost", alternate = ["cost"])
     var cost: BigDecimal? = null
 
     override fun fromMap(map: Map<*, *>) {

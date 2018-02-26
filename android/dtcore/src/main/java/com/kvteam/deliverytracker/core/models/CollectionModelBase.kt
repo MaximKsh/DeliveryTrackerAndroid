@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 open class CollectionModelBase : ModelBase() {
-    @SerializedName("ParentId")
+    @SerializedName("ParentId", alternate = ["parentId"])
     var parentId: UUID? = null
     @SerializedName("Action")
     var action: CollectionEntityAction = CollectionEntityAction.None
