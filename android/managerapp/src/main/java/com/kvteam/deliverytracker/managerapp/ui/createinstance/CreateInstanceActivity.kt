@@ -52,14 +52,15 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                 invokeAsync({
                     val instance = Instance()
                     instance.name = etCompanyNameField.text.toString()
+                    val user = User()
+                    user.surname = etSurnameField.text.toString()
+                    user.name = etNameField.text.toString()
+                    user.patronymic = etPatronymicField.text.toString()
+                    user.phoneNumber = etPhoneNumberField.text.toString()
+                    user.role = Role.Creator.id
                     instanceWebservice.create(
                             instance,
-                            User(
-                                    surname = etSurnameField.text.toString(),
-                                    name = etNameField.text.toString(),
-                                    patronymic = etPatronymicField.text.toString(),
-                                    phoneNumber = etPhoneNumberField.text.toString(),
-                                    role = Role.Creator.id),
+                            user,
                             CodePassword(
                                     password = etPasswordField.text.toString())
                     )

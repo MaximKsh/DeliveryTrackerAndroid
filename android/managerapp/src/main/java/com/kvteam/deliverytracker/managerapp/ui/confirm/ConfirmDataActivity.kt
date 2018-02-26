@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.async.invokeAsync
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.BasicResult
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
@@ -62,10 +62,10 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 finish()
             }
             action_done -> {
-                val userInfo = User(
-                        surname = etSurnameField.text.toString(),
-                        name = etNameField.text.toString(),
-                        phoneNumber = etPhoneNumberField.text.toString())
+                val userInfo = User()
+                userInfo.surname = etSurnameField.text.toString()
+                userInfo.name = etNameField.text.toString()
+                userInfo.phoneNumber = etPhoneNumberField.text.toString()
 
                 invokeAsync({
                     session.editUserInfo(userInfo)

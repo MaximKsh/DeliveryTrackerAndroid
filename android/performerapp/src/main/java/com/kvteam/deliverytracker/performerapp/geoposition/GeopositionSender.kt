@@ -42,7 +42,7 @@ class GeopositionSender : BroadcastReceiver() {
                                         pos,
                                         true)
                             } catch (ex: Exception) {
-                                Log.e("Update position", "${ex.message}\n${ex.stackTrace}")
+                                Log.e("Update geoposition", "${ex.message}\n${ex.stackTrace}")
                             }
                         })
                     }

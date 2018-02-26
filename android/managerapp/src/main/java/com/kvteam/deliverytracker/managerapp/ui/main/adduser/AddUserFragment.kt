@@ -127,12 +127,12 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
         when (item.itemId) {
             R.id.action_finish -> {
                 invokeAsync({
-                    invitationWebservice.create(User(
-                            name = etNameField.text.toString(),
-                            surname = etSurnameField.text.toString(),
-                            phoneNumber = etPhoneNumberField.text.toString(),
-                            role = selectedRole?.id
-                    ))
+                    val user = User()
+                    user.name = etNameField.text.toString()
+                    user.surname = etSurnameField.text.toString()
+                    user.phoneNumber = etPhoneNumberField.text.toString()
+                    user.role = selectedRole?.id
+                    invitationWebservice.create(user)
                 }, {
                    if (it.success) {
                        val view =  this@AddUserFragment.activity!!.currentFocus

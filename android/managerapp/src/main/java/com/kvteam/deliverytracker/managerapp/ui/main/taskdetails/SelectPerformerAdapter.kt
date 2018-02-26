@@ -48,7 +48,7 @@ class SelectPerformerAdapter(
         holder.tvSurname.text = user.surname
         holder.tvName.text = user.name
         holder.tvPhone.text = user.phoneNumber
-        holder.tvAddress.text = decodeLocation(user.position)
+        holder.tvAddress.text = decodeLocation(user.geoposition)
         holder.llSelectPerformer.setOnClickListener{ onClick?.invoke(user) }
     }
 

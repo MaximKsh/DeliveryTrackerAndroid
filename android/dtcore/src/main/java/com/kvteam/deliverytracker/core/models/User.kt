@@ -3,19 +3,43 @@ package com.kvteam.deliverytracker.core.models
 import android.arch.persistence.room.Embedded
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
-data class User(
-        var id: UUID? = null,
-        var code: String? = null,
-        var surname: String? = null,
-        var name: String? = null,
-        var patronymic: String? = null,
-        var phoneNumber: String? = null,
-        var role: UUID? = null,
-        var instanceId: UUID? = null,
-        @Embedded var position: Geoposition? = null) : Parcelable, IMapDeserializable {
+class User() : ModelBase(), Parcelable {
 
+    @SerializedName("Code")
+    var code: String? = null
+
+    @SerializedName("Surname")
+    var surname: String? = null
+
+    @SerializedName("Name")
+    var name: String? = null
+
+    @SerializedName("Patronymic")
+    var patronymic: String? = null
+
+    @SerializedName("PhoneNumber")
+    var phoneNumber: String? = null
+
+    @SerializedName("Role")
+    var role: UUID? = null
+
+    @SerializedName("Geoposition")
+    @Embedded
+    var geoposition: Geoposition? = null
+
+    override fun fromMap(map: Map<*, *>) {
+        super.fromMap(map)
+        code = map["Code"] as? String
+        role = deserializeUUIDFromMap("Role", map)
+        surname = map["Surname"] as? String
+        name = map["Name"] as? String
+        patronymic = map["Patronymic"] as? String
+        phoneNumber = map["PhoneNumber"] as? String
+        geoposition = deserializeObjectFromMap("Geoposition", map, {Geoposition()})
+    }
 
     companion object {
         @JvmField
@@ -26,17 +50,17 @@ data class User(
         }
     }
 
-    constructor(parcelIn: Parcel) : this(
-            parcelIn.readSerializable() as UUID,
-            parcelIn.readString(),
-            parcelIn.readString(),
-            parcelIn.readString(),
-            parcelIn.readString(),
-            parcelIn.readString(),
-            parcelIn.readSerializable() as? UUID?,
-            parcelIn.readSerializable() as? UUID?,
-            parcelIn.readParcelable(Geoposition::class.java.classLoader)
-    )
+    constructor(parcelIn: Parcel) : this() {
+        id = parcelIn.readSerializable() as UUID
+        code = parcelIn.readString()
+        surname = parcelIn.readString()
+        name = parcelIn.readString()
+        patronymic = parcelIn.readString()
+        phoneNumber = parcelIn.readString()
+        role = parcelIn.readSerializable() as? UUID?
+        instanceId = parcelIn.readSerializable() as? UUID?
+        geoposition = parcelIn.readParcelable(Geoposition::class.java.classLoader)
+    }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeSerializable(id)
@@ -47,32 +71,9 @@ data class User(
         dest.writeString(phoneNumber)
         dest.writeSerializable(role)
         dest.writeSerializable(instanceId)
-        dest.writeParcelable(position, flags)
+        dest.writeParcelable(geoposition, flags)
     }
 
     override fun describeContents() = 0
 
-    override fun fromMap(map: Map<*, *>) {
-        val idStr = map["Id"] as? String
-        if(idStr != null) {
-            try {
-                id = UUID.fromString(idStr)
-            } catch (e: Exception) {
-            }
-        }
-
-        val instanceIdStr = map["InstanceId"] as? String
-        if(instanceIdStr != null) {
-            try {
-                instanceId = UUID.fromString(instanceIdStr)
-            } catch (e: Exception) {
-            }
-        }
-        code = map["Code"] as? String
-        role = map["Role"] as? UUID?
-        surname = map["Surname"] as? String
-        name = map["Name"] as? String
-        patronymic = map["Patronymic"] as? String
-        phoneNumber = map["PhoneNumber"] as? String
-    }
 }

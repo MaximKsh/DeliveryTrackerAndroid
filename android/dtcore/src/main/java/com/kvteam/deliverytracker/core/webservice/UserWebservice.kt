@@ -26,8 +26,9 @@ class UserWebservice(private val webservice: IWebservice) : IUserWebservice {
     }
 
     override fun edit(id: UUID, newData: User): NetworkResult<UserResponse> {
+        newData.id = id
         val request = UserRequest()
-        request.user = newData.copy(id = id)
+        request.user = newData
 
         val result = webservice.post<UserResponse>(
                 "$userBaseUrl/edit",
