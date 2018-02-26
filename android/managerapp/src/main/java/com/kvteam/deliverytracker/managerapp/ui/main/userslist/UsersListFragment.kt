@@ -156,7 +156,9 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
             if (result.success) {
                 val digest = result.entity?.digest?.toList()!!
 
-                val categoriesEnumeration = digest.map { category ->
+                val categoriesEnumeration = digest
+                        .sortedBy { it.second.order ?: Int.MAX_VALUE }
+                        .map { category ->
 
                     DropdownTopItemInfo(
                             category.first,
