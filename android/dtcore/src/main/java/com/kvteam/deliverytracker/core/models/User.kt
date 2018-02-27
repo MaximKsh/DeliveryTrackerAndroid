@@ -30,6 +30,9 @@ class User() : ModelBase(), Parcelable {
     @Embedded
     var geoposition: Geoposition? = null
 
+    @SerializedName("Online", alternate = ["online"])
+    var online: Boolean = false
+
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)
         code = map["Code"] as? String
@@ -39,6 +42,7 @@ class User() : ModelBase(), Parcelable {
         patronymic = map["Patronymic"] as? String
         phoneNumber = map["PhoneNumber"] as? String
         geoposition = deserializeObjectFromMap("Geoposition", map, {Geoposition()})
+        online = map["Online"] as? Boolean ?: false
     }
 
     companion object {
@@ -60,6 +64,7 @@ class User() : ModelBase(), Parcelable {
         role = parcelIn.readSerializable() as? UUID?
         instanceId = parcelIn.readSerializable() as? UUID?
         geoposition = parcelIn.readParcelable(Geoposition::class.java.classLoader)
+        online = parcelIn.readByte() == 1.toByte()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -72,6 +77,7 @@ class User() : ModelBase(), Parcelable {
         dest.writeSerializable(role)
         dest.writeSerializable(instanceId)
         dest.writeParcelable(geoposition, flags)
+        dest.writeByte(if (online) 1 else  0)
     }
 
     override fun describeContents() = 0
