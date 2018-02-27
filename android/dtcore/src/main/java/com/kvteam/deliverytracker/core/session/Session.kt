@@ -14,6 +14,7 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
+import com.kvteam.deliverytracker.core.webservice.RawNetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 import java.util.*
@@ -22,6 +23,7 @@ class Session (
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
         context: Context) : ISession {
+
 
     private val gson = Gson()
     private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
@@ -86,6 +88,30 @@ class Session (
         val token = accountManager.peekAuthToken(account, sessionInfo.accountType)
         if(token != null) {
             accountManager.invalidateAuthToken(sessionInfo.accountType, token)
+        }
+    }
+
+    override fun checkSession(): CheckSessionResult {
+        val url = baseUrl + "/api/account/checkSession"
+        var headers = getAuthorizationHeaders(this) ?: return CheckSessionResult.Wrong
+        var result = httpManager.get(url, headers)
+        // Если нет доступа в сеть, дальше нет смысла что-либо делать
+        if(!result.fetched) {
+            return CheckSessionResult.Undefined
+        }
+
+        if (result.statusCode == 403) {
+            invalidateToken()
+            headers = getAuthorizationHeaders(this) ?: return CheckSessionResult.Wrong
+            result = httpManager.get(url, headers)
+        }
+        if(!result.fetched) {
+            return CheckSessionResult.Undefined
+        }
+        return when(result.statusCode) {
+            200 -> CheckSessionResult.Correct
+            403 -> CheckSessionResult.Wrong
+            else -> CheckSessionResult.Undefined
         }
     }
 

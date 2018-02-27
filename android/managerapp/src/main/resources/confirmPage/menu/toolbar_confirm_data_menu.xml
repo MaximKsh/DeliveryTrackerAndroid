@@ -4,7 +4,7 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_done"
-        android:icon="@drawable/ic_done_white_24dp"
+        android:icon="@drawable/ic_done_black_24dp"
         android:title="@string/ManagerApp_Toolbar_Done"
         app:showAsAction="ifRoom"/>
 

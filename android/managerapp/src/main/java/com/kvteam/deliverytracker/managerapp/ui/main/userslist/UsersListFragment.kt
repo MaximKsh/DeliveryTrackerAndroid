@@ -154,12 +154,11 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
             viewWebservice.getDigest("UserViewGroup")
         }, { result ->
             if (result.success) {
-                val digest = result.entity?.digest?.toList()!!
+                val digest = result.entity?.digest
+                        ?.toList()
+                        ?.sortedBy { it.second.order ?: Int.MAX_VALUE }!!
 
-                val categoriesEnumeration = digest
-                        .sortedBy { it.second.order ?: Int.MAX_VALUE }
-                        .map { category ->
-
+                val categoriesEnumeration = digest.map { category ->
                     DropdownTopItemInfo(
                             category.first,
                             category.second.entityType ?: EMPTY_STRING,

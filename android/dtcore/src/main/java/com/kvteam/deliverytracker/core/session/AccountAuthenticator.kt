@@ -63,7 +63,7 @@ class AccountAuthenticator(
             // В кэше токена нет, логинимся по новой
             val codePassword = CodePassword(account.name, am.getPassword(account))
             val accountResponse = webservice.post<AccountResponse>(
-                    "/api/session/login",
+                    "/api/account/login",
                     AccountRequest(codePassword = codePassword),
                     AccountResponse::class.java)
             authToken = accountResponse.entity?.token

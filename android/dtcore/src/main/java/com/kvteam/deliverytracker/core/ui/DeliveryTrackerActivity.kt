@@ -3,6 +3,8 @@ package com.kvteam.deliverytracker.core.ui
 import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.session.CheckSessionResult
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import dagger.android.AndroidInjection
@@ -31,13 +33,29 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (checkHasAccountOnResume
-                && !dtSession.hasAccount()) {
-            val intent = Intent(
-                    this,
-                    (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
-            startActivity(intent)
-            finish()
+        if (checkHasAccountOnResume) {
+            if(!dtSession.hasAccount()) {
+                val intent = Intent(
+                        this,
+                        (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
+                startActivity(intent)
+                finish()
+            } else {
+                invokeAsync({
+                    dtSession.checkSession()
+                }, {
+                    if(it == CheckSessionResult.Wrong) {
+                        dtSession.logout()
+                        val intent = Intent(
+                                this@DeliveryTrackerActivity,
+                                (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
+                        startActivity(intent)
+                        finish()
+                    }
+                })
+            }
+
+
         }
     }
 }

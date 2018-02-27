@@ -27,8 +27,8 @@ class Webservice(context: Context,
                 else mapOf()
         var result = httpManager.get(baseUrl + url, headers)
 
-        // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
-        if(withToken && result.statusCode == 401) {
+        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
+        if(withToken && result.statusCode == 403) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
             result = httpManager.get(baseUrl + url, headers)
@@ -45,8 +45,8 @@ class Webservice(context: Context,
                 else mapOf()
         var result = httpManager.get(baseUrl + url, headers)
 
-        // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
-        if(withToken && result.statusCode == 401) {
+        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
+        if(withToken && result.statusCode == 403) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return NetworkResult()
             result = httpManager.get(baseUrl + url, headers)
@@ -69,7 +69,7 @@ class Webservice(context: Context,
                 headers,
                 "application/json")
         // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
-        if(withToken && result.statusCode == 401) {
+        if(withToken && result.statusCode == 403) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
             result = httpManager.post(
@@ -96,8 +96,8 @@ class Webservice(context: Context,
                 body,
                 headers,
                 "application/json")
-        // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
-        if(withToken && result.statusCode == 401) {
+        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
+        if(withToken && result.statusCode == 403) {
             session.invalidateToken()
             headers = getAuthorizationHeaders(session) ?: return NetworkResult()
             result = httpManager.post(
