@@ -1,0 +1,32 @@
+<com.chauthai.swipereveallayout.SwipeRevealLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/swipeRevealLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:mode="same_level"
+    app:dragEdge="right"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+        <TextView
+            android:id="@+id/tvDeleteItem"
+            android:layout_width="wrap_content"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:background="@color/colorRed"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:text="@string/Core_Delete_List_Item"
+            android:layout_height="65dp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frListContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </FrameLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+

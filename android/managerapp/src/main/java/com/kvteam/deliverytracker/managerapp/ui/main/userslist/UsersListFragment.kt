@@ -14,7 +14,9 @@ import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.core.webservice.IUserWebservice
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
@@ -47,40 +49,42 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
     lateinit var lm: ILocalizationManager
 
 
-    private val userActions = object: IUserActions {
-        override fun onDelete(adapter: UserListFlexibleAdapter,
-                              userList: MutableList<UserListItem>,
-                              user: UserListItem) {
+    private val userActions = object: IBaseListItemActions<UserListItem> {
+        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+            if(adapter !is UserListFlexibleAdapter) {
+                return
+            }
             invokeAsync({
-                userWebservice.delete(user.user.id!!)
+                userWebservice.delete(item.user.id!!)
             }, {
                 if(it.success) {
-                    userList.remove(user)
-                    adapter.updateDataSet(userList, true)
+                    itemList.remove(item)
+                    adapter.updateDataSet(itemList, true)
                 }
             })
         }
 
-        override fun onUserItemClicked(adapter: UserListFlexibleAdapter, userList: MutableList<UserListItem>, user: UserListItem) {
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
         }
-
     }
 
-    private val invitationActions = object: IInvitationActions {
-        override fun onDelete(adapter: UserInvitationListFlexibleAdapter, invitationList: MutableList<UserInvitationListItem>, invitation: UserInvitationListItem) {
+    private val invitationActions = object: IBaseListItemActions<UserInvitationListItem> {
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
+        }
+
+        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
+            if(adapter !is UserInvitationListFlexibleAdapter) {
+                return
+            }
             invokeAsync({
-                invitationWebservice.delete(invitation.invitation.invitationCode!!)
+                invitationWebservice.delete(item.invitation.invitationCode!!)
             }, {
                 if(it.success) {
-                    invitationList.remove(invitation)
-                    adapter.updateDataSet(invitationList, true)
+                    itemList.remove(item)
+                    adapter.updateDataSet(itemList, true)
                 }
             })
         }
-
-        override fun onInvitationItemClicked(adapter: UserInvitationListFlexibleAdapter, invitationList: MutableList<UserInvitationListItem>, invitation: UserInvitationListItem) {
-        }
-
     }
 
     // TODO: выбирать добавляемую роль по сложной логике
@@ -110,7 +114,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
     private fun formatUsers(viewResult: List<Map<String, Any?>>): MutableList<UserListItem> {
         var letter: Char? = null
-        var header = SubgroupListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
+        var header = BaseListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
 
         return viewResult
                 .map { userMap ->
@@ -129,7 +133,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                     } else {
                         if (letter == null || letter != user.surname!![0]) {
                             letter = user.surname!![0]
-                            header = SubgroupListHeader(letter!!.toString())
+                            header = BaseListHeader(letter!!.toString())
                         }
                         UserListItem(user, header)
                     }
@@ -138,7 +142,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
 
     private fun formatInvitations(viewResult: List<Map<String, Any?>>): MutableList<UserInvitationListItem> {
         var date: String? = null
-        var header = SubgroupListHeader("A")
+        var header = BaseListHeader("A")
 
         return viewResult
                 .map { invitationMap ->
@@ -151,7 +155,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                     val dateCaption = invitation.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
                     if (date == null || date != dateCaption) {
                         date = dateCaption
-                        header = SubgroupListHeader(dateCaption)
+                        header = BaseListHeader(dateCaption)
                     }
                     UserInvitationListItem(invitation, header, lm)
                 }.toMutableList()
