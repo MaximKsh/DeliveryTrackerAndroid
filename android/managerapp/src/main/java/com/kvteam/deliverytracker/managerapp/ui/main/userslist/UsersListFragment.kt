@@ -23,6 +23,7 @@ import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -31,7 +32,7 @@ import kotlinx.android.synthetic.main.fragment_user_list.*
 import javax.inject.Inject
 
 // TODO: rename managersList xml to userslist
-open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
+open class UsersListFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -48,6 +49,9 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
     @Inject
     lateinit var lm: ILocalizationManager
 
+    private val dropDownTop: DropdownTop by lazy {
+        (activity as MainActivity).dropDownTop
+    }
 
     private val userActions = object: IBaseListItemActions<UserListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
@@ -90,8 +94,6 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
     // TODO: выбирать добавляемую роль по сложной логике
     private var role: Role = Role.Manager
 
-    private lateinit var dropDownTop: DropdownTop
-
     private lateinit var mAdapter: FlexibleAdapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,11 +107,6 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_user_list, container, false)
-    }
-
-    override fun onItemClick(position: Int): Boolean {
-        Log.i("POSITION", position.toString())
-        return false
     }
 
     private fun formatUsers(viewResult: List<Map<String, Any?>>): MutableList<UserListItem> {
@@ -224,7 +221,7 @@ open class UsersListFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItem
                             { index -> updateList(category.first, category.second.entityType, index)})
                 }
                 val categories = ArrayList(categoriesEnumeration)
-                dropDownTop = DropdownTop(categories, activity!!)
+                dropDownTop.updateDataSet(categories)
 
                 updateList(digest[0].first, digest[0].second.entityType, 0)
             }

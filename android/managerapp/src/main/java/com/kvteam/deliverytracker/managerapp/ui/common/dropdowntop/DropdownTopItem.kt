@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.dropdown_top_item.view.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+// TODO: fix memory leak with onclick listeners
 class DropdownTopItem (
         val index: Int,
         val icon: Int,

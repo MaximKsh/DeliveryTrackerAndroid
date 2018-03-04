@@ -15,6 +15,7 @@ import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
@@ -92,6 +93,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(SelectPerformerFragmentModule::class))
     internal abstract fun selectPerformerFragment(): SelectPerformerFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(ReferenceListFragmentModule::class))
+    internal abstract fun referenceListFragment(): ReferenceListFragment
 
     @Module
     class MainActivityNavigationControllerModule {

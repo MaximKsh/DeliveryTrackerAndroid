@@ -11,12 +11,12 @@ import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.concurrent.atomic.AtomicInteger
 
-class DropdownTop (val items: ArrayList<DropdownTopItemInfo>, val activity: FragmentActivity) {
+class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: FragmentActivity) {
     var lastSelectedIndex = AtomicInteger(0)
     val paddingSize = 10
     val itemHeight = 45
     val density = activity.resources.displayMetrics.density
-    val height = (density * items.size * itemHeight + density * paddingSize).toInt()
+    var height = 0
     val toggleIcon = ContextCompat.getDrawable(activity, R.drawable.ic_expand_more_black_24dp)
     val toggleIconResized = BitmapDrawable(
             activity.resources,
@@ -27,17 +27,8 @@ class DropdownTop (val items: ArrayList<DropdownTopItemInfo>, val activity: Frag
                     true)
     )
     val rotatedToggleIcon = BitmapDrawable(activity.resources, rotateBitmap(toggleIconResized.bitmap, 180f))
-
-    val dropdownTopItems: List<DropdownTopItem> = items.mapIndexed { index, dropdownItem -> DropdownTopItem(
-            index,
-            R.drawable.ic_group_black_24dp,
-            dropdownItem.caption,
-            dropdownItem.quantity,
-            ::onItemSelected,
-            index == 0,
-            activity) }
-
-    var isCollapsed = false
+    lateinit var dropdownTopItems: List<DropdownTopItem>
+    var isCollapsed: Boolean = false
 
     fun update() {
         activity.toolbar_title.text = items[lastSelectedIndex.get()].caption
@@ -55,6 +46,23 @@ class DropdownTop (val items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         }
         lastSelectedIndex.set(index)
         items[index].onSelected(index)
+    }
+
+    fun updateDataSet  (items: ArrayList<DropdownTopItemInfo>) {
+        activity.ll_dropdown_top.removeAllViews()
+
+        height = (density * items.size * itemHeight + density * paddingSize).toInt()
+        this.items = items
+        lastSelectedIndex = AtomicInteger(0)
+        dropdownTopItems = items.mapIndexed { index, dropdownItem -> DropdownTopItem(
+                index,
+                R.drawable.ic_group_black_24dp,
+                dropdownItem.caption,
+                dropdownItem.quantity,
+                ::onItemSelected,
+                index == 0,
+                activity) }
+
     }
 
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {
@@ -110,6 +118,8 @@ class DropdownTop (val items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     init {
+        updateDataSet(items)
+
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
 
         activity.toolbar_title.setOnClickListener { _ ->

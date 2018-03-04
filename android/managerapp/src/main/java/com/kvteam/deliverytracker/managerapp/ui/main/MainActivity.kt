@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTop
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
@@ -16,6 +17,9 @@ class MainActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var navigationController: NavigationController
+
+    lateinit var dropDownTop: DropdownTop
+        private set
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         if(navigation.selectedItemId == item.itemId
@@ -56,6 +60,8 @@ class MainActivity : DeliveryTrackerActivity() {
 
         setSupportActionBar(this.toolbar_top)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+        dropDownTop = DropdownTop(arrayListOf(), this)
 
         if (savedInstanceState == null) {
             navigationController.navigateToStaff()

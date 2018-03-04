@@ -23,8 +23,6 @@ class UserListItem(val user: User, header: BaseListHeader)
         return UserListViewHolder(view, adapter);
     }
 
-
-
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListViewHolder, position: Int, payloads: MutableList<Any>?) {
         val context = holder.itemView.context
 

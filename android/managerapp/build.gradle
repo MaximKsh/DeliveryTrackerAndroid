@@ -36,6 +36,7 @@ android {
                             'src/main/resources/createInstancePage',
                             'src/main/resources/loginPage',
                             'src/main/resources/usersListPage',
+                            'src/main/resources/referencesListPage'
                     ]
         }
     }
