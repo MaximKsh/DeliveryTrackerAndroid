@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.core.webservice
 
 import android.content.Context
 import android.text.TextUtils
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.invalidResponseBody
@@ -10,12 +9,40 @@ import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.getAuthorizationHeaders
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 import java.lang.reflect.Type
+import org.joda.time.format.ISODateTimeFormat
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import org.joda.time.DateTime
+import com.google.gson.JsonElement
+import com.google.gson.JsonParseException
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonSerializer
+import com.google.gson.GsonBuilder
 
 class Webservice(context: Context,
                  private val session: ISession,
                  private val httpManager: IHttpManager) : IWebservice {
+
+    internal class DateTimeTypeAdapter : JsonSerializer<DateTime?>, JsonDeserializer<DateTime?> {
+        @Throws(JsonParseException::class)
+        override fun deserialize(json: JsonElement, typeOfT: Type,
+                                 context: JsonDeserializationContext): DateTime? {
+            return DateTime.parse(json.asString)
+        }
+
+        override fun serialize(src: DateTime?, typeOfSrc: Type,
+                               context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(ISODateTimeFormat
+                    .dateTimeNoMillis()
+                    .print(src))
+        }
+    }
+
     // gson is thread-safe
-    private val gson = Gson()
+    private val gson = GsonBuilder()
+            .registerTypeAdapter(DateTime::class.java, DateTimeTypeAdapter())
+            .create()
 
     private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 

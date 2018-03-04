@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
 import com.amulyakhare.textdrawable.TextDrawable
 import eu.davidea.flexibleadapter.utils.DrawableUtils
 import com.kvteam.deliverytracker.core.models.User
+import com.kvteam.deliverytracker.core.roles.Role
 
 
 class UserListItem(
@@ -53,12 +54,15 @@ class UserListItem(
         holder.ivUserAvatar.setImageDrawable(materialAvatarDefault)
         holder.tvName.text = user.name
         holder.tvSurname.text = user.surname
+        holder.ivOnlineStatus.visibility = if (user.online) View.VISIBLE else View.INVISIBLE
+        holder.ivAdminStatusIcon.visibility = if (user.role == Role.Creator.id) View.VISIBLE else View.INVISIBLE
     }
 
     open class UserListViewHolder(val view: View, val adapter: FlexibleAdapter<out IFlexible<*>>?) : FlexibleViewHolder(view, adapter) {
         val tvName = view.tvName!!
         val tvSurname = view.tvSurname!!
         val ivUserAvatar = view.ivUserAvatar!!
+        val ivOnlineStatus = view.ivOnlineStatus!!
         val ivAdminStatusIcon = view.ivAdminStatusIcon!!
     }
 }

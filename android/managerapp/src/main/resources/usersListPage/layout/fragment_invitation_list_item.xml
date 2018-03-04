@@ -1,75 +1,111 @@
-<com.chauthai.swipereveallayout.SwipeRevealLayout
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/swipeRevealLayout"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:mode="same_level"
     app:dragEdge="right"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:mode="same_level">
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/tvCancelInvitation"
             android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:background="@color/colorRed"
+            android:gravity="center"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
-            android:background="@color/colorRed"
-            android:textColor="@color/colorWhite"
-            android:gravity="center"
             android:text="@string/ManagerApp_InvitationItem_CancelInvitation"
-            android:layout_height="65dp" />
+            android:textColor="@color/colorWhite" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/rlInvitationItem"
             android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/tvInvitationCode"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/colorBlack"
                 android:layout_alignParentStart="true"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvName"
                 android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/tvInvitationCode"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:textColor="@color/colorBlack"
-                android:textSize="18sp" />
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
 
-            <TextView
-                android:id="@+id/tvSurname"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/tvName"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/colorBlack"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvExpiresAt"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/colorBlack"
-                android:layout_toEndOf="@id/tvSurname" />
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tvInvitationCode"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvSurname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/colorBlack" />
+
+                <TextView
+                    android:id="@+id/tvExpiresAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/colorBlack" />
+            </LinearLayout>
 
         </RelativeLayout>
     </FrameLayout>

@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.managerapp.R
@@ -17,7 +18,8 @@ class MainActivity : DeliveryTrackerActivity() {
     lateinit var navigationController: NavigationController
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        if(navigation.selectedItemId == item.itemId) {
+        if(navigation.selectedItemId == item.itemId
+            && supportFragmentManager.backStackEntryCount == 0) {
             return@OnNavigationItemSelectedListener true
         }
 

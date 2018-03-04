@@ -1,15 +1,18 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
 
 
-class UserListFlexibleAdapter(private val list: MutableList<UserListItem>) : FlexibleAdapter<UserListItem>(list) {
+class UserListFlexibleAdapter(
+        private var noHeaderItems: MutableList<UserListItem>,
+        private val userActions: IUserActions) : FlexibleAdapter<UserListItem>(noHeaderItems) {
     private val viewBinderHelper = ViewBinderHelper()
+
 
     init {
         viewBinderHelper.setOpenOnlyOne(true);
@@ -21,22 +24,28 @@ class UserListFlexibleAdapter(private val list: MutableList<UserListItem>) : Fle
         val rlUserItem = view.rlUserItem!!
     }
 
+    override fun onPostUpdate() {
+        super.onPostUpdate()
+        noHeaderItems = currentItems.filter { item: IFlexible<*> -> item is UserListItem }.toMutableList()
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int, payloads: MutableList<Any?>?) {
         var viewHolder = holder
 
         if (holder is UserListItem.UserListViewHolder) {
             viewHolder = CustomHolder(holder.itemView, this)
 
-            viewHolder.tvDeleteUser.setOnClickListener { _ ->
-                list.removeAt(position)
-                updateDataSet(list, true)
+            val item = getItem(position)!!
+
+            viewHolder.tvDeleteUser.setOnClickListener {
+                userActions.onDelete(this, noHeaderItems, item)
             }
 
-            viewHolder.rlUserItem.setOnClickListener { _ ->
-                Log.i("USER ITEM", "HELLO")
+            viewHolder.rlUserItem.setOnClickListener {
+                userActions.onUserItemClicked(this, noHeaderItems, item)
             }
 
-            viewBinderHelper.bind(viewHolder.swipeRevealLayout, position.toString())
+            viewBinderHelper.bind(viewHolder.swipeRevealLayout, item.user.code)
         }
 
         super.onBindViewHolder(viewHolder, position, payloads)
