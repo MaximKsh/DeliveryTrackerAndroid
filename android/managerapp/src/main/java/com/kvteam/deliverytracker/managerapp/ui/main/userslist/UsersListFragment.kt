@@ -32,6 +32,13 @@ open class UsersListFragment : BaseListFragment() {
     @Inject
     lateinit var invitationWebservice: IInvitationWebservice
 
+    private val INVITE_USER_MENU_ITEM = 1
+    private val SHOW_ON_MAP_MENU_ITEM = INVITE_USER_MENU_ITEM shl 1
+
+    private val IVITATIONS_MENU_MASK = 0
+    private val MANAGERS_MENU_MASK = INVITE_USER_MENU_ITEM
+    private val PERFORMERS_MENU_MASK = INVITE_USER_MENU_ITEM and SHOW_ON_MAP_MENU_ITEM
+
     private val userActions = object: IBaseListItemActions<UserListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
             if(adapter !is UserListFlexibleAdapter) {
@@ -126,6 +133,7 @@ open class UsersListFragment : BaseListFragment() {
             "User" -> {
                 val userList = formatUsers(viewResult)
                 val adapter = mAdapter as? UserListFlexibleAdapter
+                setMenuMask(MANAGERS_MENU_MASK)
                 if (adapter != null) {
                     adapter.updateDataSet(userList, true)
                 } else {
@@ -136,6 +144,7 @@ open class UsersListFragment : BaseListFragment() {
             "Invitation" -> {
                 val invitationList = formatInvitations(viewResult)
                 val adapter = mAdapter as? UserInvitationListFlexibleAdapter
+                setMenuMask(IVITATIONS_MENU_MASK)
                 if (adapter != null) {
                     adapter.updateDataSet(invitationList, true)
                 } else {

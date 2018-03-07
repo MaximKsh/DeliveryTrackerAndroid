@@ -4,10 +4,10 @@ import `in`.srain.cube.views.ptr.PtrDefaultHandler
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityCompat.invalidateOptionsMenu
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -122,6 +122,30 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         super.onViewStateRestored(savedInstanceState)
         if (savedInstanceState == null) {
             return
+        }
+    }
+
+    private var menuItemsMask : Int = Int.MAX_VALUE
+
+    protected fun setMenuMask(mask: Int) {
+        menuItemsMask = mask
+        activity?.invalidateOptionsMenu()
+    }
+
+    protected fun showMenuItem(item: Int) {
+        menuItemsMask = menuItemsMask or item
+        activity?.invalidateOptionsMenu()
+    }
+
+    protected fun hideMenuItem(item: Int) {
+        menuItemsMask = menuItemsMask and item.inv()
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        for(i in 0 until menu.size()) {
+            menu.getItem(i).isVisible = menuItemsMask and (1 shl i) != 0
         }
     }
 }

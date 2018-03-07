@@ -23,8 +23,14 @@
     <string name="ManagerApp_MainActivity_Performers">Исполнители</string>
     <string name="ManagerApp_MainActivity_MyTasks">Мои задания</string>
     <string name="ManagerApp_Toolbar_Edit">Редактировать</string>
-    <string name="ManagerApp_Toolbar_AddUser">Добавить</string>
+
+    <string name="ManagerApp_Toolbar_AddUser">Добавить пользователя</string>
     <string name="ManagerApp_Toolbar_ShowOnMap">Показать на карте</string>
+
+    <string name="ManagerApp_Toolbar_AddClient">Добавить клиента</string>
+    <string name="ManagerApp_Toolbar_AddPaymentType">Добавить способ оплаты</string>
+    <string name="ManagerApp_Toolbar_AddProduct">Добавить продукт</string>
+
     <string name="ManagerApp_Toolbar_AddTask">Добавить</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Удалить</string>
     <string name="ManagerApp_Cancel">Отмена</string>

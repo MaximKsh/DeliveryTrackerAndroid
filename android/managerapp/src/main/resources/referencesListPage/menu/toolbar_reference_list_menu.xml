@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-        android:id="@+id/action_add"
-        android:title="@string/ManagerApp_Toolbar_AddUser"
+        android:id="@+id/action_add_product"
+        android:title="@string/ManagerApp_Toolbar_AddProduct"
         app:showAsAction="collapseActionView"/>
 
+    <item
+        android:id="@+id/action_add_payment_type"
+        android:title="@string/ManagerApp_Toolbar_AddPaymentType"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:id="@+id/action_add_client"
+        android:title="@string/ManagerApp_Toolbar_AddClient"
+        app:showAsAction="collapseActionView"/>
 </menu>
