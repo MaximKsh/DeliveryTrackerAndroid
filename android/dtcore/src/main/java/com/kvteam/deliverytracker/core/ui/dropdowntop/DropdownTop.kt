@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop
+package com.kvteam.deliverytracker.core.ui.dropdowntop
 
 import android.animation.ValueAnimator
 import android.graphics.Bitmap
@@ -6,7 +6,7 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
-import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.core.R
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -54,14 +54,16 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         height = (density * items.size * itemHeight + density * paddingSize).toInt()
         this.items = items
         lastSelectedIndex = AtomicInteger(0)
-        dropdownTopItems = items.mapIndexed { index, dropdownItem -> DropdownTopItem(
-                index,
-                R.drawable.ic_group_black_24dp,
-                dropdownItem.caption,
-                dropdownItem.quantity,
-                ::onItemSelected,
-                index == 0,
-                activity) }
+        dropdownTopItems = items.mapIndexed { index, dropdownItem ->
+            DropdownTopItem(
+                    index,
+                    R.drawable.ic_group_black_24dp,
+                    dropdownItem.caption,
+                    dropdownItem.quantity,
+                    ::onItemSelected,
+                    index == 0,
+                    activity)
+        }
 
     }
 
@@ -117,7 +119,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
     }
 
-    init {
+    fun init() {
         updateDataSet(items)
 
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)

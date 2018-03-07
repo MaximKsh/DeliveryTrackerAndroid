@@ -10,7 +10,7 @@
         android:layout_width="45dp"
         android:layout_height="30dp"
         android:alpha="0.3"
-        android:contentDescription="@string/ManagerApp_CodeHintIcon" />
+    />
 
     <TextView
         android:id="@+id/tvCategoryName"
@@ -34,7 +34,6 @@
             android:id="@+id/ivSelectedIcon"
             android:layout_width="35dp"
             android:layout_height="25dp"
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
             android:src="@drawable/ic_done_black_24dp"
             android:visibility="gone" />
 

@@ -1,8 +1,8 @@
-package com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop
+package com.kvteam.deliverytracker.core.ui.dropdowntop
 
 import android.support.v4.app.FragmentActivity
 import android.view.View
-import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.core.R
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.dropdown_top_item.view.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -39,7 +39,7 @@ class DropdownTopItem (
     init {
         layout.tvCategoryName.text = name
         layout.ivCategoryIcon.setImageResource(R.drawable.ic_group_black_24dp)
-        layout.tvCategoryQuantity.text = activity.resources.getString(R.string.ManagerApp_Dropdown_Top_Quantity, quantity)
+        layout.tvCategoryQuantity.text = activity.resources.getString(R.string.Core_Dropdown_Top_Quantity, quantity)
         layout.ivSelectedIcon.visibility = if (isSelected) View.VISIBLE else View.GONE
         layout.setOnClickListener{ _ -> handleSelectionInner() }
         activity.ll_dropdown_top.addView(layout)

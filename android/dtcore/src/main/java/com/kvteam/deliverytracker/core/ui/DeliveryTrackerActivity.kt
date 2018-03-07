@@ -7,6 +7,7 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.CheckSessionResult
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
+import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -21,9 +22,21 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
     protected open val allowSettingsContext
         get() = true
 
+    protected open val useDropdownTop
+        get() = false
+
+    lateinit var dropDownTop: DropdownTop
+        private set
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        if (useDropdownTop) {
+            dropDownTop = DropdownTop(arrayListOf(), this)
+        }
 
         if(!allowSettingsContext
                 && intent.getBooleanExtra(SETTINGS_CONTEXT, false)) {
@@ -33,6 +46,9 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (useDropdownTop) {
+            dropDownTop.init()
+        }
         if (checkHasAccountOnResume) {
             if(!dtSession.hasAccount()) {
                 val intent = Intent(

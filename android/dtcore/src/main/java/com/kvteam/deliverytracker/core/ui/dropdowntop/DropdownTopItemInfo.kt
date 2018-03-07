@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop
+package com.kvteam.deliverytracker.core.ui.dropdowntop
 
 data class DropdownTopItemInfo(
         val viewName: String,

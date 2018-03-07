@@ -50,6 +50,9 @@
     <string name="ManagerApp_TasksListFragment_AddTaskButton">Добавить задание</string>
     <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
     <string name="ManagerApp_Dropdown_Top_Quantity"> (%d)</string>
+    <string name="ServerMessage_Views_ProductsView">Товары</string>
+    <string name="ServerMessage_Views_PaymentTypesView">Способы оплаты</string>
+    <string name="ServerMessage_Views_ClientsView">Клиенты</string>
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Адрес не определен</string>

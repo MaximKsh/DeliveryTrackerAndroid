@@ -7,10 +7,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
-import com.kvteam.deliverytracker.core.R
 import eu.davidea.viewholders.FlexibleViewHolder
 import kotlinx.android.synthetic.main.base_list_item.view.*
 

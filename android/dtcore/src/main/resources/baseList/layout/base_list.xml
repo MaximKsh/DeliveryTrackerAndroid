@@ -19,7 +19,7 @@
 
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvUsersList"
+            android:id="@+id/rvBaseList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
@@ -27,8 +27,5 @@
             tools:listitem="@layout/base_list_item" />
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
-
-
-    <!--<include layout="@layout/dropdown_top" />-->
 
 </FrameLayout>

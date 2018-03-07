@@ -9,8 +9,8 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTop
-import com.kvteam.deliverytracker.managerapp.ui.common.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
+import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
