@@ -87,4 +87,12 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
             webservice: IWebservice): IViewWebservice {
         return ViewWebservice(webservice)
     }
+
+    @Provides
+    @Singleton
+    fun taskWebservice(
+            webservice: IWebservice,
+            session: ISession): ITaskWebservice {
+        return TaskWebservice(webservice, session)
+    }
 }

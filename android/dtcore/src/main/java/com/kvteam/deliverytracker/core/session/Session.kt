@@ -30,14 +30,25 @@ class Session (
 
     override var id: UUID?
         get() {
-            val roleOrNull = getUserDataOrNull("_id")
-            return if (roleOrNull != null) {
-                UUID.fromString(roleOrNull)
+            val idOrNull = getUserDataOrNull("_id")
+            return if (idOrNull != null) {
+                UUID.fromString(idOrNull)
             } else {
                 null
             }
         }
         private set(v) = setUserDataOrNull("_id", v?.toString())
+
+    override var instanceId: UUID?
+        get() {
+            val idOrNull = getUserDataOrNull("_instanceId")
+            return if (idOrNull != null) {
+                UUID.fromString(idOrNull)
+            } else {
+                null
+            }
+        }
+        private set(v) = setUserDataOrNull("_instanceId", v?.toString())
 
     override var code: String?
         get() = getUserDataOrNull("_username")
@@ -216,6 +227,7 @@ class Session (
 
         val user = accountResponse.user
         id = user?.id
+        instanceId = user?.instanceId
         code = username
         surname = user?.surname ?: "no surname"
         name = user?.name ?: "no name"

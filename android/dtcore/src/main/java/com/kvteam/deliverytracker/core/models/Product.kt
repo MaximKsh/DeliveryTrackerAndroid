@@ -18,10 +18,7 @@ class Product : ModelBase() {
         vendorCode = map["VendorCode"] as? String
         name = map["Name"] as? String
         description = map["Description"] as? String
-        val costDbl = map["Cost"] as? Double
-        if(costDbl != null) {
-            cost = BigDecimal.valueOf(costDbl)
-        }
+        cost = deserializeBigDecimalFromMap("Cost", map)
     }
 
 }

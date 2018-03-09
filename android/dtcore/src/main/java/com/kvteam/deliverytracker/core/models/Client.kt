@@ -20,9 +20,7 @@ class Client : ModelBase() {
         name = map["Name"] as? String
         patronymic = map["Patronymic"] as? String
         phoneNumber = map["PhoneNumber"] as? String
-        val addresses = deserializeListObjectsFromMap("Addresses", map, { ClientAddress() })
-        if(addresses != null) {
-            clientAddresses = addresses.toMutableList()
-        }
+        clientAddresses = deserializeListObjectsFromMap("Addresses", map, { ClientAddress() })
+
     }
 }
