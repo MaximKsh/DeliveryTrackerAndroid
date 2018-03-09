@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.core.models
 import com.google.gson.internal.LinkedTreeMap
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,6 +13,18 @@ fun deserializeUUIDFromMap(key: String, map: Map<*, *>) : UUID? {
         return try {
             UUID.fromString(idStr)
         } catch (e: Exception) {
+            null
+        }
+    }
+    return null
+}
+
+fun deserializeBigDecimalFromMap(key: String, map: Map<*, *>) : BigDecimal? {
+    val dbl = map[key] as? Double
+    if(dbl != null) {
+        return try {
+            BigDecimal.valueOf(dbl)
+        } catch (e: Exception){
             null
         }
     }
@@ -46,12 +59,12 @@ fun <T : IMapDeserializable> deserializeObjectFromMap(
 fun <T : IMapDeserializable> deserializeListObjectsFromMap(
         key: String,
         map: Map<*, *>,
-        factory: () -> T) : List<T>? {
+        factory: () -> T) : MutableList<T> {
     val serializedList = map[key]
     if(serializedList is List<*>) {
         val typedList = mutableListOf<T>()
         for (objMap in serializedList) {
-            if(objMap is LinkedTreeMap<*, *>) {
+            if(objMap is Map<*, *>) {
                 val obj = factory()
                 obj.fromMap(objMap)
                 typedList.add(obj)
@@ -59,5 +72,46 @@ fun <T : IMapDeserializable> deserializeListObjectsFromMap(
         }
         return typedList
     }
-    return null
+    return mutableListOf()
+}
+
+fun deserializeMapFromMap(
+        key: String,
+        map: Map<*, *>) : MutableMap<String, Map<*, *>> {
+    val serializedMap = map[key]
+    if(serializedMap is Map<*, *>) {
+        val typedMap = mutableMapOf<String, Map<*, *>>()
+        for (pair in serializedMap.entries) {
+            val pairKey = pair.key
+            val pairValue = pair.value
+            if(pairKey is String
+                    && pairValue is Map<*, *>) {
+                typedMap[pairKey] = pairValue
+            }
+        }
+        return typedMap
+    }
+    return mutableMapOf()
+}
+
+fun <T : IMapDeserializable> deserializeMapObjectsFromMap(
+        key: String,
+        map: Map<*, *>,
+        factory: () -> T) : MutableMap<String, T> {
+    val serializedMap = map[key]
+    if(serializedMap is Map<*, *>) {
+        val typedMap = mutableMapOf<String, T>()
+        for (pair in serializedMap.entries) {
+            val pairKey = pair.key
+            val pairValue = pair.value
+            if(pairKey is String
+                && pairValue is Map<*, *>) {
+                val obj = factory()
+                obj.fromMap(pairValue)
+                typedMap[pairKey] = obj
+            }
+        }
+        return typedMap
+    }
+    return mutableMapOf()
 }

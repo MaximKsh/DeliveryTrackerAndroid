@@ -1,10 +1,8 @@
 package com.kvteam.deliverytracker.core.session
 
-import com.kvteam.deliverytracker.core.common.BasicResult
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
-import com.kvteam.deliverytracker.core.webservice.RawNetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 import java.util.*
 
@@ -25,6 +23,7 @@ interface ISession {
                        new: CodePassword) : NetworkResult<AccountResponse>
 
     val id: UUID?
+    val instanceId: UUID?
     val code: String?
     val surname: String?
     val name: String?
