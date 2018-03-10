@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
+import com.kvteam.deliverytracker.core.ui.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
@@ -51,4 +52,10 @@ interface SelectPerformerFragmentSubcomponent : AndroidInjector<SelectPerformerF
 interface ReferenceListFragmentSubcomponent : AndroidInjector<ReferenceListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<ReferenceListFragment>()
+}
+
+@Subcomponent
+interface SettingsFragmentSubcomponent : AndroidInjector<SettingsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<SettingsFragment>()
 }

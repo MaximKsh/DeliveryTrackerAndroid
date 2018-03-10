@@ -27,6 +27,7 @@ interface ISession {
     val code: String?
     val surname: String?
     val name: String?
+    val patronymic: String?
     val phoneNumber: String?
     val role: UUID?
 }

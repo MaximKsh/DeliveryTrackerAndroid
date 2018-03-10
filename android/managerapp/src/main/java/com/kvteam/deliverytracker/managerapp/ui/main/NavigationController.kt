@@ -2,13 +2,12 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.core.ui.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragmentMode
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -58,7 +57,7 @@ class NavigationController (private val mainActivity: MainActivity) {
     }
 
     fun navigateToSettings() {
-        val fragment = MyTasksListFragment()
+        val fragment = SettingsFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)

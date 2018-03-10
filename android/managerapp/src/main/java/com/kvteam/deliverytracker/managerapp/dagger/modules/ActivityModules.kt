@@ -5,6 +5,7 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.app.Activity
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
+import com.kvteam.deliverytracker.core.ui.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.ConfirmDataActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.CreateInstanceActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
@@ -97,6 +98,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(ReferenceListFragmentModule::class))
     internal abstract fun referenceListFragment(): ReferenceListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(SettingsFragmentModule::class))
+    internal abstract fun settingsFragment(): SettingsFragment
 
     @Module
     class MainActivityNavigationControllerModule {

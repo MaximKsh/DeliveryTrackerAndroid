@@ -7,6 +7,7 @@ import android.os.Build
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.common.unauthorized
 import com.kvteam.deliverytracker.core.models.CodePassword
@@ -14,7 +15,6 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
-import com.kvteam.deliverytracker.core.webservice.RawNetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 import java.util.*
@@ -59,6 +59,9 @@ class Session (
     override var name: String?
         get() = getUserDataOrNull("_name")
         private set(v) = setUserDataOrNull("_name", v)
+    override var patronymic: String?
+        get() = getUserDataOrNull("_patronymic")
+        private set(v) = setUserDataOrNull("_patronymic", v)
     override var phoneNumber: String?
         get() = getUserDataOrNull("_phoneNumber")
         private set(v) = setUserDataOrNull("_phoneNumber", v)
@@ -168,7 +171,8 @@ class Session (
                 rawRequestBody,
                 mapOf(),
                 "application/json")
-        if(!response.success) {
+        if(!response.success
+            || response.statusCode !in 200..201) {
             return LoginResult(
                     LoginResultType.Error,
                     fetched = response.fetched,
@@ -229,9 +233,10 @@ class Session (
         id = user?.id
         instanceId = user?.instanceId
         code = username
-        surname = user?.surname ?: "no surname"
-        name = user?.name ?: "no name"
-        phoneNumber = user?.phoneNumber ?: "no phone number"
+        surname = user?.surname ?: EMPTY_STRING
+        name = user?.name ?: EMPTY_STRING
+        patronymic = user?.patronymic ?: EMPTY_STRING
+        phoneNumber = user?.phoneNumber ?: EMPTY_STRING
         role = tokenRole
 
         val resultType =
@@ -325,8 +330,9 @@ class Session (
         }
         val newUserInfo = accountResponse.user
         if( newUserInfo != null) {
-            surname = newUserInfo.surname ?: "no surname"
-            name = newUserInfo.name ?: "no name"
+            surname = newUserInfo.surname ?: EMPTY_STRING
+            name = newUserInfo.name ?: EMPTY_STRING
+            patronymic = newUserInfo.patronymic ?: EMPTY_STRING
             phoneNumber = newUserInfo.phoneNumber ?: "no phone number"
             role = newUserInfo.role
         }

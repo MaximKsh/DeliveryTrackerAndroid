@@ -3,6 +3,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
+import com.kvteam.deliverytracker.core.ui.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
@@ -81,5 +82,14 @@ abstract class ReferenceListFragmentModule {
     @IntoMap
     @FragmentKey(ReferenceListFragment::class)
     internal abstract fun referenceListFragmentInjector(builder: ReferenceListFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(SettingsFragmentSubcomponent::class))
+abstract class SettingsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(SettingsFragment::class)
+    internal abstract fun settingsFragmentInjector(builder: SettingsFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
