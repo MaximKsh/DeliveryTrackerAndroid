@@ -2,6 +2,8 @@ package com.kvteam.deliverytracker.core.roles
 
 
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import java.util.*
 
 
@@ -32,4 +34,39 @@ enum class Role {
     abstract val roleName: String
     abstract val localizationStringId: Int
     abstract val localizationStringName: String
+
+    fun getCaption(lm: ILocalizationManager): String {
+        return lm.getString(localizationStringId)
+    }
+
+    companion object {
+        fun getRole(id: UUID?) : Role? {
+            return when(id){
+                Role.Creator.id -> Role.Creator
+                Role.Manager.id -> Role.Manager
+                Role.Performer.id -> Role.Performer
+                else -> null
+            }
+        }
+
+        fun getRole(role: String?) : Role? {
+            return when(role){
+                Role.Creator.roleName -> Role.Creator
+                Role.Manager.roleName -> Role.Manager
+                Role.Performer.roleName -> Role.Performer
+                else -> null
+            }
+        }
+
+        fun getCaption(id: UUID?, lm: ILocalizationManager): String {
+            val role = getRole(id)
+            return role?.getCaption(lm) ?: EMPTY_STRING
+        }
+
+        fun getCaption(rolename: String?, lm: ILocalizationManager): String {
+            val role = getRole(rolename)
+            return role?.getCaption(lm) ?: EMPTY_STRING
+        }
+    }
+
 }

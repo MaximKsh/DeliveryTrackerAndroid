@@ -1,23 +1,24 @@
-package com.kvteam.deliverytracker.core.ui
+package com.kvteam.deliverytracker.core.ui.settings
 
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_base_settings.*
 import javax.inject.Inject
 
 
-class SettingsFragment : DeliveryTrackerFragment() {
+abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var session: ISession
@@ -25,15 +26,18 @@ class SettingsFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var lm: ILocalizationManager
 
+    protected abstract fun onEditSettingsClicked()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
+        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_base_settings, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,17 +47,28 @@ class SettingsFragment : DeliveryTrackerFragment() {
         tvName.text = session.name
         tvPatronymic.text = session.patronymic
         tvPhoneNumber.text = session.phoneNumber
-        tvRole.text = lm.getString(session.role?.toRole()?.localizationStringName ?: "")
-
+        tvRole.text = Role.getCaption(session.role, lm)
 
         bttnLogout.setOnClickListener {
             session.logout()
-            val intent = Intent(
-                    activity,
-                    (context?.applicationContext as DeliveryTrackerApplication).loginActivityType as Class<*>)
+            val loginActivity =
+                    (context?.applicationContext as DeliveryTrackerApplication).loginActivityType as Class<*>
+            val intent = Intent(activity, loginActivity)
             startActivity(intent)
             activity?.finish()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_edit_settings -> onEditSettingsClicked()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_base_settings_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 }

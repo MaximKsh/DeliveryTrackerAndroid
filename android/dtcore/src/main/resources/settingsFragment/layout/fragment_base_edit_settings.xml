@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etNameField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                >
+
+                <EditText
+                    android:id="@+id/etSurnameField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                >
+
+                <EditText
+                    android:id="@+id/etPatronymicField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPersonName" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/etPhoneNumberField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="phone" />
+
+
+                <ImageView
+                    android:id="@+id/ivPhoneNumberHintIcon"
+                    android:alpha="0.3"
+                    android:layout_marginTop="13dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/etOldPasswordField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+
+                <ImageView
+                    android:alpha="0.3"
+                    android:layout_marginTop="13dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/etPasswordField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+
+                <ImageView
+                    android:alpha="0.3"
+                    android:layout_marginTop="13dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/etConfirmPasswordField"
+                    android:layout_width="match_parent"
+                    android:paddingStart="45dp"
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+
+                <ImageView
+                    android:alpha="0.3"
+                    android:layout_marginTop="13dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -2,9 +2,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.core.ui.SettingsFragment
+import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragmentMode
@@ -64,6 +66,14 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
+    fun navigateToEditSettings() {
+        val fragment = EditSettingsFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
     fun navigateToCatalogs() {
         val fragment = ReferenceListFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -95,5 +105,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
+
+
 
 }
