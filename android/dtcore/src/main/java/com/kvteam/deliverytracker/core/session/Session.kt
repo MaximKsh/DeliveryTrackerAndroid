@@ -4,10 +4,10 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
 import android.os.Build
-import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.buildDefaultGson
 import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.common.unauthorized
 import com.kvteam.deliverytracker.core.models.CodePassword
@@ -23,9 +23,7 @@ class Session (
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
         context: Context) : ISession {
-
-
-    private val gson = Gson()
+    private val gson = buildDefaultGson()
     private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 
     override var id: UUID?
@@ -106,7 +104,7 @@ class Session (
     }
 
     override fun checkSession(): CheckSessionResult {
-        val url = baseUrl + "/api/account/checkSession"
+        val url = baseUrl + "/api/account/check"
         var headers = getAuthorizationHeaders(this) ?: return CheckSessionResult.Wrong
         var result = httpManager.get(url, headers)
         // Если нет доступа в сеть, дальше нет смысла что-либо делать
@@ -189,7 +187,7 @@ class Session (
                     statusCode = response.statusCode,
                     errors = response.errors)
         }
-        val tokenRole = accountResponse.user?.role
+        val tokenRole = accountResponse?.user?.role
         if(tokenRole != null
                 && !sessionInfo.allowRoles.contains(tokenRole.toRole())) {
             return LoginResult(

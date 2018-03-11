@@ -2,72 +2,54 @@ package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.annotations.SerializedName
 import org.joda.time.DateTime
+import java.io.Serializable
 import java.math.BigDecimal
 import java.util.*
 
-class TaskInfo : ModelBase() {
+data class TaskInfo(
     @SerializedName("TaskStateId", alternate = ["taskStateId"])
-    var taskStateId: UUID? = null
-
+    var taskStateId: UUID? = null,
     @SerializedName("TaskStateName", alternate = ["taskStateName"])
-    var taskStateName: String? = null
-
+    var taskStateName: String? = null,
     @SerializedName("TaskStateCaption", alternate = ["taskStateCaption"])
-    var taskStateCaption: String? = null
-
+    var taskStateCaption: String? = null,
     @SerializedName("AuthorId", alternate = ["authorId"])
-    var authorId: UUID? = null
-
+    var authorId: UUID? = null,
     @SerializedName("PerformerId", alternate = ["performerId"])
-    var performerId: UUID? = null
-
+    var performerId: UUID? = null,
     @SerializedName("TaskNumber", alternate = ["taskNumber"])
-    var taskNumber: String? = null
-
+    var taskNumber: String? = null,
     @SerializedName("Created", alternate = ["created"])
-    var created: DateTime? = null
-
+    var created: DateTime? = null,
     @SerializedName("StateChangedLastTime", alternate = ["stateChangedLastTime"])
-    var stateChangedLastTime: DateTime? = null
-
+    var stateChangedLastTime: DateTime? = null,
     @SerializedName("Receipt", alternate = ["receipt"])
-    var receipt: DateTime? = null
-
+    var receipt: DateTime? = null,
     @SerializedName("ReceiptActual", alternate = ["receiptActual"])
-    var receiptActual: DateTime? = null
-
+    var receiptActual: DateTime? = null,
     @SerializedName("DeliveryFrom", alternate = ["deliveryFrom"])
-    var deliveryFrom: DateTime? = null
-
+    var deliveryFrom: DateTime? = null,
     @SerializedName("DeliveryTo", alternate = ["deliveryTo"])
-    var deliveryTo: DateTime? = null
-
+    var deliveryTo: DateTime? = null,
     @SerializedName("DeliveryActual", alternate = ["deliveryActual"])
-    var deliveryActual: DateTime? = null
-
+    var deliveryActual: DateTime? = null,
     @SerializedName("Comment", alternate = ["comment"])
-    var comment: String? = null
-
+    var comment: String? = null,
     @SerializedName("WarehouseId", alternate = ["warehouseId"])
-    var warehouseId: UUID? = null
-
+    var warehouseId: UUID? = null,
     @SerializedName("PaymentTypeId", alternate = ["paymentTypeId"])
-    var paymentTypeId: UUID? = null
-
+    var paymentTypeId: UUID? = null,
     @SerializedName("ClientId", alternate = ["clientId"])
-    var clientId: UUID? = null
-
+    var clientId: UUID? = null,
     @SerializedName("ClientAddressId", alternate = ["clientAddressId"])
-    var clientAddressId: UUID? = null
-
+    var clientAddressId: UUID? = null,
     @SerializedName("Cost", alternate = ["cost"])
-    var cost: BigDecimal? = null
-
+    var cost: BigDecimal? = null,
     @SerializedName("DeliveryCost", alternate = ["deliveryCost"])
-    var deliveryCost: BigDecimal? = null
-
+    var deliveryCost: BigDecimal? = null,
     @SerializedName("TaskProducts", alternate = ["taskProducts"])
     var taskProducts: MutableList<TaskProduct> = mutableListOf()
+) : ModelBase(), Serializable {
 
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)

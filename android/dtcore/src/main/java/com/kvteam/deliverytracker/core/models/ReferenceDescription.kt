@@ -1,5 +1,7 @@
 package com.kvteam.deliverytracker.core.models
 
-class ReferenceDescription {
+import java.io.Serializable
+
+data class ReferenceDescription (
     var caption: String? = null
-}
+    ) : Serializable
