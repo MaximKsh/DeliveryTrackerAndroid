@@ -42,7 +42,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
 
     private fun onItemSelected (index: Int) {
         val lsi = lastSelectedIndex.get()
-        if (index != lsi && lsi != -1) {
+        if (index != lsi) {
             dropdownTopItems[lastSelectedIndex.get()].reset()
         }
         lastSelectedIndex.set(index)
@@ -154,7 +154,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         }
 
         activity.vBlackView.setOnClickListener { _ ->
-            lastSelectedIndex.set(-1)
+//            lastSelectedIndex.set(-1)
             closeDropdown()
             isCollapsed = false
         }

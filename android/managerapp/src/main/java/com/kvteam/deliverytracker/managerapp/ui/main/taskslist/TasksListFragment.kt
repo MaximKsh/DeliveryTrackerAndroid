@@ -5,145 +5,106 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.models.TaskInfo
+import com.kvteam.deliverytracker.core.ui.*
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
+import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
+import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-
-open class TasksListFragment : DeliveryTrackerFragment() {
-    protected val layoutManagerKey = "layoutManager"
-    protected val tasksListKey = "tasksListKey"
-
-    @Inject
-    lateinit var lm: ILocalizationManager
-
+open class TasksListFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    private lateinit var addTaskMenuItem: MenuItem
+    @Inject
+    lateinit var tasksWebservice: ITaskWebservice
 
-    protected lateinit var adapter: AutoClearedValue<TasksListAdapter>
+    override val viewGroup: String = "TaskViewGroup"
 
-    protected var ignoreSavedState = false
+    private val TASKS_MENU_MASK = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
+    private val tasksActions = object : IBaseListItemActions<TaskListItem> {
+        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {
+            if (adapter !is TasksListFlexibleAdapter) {
+                return
+            }
+//            invokeAsync({
+//                tasksWebservice.get("", item.paymentType.id!!)
+//            }, {
+//                if (it.success) {
+                    itemList.remove(item)
+                    adapter.updateDataSet(itemList, true)
+//                }
+            }
+
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(
-                R.layout.fragment_tasks_list,
-                container,
-                false)
+
+    private fun formatTasks(viewResult: List<Map<String, Any?>>): MutableList<TaskListItem> {
+        var date: String? = null
+        var header = BaseListHeader("A")
+
+        return viewResult
+                .map { taskMap ->
+                    val task = TaskInfo()
+                    task.fromMap(taskMap)
+                    task
+                }
+                .sortedByDescending { a -> a.created }
+                .map { task ->
+                    val dateCaption = task.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
+                    if (date == null || date != dateCaption) {
+                        date = dateCaption
+                        header = BaseListHeader(dateCaption)
+                    }
+                    TaskListItem(task, header, lm)
+                }.toMutableList()
     }
 
-    private fun showMine(index: Int) {
-
-    }
-
-    private fun showAll(index: Int) {
-
+    override fun handleUpdateList(type: String, viewResult: List<Map<String, Any?>>) {
+        when (type) {
+            "TaskInfo" -> {
+                val referencesList = formatTasks(viewResult)
+                val adapter = mAdapter as? TasksListFlexibleAdapter
+                setMenuMask(TASKS_MENU_MASK)
+                if (adapter != null) {
+                    adapter.updateDataSet(referencesList, true)
+                } else {
+                    mAdapter = TasksListFlexibleAdapter(referencesList, tasksActions)
+                    initAdapter()
+                }
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
         super.onActivityCreated(savedInstanceState)
-        rvTasksList.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
-        rvTasksList.addItemDecoration(
-                DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        val categories = arrayListOf<DropdownTopItemInfo>(
-                //DropdownTopItemInfo("Mine", 2, ::showMine),
-                //DropdownTopItemInfo("All", 12, ::showAll)
-        )
-
-        DropdownTop(categories, activity!!)
-
-        adapter = AutoClearedValue(
-                this,
-                TasksListAdapter(this::onTaskClicked, lm),
-                {
-                    it?.onTaskClick = null
-                    it?.lm = null
-                })
-        rvTasksList.adapter = adapter.value
-
-        /*savedInstanceState?.apply {
-            val adapter = adapter.value
-            val layoutManager = rvTasksList?.layoutManager
-            if(adapter != null
-                    && layoutManager != null) {
-                if(containsKey(tasksListKey)
-                        && containsKey(layoutManagerKey)) {
-                    val savedTasks = getParcelableArray(tasksListKey).map { it as TaskModel }
-                    adapter.items.clear()
-                    adapter.items.addAll(savedTasks)
-                    layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
-                } else {
-                    ignoreSavedState = true
-                }
-            }
-        }*/
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.apply {
-            val adapter = adapter.value
-            val layoutManager = rvTasksList?.layoutManager
-            /*if(adapter != null
-                    && layoutManager != null) {
-                putParcelableArray(
-                        tasksListKey,
-                        adapter.items.toTypedArray())
-                putParcelable(
-                        layoutManagerKey,
-                        layoutManager.onSaveInstanceState())
-            }*/
-        }
+        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_addTask -> {
-                navigationController.navigateToAddTask()
+            R.id.action_add -> {
+                navigationController.navigateToAddClient()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_tasks_tab_menu, menu)
-
-        this.addTaskMenuItem = menu.findItem(R.id.action_addTask)
-        this.addTaskMenuItem.isVisible = true
-        this.activity?.toolbar_left_action?.setOnClickListener { _ ->
-
-        }
-
+        inflater.inflate(R.menu.toolbar_tasks_list_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    private fun onTaskClicked(task: Any) {
-        /*val id = task.id
-        if(id != null) {
-            navigationController.navigateToTask(id)
-        }*/
-    }
-
 }

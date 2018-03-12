@@ -56,7 +56,11 @@
 
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>
+    <string name="ServerMessage_Views_TasksManagersView">Tasks</string>
+    <string name="ServerMessage_Views_TasksPerformersView">Tasks</string>
     <string name="ServerMessage_Views_InvitationsView">Invitations</string>
+    <string name="ServerMessage_TaskStates_Unconfirmed">Unconfirmed</string>
+
     <string name="Core_Dropdown_Top_Quantity"> (%d)</string>
 
     <string name="Core_Delete_List_Item">Delete</string>

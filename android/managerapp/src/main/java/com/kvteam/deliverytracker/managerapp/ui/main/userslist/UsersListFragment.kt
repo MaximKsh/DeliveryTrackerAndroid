@@ -160,7 +160,6 @@ open class UsersListFragment : BaseListFragment() {
         mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
         super.onActivityCreated(savedInstanceState)
         (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
