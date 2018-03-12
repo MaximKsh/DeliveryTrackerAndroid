@@ -11,6 +11,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragme
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Subcomponent
@@ -33,6 +34,12 @@ interface AddPaymentTypeSubcomponent : AndroidInjector<AddPaymentTypeFragment> {
 interface EditProductSubcomponent : AndroidInjector<EditProductFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditProductFragment>()
+}
+
+@Subcomponent
+interface EditTaskSubcomponent : AndroidInjector<EditTaskFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<EditTaskFragment>()
 }
 
 @Subcomponent

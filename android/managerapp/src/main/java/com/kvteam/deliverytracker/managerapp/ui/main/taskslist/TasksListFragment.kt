@@ -97,7 +97,7 @@ open class TasksListFragment : BaseListFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add -> {
-                navigationController.navigateToAddClient()
+                navigationController.navigateToEditTask()
             }
         }
         return super.onOptionsItemSelected(item)

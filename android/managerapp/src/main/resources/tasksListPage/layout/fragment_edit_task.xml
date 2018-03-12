@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="55dp"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvTaskInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="10dp"
+            android:text="General info"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/rlTaskInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTaskInfo"
+            android:background="@color/colorWhite"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:id="@+id/rlTaskNumber"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etTaskNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="@string/ManagerApp_AddTaskFragment_Number"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivTaskNumberHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlDeliveryFrom"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlTaskNumber"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etDeliveryFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="Delivery from"
+                    android:inputType="datetime"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivDeliveryFromHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlDeliveryTo"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlDeliveryFrom"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etDeliveryTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="Delivery to"
+                    android:inputType="datetime"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivDeliveryToHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlReceiptAt"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlDeliveryTo"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etReceiptAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="Receipt at"
+                    android:inputType="datetime"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivReceiptsAtHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlPaymentType"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlReceiptAt"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etPaymentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="AUTOCOMPLITE PAYMENT TYPE"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivPaymentTypeHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlDeliveryType"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlPaymentType"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etDeliveryCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="AUTOCOMPLITE DELIVERY TYPE"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivDeliveryTypeHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlTaskComment"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/rlDeliveryType"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etTaskComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="Task comment"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivTaskCommentHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvTaskProductsInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlTaskInfo"
+            android:padding="10dp"
+            android:text="Products info"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/rlTaskProductsInfo"
+            android:background="@color/colorWhite"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTaskProductsInfo">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlTaskProducts"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etTaskProducts"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="AUTOCOMPLITE PRODUCTS AND WAREHOUSES"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivTaskProductsHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvTaskClientInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlTaskProductsInfo"
+            android:padding="10dp"
+            android:text="Client info"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:id="@+id/rlTaskClientInfo"
+            android:background="@color/colorWhite"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTaskClientInfo">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlTaskClient"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/etTaskClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:ems="10"
+                    android:hint="AUTOCOMPLITE CLIENT AND CREATION"
+                    android:paddingEnd="45dp"
+                    android:paddingStart="45dp"
+                    android:theme="@style/EditTextTheme" />
+
+
+                <ImageView
+                    android:id="@+id/ivTaskClientHintIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="13dp"
+                    android:alpha="0.3"
+                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:src="@drawable/ic_tasks_black_24dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>
