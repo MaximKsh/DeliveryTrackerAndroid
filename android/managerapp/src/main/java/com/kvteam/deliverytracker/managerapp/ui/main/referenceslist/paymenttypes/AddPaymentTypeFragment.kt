@@ -36,6 +36,8 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
+        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Product")
         etNameField.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)

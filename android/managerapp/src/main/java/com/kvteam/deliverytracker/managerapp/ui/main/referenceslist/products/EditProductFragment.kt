@@ -49,7 +49,7 @@ class EditProductFragment : DeliveryTrackerFragment() {
                     val product = Product()
                     product.name = etNameField.text.toString()
                     product.vendorCode = etVendorCodeField.text.toString()
-                    product.cost = etCostField.text as BigDecimal
+                    product.cost = BigDecimal(etCostField.text.toString())
                     product.description = etDescriptionField.text.toString()
 
                     referenceWebservice.create("Product", product)

@@ -18,8 +18,8 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.Clie
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientsListFlexibleAdapter
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypesListFlexibleAdapter
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.ProductsListFlexibleAdapter
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.ProductListItem
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductsListFlexibleAdapter
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehousesListFlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter

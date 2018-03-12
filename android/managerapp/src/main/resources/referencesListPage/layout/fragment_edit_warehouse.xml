@@ -1,7 +1,8 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -13,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:ems="10"
-            android:hint="@string/ManagerApp_AddTaskFragment_Address"
+            android:hint="@string/ManagerApp_EnterNameHint"
             android:paddingEnd="45dp"
             android:paddingStart="45dp"
             android:theme="@style/EditTextTheme" />
@@ -26,7 +27,7 @@
             android:layout_marginTop="13dp"
             android:alpha="0.3"
             android:contentDescription="@string/ManagerApp_CodeHintIcon"
-            android:src="@drawable/ic_location_on_black_24dp" />
+            android:src="@drawable/ic_assignment_ind_black_24dp" />
 
     </RelativeLayout>
 
@@ -57,4 +58,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>

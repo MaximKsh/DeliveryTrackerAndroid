@@ -41,7 +41,8 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     private fun onItemSelected (index: Int) {
-        if (index != lastSelectedIndex.get()) {
+        val lsi = lastSelectedIndex.get()
+        if (index != lsi && lsi != -1) {
             dropdownTopItems[lastSelectedIndex.get()].reset()
         }
         lastSelectedIndex.set(index)
@@ -93,6 +94,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
+        activity.vBlackView.isClickable = true
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, rotatedToggleIcon, null)
     }
 
@@ -116,6 +118,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
+        activity.vBlackView.isClickable = false
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
     }
 
@@ -134,6 +137,8 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     fun init() {
+        activity.vBlackView.isClickable = false
+
         updateDataSet(items)
 
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
@@ -151,6 +156,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         activity.vBlackView.setOnClickListener { _ ->
             lastSelectedIndex.set(-1)
             closeDropdown()
+            isCollapsed = false
         }
     }
 }
