@@ -35,6 +35,7 @@ android {
                             'src/main/resources/confirmPage',
                             'src/main/resources/createInstancePage',
                             'src/main/resources/loginPage',
+                            'src/main/resources/tasksListPage',
                             'src/main/resources/usersListPage',
                             'src/main/resources/referencesListPage'
                     ]

@@ -16,8 +16,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragme
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -35,6 +34,16 @@ abstract class UsersListFragmentModule {
             AndroidInjector.Factory<out Fragment>
 
 }
+
+@Module(subcomponents = arrayOf(TasksListFragmentSubcomponent::class))
+abstract class TasksListFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TasksListFragment::class)
+    internal abstract fun tasksListFragmentInjector(builder: TasksListFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
 
 @Module(subcomponents = arrayOf(AddUserFragmentSubcomponent::class))
 abstract class AddUserFragmentModule {
@@ -89,25 +98,6 @@ abstract class AddClientFragmentModule {
     @IntoMap
     @FragmentKey(AddClientFragment::class)
     internal abstract fun addClientFragmentInjector(builder: AddClientSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
-
-@Module(subcomponents = arrayOf(AllTasksListFragmentSubcomponent::class))
-abstract class AllTasksListFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(AllTasksListFragment::class)
-    internal abstract fun undistributedTasksListFragmentInjector(builder: AllTasksListFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
-@Module(subcomponents = arrayOf(MyTasksListFragmentSubcomponent::class))
-abstract class MyTasksListFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(MyTasksListFragment::class)
-    internal abstract fun myTasksInjector(builder: MyTasksListFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

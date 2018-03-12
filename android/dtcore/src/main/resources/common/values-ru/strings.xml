@@ -54,4 +54,8 @@
     <string name="ServerMessage_Views_ManagersView">Менеджеры</string>
     <string name="ServerMessage_Views_PerformersView">Исполнители</string>
     <string name="ServerMessage_Views_InvitationsView">Приглашения</string>
+    <string name="ServerMessage_Views_TasksManagersView">Задачи</string>
+    <string name="ServerMessage_Views_TasksPerformersView">Задачи</string>
+    <string name="ServerMessage_TaskStates_Unconfirmed">Не подтвержденно</string>
+
 </resources>
