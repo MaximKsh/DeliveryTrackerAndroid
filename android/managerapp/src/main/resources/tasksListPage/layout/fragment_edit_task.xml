@@ -151,15 +151,23 @@
                 android:layout_below="@id/rlReceiptAt"
                 android:layout_gravity="center">
 
-                <EditText
-                    android:id="@+id/etPaymentType"
+                <com.kvteam.deliverytracker.core.ui.autocomplete.DelayAutoCompleteTextView
+                    android:id="@+id/acPaymentType"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="AUTOCOMPLITE PAYMENT TYPE"
+                    android:layout_height="wrap_content"
                     android:paddingEnd="45dp"
                     android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
+                    android:imeOptions="flagNoExtractUi|actionSearch"/>
+
+                <ProgressBar
+                    android:id="@+id/pbPaymentType"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:visibility="gone"/>
 
 
                 <ImageView
