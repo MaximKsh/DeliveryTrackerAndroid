@@ -3,6 +3,7 @@
     android:id="@+id/ll_dropdown_top_item"
     android:layout_width="match_parent"
     android:layout_height="45dp"
+    android:background="?selectableItemBackground"
     android:gravity="center_vertical">
 
     <ImageView

@@ -44,6 +44,11 @@
     <string name="Core_Session_Error_EditUserInfo">Ошибка изменения пользовательских данных</string>
     <string name="Core_Session_Error_Unauthorized">Вы не авторизованы</string>
 
+    <string name="Core_Product_Name">Название продукта</string>
+    <string name="Core_Product_Vendor_Code">Артикул</string>
+    <string name="Core_Product_Cost">Цена</string>
+    <string name="Core_Product_Description">Описание</string>
+
     <string name="Core_Delete_List_Item">Удалить</string>
 
     <string name="ServerMessage_Views_ManagersView">Менеджеры</string>

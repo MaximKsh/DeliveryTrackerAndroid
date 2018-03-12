@@ -41,7 +41,8 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     private fun onItemSelected (index: Int) {
-        if (index != lastSelectedIndex.get()) {
+        val lsi = lastSelectedIndex.get()
+        if (index != lsi && lsi != -1) {
             dropdownTopItems[lastSelectedIndex.get()].reset()
         }
         lastSelectedIndex.set(index)
@@ -93,6 +94,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
+        activity.vBlackView.isClickable = true
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, rotatedToggleIcon, null)
     }
 
@@ -116,10 +118,27 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
+        activity.vBlackView.isClickable = false
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
     }
 
+    fun setToolbarTitle(text: String) {
+        activity.toolbar_title.text = text
+    }
+
+    fun enableDropdown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        activity.toolbar_title.isClickable = true
+    }
+
+    fun disableDropDown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+        activity.toolbar_title.isClickable = false
+    }
+
     fun init() {
+        activity.vBlackView.isClickable = false
+
         updateDataSet(items)
 
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
@@ -132,6 +151,12 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
                 openDropdown()
                 isCollapsed = true
             }
+        }
+
+        activity.vBlackView.setOnClickListener { _ ->
+            lastSelectedIndex.set(-1)
+            closeDropdown()
+            isCollapsed = false
         }
     }
 }

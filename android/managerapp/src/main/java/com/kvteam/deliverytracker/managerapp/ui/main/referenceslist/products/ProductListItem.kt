@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes
+package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.graphics.Color
 import android.view.View

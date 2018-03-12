@@ -5,8 +5,13 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
-import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
@@ -39,6 +44,52 @@ abstract class AddUserFragmentModule {
     internal abstract fun addUserFragmentInjector(builder: AddUserFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 
+}
+
+@Module(subcomponents = arrayOf(EditClientAddressSubcomponent::class))
+abstract class EditClientAddressFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(EditClientAddressFragment::class)
+    internal abstract fun editClientAddressFragmentInjector(builder: EditClientAddressSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+
+}
+
+@Module(subcomponents = arrayOf(AddPaymentTypeSubcomponent::class))
+abstract class AddPaymentTypeFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(AddPaymentTypeFragment::class)
+    internal abstract fun addPaymentTypeFragmentInjector(builder: AddPaymentTypeSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(EditProductSubcomponent::class))
+abstract class EditProductFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(EditProductFragment::class)
+    internal abstract fun editProductFragmentInjector(builder: EditProductSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(EditWarehouseSubcomponent::class))
+abstract class EditWarehouseFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(EditWarehouseFragment::class)
+    internal abstract fun editWarehouseFragmentInjector(builder: EditWarehouseSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(AddClientSubcomponent::class))
+abstract class AddClientFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(AddClientFragment::class)
+    internal abstract fun addClientFragmentInjector(builder: AddClientSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
 }
 
 
