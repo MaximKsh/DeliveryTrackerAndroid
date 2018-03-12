@@ -7,6 +7,8 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.Edit
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
@@ -86,4 +88,16 @@ interface SelectPerformerFragmentSubcomponent : AndroidInjector<SelectPerformerF
 interface ReferenceListFragmentSubcomponent : AndroidInjector<ReferenceListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<ReferenceListFragment>()
+}
+
+@Subcomponent
+interface SettingsFragmentSubcomponent : AndroidInjector<SettingsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<SettingsFragment>()
+}
+
+@Subcomponent
+interface EditSettingsFragmentSubcomponent : AndroidInjector<EditSettingsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<EditSettingsFragment>()
 }

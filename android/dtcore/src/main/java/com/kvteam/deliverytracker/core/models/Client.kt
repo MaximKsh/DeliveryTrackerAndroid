@@ -1,18 +1,20 @@
 package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Client : ModelBase() {
+class Client(
     @SerializedName("Surname", alternate = ["surname"])
-    var surname: String? = null
+    var surname: String? = null,
     @SerializedName("Name", alternate = ["name"])
-    var name: String? = null
+    var name: String? = null,
     @SerializedName("Patronymic", alternate = ["patronymic"])
-    var patronymic: String? = null
+    var patronymic: String? = null,
     @SerializedName("PhoneNumber", alternate = ["phoneNumber"])
-    var phoneNumber: String? = null
+    var phoneNumber: String? = null,
     @SerializedName("Addresses", alternate = ["addresses"])
     var clientAddresses: MutableList<ClientAddress> = mutableListOf()
+): ModelBase(), Serializable {
 
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)

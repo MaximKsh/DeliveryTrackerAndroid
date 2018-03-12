@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.EntityResult
+import com.kvteam.deliverytracker.core.models.TaskInfo
+import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -35,6 +38,9 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
     //@Inject
     //lateinit var taskRepository: ITaskRepository
 
+    @Inject
+    lateinit var taskWebservice: ITaskWebservice
+
     var taskId: UUID? = null
         private set
 
@@ -55,6 +61,22 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val taskInfo = TaskInfo()
+        taskInfo.taskNumber = "001"
+        taskInfo.taskProducts = mutableListOf(TaskProduct())
+        taskInfo.taskProducts[0].productId = UUID.fromString("2bff4e04-e6f2-4240-aebc-4c7568938f63")
+        taskInfo.taskProducts[0].quantity = 1
+
+        invokeAsync({
+            taskWebservice.create(taskInfo)
+        }, {
+            val result = it
+            if(result.success) {
+
+            }
+        })
+
 
         if(savedInstanceState != null
                 && view != null) {

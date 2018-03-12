@@ -3,6 +3,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
+import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
@@ -11,6 +12,8 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.Edit
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
@@ -132,5 +135,24 @@ abstract class ReferenceListFragmentModule {
     @IntoMap
     @FragmentKey(ReferenceListFragment::class)
     internal abstract fun referenceListFragmentInjector(builder: ReferenceListFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(SettingsFragmentSubcomponent::class))
+abstract class SettingsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(SettingsFragment::class)
+    internal abstract fun settingsFragmentInjector(builder: SettingsFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+
+@Module(subcomponents = arrayOf(EditSettingsFragmentSubcomponent::class))
+abstract class EditSettingsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(EditSettingsFragment::class)
+    internal abstract fun editSettingsFragmentInjector(builder: EditSettingsFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }

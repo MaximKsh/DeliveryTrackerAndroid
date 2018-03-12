@@ -15,6 +15,8 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformer
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragmentMode
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -104,10 +106,18 @@ class NavigationController (private val mainActivity: MainActivity) {
     }
 
     fun navigateToSettings() {
-        val fragment = MyTasksListFragment()
+        val fragment = SettingsFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToEditSettings() {
+        val fragment = EditSettingsFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 
@@ -142,5 +152,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
+
+
 
 }
