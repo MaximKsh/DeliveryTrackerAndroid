@@ -26,8 +26,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragme
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.MyTasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -83,6 +82,10 @@ abstract class MainActivityModule {
     internal abstract fun usersListFragment(): UsersListFragment
 
     @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TasksListFragmentModule::class))
+    internal abstract fun tasksListFragment(): TasksListFragment
+
+    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AddUserFragmentModule::class))
     internal abstract fun addUserFragment(): AddUserFragment
 
@@ -105,14 +108,6 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditClientAddressFragmentModule::class))
     internal abstract fun editClientAddressFragment(): EditClientAddressFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(AllTasksListFragmentModule::class))
-    internal abstract fun allTaskListFragment(): AllTasksListFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(MyTasksListFragmentModule::class))
-    internal abstract fun myTasksListFragment(): MyTasksListFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AddTaskFragmentModule::class))

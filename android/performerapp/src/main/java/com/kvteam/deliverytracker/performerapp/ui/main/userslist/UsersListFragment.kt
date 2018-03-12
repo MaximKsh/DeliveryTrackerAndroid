@@ -81,9 +81,6 @@ open class UsersListFragment : DeliveryTrackerFragment() {
             val layoutManager = rvUsersList?.layoutManager
             if(adapter != null
                     && layoutManager != null) {
-                putParcelableArray(
-                        usersListKey,
-                        adapter.items.toTypedArray())
                 putParcelable(
                         layoutManagerKey,
                         layoutManager.onSaveInstanceState())

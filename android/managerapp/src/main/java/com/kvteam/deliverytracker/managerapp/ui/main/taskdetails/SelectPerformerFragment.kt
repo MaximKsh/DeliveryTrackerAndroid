@@ -102,9 +102,6 @@ open class SelectPerformerFragment : DeliveryTrackerFragment() {
             val layoutManager = rvAvailablePerformersList?.layoutManager
             if(adapter != null
                     && layoutManager != null) {
-                putParcelableArray(
-                        performersListKey,
-                        adapter.items.toTypedArray())
                 putParcelable(
                         layoutManagerKey,
                         layoutManager.onSaveInstanceState())

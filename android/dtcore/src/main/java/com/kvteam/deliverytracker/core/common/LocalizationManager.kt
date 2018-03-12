@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.common
 
+import android.content.res.Resources
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.R
 
@@ -16,7 +17,11 @@ class LocalizationManager(
     }
 
     override fun getString(resId: Int): String {
-        return app.getString(resId)
+        return try {
+            app.getString(resId)
+        } catch (e: Resources.NotFoundException) {
+            resId.toString()
+        }
     }
 
     override fun getString(resName: String): String {
