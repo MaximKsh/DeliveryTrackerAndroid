@@ -9,6 +9,6 @@ interface IViewWebservice {
 
     fun getDigest(viewGroup: String) : NetworkResult<ViewResponse>
 
-    fun getViewResult(viewGroup: String, view: String) : NetworkResult<ViewResponse>
+    fun getViewResult(viewGroup: String, view: String, arguments: Map<String, Any>? = null) : NetworkResult<ViewResponse>
 
 }

@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.webservice
 
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ViewResponse
 
 class ViewWebservice(private val webservice: IWebservice) : IViewWebservice {
@@ -30,9 +31,14 @@ class ViewWebservice(private val webservice: IWebservice) : IViewWebservice {
         return result
     }
 
-    override fun getViewResult(viewGroup: String, view: String): NetworkResult<ViewResponse> {
+    override fun getViewResult(viewGroup: String, view: String, arguments: Map<String, Any>?): NetworkResult<ViewResponse> {
+        var getArguments = EMPTY_STRING
+        if(arguments != null) {
+            getArguments = "?"
+            getArguments += arguments.asIterable().joinToString("&", transform = {"${it.key}=${it.value}"})
+        }
         val result = webservice.get<ViewResponse>(
-                "$viewBaseUrl/$viewGroup/$view",
+                "$viewBaseUrl/$viewGroup/$view$getArguments",
                 ViewResponse::class.java,
                 true)
         return result
