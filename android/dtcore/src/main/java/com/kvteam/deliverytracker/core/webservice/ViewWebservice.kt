@@ -32,10 +32,11 @@ class ViewWebservice(private val webservice: IWebservice) : IViewWebservice {
     }
 
     override fun getViewResult(viewGroup: String, view: String, arguments: Map<String, Any>?): NetworkResult<ViewResponse> {
-        var getArguments = EMPTY_STRING
-        if(arguments != null) {
-            getArguments = "?"
-            getArguments += arguments.asIterable().joinToString("&", transform = {"${it.key}=${it.value}"})
+        val getArguments = if(arguments != null) {
+            arguments.asIterable().joinToString(
+                    prefix = "?", separator = "&", transform = {"${it.key}=${it.value}"})
+        } else {
+            EMPTY_STRING
         }
         val result = webservice.get<ViewResponse>(
                 "$viewBaseUrl/$viewGroup/$view$getArguments",
