@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.AutoCompleteTextView
+import java.lang.ref.WeakReference
 
 
 class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCompleteTextView(context, attrs) {
@@ -17,11 +18,17 @@ class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCom
     private var mAutoCompleteDelay = defaultAutocompleteDelay
     private var mLoadingIndicator: ProgressBar? = null
 
-    private val mHandler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super@DelayAutoCompleteTextView.performFiltering(msg.obj as CharSequence, msg.arg1)
+    private class FilterMessageHandler(view : DelayAutoCompleteTextView): Handler() {
+        private val viewReference = WeakReference<DelayAutoCompleteTextView>(view)
+        override fun handleMessage(msg: Message?) {
+            val view = viewReference.get()
+            if(view != null && msg != null) {
+                view.performFilteringSuper(msg.obj as CharSequence, msg.arg1)
+            }
         }
     }
+
+    private val handler = FilterMessageHandler(this)
 
     fun setLoadingIndicator(progressBar: ProgressBar) {
         mLoadingIndicator = progressBar
@@ -32,17 +39,17 @@ class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCom
     }
 
     override fun performFiltering(text: CharSequence, keyCode: Int) {
-        if (mLoadingIndicator != null) {
-            mLoadingIndicator!!.visibility = View.VISIBLE
-        }
-        mHandler.removeMessages(messageTextChanged)
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(messageTextChanged, text), mAutoCompleteDelay)
+        mLoadingIndicator?.visibility = View.VISIBLE
+        handler.removeMessages(messageTextChanged)
+        handler.sendMessageDelayed(handler.obtainMessage(messageTextChanged, text), mAutoCompleteDelay)
     }
 
     override fun onFilterComplete(count: Int) {
-        if (mLoadingIndicator != null) {
-            mLoadingIndicator!!.visibility = View.GONE
-        }
+        mLoadingIndicator?.visibility = View.GONE
         super.onFilterComplete(count)
+    }
+
+    private fun performFilteringSuper(text: CharSequence, keyCode: Int) {
+        super.performFiltering(text, keyCode)
     }
 }

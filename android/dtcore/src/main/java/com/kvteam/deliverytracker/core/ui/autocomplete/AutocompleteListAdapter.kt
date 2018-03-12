@@ -9,43 +9,57 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.ModelBase
+import java.lang.ref.WeakReference
+import kotlin.math.min
 
 
-class AutocompleteListAdapter <out T : ModelBase> (
+open class AutocompleteListAdapter <T : ModelBase> (
         private val ctx: Context,
         private val getListFunc: (String) -> MutableList<T>,
-        private val mainLineCaptionFunc: (T) -> String,
-        private val secondLineCaptionFunc: ((T) -> String)? = null,
-        private val limit: Int = 10)
+        private val mainLineCaptionFunc: (T) -> String = { EMPTY_STRING },
+        private val limit: Int = 5)
     : BaseAdapter(), Filterable {
 
-    private val filter = object: Filter() {
+    class AutocompleteFilter<out T : ModelBase>(
+            adapter: AutocompleteListAdapter<T>) : Filter() {
+        private val adapterRef = WeakReference(adapter)
+
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val results = FilterResults()
-            results.values = getListFunc(constraint.toString())
+            val adapter = adapterRef.get() ?: return results
+            val items = adapter.getListFunc(constraint.toString())
+            results.values = items.subList(0, min(adapter.limit, items.size))
             return results
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            val adapter = adapterRef.get() ?: return
             val values = results?.values
             if (results != null
                     && values is MutableList<*>) {
-                list.clear()
+                adapter.list.clear()
                 for (item in values) {
                     @Suppress("UNCHECKED_CAST")
-                    list.add(item as T)
+                    adapter.list.add(item as T)
                 }
-                notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
             } else {
-                notifyDataSetInvalidated()
+                adapter.notifyDataSetInvalidated()
             }
         }
-
     }
+
+    private val autocompleteFilter: AutocompleteFilter<T> by lazy { AutocompleteFilter(this) }
 
     private val list = mutableListOf<T>()
 
+    protected open val viewLayoutId = R.layout.autocomplete_list_item
+
+    protected open fun updateView(position: Int, item: T, view: View, parent: ViewGroup?) {
+        (view.findViewById(R.id.tvMainLine) as TextView).text = mainLineCaptionFunc(item)
+    }
 
     override fun getItem(position: Int): T = list[position]
 
@@ -56,19 +70,15 @@ class AutocompleteListAdapter <out T : ModelBase> (
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = if (convertView == null) {
             val inflater = LayoutInflater.from(ctx)
-            inflater.inflate(R.layout.autocomplete_list_item, parent, false)
+            inflater.inflate(viewLayoutId, parent, false)
         } else {
             convertView
         }
         val item = getItem(position)
-        (view.findViewById(R.id.tvMainLine) as TextView).text = mainLineCaptionFunc(item)
-        val slcf = secondLineCaptionFunc
-        if(slcf != null){
-            (view.findViewById(R.id.tvSecondLine) as TextView).text = slcf(item)
-        }
+        updateView(position, item, view, parent)
         return view
     }
 
-    override fun getFilter() = filter
+    override fun getFilter() = autocompleteFilter
 
 }
