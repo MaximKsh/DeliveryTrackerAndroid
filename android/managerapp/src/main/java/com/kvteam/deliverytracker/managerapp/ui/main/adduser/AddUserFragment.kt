@@ -83,6 +83,9 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
         val adapter = ArrayAdapter.createFromResource(this.activity,
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        etNameField.requestFocus()
+        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         sUserRole.adapter = adapter
         this.activity?.toolbar_title?.text = resources.getString(R.string.ManagerApp_Toolbar_AddUser)
 

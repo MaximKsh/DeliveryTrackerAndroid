@@ -133,5 +133,10 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
                 isCollapsed = true
             }
         }
+
+        activity.vBlackView.setOnClickListener { _ ->
+            lastSelectedIndex.set(-1)
+            closeDropdown()
+        }
     }
 }

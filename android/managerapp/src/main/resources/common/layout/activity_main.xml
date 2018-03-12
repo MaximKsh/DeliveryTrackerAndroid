@@ -14,7 +14,7 @@
         <include layout="@layout/toolbar" />
 
         <FrameLayout
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="60dp"
             android:id="@+id/mainContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

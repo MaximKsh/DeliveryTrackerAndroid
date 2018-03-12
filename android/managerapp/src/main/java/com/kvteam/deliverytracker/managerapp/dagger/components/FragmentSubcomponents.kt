@@ -2,6 +2,11 @@ package com.kvteam.deliverytracker.managerapp.dagger.components
 
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
@@ -15,6 +20,36 @@ import dagger.android.AndroidInjector
 interface AddUserFragmentSubcomponent : AndroidInjector<AddUserFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<AddUserFragment>()
+}
+
+@Subcomponent
+interface AddPaymentTypeSubcomponent : AndroidInjector<AddPaymentTypeFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<AddPaymentTypeFragment>()
+}
+
+@Subcomponent
+interface EditProductSubcomponent : AndroidInjector<EditProductFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<EditProductFragment>()
+}
+
+@Subcomponent
+interface EditWarehouseSubcomponent : AndroidInjector<EditWarehouseFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<EditWarehouseFragment>()
+}
+
+@Subcomponent
+interface AddClientSubcomponent : AndroidInjector<AddClientFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<AddClientFragment>()
+}
+
+@Subcomponent
+interface EditClientAddressSubcomponent : AndroidInjector<EditClientAddressFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<EditClientAddressFragment>()
 }
 
 @Subcomponent

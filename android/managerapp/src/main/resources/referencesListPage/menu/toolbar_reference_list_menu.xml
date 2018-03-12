@@ -15,4 +15,9 @@
         android:id="@+id/action_add_client"
         android:title="@string/ManagerApp_Toolbar_AddClient"
         app:showAsAction="collapseActionView"/>
+
+    <item
+        android:id="@+id/action_add_warehouse"
+        android:title="@string/ManagerApp_Toolbar_AddWarehouse"
+        app:showAsAction="collapseActionView"/>
 </menu>

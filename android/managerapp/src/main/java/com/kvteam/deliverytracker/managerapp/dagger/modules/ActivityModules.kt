@@ -16,6 +16,11 @@ import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.AllTasksListFragment
@@ -77,6 +82,26 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AddUserFragmentModule::class))
     internal abstract fun addUserFragment(): AddUserFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(AddPaymentTypeFragmentModule::class))
+    internal abstract fun addPaymentTypeFragment(): AddPaymentTypeFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(EditProductFragmentModule::class))
+    internal abstract fun editProductFragment(): EditProductFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(EditWarehouseFragmentModule::class))
+    internal abstract fun editWarehouseFragment(): EditWarehouseFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(AddClientFragmentModule::class))
+    internal abstract fun addClientFragment(): AddClientFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(EditClientAddressFragmentModule::class))
+    internal abstract fun editClientAddressFragment(): EditClientAddressFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AllTasksListFragmentModule::class))

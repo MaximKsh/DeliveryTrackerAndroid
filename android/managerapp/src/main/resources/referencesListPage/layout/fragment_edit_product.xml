@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/etNameField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:hint="@string/ManagerApp_EnterNameHint"
+                android:inputType="textPersonName"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivNameHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/etVendorCodeField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:hint="@string/ManagerApp_EnterSurnameHint"
+                android:inputType="textPersonName"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivVendorCodeHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/etCostField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:hint="@string/ManagerApp_EnterPatronymicHint"
+                android:inputType="textPersonName"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivCostHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/etDescriptionField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:hint="@string/ManagerApp_EnterPhoneNumberHint"
+                android:inputType="phone"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivPhoneNumberHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:src="@drawable/ic_phone_black_24dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>
