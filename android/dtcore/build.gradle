@@ -37,7 +37,8 @@ android {
                             'src/main/resources/baseList',
                             'src/main/resources/toolbar',
                             'src/main/resources/common',
-                            'src/main/resources/settingsFragment'
+                            'src/main/resources/settingsFragment',
+                            'src/main/resources/autocomplete'
                     ]
         }
     }
