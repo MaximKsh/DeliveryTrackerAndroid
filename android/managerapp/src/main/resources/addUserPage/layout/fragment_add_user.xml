@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/colorWhite"
     android:padding="30dp"
-    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.adduser.AddUserFragment">
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment">
 
     <ScrollView
         android:layout_width="match_parent"

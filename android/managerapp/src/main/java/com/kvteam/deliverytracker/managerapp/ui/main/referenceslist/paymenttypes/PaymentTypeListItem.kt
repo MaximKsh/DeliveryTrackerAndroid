@@ -39,7 +39,7 @@ class PaymentTypeListItem(
 
     open class PaymentTypesListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int
-            get() = R.layout.fragment_reference_list_item
+            get() = R.layout.payment_type_list_item
 
         val tvName = view.tvName!!
     }

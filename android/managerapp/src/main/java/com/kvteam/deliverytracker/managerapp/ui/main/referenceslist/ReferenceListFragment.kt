@@ -6,8 +6,10 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
+import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -16,8 +18,10 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.Clie
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientsListFlexibleAdapter
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypesListFlexibleAdapter
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.ProductsListFlexibleAdapter
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.ProductListItem
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductsListFlexibleAdapter
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductListItem
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseListItem
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehousesListFlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import javax.inject.Inject
 
@@ -33,12 +37,14 @@ open class ReferenceListFragment : BaseListFragment() {
     private val PRODUCTS_MENU_ITEM = 1
     private val PAYMENT_TYPES_MENU_ITEM = PRODUCTS_MENU_ITEM shl 1
     private val CLIENTS_MENU_ITEM = PAYMENT_TYPES_MENU_ITEM shl 1
+    private val WAREHOUSES_MENU_ITEM = CLIENTS_MENU_ITEM shl 1
 
     private val PRODUCTS_MENU_MASK = PRODUCTS_MENU_ITEM
     private val PAYMENT_TYPES__MENU_MASK = PAYMENT_TYPES_MENU_ITEM
     private val CLIENTS_MENU_MASK = CLIENTS_MENU_ITEM
+    private val WAREHOUSES_MENU_MASK = WAREHOUSES_MENU_ITEM
 
-    private val paymentTypesActions = object: IBaseListItemActions<PaymentTypeListItem> {
+    private val paymentTypesActions = object : IBaseListItemActions<PaymentTypeListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
             if (adapter !is PaymentTypesListFlexibleAdapter) {
                 return
@@ -46,7 +52,7 @@ open class ReferenceListFragment : BaseListFragment() {
             invokeAsync({
                 referenceWebservice.delete("PaymentType", item.paymentType.id!!)
             }, {
-                if(it.success) {
+                if (it.success) {
                     itemList.remove(item)
                     adapter.updateDataSet(itemList, true)
                 }
@@ -56,15 +62,33 @@ open class ReferenceListFragment : BaseListFragment() {
         override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {}
     }
 
-    private val productsActions = object: IBaseListItemActions<ProductListItem> {
+    private val warehousesActions = object : IBaseListItemActions<WarehouseListItem> {
+        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {
+            if (adapter !is WarehousesListFlexibleAdapter) {
+                return
+            }
+            invokeAsync({
+                referenceWebservice.delete("Warehouse", item.warehouse.id!!)
+            }, {
+                if (it.success) {
+                    itemList.remove(item)
+                    adapter.updateDataSet(itemList, true)
+                }
+            })
+        }
+
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {}
+    }
+
+    private val productsActions = object : IBaseListItemActions<ProductListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
-            if(adapter !is ProductsListFlexibleAdapter) {
+            if (adapter !is ProductsListFlexibleAdapter) {
                 return
             }
             invokeAsync({
                 referenceWebservice.delete("Product", item.product.id!!)
             }, {
-                if(it.success) {
+                if (it.success) {
                     itemList.remove(item)
                     adapter.updateDataSet(itemList, true)
                 }
@@ -74,15 +98,15 @@ open class ReferenceListFragment : BaseListFragment() {
         override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
     }
 
-    private val clientsActions = object: IBaseListItemActions<ClientListItem> {
+    private val clientsActions = object : IBaseListItemActions<ClientListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {
-            if(adapter !is ClientsListFlexibleAdapter) {
+            if (adapter !is ClientsListFlexibleAdapter) {
                 return
             }
             invokeAsync({
                 referenceWebservice.delete("Client", item.client.id!!)
             }, {
-                if(it.success) {
+                if (it.success) {
                     itemList.remove(item)
                     adapter.updateDataSet(itemList, true)
                 }
@@ -90,6 +114,17 @@ open class ReferenceListFragment : BaseListFragment() {
         }
 
         override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {}
+    }
+
+    private fun formatWarehouses(viewResult: List<Map<String, Any?>>): MutableList<WarehouseListItem> {
+        val header = BaseListHeader("A")
+
+        return viewResult
+                .map { referenceMap ->
+                    val warehouse = Warehouse()
+                    warehouse.fromMap(referenceMap)
+                    WarehouseListItem(warehouse, header, lm)
+                }.toMutableList()
     }
 
     private fun formatPaymentTypes(viewResult: List<Map<String, Any?>>): MutableList<PaymentTypeListItem> {
@@ -115,12 +150,21 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
     private fun formatClients(viewResult: List<Map<String, Any?>>): MutableList<ClientListItem> {
-        val header = BaseListHeader("A")
+        var letter: Char? = null
+        var header = BaseListHeader("A")
 
         return viewResult
-                .map { referenceMap ->
+                .map { clientMap ->
                     val client = Client()
-                    client.fromMap(referenceMap)
+                    client.fromMap(clientMap)
+                    client
+                }
+                .sortedBy { c -> c.surname }
+                .map { client ->
+                    if (letter == null || letter != client.surname!![0]) {
+                        letter = client.surname!![0]
+                        header = BaseListHeader(letter!!.toString())
+                    }
                     ClientListItem(client, header, lm)
                 }.toMutableList()
     }
@@ -160,24 +204,39 @@ open class ReferenceListFragment : BaseListFragment() {
                     initAdapter()
                 }
             }
+            "Warehouse" -> {
+                val referencesList = formatWarehouses(viewResult)
+                val adapter = mAdapter as? WarehousesListFlexibleAdapter
+                setMenuMask(WAREHOUSES_MENU_MASK)
+                if (adapter != null) {
+                    adapter.updateDataSet(referencesList, true)
+                } else {
+                    mAdapter = WarehousesListFlexibleAdapter(referencesList, warehousesActions)
+                    initAdapter()
+                }
+            }
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
         super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add_client -> {
-                navigationController.navigateToAddPaymentReference()
+                navigationController.navigateToAddClient()
             }
             R.id.action_add_payment_type -> {
-                navigationController.navigateToAddPaymentReference()
+                navigationController.navigateToAddPaymentType()
             }
             R.id.action_add_product -> {
-                navigationController.navigateToAddPaymentReference()
+                navigationController.navigateToEditProduct()
+            }
+            R.id.action_add_warehouse -> {
+                navigationController.navigateToEditWarehouse()
             }
         }
         return super.onOptionsItemSelected(item)

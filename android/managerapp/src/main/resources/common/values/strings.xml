@@ -34,6 +34,7 @@
     <string name="ManagerApp_Toolbar_AddClient">Add client</string>
     <string name="ManagerApp_Toolbar_AddPaymentType">Add payment type</string>
     <string name="ManagerApp_Toolbar_AddProduct">Add product</string>
+    <string name="ManagerApp_Toolbar_AddWarehouse">Add warehouse</string>
 
     <string name="ManagerApp_Toolbar_AddTask">Add Task</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Delete</string>
@@ -70,7 +71,7 @@
     <string name="ServerMessage_Views_ProductsView">Products</string>
     <string name="ServerMessage_Views_PaymentTypesView">Payment Types</string>
     <string name="ServerMessage_Views_ClientsView">Clients</string>
-
+    <string name="ServerMessage_Views_WarehousesView">Warehouses</string>
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>

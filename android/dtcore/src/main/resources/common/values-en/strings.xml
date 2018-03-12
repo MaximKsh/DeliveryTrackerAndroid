@@ -1,7 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-    <string name="Core_WebserviceUrl" translatable="false">http://192.168.100.17:6000</string>
+    <string name="Core_WebserviceUrl" translatable="false">http://172.20.10.11:5000</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_TaskState_NewUndistributed">New undistributed</string>
@@ -47,6 +47,12 @@
     <string name="Core_Session_Error_RefreshUserInfo">Refresh user info error</string>
     <string name="Core_Session_Error_EditUserInfo">Edit user info error</string>
     <string name="Core_Session_Error_Unauthorized">Unauthorized</string>
+
+    <string name="Core_Product_Name">Product name</string>
+    <string name="Core_Product_Vendor_Code">Vendor Code</string>
+    <string name="Core_Product_Cost">Cost</string>
+    <string name="Core_Product_Description">Description</string>
+
 
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>

@@ -30,6 +30,7 @@
     <string name="ManagerApp_Toolbar_AddClient">Добавить клиента</string>
     <string name="ManagerApp_Toolbar_AddPaymentType">Добавить способ оплаты</string>
     <string name="ManagerApp_Toolbar_AddProduct">Добавить продукт</string>
+    <string name="ManagerApp_Toolbar_AddWarehouse">Добавить пункт выдачи</string>
 
     <string name="ManagerApp_Toolbar_AddTask">Добавить</string>
     <string name="ManagerApp_Toolbar_DeleteUser">Удалить</string>
@@ -56,9 +57,11 @@
     <string name="ManagerApp_TasksListFragment_AddTaskButton">Добавить задание</string>
     <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
     <string name="ManagerApp_Dropdown_Top_Quantity"> (%d)</string>
+
     <string name="ServerMessage_Views_ProductsView">Товары</string>
     <string name="ServerMessage_Views_PaymentTypesView">Способы оплаты</string>
     <string name="ServerMessage_Views_ClientsView">Клиенты</string>
+    <string name="ServerMessage_Views_WarehousesView">Пункты выдачи</string>
 
 
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Адрес не определен</string>
