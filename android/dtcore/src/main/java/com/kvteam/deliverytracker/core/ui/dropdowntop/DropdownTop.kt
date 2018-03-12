@@ -119,6 +119,20 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
     }
 
+    fun setToolbarTitle(text: String) {
+        activity.toolbar_title.text = text
+    }
+
+    fun enableDropdown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        activity.toolbar_title.isClickable = true
+    }
+
+    fun disableDropDown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+        activity.toolbar_title.isClickable = false
+    }
+
     fun init() {
         updateDataSet(items)
 

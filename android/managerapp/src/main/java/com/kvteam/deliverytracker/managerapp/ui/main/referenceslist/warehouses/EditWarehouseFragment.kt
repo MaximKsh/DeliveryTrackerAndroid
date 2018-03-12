@@ -5,6 +5,7 @@ import android.view.*
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Warehouse
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -28,6 +29,12 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
+        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Warehouse")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

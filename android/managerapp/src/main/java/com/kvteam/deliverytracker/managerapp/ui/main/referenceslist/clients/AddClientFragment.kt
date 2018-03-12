@@ -17,6 +17,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import kotlinx.android.synthetic.main.client_address_item.view.*
 import kotlinx.android.synthetic.main.fragment_add_client.*
 
@@ -47,6 +48,10 @@ class AddClientFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
+        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Client")
+
         tvAddAddress.setOnClickListener { _ ->
             navigationController.navigateToEditClientAddress(CollectionEntityAction.Create)
         }

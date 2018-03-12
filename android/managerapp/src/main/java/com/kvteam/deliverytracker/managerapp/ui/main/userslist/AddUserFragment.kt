@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.adduser
+package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -80,6 +81,8 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
+        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("User")
         val adapter = ArrayAdapter.createFromResource(this.activity,
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

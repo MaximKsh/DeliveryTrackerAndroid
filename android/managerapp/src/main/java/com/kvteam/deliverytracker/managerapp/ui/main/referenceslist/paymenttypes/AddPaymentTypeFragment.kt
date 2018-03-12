@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_add_payment_type.*
 import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import android.view.inputmethod.InputMethodManager
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 
 
 class AddPaymentTypeFragment : DeliveryTrackerFragment() {

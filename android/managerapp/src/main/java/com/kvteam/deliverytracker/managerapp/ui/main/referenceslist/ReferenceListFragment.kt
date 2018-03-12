@@ -9,6 +9,7 @@ import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -220,6 +221,7 @@ open class ReferenceListFragment : BaseListFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
         super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
