@@ -16,6 +16,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragme
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
@@ -61,6 +62,16 @@ abstract class EditClientAddressFragmentModule {
     @IntoMap
     @FragmentKey(EditClientAddressFragment::class)
     internal abstract fun editClientAddressFragmentInjector(builder: EditClientAddressSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+
+}
+
+@Module(subcomponents = arrayOf(EditTaskSubcomponent::class))
+abstract class EditTaskFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(EditTaskFragment::class)
+    internal abstract fun editTaskFragmentInjector(builder: EditTaskSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 
 }
