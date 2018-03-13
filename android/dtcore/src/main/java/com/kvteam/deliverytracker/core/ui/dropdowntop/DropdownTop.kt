@@ -6,6 +6,9 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import com.kvteam.deliverytracker.core.R
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -68,6 +71,44 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
 
     }
 
+    // TODO: move to controller
+    fun setToolbarTitle(text: String) {
+        activity.toolbar_title.text = text
+    }
+
+    fun enableDropdown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        activity.toolbar_title.isClickable = true
+    }
+
+    fun disableDropDown() {
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+        activity.toolbar_title.isClickable = false
+    }
+
+    fun enableSearchMode (callback: (String) -> Unit) {
+        disableDropDown()
+        activity.toolbar_title.visibility = View.GONE
+        activity.rlToolbarSearch.visibility = View.VISIBLE
+        activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                callback(p0.toString())
+            }
+        })
+    }
+
+    fun disableSearchMode () {
+        enableDropdown()
+        activity.toolbar_title.visibility = View.VISIBLE
+        activity.rlToolbarSearch.visibility = View.GONE
+    }
+
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angle)
@@ -120,20 +161,6 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
 
         activity.vBlackView.isClickable = false
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
-    }
-
-    fun setToolbarTitle(text: String) {
-        activity.toolbar_title.text = text
-    }
-
-    fun enableDropdown() {
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
-        activity.toolbar_title.isClickable = true
-    }
-
-    fun disableDropDown() {
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-        activity.toolbar_title.isClickable = false
     }
 
     fun init() {

@@ -1,0 +1,64 @@
+package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
+
+import android.os.Bundle
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.models.Product
+import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
+import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import javax.inject.Inject
+
+open class FilterProductsFragment : BaseListFragment() {
+    @Inject
+    lateinit var navigationController: NavigationController
+
+    override val viewGroup: String = "ReferenceViewGroup"
+
+    private val productActions = object : IBaseListItemActions<ProductListItem> {
+        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+    }
+
+
+    private fun formatProducts(viewResult: List<Map<String, Any?>>): MutableList<ProductListItem> {
+        return viewResult
+                .map { referenceMap ->
+                    val product = Product()
+                    product.fromMap(referenceMap)
+                    ProductListItem(product, null, lm)
+                }.toMutableList()
+    }
+
+    override fun handleUpdateList(type: String, viewResult: List<Map<String, Any?>>) {
+        val productsList = formatProducts(viewResult)
+        (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as DeliveryTrackerActivity).dropDownTop.disableSearchMode()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
+        (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
+        (activity as DeliveryTrackerActivity).dropDownTop.enableSearchMode({text ->
+            mAdapter.searchText = text
+            invokeAsync({
+                viewWebservice.getViewResult(viewGroup, "ProductsView", mapOf(
+                        "name" to text
+                ))
+            }, {
+                if (it.success) {
+                    val result = it.entity?.viewResult!!
+                    val productsList = formatProducts(result)
+                    (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
+                }
+            })
+        })
+        super.onActivityCreated(savedInstanceState)
+    }
+}
