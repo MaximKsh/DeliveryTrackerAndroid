@@ -26,14 +26,6 @@ class ClientListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: ClientsListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         holder.tvName.text = client.name
         holder.tvSurname.text = client.surname
         holder.tvPhoneNumber.text = client.phoneNumber

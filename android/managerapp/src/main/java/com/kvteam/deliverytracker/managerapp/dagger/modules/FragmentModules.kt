@@ -11,6 +11,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddC
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
@@ -91,6 +92,15 @@ abstract class EditProductFragmentModule {
     @IntoMap
     @FragmentKey(EditProductFragment::class)
     internal abstract fun editProductFragmentInjector(builder: EditProductSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(FilterProductsSubcomponent::class))
+abstract class FilterProductsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(FilterProductsFragment::class)
+    internal abstract fun filterProductsFragmentInjector(builder: FilterProductsSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

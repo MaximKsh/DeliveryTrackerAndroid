@@ -18,6 +18,8 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
         private val itemActions: IBaseListItemActions<T2>) : FlexibleAdapter<T2>(noHeaderItems) {
     private val viewBinderHelper = ViewBinderHelper()
 
+    var hideDeleteButton = false
+
     init {
         viewBinderHelper.setOpenOnlyOne(true);
     }
@@ -62,6 +64,8 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
             }
 
             viewBinderHelper.bind(holder.swipeRevealLayout, item.key)
+
+            holder.swipeRevealLayout.setLockDrag(hideDeleteButton)
         }
 
         super.onBindViewHolder(holder, position, payloads)

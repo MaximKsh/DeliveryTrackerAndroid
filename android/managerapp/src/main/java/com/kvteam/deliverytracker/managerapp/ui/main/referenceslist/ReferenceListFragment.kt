@@ -117,35 +117,29 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
     private fun formatWarehouses(viewResult: List<Map<String, Any?>>): MutableList<WarehouseListItem> {
-        val header = BaseListHeader("A")
-
         return viewResult
                 .map { referenceMap ->
                     val warehouse = Warehouse()
                     warehouse.fromMap(referenceMap)
-                    WarehouseListItem(warehouse, header, lm)
+                    WarehouseListItem(warehouse, null, lm)
                 }.toMutableList()
     }
 
     private fun formatPaymentTypes(viewResult: List<Map<String, Any?>>): MutableList<PaymentTypeListItem> {
-        val header = BaseListHeader("A")
-
         return viewResult
                 .map { referenceMap ->
                     val payment = PaymentType()
                     payment.fromMap(referenceMap)
-                    PaymentTypeListItem(payment, header, lm)
+                    PaymentTypeListItem(payment, null, lm)
                 }.toMutableList()
     }
 
     private fun formatProducts(viewResult: List<Map<String, Any?>>): MutableList<ProductListItem> {
-        val header = BaseListHeader("A")
-
         return viewResult
                 .map { referenceMap ->
                     val product = Product()
                     product.fromMap(referenceMap)
-                    ProductListItem(product, header, lm)
+                    ProductListItem(product, null, lm)
                 }.toMutableList()
     }
 

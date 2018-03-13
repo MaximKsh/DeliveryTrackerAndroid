@@ -10,6 +10,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddC
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
@@ -100,6 +101,14 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     fun navigateToEditProduct() {
         val fragment = EditProductFragment()
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToFilterProducts() {
+        val fragment = FilterProductsFragment()
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .addToBackStack(null)

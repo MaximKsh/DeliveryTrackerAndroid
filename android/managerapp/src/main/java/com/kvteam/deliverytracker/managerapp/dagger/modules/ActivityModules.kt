@@ -21,6 +21,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddC
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
@@ -101,6 +102,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditTaskFragmentModule::class))
     internal abstract fun editTaskFragment(): EditTaskFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(FilterProductsFragmentModule::class))
+    internal abstract fun filterProductsFragment(): FilterProductsFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditWarehouseFragmentModule::class))

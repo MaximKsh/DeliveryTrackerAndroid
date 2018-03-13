@@ -10,11 +10,12 @@ import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.flexibleadapter.utils.DrawableUtils
+import eu.davidea.flexibleadapter.utils.FlexibleUtils
 import kotlinx.android.synthetic.main.product_list_item.view.*
 
 class ProductListItem(
         val product: Product,
-        header: BaseListHeader,
+        header: BaseListHeader?,
         private val lm: ILocalizationManager)
     : BaseListItem<Product, ProductListItem.ProductsListViewHolder>(product, header) {
 
@@ -26,15 +27,12 @@ class ProductListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: ProductsListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
-        holder.tvName.text = product.name
+        if (adapter!!.hasSearchText()) {
+            FlexibleUtils.highlightText(
+                    holder.tvName, product.name, adapter.searchText, Color.MAGENTA)
+        } else {
+            holder.tvName.text = product.name
+        }
         holder.tvCost.text = product.cost.toString()
         holder.tvVendorCode.text = product.vendorCode
     }

@@ -25,14 +25,6 @@ class TaskListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: TasksListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         holder.tvTaskCaption.text = lm.getString(task.taskStateCaption!!)
         holder.tvTaskNumber.text = task.taskNumber
     }

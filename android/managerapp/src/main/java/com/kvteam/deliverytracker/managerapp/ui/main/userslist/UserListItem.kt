@@ -24,14 +24,6 @@ class UserListItem(val user: User, header: BaseListHeader)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         val materialAvatarDefault = TextDrawable.builder()
                 .buildRound(user.name!![0].toString() + user.surname!![0].toString(), Color.LTGRAY)
 

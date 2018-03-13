@@ -28,14 +28,6 @@ class UserInvitationListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: InvitationListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         holder.tvName.text = invitation.preliminaryUser?.name
         holder.tvSurname.text = invitation.preliminaryUser?.surname
         holder.tvInvitationCode.text = invitation.invitationCode

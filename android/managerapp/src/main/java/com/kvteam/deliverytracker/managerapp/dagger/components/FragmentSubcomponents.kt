@@ -6,6 +6,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddC
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
@@ -46,6 +47,12 @@ interface EditTaskSubcomponent : AndroidInjector<EditTaskFragment> {
 interface EditWarehouseSubcomponent : AndroidInjector<EditWarehouseFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditWarehouseFragment>()
+}
+
+@Subcomponent
+interface FilterProductsSubcomponent : AndroidInjector<FilterProductsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<FilterProductsFragment>()
 }
 
 @Subcomponent

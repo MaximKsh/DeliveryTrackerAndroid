@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.warehouse_list_item.view.*
 
 class WarehouseListItem(
         val warehouse: Warehouse,
-        header: BaseListHeader,
+        header: BaseListHeader?,
         private val lm: ILocalizationManager)
     : BaseListItem<Warehouse, WarehouseListItem.WarehousesListViewHolder>(warehouse, header) {
 
@@ -26,14 +26,6 @@ class WarehouseListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: WarehousesListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         holder.tvName.text = warehouse.name
         holder.tvAddress.text = warehouse.rawAddress
     }

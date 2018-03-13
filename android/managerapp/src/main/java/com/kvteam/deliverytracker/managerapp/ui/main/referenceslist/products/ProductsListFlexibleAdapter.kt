@@ -6,4 +6,5 @@ import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 
 class ProductsListFlexibleAdapter(noHeaderItems: MutableList<ProductListItem>,
                                   referenceActions: IBaseListItemActions<ProductListItem>)
-    : BaseListFlexibleAdapter<Product, ProductListItem, ProductListItem.ProductsListViewHolder>(noHeaderItems, referenceActions) {}
+    : BaseListFlexibleAdapter<Product, ProductListItem, ProductListItem.ProductsListViewHolder>(noHeaderItems, referenceActions) {
+}

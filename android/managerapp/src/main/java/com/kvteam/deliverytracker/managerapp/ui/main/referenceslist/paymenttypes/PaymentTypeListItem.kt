@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
 
 class PaymentTypeListItem(
         val paymentType: PaymentType,
-        header: BaseListHeader,
+        header: BaseListHeader?,
         private val lm: ILocalizationManager)
     : BaseListItem<PaymentType, PaymentTypeListItem.PaymentTypesListViewHolder>(paymentType, header) {
 
@@ -26,14 +26,6 @@ class PaymentTypeListItem(
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: PaymentTypesListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        val context = holder.itemView.context
-
-        val drawable = DrawableUtils.getSelectableBackgroundCompat(
-                Color.WHITE, Color.parseColor("#dddddd"),
-                DrawableUtils.getColorControlHighlight(context))
-
-        DrawableUtils.setBackgroundCompat(holder.itemView, drawable)
-
         holder.tvName.text = paymentType.name
     }
 
