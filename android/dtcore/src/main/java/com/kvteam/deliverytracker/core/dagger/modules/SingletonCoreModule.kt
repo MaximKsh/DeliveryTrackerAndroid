@@ -16,6 +16,12 @@ import javax.inject.Singleton
 abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Provides
     @Singleton
+    fun eventEmitter(): IEventEmitter {
+        return EventEmitter()
+    }
+
+    @Provides
+    @Singleton
     fun httpManager(): IHttpManager {
         return HttpManager()
     }
