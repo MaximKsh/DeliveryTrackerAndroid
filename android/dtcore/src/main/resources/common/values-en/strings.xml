@@ -64,4 +64,5 @@
     <string name="Core_Dropdown_Top_Quantity"> (%d)</string>
 
     <string name="Core_Delete_List_Item">Delete</string>
+    <string name="Core_SelectFromList">Select from list</string>
 </resources>

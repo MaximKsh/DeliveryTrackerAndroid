@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_gravity="center">
+
+    <com.kvteam.deliverytracker.core.ui.autocomplete.DelayAutoCompleteTextView
+        android:id="@+id/atvAutocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="70dp"
+        android:theme="@style/EditTextTheme"
+        android:ems="10" />
+
+    <ProgressBar
+        android:id="@+id/pbProgress"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/ivListSelection"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/ivListSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:alpha="0.5"
+        android:src="@drawable/ic_list_black_24dp"
+        android:contentDescription="@string/Core_SelectFromList" />
+
+</RelativeLayout>

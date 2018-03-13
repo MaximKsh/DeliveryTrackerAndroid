@@ -58,4 +58,7 @@
     <string name="ServerMessage_Views_TasksPerformersView">Задачи</string>
     <string name="ServerMessage_TaskStates_Unconfirmed">Не подтвержденно</string>
 
+
+    <string name="Core_SelectFromList">Выбрать из списка</string>
+
 </resources>
