@@ -1,161 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="45dp"
+                android:layout_alignParentStart="true"
+                android:contentDescription=""/>
+
+            <TextView
+                android:id="@+id/tvHeader"
+                android:textAlignment="center"
+                android:textSize="22sp"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"/>
 
-                <EditText
-                    android:id="@+id/etNameField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etSurnameField"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                >
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_below="@id/tvHeader"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/etSurnameField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etNameField"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                >
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:layout_below="@id/etSurnameField"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/etPatronymicField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etPatronymicField"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center">
-                <EditText
-                    android:id="@+id/etPhoneNumberField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="phone" />
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:layout_below="@id/etNameField"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-
-                <ImageView
-                    android:id="@+id/ivPhoneNumberHintIcon"
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etPhoneNumberField"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center">
-                <EditText
-                    android:id="@+id/etOldPasswordField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPassword" />
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/ivUserAvatar"
+                android:layout_below="@id/etPatronymicField"
+                android:ems="10"
+                android:inputType="phone" />
 
-
-                <ImageView
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etOldPasswordField"
+                android:hint="Old password"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center">
-                <EditText
-                    android:id="@+id/etPasswordField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPassword" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPhoneNumberField"
+                android:ems="10"
+                android:inputType="textPassword" />
 
-
-                <ImageView
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <EditText
+                android:id="@+id/etPasswordField"
+                android:hint="New password"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center">
-                <EditText
-                    android:id="@+id/etConfirmPasswordField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPassword" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etOldPasswordField"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/etConfirmPasswordField"
+                android:hint="Confirm password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPasswordField"
+                android:ems="10"
+                android:inputType="textPassword" />
 
 
-                <ImageView
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
-            </RelativeLayout>
+        </RelativeLayout>
 
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>

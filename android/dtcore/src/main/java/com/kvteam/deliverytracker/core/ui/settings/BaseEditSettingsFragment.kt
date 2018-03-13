@@ -1,9 +1,11 @@
 package com.kvteam.deliverytracker.core.ui.settings
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.Toast
+import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -11,7 +13,9 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.models.getUser
+import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
@@ -59,6 +63,9 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
+        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Profile")
+
         val args = arguments
         val user = if(args == null) {
             val user = session.getUser()
@@ -75,13 +82,13 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_edit_settings -> editSettings()
+            R.id.action_save_settings -> editSettings()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_base_settings_menu, menu)
+        inflater.inflate(R.menu.toolbar_base_edit_settings_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -142,10 +149,17 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
     }
 
     private fun initControls(user: User) {
+        tvHeader.text = "${Role.getCaption(user.role, lm)} (${user.code})"
         etNameField.setText(user.name)
         etSurnameField.setText(user.surname)
         etPatronymicField.setText(user.patronymic)
         etPhoneNumberField.setText(user.phoneNumber)
+
+        val surname = user.surname
+        val name = user.name
+        val materialAvatarDefault = TextDrawable.builder()
+                .buildRound((name?.get(0)?.toString() ?: EMPTY_STRING) + (surname?.get(0)?.toString() ?: EMPTY_STRING), Color.LTGRAY)
+        ivUserAvatar.setImageDrawable(materialAvatarDefault)
     }
 
     private fun prepareModifiedUser() : ModifyUserContext {

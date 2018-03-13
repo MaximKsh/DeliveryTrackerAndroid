@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_save_settings"
-        android:title="LocMe: save"
+        android:title="Save"
         app:showAsAction="ifRoom"/>
 </menu>
