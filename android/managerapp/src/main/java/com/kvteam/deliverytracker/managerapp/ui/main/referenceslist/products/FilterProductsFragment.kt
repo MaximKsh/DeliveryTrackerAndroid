@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
@@ -14,12 +15,18 @@ open class FilterProductsFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    @Inject
+    lateinit var emitter: IEventEmitter
+
     override val viewGroup: String = "ReferenceViewGroup"
 
     private val productActions = object : IBaseListItemActions<ProductListItem> {
         override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
+            emitter.signal("FilterProductSignal", item.product)
+            navigationController.closeCurrentFragment()
+        }
     }
 
 

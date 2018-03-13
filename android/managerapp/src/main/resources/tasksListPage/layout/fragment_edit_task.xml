@@ -181,6 +181,7 @@
 
             </RelativeLayout>
 
+
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/rlDeliveryType"
                 android:layout_width="match_parent"
@@ -257,34 +258,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvTaskProductsInfo">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlTaskProducts"
+
+            <com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteView
+                android:id="@+id/acvProductAutocomplete"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content"/>
 
-                <EditText
-                    android:id="@+id/etTaskProducts"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="AUTOCOMPLITE PRODUCTS AND WAREHOUSES"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivTaskProductsHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
         </RelativeLayout>
 
         <TextView

@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.PaymentType
+import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
+import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -26,6 +29,12 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     lateinit var taskWebservice: ITaskWebservice
 
     @Inject
+    lateinit var viewWebservice: IViewWebservice
+
+    @Inject
+    lateinit var emitter: IEventEmitter
+
+    @Inject
     lateinit var lm: ILocalizationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,23 +43,50 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val selectedProduct = emitter.get("EditTaskFragment", "FilterProductSignal")
+        if(selectedProduct != null
+            && selectedProduct is Product) {
+            val autocomplete = acvProductAutocomplete.autoCompleteTextView
+            autocomplete.setText(selectedProduct.name)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
         (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Task")
-        val autocomplete = acPaymentType
-        autocomplete.setLoadingIndicator(pbPaymentType)
+        val autocomplete = acvProductAutocomplete.autoCompleteTextView
         autocomplete.setAutoCompleteDelay(200L)
         autocomplete.threshold = 2
-        autocomplete.setAdapter(AutocompleteListAdapter<PaymentType>(
+        autocomplete.setAdapter(AutocompleteListAdapter(
                 activity!!,
-                { mutableListOf(PaymentType(name = "123456"))},
+                {
+                    val networkResponse = viewWebservice.getViewResult(
+                        "ReferenceViewGroup",
+                        "ProductsView",
+                        mapOf("name" to it))
+                    val viewResult = networkResponse.entity?.viewResult!!
+                    val result = viewResult
+                            .map { referenceMap ->
+                                val product = Product()
+                                product.fromMap(referenceMap)
+                                product
+                            }.toMutableList()
+                    result
+                },
                 { it.name!! }
 
         ))
-        autocomplete.onItemClickListener = AdapterView.OnItemClickListener { av, item, pos, id ->
-            val item = av.getItemAtPosition(pos)
-            autocomplete.setText("123")
+
+        autocomplete.onItemClickListener = AdapterView.OnItemClickListener { av, it, pos, id ->
+            val item = av.getItemAtPosition(pos) as Product
+            autocomplete.setText(item.name)
+        }
+
+        acvProductAutocomplete.listSelectionButton.setOnClickListener {
+            emitter.subscribe("EditTaskFragment", "FilterProductSignal")
             navigationController.navigateToFilterProducts()
         }
 
