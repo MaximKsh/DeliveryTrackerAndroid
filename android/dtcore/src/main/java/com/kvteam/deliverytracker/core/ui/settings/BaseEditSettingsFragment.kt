@@ -63,8 +63,8 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
-        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Profile")
+        toolbarController.disableDropDown()
+        toolbarController.setToolbarTitle("Profile")
 
         val args = arguments
         val user = if(args == null) {

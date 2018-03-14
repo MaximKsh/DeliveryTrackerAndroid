@@ -47,8 +47,8 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
-        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Profile")
+        toolbarController.disableDropDown()
+        toolbarController.setToolbarTitle("Profile")
 
         tvHeader.text = "${Role.getCaption(session.role, lm)} (${session.code})"
         tvSurname.text = session.surname

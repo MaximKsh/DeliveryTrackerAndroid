@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.base_list.*
 import javax.inject.Inject
 
 abstract class BaseListFragment : DeliveryTrackerFragment() {
+    private val selectedIndexKey = "selectedIndex"
+
     @Inject
     lateinit var viewWebservice: IViewWebservice
 
@@ -28,10 +30,6 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
     lateinit var lm: ILocalizationManager
 
     abstract val viewGroup: String
-
-    private val dropDownTop: DropdownTop by lazy {
-        (activity as DeliveryTrackerActivity).dropDownTop
-    }
 
     protected lateinit var mAdapter: FlexibleAdapter<*>
 
@@ -50,10 +48,10 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         invokeAsync({
             viewWebservice.getViewResult(viewGroup, viewName)
         }, { result ->
-            if (result.success && groupIndex == dropDownTop.lastSelectedIndex.get()) {
+            if (result.success && groupIndex == dropdownTop.lastSelectedIndex.get()) {
                 handleUpdateList(type!!, result.entity!!.viewResult!!)
                 afterUpdate()
-                dropDownTop.update()
+                dropdownTop.update()
             }
         })
     }
@@ -88,9 +86,10 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             { index -> updateList(category.first, category.second.entityType, index) })
                 }
                 val categories = ArrayList(categoriesEnumeration)
-                dropDownTop.updateDataSet(categories)
 
-                updateList(digest[0].first, digest[0].second.entityType, 0)
+                dropdownTop.updateDataSet(categories)
+                val idx = dropdownTop.lastSelectedIndex.get()
+                updateList(digest[idx].first, digest[idx].second.entityType, idx)
             }
         })
     }
@@ -104,8 +103,8 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
         ptrFrame.setPtrHandler(object : PtrHandler {
             override fun onRefreshBegin(frame: PtrFrameLayout?) {
-                val index = dropDownTop.lastSelectedIndex.get()
-                val selectedItem = dropDownTop.items[index]
+                val index = dropdownTop.lastSelectedIndex.get()
+                val selectedItem = dropdownTop.items[index]
                 updateList(selectedItem.viewName, selectedItem.entityType, index, {ptrFrame.refreshComplete()})
             }
 
@@ -114,14 +113,26 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             }
         })
 
+        val args = arguments
+        if(args != null
+            && args.containsKey(selectedIndexKey)) {
+            dropdownTop.lastSelectedIndex.set(args.getInt(selectedIndexKey))
+        } else {
+            dropdownTop.lastSelectedIndex.set(0)
+        }
         initAdapter()
         setCategories()
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if (savedInstanceState == null) {
-            return
+    override fun onStop() {
+        super.onStop()
+        val args = arguments
+        if(args == null) {
+            val bundle = Bundle()
+            bundle.putInt(selectedIndexKey, dropdownTop.lastSelectedIndex.get())
+            arguments = bundle
+        } else {
+            args.putInt(selectedIndexKey, dropdownTop.lastSelectedIndex.get())
         }
     }
 

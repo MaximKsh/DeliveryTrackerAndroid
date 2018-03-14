@@ -12,6 +12,7 @@ import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.core.webservice.IUserWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -156,10 +157,13 @@ open class UsersListFragment : BaseListFragment() {
         }
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+         toolbar.enableDropdown()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

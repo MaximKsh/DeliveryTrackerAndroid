@@ -12,10 +12,9 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_add_payment_type.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import android.view.inputmethod.InputMethodManager
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 
 
 class AddPaymentTypeFragment : DeliveryTrackerFragment() {
@@ -34,10 +33,14 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.setToolbarTitle("Product")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
-        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Product")
         etNameField.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -66,9 +69,6 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_payment_type_menu, menu)
-        activity!!.toolbar_left_action.setOnClickListener { _ ->
-            navigationController.closeCurrentFragment()
-        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

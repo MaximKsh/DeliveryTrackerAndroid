@@ -1,7 +1,9 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.PaymentType
@@ -9,8 +11,8 @@ import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -18,8 +20,8 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.Clie
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientsListFlexibleAdapter
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypesListFlexibleAdapter
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductsListFlexibleAdapter
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductListItem
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductsListFlexibleAdapter
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehousesListFlexibleAdapter
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -212,10 +214,13 @@ open class ReferenceListFragment : BaseListFragment() {
         }
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbarController.enableDropdown()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

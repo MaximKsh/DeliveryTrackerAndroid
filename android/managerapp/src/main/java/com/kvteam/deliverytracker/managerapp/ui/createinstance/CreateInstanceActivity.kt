@@ -14,11 +14,12 @@ import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IInstanceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_create_instance.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
@@ -29,14 +30,21 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
+    override val layoutId = R.layout.activity_create_instance
+
+    override fun getToolbarConfiguration(): ToolbarConfiguration {
+        return ToolbarConfiguration(true, false)
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.showBackButton()
+        toolbar.setToolbarTitle(resources.getString(R.string.ManagerApp_CreateInstanceActivity_CompanyRegistration))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_instance)
 
-        setSupportActionBar(this.toolbar_top)
-        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        this.toolbar_title.text = resources.getString(R.string.ManagerApp_CreateInstanceActivity_CompanyRegistration)
         /*val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, LocationFragment())
         transaction.addToBackStack(null)

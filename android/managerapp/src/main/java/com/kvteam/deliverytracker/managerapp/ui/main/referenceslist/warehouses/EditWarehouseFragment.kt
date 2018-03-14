@@ -7,12 +7,12 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_edit_warehouse.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 class EditWarehouseFragment : DeliveryTrackerFragment() {
@@ -31,10 +31,13 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.setToolbarTitle("Warehouse")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
-        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Warehouse")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,9 +65,6 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_edit_warehouse_menu, menu)
-        activity!!.toolbar_left_action.setOnClickListener { _ ->
-            navigationController.closeCurrentFragment()
-        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

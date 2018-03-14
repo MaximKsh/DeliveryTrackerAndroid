@@ -10,14 +10,13 @@ import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 import android.view.inputmethod.InputMethodManager
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import kotlinx.android.synthetic.main.client_address_item.view.*
 import kotlinx.android.synthetic.main.fragment_add_client.*
 
@@ -46,11 +45,13 @@ class AddClientFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.setToolbarTitle("Client")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        (activity as DeliveryTrackerActivity).dropDownTop.disableDropDown()
-        (activity as DeliveryTrackerActivity).dropDownTop.setToolbarTitle("Client")
 
         tvAddAddress.setOnClickListener { _ ->
             navigationController.navigateToEditClientAddress(CollectionEntityAction.Create)
@@ -119,9 +120,6 @@ class AddClientFragment : DeliveryTrackerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_client_menu, menu)
-        activity!!.toolbar_left_action.setOnClickListener { _ ->
-            navigationController.closeCurrentFragment()
-        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

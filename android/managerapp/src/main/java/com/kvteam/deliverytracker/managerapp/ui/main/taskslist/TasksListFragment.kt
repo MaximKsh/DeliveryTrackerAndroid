@@ -13,13 +13,12 @@ import com.kvteam.deliverytracker.core.ui.*
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
 import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import kotlinx.android.synthetic.main.fragment_tasks_list.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 open class TasksListFragment : BaseListFragment() {
@@ -88,10 +87,13 @@ open class TasksListFragment : BaseListFragment() {
         }
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbarController.enableDropdown()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
         super.onActivityCreated(savedInstanceState)
-        (activity as DeliveryTrackerActivity).dropDownTop.enableDropdown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

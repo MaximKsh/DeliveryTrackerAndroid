@@ -46,13 +46,13 @@ open class FilterProductsFragment : BaseListFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (activity as DeliveryTrackerActivity).dropDownTop.disableSearchMode()
+        toolbarController.disableSearchMode()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
-        (activity as DeliveryTrackerActivity).dropDownTop.enableSearchMode({text ->
+        toolbarController.enableSearchMode({text ->
             mAdapter.searchText = text
             invokeAsync({
                 viewWebservice.getViewResult(viewGroup, "ProductsView", mapOf(

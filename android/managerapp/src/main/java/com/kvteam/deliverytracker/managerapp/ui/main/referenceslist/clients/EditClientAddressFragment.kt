@@ -9,11 +9,11 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_edit_client_address.*
-import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 import javax.inject.Inject
 
@@ -38,8 +38,15 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.setToolbarTitle("Client Address")
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         val args = arguments
 
         if(args != null) {
@@ -73,9 +80,6 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_edit_client_address_menu, menu)
-        activity!!.toolbar_left_action.setOnClickListener { _ ->
-            navigationController.closeCurrentFragment()
-        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

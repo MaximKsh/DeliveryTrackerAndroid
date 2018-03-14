@@ -3,11 +3,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 
@@ -17,8 +17,7 @@ class MainActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    override val useDropdownTop: Boolean
-        get() = true
+    override val layoutId = R.layout.activity_main
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         if(navigation.selectedItemId == item.itemId
@@ -53,12 +52,12 @@ class MainActivity : DeliveryTrackerActivity() {
     override val allowSettingsContext: Boolean
         get() = false
 
+    override fun getToolbarConfiguration(): ToolbarConfiguration {
+        return ToolbarConfiguration(true, true)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        setSupportActionBar(this.toolbar_top)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         if (savedInstanceState == null) {
             navigationController.navigateToStaff()

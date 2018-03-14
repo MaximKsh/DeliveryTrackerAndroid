@@ -2,19 +2,24 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.session.CheckSessionResult
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
-import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
-abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
+abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentManager.OnBackStackChangedListener {
     @Inject
     protected lateinit var dtSession: ISession
+
+    protected abstract val layoutId: Int
 
     protected open val checkHasAccountOnResume
         get() = false
@@ -22,33 +27,45 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
     protected open val allowSettingsContext
         get() = true
 
-    protected open val useDropdownTop
-        get() = false
-
-    lateinit var dropDownTop: DropdownTop
+    lateinit var toolbarController: ToolbarController
         private set
 
+    protected open fun getToolbarConfiguration(): ToolbarConfiguration {
+        return ToolbarConfiguration()
+    }
 
+    protected open fun configureToolbar(toolbar: ToolbarController) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        if (useDropdownTop) {
-            dropDownTop = DropdownTop(arrayListOf(), this)
-        }
-
         if(!allowSettingsContext
                 && intent.getBooleanExtra(SETTINGS_CONTEXT, false)) {
             finishAffinity()
         }
+
+        setContentView(layoutId)
+
+        val toolbarConfiguration = getToolbarConfiguration()
+        if (toolbarConfiguration.useToolbar) {
+            toolbarController = ToolbarController(this, toolbarConfiguration)
+            setSupportActionBar(toolbar_top)
+            supportActionBar!!.setDisplayShowTitleEnabled(false)
+            toolbarController.init()
+            configureToolbar(toolbarController)
+
+            supportFragmentManager.addOnBackStackChangedListener(this)
+            updateHomeUpButton()
+        }
     }
+
 
     override fun onResume() {
         super.onResume()
-        if (useDropdownTop) {
-            dropDownTop.init()
-        }
+
         if (checkHasAccountOnResume) {
             if(!dtSession.hasAccount()) {
                 val intent = Intent(
@@ -70,8 +87,24 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity() {
                     }
                 })
             }
+        }
+    }
 
+    override fun onBackStackChanged() {
+        updateHomeUpButton()
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        supportFragmentManager.popBackStack()
+        return true
+    }
+
+    private fun updateHomeUpButton() {
+        val canBack = supportFragmentManager.backStackEntryCount > 0
+        if(canBack) {
+            toolbarController.showBackButton()
+        } else {
+            toolbarController.hideBackButton()
         }
     }
 }

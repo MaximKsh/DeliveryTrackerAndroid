@@ -35,19 +35,35 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentManager.popBackStack()
     }
 
-    fun navigateToAddPaymentReference() {
-        val fragment = UsersListFragment()
+    private val usersListFragment = UsersListFragment()
+    fun navigateToStaff() {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, usersListFragment)
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToStaff() {
-        val fragment = UsersListFragment()
+    private val tasksListFragment = TasksListFragment()
+    fun navigateToTasks() {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, tasksListFragment)
+                .commitAllowingStateLoss()
+    }
+
+    private val referenceListFragment = ReferenceListFragment()
+    fun navigateToCatalogs() {
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, referenceListFragment)
+                .commitAllowingStateLoss()
+    }
+
+    private val settingsFragment = SettingsFragment()
+    fun navigateToSettings() {
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, settingsFragment)
                 .commitAllowingStateLoss()
     }
 
@@ -56,14 +72,6 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .addToBackStack(null)
-                .commitAllowingStateLoss()
-    }
-
-    fun navigateToTasks() {
-        val fragment = TasksListFragment()
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
                 .commitAllowingStateLoss()
     }
 
@@ -123,13 +131,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToSettings() {
-        val fragment = SettingsFragment()
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
-                .commitAllowingStateLoss()
-    }
+
 
     fun navigateToEditSettings() {
         val fragment = EditSettingsFragment()
@@ -139,13 +141,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToCatalogs() {
-        val fragment = ReferenceListFragment()
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
-                .commitAllowingStateLoss()
-    }
+
 
     fun navigateToAddTask() {
         val fragment = TaskDetailsFragment.create(TaskDetailsFragmentMode.ADD)

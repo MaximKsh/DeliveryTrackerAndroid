@@ -11,12 +11,13 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_confirm_data.*
-import kotlinx.android.synthetic.main.toolbar.*
 import javax.inject.Inject
 
 class ConfirmDataActivity : DeliveryTrackerActivity() {
@@ -24,17 +25,23 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
     private val nameKey = "caption"
     private val phoneNumberKey = "phoneNumber"
 
+    override val layoutId = R.layout.activity_confirm_data
+
     @Inject
     lateinit var session: ISession
+
+    override fun getToolbarConfiguration(): ToolbarConfiguration {
+        return ToolbarConfiguration(true, false)
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.setToolbarTitle(resources.getString(R.string.ManagerApp_ConfirmDataActivity_Confirm))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_confirm_data)
 
-        setSupportActionBar(this.toolbar_top)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        this.toolbar_title.text = resources.getString(R.string.ManagerApp_ConfirmDataActivity_Confirm)
 
         if(savedInstanceState == null) {
             etSurnameField.setText(session.surname ?: EMPTY_STRING)

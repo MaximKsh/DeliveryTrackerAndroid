@@ -32,13 +32,15 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
             BitmapDrawable(activity.resources, rotateBitmap(toggleIconResized.bitmap, 180f))
     private lateinit var dropdownTopItems: List<DropdownTopItem>
     private var isCollapsed: Boolean = true
+    private var initialized = false
 
     val lastSelectedIndex = AtomicInteger(0)
 
     fun init() {
+        initialized = true
         updateDataSet(items)
 
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        showIconCollapsed()
 
         activity.toolbar_title.setOnClickListener { _ ->
             if (isCollapsed) {
@@ -51,6 +53,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     fun update() {
+        checkInitialized()
         activity.toolbar_title.text = items[lastSelectedIndex.get()].caption
         if (!isCollapsed) {
             closeDropdown()
@@ -59,13 +62,14 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         dropdownTopItems.forEach { item -> if (item.index != lastSelectedIndex.get()) item.reset() }
     }
 
-
-
     fun updateDataSet  (items: ArrayList<DropdownTopItemInfo>) {
+        checkInitialized()
         activity.ll_dropdown_top.removeAllViews()
         height = (density * items.size * itemHeight + density * paddingSize).toInt()
         this.items = items
-        lastSelectedIndex.set(0)
+        var idx = lastSelectedIndex.get()
+        idx = if(0 <= idx && idx < items.size) idx else 0
+        lastSelectedIndex.set(idx)
         dropdownTopItems = items.mapIndexed { index, dropdownItem ->
             DropdownTopItem(
                     index,
@@ -79,42 +83,19 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
 
     }
 
-    // TODO: move to controller
-    fun setToolbarTitle(text: String) {
-        activity.toolbar_title.text = text
-    }
-
-    fun enableDropdown() {
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
-        activity.toolbar_title.isClickable = true
-    }
-
-    fun disableDropDown() {
+    fun hideIcon() {
+        checkInitialized()
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-        activity.toolbar_title.isClickable = false
     }
 
-    fun enableSearchMode (callback: (String) -> Unit) {
-        disableDropDown()
-        activity.toolbar_title.visibility = View.GONE
-        activity.rlToolbarSearch.visibility = View.VISIBLE
-        activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                callback(p0.toString())
-            }
-        })
+    fun showIconCollapsed() {
+        checkInitialized()
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
     }
 
-    fun disableSearchMode () {
-        enableDropdown()
-        activity.toolbar_title.visibility = View.VISIBLE
-        activity.rlToolbarSearch.visibility = View.GONE
+    fun showIconOpen() {
+        checkInitialized()
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, rotatedToggleIcon, null)
     }
 
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {
@@ -150,7 +131,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, rotatedToggleIcon, null)
+        showIconOpen()
         isCollapsed = false
     }
 
@@ -181,7 +162,7 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.duration = 100L * items.size
         anim2.start()
 
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        showIconCollapsed()
         isCollapsed = true
     }
 
@@ -192,5 +173,9 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         }
         lastSelectedIndex.set(index)
         items[index].onSelected(index)
+    }
+
+    private fun checkInitialized() {
+        if(!initialized) throw IllegalStateException("Dropdown wasn't initialize")
     }
 }

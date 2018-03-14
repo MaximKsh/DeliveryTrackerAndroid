@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.kvteam.deliverytracker.managerapp.ui.main.MainActivity">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <include layout="@layout/toolbar" />
 
         <FrameLayout
             android:layout_marginTop="60dp"
@@ -30,8 +29,8 @@
             app:menu="@menu/navigation" />
     </RelativeLayout>
 
-    <include
-        layout="@layout/dropdown_top" />
 
 
+    <include layout="@layout/toolbar" />
+    <include layout="@layout/dropdown_top" />
 </FrameLayout>

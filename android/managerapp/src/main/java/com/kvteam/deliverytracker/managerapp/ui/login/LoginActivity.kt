@@ -25,10 +25,11 @@ class LoginActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
+    override val layoutId = R.layout.activity_login
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         if(savedInstanceState != null){
