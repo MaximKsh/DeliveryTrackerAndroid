@@ -68,19 +68,9 @@
             </RelativeLayout>
     </ScrollView>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/bttnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="100dp">
-
-        <Button
-            android:id="@+id/bttnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="logout" />
-    </LinearLayout>
-
-
-
+        android:text="logout" />
 </LinearLayout>
