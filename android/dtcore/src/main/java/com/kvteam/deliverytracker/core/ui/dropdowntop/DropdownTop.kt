@@ -15,13 +15,12 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.concurrent.atomic.AtomicInteger
 
 class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: FragmentActivity) {
-    var lastSelectedIndex = AtomicInteger(0)
-    val paddingSize = 10
-    val itemHeight = 45
-    val density = activity.resources.displayMetrics.density
-    var height = 0
-    val toggleIcon = ContextCompat.getDrawable(activity, R.drawable.ic_expand_more_black_24dp)
-    val toggleIconResized = BitmapDrawable(
+    private val paddingSize = 10
+    private val itemHeight = 45
+    private val density = activity.resources.displayMetrics.density
+    private var height = 0
+    private val toggleIcon = ContextCompat.getDrawable(activity, R.drawable.ic_expand_more_black_24dp)
+    private val toggleIconResized = BitmapDrawable(
             activity.resources,
             Bitmap.createScaledBitmap(
                     (toggleIcon as BitmapDrawable).bitmap,
@@ -29,35 +28,44 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
                     Math.round(30 * density),
                     true)
     )
-    val rotatedToggleIcon = BitmapDrawable(activity.resources, rotateBitmap(toggleIconResized.bitmap, 180f))
-    lateinit var dropdownTopItems: List<DropdownTopItem>
-    var isCollapsed: Boolean = false
+    private val rotatedToggleIcon =
+            BitmapDrawable(activity.resources, rotateBitmap(toggleIconResized.bitmap, 180f))
+    private lateinit var dropdownTopItems: List<DropdownTopItem>
+    private var isCollapsed: Boolean = true
+
+    val lastSelectedIndex = AtomicInteger(0)
+
+    fun init() {
+        updateDataSet(items)
+
+        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+
+        activity.toolbar_title.setOnClickListener { _ ->
+            if (isCollapsed) {
+                openDropdown()
+            } else {
+                closeDropdown()
+            }
+        }
+        activity.vBlackView.setOnClickListener { closeDropdown() }
+    }
 
     fun update() {
         activity.toolbar_title.text = items[lastSelectedIndex.get()].caption
-        if (isCollapsed) {
+        if (!isCollapsed) {
             closeDropdown()
         }
-        isCollapsed = false
         dropdownTopItems[lastSelectedIndex.get()].onLoadCompleted()
         dropdownTopItems.forEach { item -> if (item.index != lastSelectedIndex.get()) item.reset() }
     }
 
-    private fun onItemSelected (index: Int) {
-        val lsi = lastSelectedIndex.get()
-        if (index != lsi) {
-            dropdownTopItems[lastSelectedIndex.get()].reset()
-        }
-        lastSelectedIndex.set(index)
-        items[index].onSelected(index)
-    }
+
 
     fun updateDataSet  (items: ArrayList<DropdownTopItemInfo>) {
         activity.ll_dropdown_top.removeAllViews()
-
         height = (density * items.size * itemHeight + density * paddingSize).toInt()
         this.items = items
-        lastSelectedIndex = AtomicInteger(0)
+        lastSelectedIndex.set(0)
         dropdownTopItems = items.mapIndexed { index, dropdownItem ->
             DropdownTopItem(
                     index,
@@ -116,6 +124,10 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     }
 
     private fun openDropdown () {
+        if(!isCollapsed) {
+            return
+        }
+
         val anim = ValueAnimator.ofInt(0, height)
         anim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
@@ -130,16 +142,23 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Float
             activity.vBlackView.alpha = value
+            if(value == 0f) {
+                activity.vBlackView.visibility = View.VISIBLE
+            }
         }
 
         anim2.duration = 100L * items.size
         anim2.start()
 
-        activity.vBlackView.isClickable = true
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, rotatedToggleIcon, null)
+        isCollapsed = false
     }
 
     private fun closeDropdown () {
+        if(isCollapsed) {
+            return
+        }
+
         val anim = ValueAnimator.ofInt(height, 0)
         anim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
@@ -154,36 +173,24 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
         anim2.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Float
             activity.vBlackView.alpha = value
+            if(value == 0f) {
+                activity.vBlackView.visibility = View.GONE
+            }
         }
 
         anim2.duration = 100L * items.size
         anim2.start()
 
-        activity.vBlackView.isClickable = false
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
+        isCollapsed = true
     }
 
-    fun init() {
-        activity.vBlackView.isClickable = false
-
-        updateDataSet(items)
-
-        activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, toggleIconResized, null)
-
-        activity.toolbar_title.setOnClickListener { _ ->
-            if (isCollapsed) {
-                closeDropdown()
-                isCollapsed = false
-            } else {
-                openDropdown()
-                isCollapsed = true
-            }
+    private fun onItemSelected (index: Int) {
+        val lsi = lastSelectedIndex.get()
+        if (index != lsi) {
+            dropdownTopItems[lastSelectedIndex.get()].reset()
         }
-
-        activity.vBlackView.setOnClickListener { _ ->
-//            lastSelectedIndex.set(-1)
-            closeDropdown()
-            isCollapsed = false
-        }
+        lastSelectedIndex.set(index)
+        items[index].onSelected(index)
     }
 }
