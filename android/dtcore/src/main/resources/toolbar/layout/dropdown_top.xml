@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/vBlackView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/colorBlack"/>
+
+    <RelativeLayout
+        android:id="@+id/ll_dropdown_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/shape_bottom_border"
+        android:padding="5dp">
+
+        <RelativeLayout
+            android:id="@+id/rvDropdownSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etDropdownSearch"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:paddingEnd="85dp"/>
+
+            <ImageView
+                android:id="@+id/ivDropdownSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_toStartOf="@+id/ivDropdownRefresh"
+                android:layout_centerVertical="true"
+                android:alpha="0.5"
+                android:src="@drawable/ic_search_black_24dp" />
+
+            <ImageView
+                android:id="@+id/ivDropdownRefresh"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:alpha="0.5"
+                android:src="@drawable/ic_refresh_black_24dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_dropdown_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rvDropdownSearch"
+            android:orientation="vertical"/>
+    </RelativeLayout>
+</FrameLayout>
+

@@ -6,15 +6,16 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.concurrent.atomic.AtomicInteger
 
-class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: FragmentActivity) {
+class DropdownTop (
+        initialItems: ArrayList<DropdownTopItemInfo>,
+        private val activity: FragmentActivity) {
     private val paddingSize = 10
     private val itemHeight = 45
     private val density = activity.resources.displayMetrics.density
@@ -34,7 +35,16 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
     private var isCollapsed: Boolean = true
     private var initialized = false
 
+    private val searchHeight
+        get() = activity.rvDropdownSearch.height
+
+    private val searchHeightEffective
+        get() = if(activity.rvDropdownSearch.visibility == View.VISIBLE) searchHeight else 0
+
     val lastSelectedIndex = AtomicInteger(0)
+
+    var items = initialItems
+        private set
 
     fun init() {
         initialized = true
@@ -64,8 +74,8 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
 
     fun updateDataSet  (items: ArrayList<DropdownTopItemInfo>) {
         checkInitialized()
-        activity.ll_dropdown_top.removeAllViews()
-        height = (density * items.size * itemHeight + density * paddingSize).toInt()
+        activity.ll_dropdown_content.removeAllViews()
+        height = (searchHeightEffective + density * items.size * itemHeight + density * paddingSize).toInt()
         this.items = items
         var idx = lastSelectedIndex.get()
         idx = if(0 <= idx && idx < items.size) idx else 0
@@ -81,6 +91,45 @@ class DropdownTop (var items: ArrayList<DropdownTopItemInfo>, val activity: Frag
                     activity)
         }
 
+    }
+
+    var searchText: String
+        get() {
+            checkInitialized()
+            return if (activity.rvDropdownSearch.visibility == View.VISIBLE) {
+                activity.etDropdownSearch.text.toString()
+            } else {
+                return EMPTY_STRING
+            }
+        }
+        set(value) {
+            activity.etDropdownSearch.setText(value)
+        }
+
+    fun showSearch(searchAction: (String) -> Unit = {},
+                   refreshDigest: () -> Unit = {}) {
+        checkInitialized()
+        activity.rvDropdownSearch.visibility = View.VISIBLE
+        activity.ivDropdownSearch.setOnClickListener{
+            closeDropdown()
+            searchAction(activity.etDropdownSearch.text.toString())
+        }
+        activity.ivDropdownRefresh.setOnClickListener {
+            refreshDigest()
+        }
+    }
+
+    fun hideSearch() {
+        checkInitialized()
+        activity.rvDropdownSearch.visibility = View.GONE
+        clearSearchText()
+        activity.ivDropdownSearch.setOnClickListener { }
+        activity.ivDropdownRefresh.setOnClickListener { }
+    }
+
+    fun clearSearchText() {
+        checkInitialized()
+        activity.etDropdownSearch.setText(EMPTY_STRING)
     }
 
     fun hideIcon() {

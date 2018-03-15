@@ -88,7 +88,8 @@ open class TasksListFragment : BaseListFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbarController.enableDropdown()
+        toolbar.enableDropdown()
+        toolbar.dropDownTop.hideSearch()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

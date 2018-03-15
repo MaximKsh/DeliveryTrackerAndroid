@@ -33,7 +33,6 @@ android {
         main {
             res.srcDirs =
                     [
-                            'src/main/resources/dropdownTop',
                             'src/main/resources/baseList',
                             'src/main/resources/toolbar',
                             'src/main/resources/common',

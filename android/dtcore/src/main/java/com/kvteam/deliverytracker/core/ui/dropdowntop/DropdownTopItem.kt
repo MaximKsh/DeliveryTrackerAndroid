@@ -17,7 +17,7 @@ class DropdownTopItem (
         var isSelected: Boolean = false,
         val activity: FragmentActivity){
 
-    val layout = activity.layoutInflater.inflate(R.layout.dropdown_top_item, activity.ll_dropdown_top,false)
+    val layout = activity.layoutInflater.inflate(R.layout.dropdown_top_item, activity.ll_dropdown_content,false)
     var isLoading = AtomicBoolean(false)
 
     private fun handleSelectionInner () {
@@ -42,7 +42,7 @@ class DropdownTopItem (
         layout.tvCategoryQuantity.text = activity.resources.getString(R.string.Core_Dropdown_Top_Quantity, quantity)
         layout.ivSelectedIcon.visibility = if (isSelected) View.VISIBLE else View.GONE
         layout.setOnClickListener{ _ -> handleSelectionInner() }
-        activity.ll_dropdown_top.addView(layout)
+        activity.ll_dropdown_content.addView(layout)
     }
 
     fun reset () {

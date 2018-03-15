@@ -214,8 +214,13 @@ open class ReferenceListFragment : BaseListFragment() {
         }
     }
 
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("name" to value)
+    }
+
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbarController.enableDropdown()
+        useSearchInToolbar(toolbar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
