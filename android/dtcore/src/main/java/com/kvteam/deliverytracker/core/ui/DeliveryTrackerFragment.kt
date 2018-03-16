@@ -14,6 +14,10 @@ abstract class DeliveryTrackerFragment: Fragment() {
     protected val dropdownTop
         get() = toolbarController.dropDownTop
 
+    init {
+        arguments = Bundle()
+    }
+
     protected open fun configureToolbar(toolbar: ToolbarController) {
 
     }

@@ -215,7 +215,7 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
-        return mapOf("name" to value)
+        return mapOf("search" to value)
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {

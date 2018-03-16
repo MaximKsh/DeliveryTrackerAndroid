@@ -22,10 +22,11 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
+    override val layoutId = R.layout.activity_confirm_data
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_confirm_data)
 
         if(savedInstanceState == null) {
             etConfirmSurname.setText(session.surname ?: EMPTY_STRING)

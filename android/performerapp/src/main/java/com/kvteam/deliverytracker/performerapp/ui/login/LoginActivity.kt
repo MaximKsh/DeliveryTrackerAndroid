@@ -26,11 +26,11 @@ class LoginActivity : DeliveryTrackerActivity() {
     @Inject
     lateinit var session: ISession
 
+    override val layoutId: Int = R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         savedInstanceState?.apply {
             etLoginUsername.setText(

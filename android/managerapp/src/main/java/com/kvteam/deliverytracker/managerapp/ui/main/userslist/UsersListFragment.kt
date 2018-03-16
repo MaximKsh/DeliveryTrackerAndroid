@@ -157,8 +157,13 @@ open class UsersListFragment : BaseListFragment() {
         }
     }
 
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("search" to value)
+    }
+
     override fun configureToolbar(toolbar: ToolbarController) {
-         toolbar.enableDropdown()
+        toolbarController.enableDropdown()
+        useSearchInToolbar(toolbar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

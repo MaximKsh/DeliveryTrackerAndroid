@@ -39,10 +39,11 @@ class MainActivity : DeliveryTrackerActivity() {
     override val allowSettingsContext: Boolean
         get() = false
 
+    override val layoutId = R.layout.activity_main
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         removeShiftMode(bnvNavigation)
 
         if (savedInstanceState == null) {
