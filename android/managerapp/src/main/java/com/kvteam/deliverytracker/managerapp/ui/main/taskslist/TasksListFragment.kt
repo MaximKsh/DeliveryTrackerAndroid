@@ -29,20 +29,9 @@ open class TasksListFragment : BaseListFragment() {
     private val TASKS_MENU_MASK = 1
 
     private val tasksActions = object : IBaseListItemActions<TaskListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {
-            if (adapter !is TasksListFlexibleAdapter) {
-                return
-            }
-//            invokeAsync({
-//                tasksWebservice.getAsync("", item.paymentType.id!!)
-//            }, {
-//                if (it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-//                }
-            }
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
     }
 
 

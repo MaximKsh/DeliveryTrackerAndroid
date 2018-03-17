@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
@@ -27,6 +28,9 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+    @Inject
+    lateinit var ee: IEventEmitter
+
 
     private var type = CollectionEntityAction.Create
 
@@ -71,7 +75,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
                 address.rawAddress = etAddress.text.toString()
                 address.action = type
                 address.id = UUID.randomUUID()
-                navigationController.info["address"] = address
+                ee.signal("address", address)
                 navigationController.closeCurrentFragment()
             }
         }

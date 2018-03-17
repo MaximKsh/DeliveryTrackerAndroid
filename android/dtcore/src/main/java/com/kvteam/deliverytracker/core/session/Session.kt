@@ -8,7 +8,6 @@ import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.buildDefaultGson
-import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
@@ -69,7 +68,9 @@ class Session (
         try{
             createAccount(username, password, token, user)
         } catch (e: Exception) {
-            return LoginResult(LoginResultType.Error, fetched = false)
+            val result = LoginResult(LoginResultType.Error)
+            result.fetched = false
+            return result
         }
         return LoginResult(LoginResultType.Success)
     }
@@ -125,50 +126,30 @@ class Session (
                 "application/json")
         if(!response.success
             || response.statusCode !in OK_HTTP_STATUS..CREATED_HTTP_STATUS) {
-            return@async LoginResult(
-                    LoginResultType.Error,
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async LoginResult.error(response)
         }
 
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return@async LoginResult(
-                    LoginResultType.Error,
-                    fetched = true,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async LoginResult.error(response)
         }
         val tokenRole = accountResponse?.user?.role
         if(tokenRole != null
                 && !sessionInfo.allowRoles.contains(tokenRole.toRole())) {
-            return@async LoginResult(
-                    LoginResultType.RoleMismatch,
-                    fetched = true,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async LoginResult.roleMismatch(response, accountResponse)
         }
         val token = accountResponse.token!!
         val user = accountResponse.user!!
         try{
             createAccount(username, password, token, user)
         } catch (e: Exception) {
-            return@async LoginResult(
-                    LoginResultType.Error,
-                    fetched = true,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async LoginResult.error(response, accountResponse)
         }
         val resultType =
                 if(response.statusCode == CREATED_HTTP_STATUS) LoginResultType.Registered
                 else LoginResultType.Success
-        return@async LoginResult(
-                resultType,
-                accountResponse,
-                fetched = true,
-                statusCode = response.statusCode)
+        return@async LoginResult.correct(resultType, response, accountResponse)
     }.await()
 
     override suspend fun refreshUserInfoAsync(): NetworkResult<AccountResponse> = async {
@@ -178,28 +159,18 @@ class Session (
                     it)
         }
         if(!response.success) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async NetworkResult.create<AccountResponse>(response)
         }
 
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = listOf(invalidResponseBody()))
+            return@async NetworkResult.create<AccountResponse>(response)
         }
         val userInfo = accountResponse.user
         setUserToAccount(userInfo)
 
-        return@async NetworkResult(
-                entity = accountResponse,
-                statusCode = response.statusCode,
-                fetched = response.fetched,
-                errors = response.errors)
+        return@async NetworkResult.create(response,accountResponse)
     }.await()
 
     override suspend fun editUserInfoAsync(
@@ -215,28 +186,18 @@ class Session (
         }
 
         if(!response.success) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async NetworkResult.create<AccountResponse>(response)
         }
 
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = listOf(invalidResponseBody()))
+            return@async NetworkResult.create<AccountResponse>(response)
         }
         val newUserInfo = accountResponse.user
         setUserToAccount(newUserInfo)
 
-        return@async NetworkResult(
-                entity = accountResponse,
-                statusCode = response.statusCode,
-                fetched = response.fetched,
-                errors = response.errors)
+        return@async NetworkResult.create(response,accountResponse)
     }.await()
 
     override suspend fun changePasswordAsync(
@@ -254,29 +215,19 @@ class Session (
         }
 
         if(!response.success) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = response.errors)
+            return@async NetworkResult.create<AccountResponse>(response)
         }
 
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return@async NetworkResult<AccountResponse>(
-                    fetched = response.fetched,
-                    statusCode = response.statusCode,
-                    errors = listOf(invalidResponseBody()))
+            return@async NetworkResult.create<AccountResponse>(response)
         }
         val account = accountManager.getAccountsByType(sessionInfo.accountType).firstOrNull()
         if(account != null) {
             accountManager.setPassword(account, new.password)
         }
-        return@async NetworkResult(
-                entity = accountResponse,
-                statusCode = response.statusCode,
-                fetched = response.fetched,
-                errors = response.errors)
+        return@async NetworkResult.create(response,accountResponse)
     }.await()
 
     private fun getUserFromAccount(): User? {

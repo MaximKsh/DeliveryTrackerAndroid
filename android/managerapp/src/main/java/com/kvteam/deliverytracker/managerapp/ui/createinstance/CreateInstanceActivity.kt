@@ -13,7 +13,7 @@ import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
-import com.kvteam.deliverytracker.core.ui.errorhandling.handleResultErrors
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.IInstanceWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InstanceResponse
@@ -29,6 +29,9 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorHandler: IErrorHandler
 
     override val layoutId = R.layout.activity_create_instance
 
@@ -49,8 +52,9 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
             }
             R.id.action_done -> {
                 val result = createInstanceAsync()
-                if(handleResultErrors(this@CreateInstanceActivity, result))
+                if (errorHandler.handle(result)) {
                     return@launchUI
+                }
                 val entity = result.entity!!
                 val token = entity.token!!
                 val user = entity.creator!!

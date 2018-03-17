@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
@@ -47,75 +47,67 @@ open class ReferenceListFragment : BaseListFragment() {
     private val WAREHOUSES_MENU_MASK = WAREHOUSES_MENU_ITEM
 
     private val paymentTypesActions = object : IBaseListItemActions<PaymentTypeListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
             if (adapter !is PaymentTypesListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                referenceWebservice.deleteAsync("PaymentType", item.paymentType.id!!)
-            }, {
-                if (it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = referenceWebservice.deleteAsync("PaymentType", item.paymentType.id!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {}
     }
 
     private val warehousesActions = object : IBaseListItemActions<WarehouseListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {
             if (adapter !is WarehousesListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                referenceWebservice.deleteAsync("Warehouse", item.warehouse.id!!)
-            }, {
-                if (it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = referenceWebservice.deleteAsync("Warehouse", item.warehouse.id!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {}
     }
 
     private val productsActions = object : IBaseListItemActions<ProductListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
             if (adapter !is ProductsListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                referenceWebservice.deleteAsync("Product", item.product.id!!)
-            }, {
-                if (it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = referenceWebservice.deleteAsync("Product", item.product.id!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
     }
 
     private val clientsActions = object : IBaseListItemActions<ClientListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {
             if (adapter !is ClientsListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                referenceWebservice.deleteAsync("Client", item.client.id!!)
-            }, {
-                if (it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = referenceWebservice.deleteAsync("Client", item.client.id!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {}
     }
 
     private fun formatWarehouses(viewResult: List<Map<String, Any?>>): MutableList<WarehouseListItem> {
@@ -157,9 +149,10 @@ open class ReferenceListFragment : BaseListFragment() {
                 }
                 .sortedBy { c -> c.surname }
                 .map { client ->
-                    if (letter == null || letter != client.surname!![0]) {
-                        letter = client.surname!![0]
-                        header = BaseListHeader(letter!!.toString())
+                    val firstLetter = client.surname?.firstOrNull()
+                    if (letter == null || letter != firstLetter) {
+                        letter = firstLetter
+                        header = BaseListHeader(letter?.toString() ?: EMPTY_STRING)
                     }
                     ClientListItem(client, header, lm)
                 }.toMutableList()

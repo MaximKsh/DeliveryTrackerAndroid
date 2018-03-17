@@ -6,7 +6,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.User
@@ -14,6 +14,7 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -31,6 +32,10 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     private val userRoleKey = "userRoleKey"
     private val userNameKey = "userNameKey"
@@ -123,10 +128,10 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
         super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         if (tvInvitationCodeInfo.visibility == View.VISIBLE) {
             navigationController.closeCurrentFragment()
-            return super.onOptionsItemSelected(item)
+            return@launchUI
         }
 
         item.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
@@ -134,29 +139,27 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
         when (item.itemId) {
             R.id.action_finish -> {
-                invokeAsync({
-                    val user = User()
-                    user.name = etNameField.text.toString()
-                    user.surname = etSurnameField.text.toString()
-                    user.phoneNumber = etPhoneNumberField.text.toString()
-                    user.role = selectedRole?.id
-                    invitationWebservice.createAsync(user)
-                }, {
-                   if (it.success) {
-                       val view =  this@AddUserFragment.activity!!.currentFocus
-                       if (view != null) {
-                           val imm = this@AddUserFragment.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                           imm.hideSoftInputFromWindow(view.windowToken, 0)
-                       }
-                       this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
-                       this@AddUserFragment.tvInvitationCode.text = it.entity?.invitation?.invitationCode
-                   }
-                })
-//                navigationController.closeCurrentFragment()
+                val user = User()
+                user.name = etNameField.text.toString()
+                user.surname = etSurnameField.text.toString()
+                user.phoneNumber = etPhoneNumberField.text.toString()
+                user.role = selectedRole?.id
+                val result = invitationWebservice.createAsync(user)
+                if(eh.handle(result)) {
+                    return@launchUI
+                }
+                val view =  this@AddUserFragment.activity!!.currentFocus
+                if (view != null) {
+                    val imm = this@AddUserFragment.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+                this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
+                this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_user_menu, menu)

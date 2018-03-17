@@ -5,5 +5,5 @@ data class DropdownTopItemInfo(
         val entityType: String,
         val caption: String,
         val quantity: Int,
-        val onSelected: (Int) -> Unit
+        val onSelected: suspend (Int) -> Unit
 )

@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
-import android.graphics.Color
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Invitation
@@ -10,7 +9,6 @@ import com.kvteam.deliverytracker.core.ui.BaseListItem
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.flexibleadapter.utils.DrawableUtils
 import kotlinx.android.synthetic.main.fragment_invitation_list_item.view.*
 
 
@@ -24,7 +22,7 @@ class UserInvitationListItem(
         get() = invitation.invitationCode!!
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : InvitationListViewHolder {
-        return InvitationListViewHolder(view, adapter);
+        return InvitationListViewHolder(view, adapter)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: InvitationListViewHolder, position: Int, payloads: MutableList<Any>?) {

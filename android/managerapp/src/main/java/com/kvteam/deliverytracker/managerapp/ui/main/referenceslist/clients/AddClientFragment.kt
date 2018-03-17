@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -30,6 +32,12 @@ class AddClientFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var ee: IEventEmitter
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     private val viewBinderHelper = ViewBinderHelper()
 
@@ -56,10 +64,9 @@ class AddClientFragment : DeliveryTrackerFragment() {
         tvAddAddress.setOnClickListener { _ ->
             navigationController.navigateToEditClientAddress(CollectionEntityAction.Create)
         }
-        if (navigationController.info.containsKey("address")) {
-            val address = navigationController.info["address"] as ClientAddress
-            navigationController.info.remove("address")
-
+        val sig = ee.get("AddClientFragment", "address")
+        if (sig != null){
+            val address = sig as ClientAddress
             when (address.action) {
                 CollectionEntityAction.Edit -> {}
                 CollectionEntityAction.Create -> {
@@ -71,6 +78,7 @@ class AddClientFragment : DeliveryTrackerFragment() {
             val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
             view.tvClientAddress.text = clientAddress.rawAddress
             view.setOnClickListener { _ ->
+                ee.subscribe("AddClientFragment", "address")
                 navigationController.navigateToEditClientAddress(CollectionEntityAction.Edit, clientAddress)
             }
             view.tvDeleteItem.setOnClickListener { _ ->
@@ -94,29 +102,29 @@ class AddClientFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_add_client, container, false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                invokeAsync({
-                    client.name = etNameField.text.toString()
-                    client.surname = etSurnameField.text.toString()
-                    client.patronymic = etPatronymicField.text.toString()
-                    client.phoneNumber = etPhoneNumberField.text.toString()
-                    referenceWebservice.createAsync("Client", client)
-                }, {
-                    if (it.success) {
-                        val view =  activity!!.currentFocus
-                        if (view != null) {
-                            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.hideSoftInputFromWindow(view.windowToken, 0)
-                        }
-                        navigationController.closeCurrentFragment()
-                    }
-                })
+                client.name = etNameField.text.toString()
+                client.surname = etSurnameField.text.toString()
+                client.patronymic = etPatronymicField.text.toString()
+                client.phoneNumber = etPhoneNumberField.text.toString()
+                val result = referenceWebservice.createAsync("Client", client)
+                if(eh.handle(result)) {
+                    return@launchUI
+                }
+                val view =  activity!!.currentFocus
+                if (view != null) {
+                    val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+                navigationController.closeCurrentFragment()
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_client_menu, menu)

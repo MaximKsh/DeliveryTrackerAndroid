@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
@@ -10,10 +9,9 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Subcomponent
 import dagger.android.AndroidInjector
@@ -77,18 +75,6 @@ interface UsersListFragmentSubcomponent : AndroidInjector<UsersListFragment> {
 interface TasksListFragmentSubcomponent : AndroidInjector<TasksListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<TasksListFragment>()
-}
-
-@Subcomponent
-interface AddTaskFragmentSubcomponent : AndroidInjector<TaskDetailsFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<TaskDetailsFragment>()
-}
-
-@Subcomponent
-interface SelectPerformerFragmentSubcomponent : AndroidInjector<SelectPerformerFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<SelectPerformerFragment>()
 }
 
 @Subcomponent

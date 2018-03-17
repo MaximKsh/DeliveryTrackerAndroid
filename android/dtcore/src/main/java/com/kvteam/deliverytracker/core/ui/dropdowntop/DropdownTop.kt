@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.view.View
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -106,16 +107,20 @@ class DropdownTop (
             activity.etDropdownSearch.setText(value)
         }
 
-    fun showSearch(searchAction: (String) -> Unit = {},
-                   refreshDigest: () -> Unit = {}) {
+    fun showSearch(searchAction: suspend (String) -> Unit = {},
+                   refreshDigest:suspend () -> Unit = {}) {
         checkInitialized()
         activity.rvDropdownSearch.visibility = View.VISIBLE
         activity.ivDropdownSearch.setOnClickListener{
-            closeDropdown()
-            searchAction(activity.etDropdownSearch.text.toString())
+            launchUI {
+                closeDropdown()
+                searchAction(activity.etDropdownSearch.text.toString())
+            }
         }
         activity.ivDropdownRefresh.setOnClickListener {
-            refreshDigest()
+            launchUI {
+                refreshDigest()
+            }
         }
     }
 
@@ -215,7 +220,7 @@ class DropdownTop (
         isCollapsed = true
     }
 
-    private fun onItemSelected (index: Int) {
+    private fun onItemSelected (index: Int) = launchUI {
         val lsi = lastSelectedIndex.get()
         if (index != lsi) {
             dropdownTopItems[lastSelectedIndex.get()].reset()

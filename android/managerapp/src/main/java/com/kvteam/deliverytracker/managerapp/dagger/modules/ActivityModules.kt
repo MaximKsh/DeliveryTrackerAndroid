@@ -3,9 +3,12 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
-import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
+import com.kvteam.deliverytracker.core.ui.errorhandling.ErrorHandler
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.dagger.components.ConfirmDataActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.CreateInstanceActivitySubcomponent
 import com.kvteam.deliverytracker.managerapp.dagger.components.LoginActivitySubcomponent
@@ -15,7 +18,6 @@ import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceAct
 import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
@@ -25,10 +27,9 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -38,18 +39,30 @@ import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
-@Module(subcomponents = arrayOf(CreateInstanceActivitySubcomponent::class))
+@Module(subcomponents = [(CreateInstanceActivitySubcomponent::class)],
+        includes = [(CreateInstanceActivityModule.CreateInstanceScopeModule::class)])
 abstract class CreateInstanceActivityModule {
     @Binds
     @IntoMap
     @ActivityKey(CreateInstanceActivity::class)
     internal abstract fun createInstanceActivityInjector(builder: CreateInstanceActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
-
+    @Module
+    class CreateInstanceScopeModule {
+        @Provides
+        @ActivityScope
+        fun errorHandler(activity: CreateInstanceActivity, lm: ILocalizationManager): IErrorHandler {
+            return ErrorHandler(
+                    activity,
+                    R.id.llCreateInstanceMainView,
+                    lm)
+        }
+    }
 
 }
 
-@Module(subcomponents = arrayOf(ConfirmDataActivitySubcomponent::class))
+@Module(subcomponents = [(ConfirmDataActivitySubcomponent::class)],
+        includes = [(ConfirmDataActivityModule.ConfirmDataScopeModule::class)])
 abstract class ConfirmDataActivityModule {
     @Binds
     @IntoMap
@@ -57,9 +70,22 @@ abstract class ConfirmDataActivityModule {
     internal abstract fun approveUserInfoActivityInjector(builder: ConfirmDataActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
+    @Module
+    class ConfirmDataScopeModule {
+        @Provides
+        @ActivityScope
+        fun errorHandler(activity: ConfirmDataActivity, lm: ILocalizationManager): IErrorHandler {
+            return ErrorHandler(
+                    activity,
+                    R.id.llConfirmDataMainView,
+                    lm)
+        }
+    }
+
 }
 
-@Module(subcomponents = arrayOf(LoginActivitySubcomponent::class))
+@Module(subcomponents = [(LoginActivitySubcomponent::class)],
+        includes = [(LoginActivityModule.LoginActivityScopeModule::class)])
 abstract class LoginActivityModule {
     @Binds
     @IntoMap
@@ -67,11 +93,22 @@ abstract class LoginActivityModule {
     internal abstract fun loginActivityInjector(builder: LoginActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
+    @Module
+    class LoginActivityScopeModule {
+        @Provides
+        @ActivityScope
+        fun errorHandler(activity: LoginActivity, lm: ILocalizationManager): IErrorHandler {
+            return ErrorHandler(
+                    activity,
+                    R.id.llLoginActivityRootView,
+                    lm)
+        }
+    }
 }
 
 
-@Module(subcomponents = arrayOf(MainActivitySubcomponent::class),
-        includes = arrayOf(MainActivityModule.MainActivityNavigationControllerModule::class))
+@Module(subcomponents = [(MainActivitySubcomponent::class)],
+        includes = [(MainActivityModule.MainActivityScopeModule::class)])
 abstract class MainActivityModule {
     @Binds
     @IntoMap
@@ -120,14 +157,6 @@ abstract class MainActivityModule {
     internal abstract fun editClientAddressFragment(): EditClientAddressFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(AddTaskFragmentModule::class))
-    internal abstract fun addTaskFragment(): TaskDetailsFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(SelectPerformerFragmentModule::class))
-    internal abstract fun selectPerformerFragment(): SelectPerformerFragment
-
-    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(ReferenceListFragmentModule::class))
     internal abstract fun referenceListFragment(): ReferenceListFragment
 
@@ -140,12 +169,20 @@ abstract class MainActivityModule {
     internal abstract fun editSettingsFragment(): EditSettingsFragment
 
     @Module
-    class MainActivityNavigationControllerModule {
+    class MainActivityScopeModule {
         @Provides
         @ActivityScope
         fun navigationController(activity: MainActivity): NavigationController {
             return NavigationController(activity)
         }
-    }
 
+        @Provides
+        @ActivityScope
+        fun errorHandler(activity: MainActivity, lm: ILocalizationManager): IErrorHandler {
+            return ErrorHandler(
+                    activity,
+                    R.id.mainContainer,
+                    lm)
+        }
+    }
 }

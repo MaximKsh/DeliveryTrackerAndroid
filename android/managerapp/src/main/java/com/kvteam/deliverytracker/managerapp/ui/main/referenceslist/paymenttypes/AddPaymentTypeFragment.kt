@@ -4,11 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -26,6 +27,9 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -50,22 +54,21 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_add_payment_type, container, false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                invokeAsync({
-                    val paymentType = PaymentType()
-                    paymentType.name = etNameField.text.toString()
-                    referenceWebservice.createAsync("PaymentType", paymentType)
-                }, {
-                    if (it.success) {
-                        navigationController.closeCurrentFragment()
-                    }
-                })
+                val paymentType = PaymentType()
+                paymentType.name = etNameField.text.toString()
+                val result = referenceWebservice.createAsync("PaymentType", paymentType)
+                if(eh.handle(result)) {
+                    return@launchUI
+                }
+                navigationController.closeCurrentFragment()
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_add_payment_type_menu, menu)

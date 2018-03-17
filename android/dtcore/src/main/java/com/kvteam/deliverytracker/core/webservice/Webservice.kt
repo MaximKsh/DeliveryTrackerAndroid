@@ -5,7 +5,6 @@ import android.text.TextUtils
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.buildDefaultGson
-import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 import kotlinx.coroutines.experimental.async
@@ -75,23 +74,14 @@ class Webservice(context: Context,
             responseType: Type): NetworkResult<T> {
         if(!result.fetched
                 || TextUtils.isEmpty(result.entity)) {
-            return NetworkResult(
-                    fetched = result.fetched,
-                    statusCode = result.statusCode,
-                    errors = result.errors)
+            return NetworkResult.create(result)
         }
 
         return try {
             val obj = gson.fromJson<T>(result.entity, responseType)
-            NetworkResult(
-                    obj,
-                    fetched = true,
-                    statusCode = result.statusCode)
+            NetworkResult.create(result, obj)
         } catch (e: JsonSyntaxException) {
-            NetworkResult(
-                    fetched = true,
-                    statusCode = result.statusCode,
-                    errors = listOf(invalidResponseBody()))
+            NetworkResult.create(result)
         }
     }
 }

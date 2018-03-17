@@ -7,7 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.R
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.CodePassword
@@ -15,6 +15,7 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 import dagger.android.support.AndroidSupportInjection
@@ -43,6 +44,9 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     protected abstract fun afterSuccessfulEdit()
 
@@ -78,19 +82,20 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
         initControls(user)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_save_settings -> editSettings()
         }
-        return super.onOptionsItemSelected(item)
-    }
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_base_edit_settings_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun editSettings() {
+    private suspend fun editSettings() {
         val (modifiedUser, modifiedUserCorrect) =
                 prepareModifiedUser()
         val (oldPassword, newPassword, needChangePassword, passwordCorrect) =
@@ -108,42 +113,24 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
             return
         }
 
-        invokeAsync({
-            var editResult: NetworkResult<AccountResponse>? = null
-            if(modifiedUser != null) {
-                editResult = session.editUserInfoAsync(modifiedUser)
+
+        if(modifiedUser != null) {
+            val editResult = session.editUserInfoAsync(modifiedUser)
+            if(eh.handle(editResult)) {
+                return
             }
-            var changePasswordResult: NetworkResult<AccountResponse>? = null
-            if(needChangePassword) {
-                changePasswordResult = session.changePasswordAsync(
-                        CodePassword(password = oldPassword),
-                        CodePassword(password = newPassword))
+        }
+
+        if(needChangePassword) {
+            val changePasswordResult = session.changePasswordAsync(
+                    CodePassword(password = oldPassword),
+                    CodePassword(password = newPassword))
+            if(eh.handle(changePasswordResult)) {
+                return
             }
-            RequestResult(editResult, changePasswordResult)
-        }, {
-            val (editResult, changePasswordResult) = it
-            if (editResult != null) {
-                if(!editResult.success) {
-                    showToast("Edit did not successful.")
-                    return@invokeAsync
-                }
-                if(editResult.entity == null || !editResult.entity.errors.isEmpty()) {
-                    showToast("Edit errors: ${editResult.entity?.errors?.joinToString { it.message } ?: EMPTY_STRING}")
-                    return@invokeAsync
-                }
-            }
-            if (changePasswordResult != null) {
-                if(!changePasswordResult.success) {
-                    showToast("Change password did not successful.")
-                    return@invokeAsync
-                }
-                if(changePasswordResult.entity?.errors?.isNotEmpty() == true) {
-                    showToast("Change password errors: ${changePasswordResult.entity.errors.joinToString { it.message }}")
-                    return@invokeAsync
-                }
-            }
-            afterSuccessfulEdit()
-        })
+        }
+
+        afterSuccessfulEdit()
     }
 
     private fun initControls(user: User) {

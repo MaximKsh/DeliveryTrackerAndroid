@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.BasicResult
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.User
@@ -13,6 +13,7 @@ import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
@@ -29,6 +30,9 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorHandler: IErrorHandler
 
     override fun getToolbarConfiguration(): ToolbarConfiguration {
         return ToolbarConfiguration(true, false)
@@ -64,7 +68,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
@@ -74,16 +78,16 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 userInfo.surname = etSurnameField.text.toString()
                 userInfo.name = etNameField.text.toString()
                 userInfo.phoneNumber = etPhoneNumberField.text.toString()
-
-                invokeAsync({
-                    session.editUserInfoAsync(userInfo)
-                }, {
-                    navigateToMainAcitity(it)
-                })
+                val result = session.editUserInfoAsync(userInfo)
+                if(errorHandler.handle(result)) {
+                    return@launchUI
+                }
+                navigateToMainAcitity(result)
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_confirm_data_menu, menu)

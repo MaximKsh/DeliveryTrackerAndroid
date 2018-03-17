@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.core.models.User
@@ -43,40 +42,36 @@ open class UsersListFragment : BaseListFragment() {
     private val PERFORMERS_MENU_MASK = INVITE_USER_MENU_ITEM and SHOW_ON_MAP_MENU_ITEM
 
     private val userActions = object: IBaseListItemActions<UserListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
             if(adapter !is UserListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                userWebservice.deleteAsync(item.user.id!!)
-            }, {
-                if(it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = userWebservice.deleteAsync(item.user.id!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
         }
     }
 
     private val invitationActions = object: IBaseListItemActions<UserInvitationListItem> {
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
         }
 
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserInvitationListItem>, item: UserInvitationListItem) {
             if(adapter !is UserInvitationListFlexibleAdapter) {
                 return
             }
-            invokeAsync({
-                invitationWebservice.deleteAsync(item.invitation.invitationCode!!)
-            }, {
-                if(it.success) {
-                    itemList.remove(item)
-                    adapter.updateDataSet(itemList, true)
-                }
-            })
+            val result = invitationWebservice.deleteAsync(item.invitation.invitationCode!!)
+            if(eh.handle(result)) {
+                return
+            }
+            itemList.remove(item)
+            adapter.updateDataSet(itemList, true)
         }
     }
 

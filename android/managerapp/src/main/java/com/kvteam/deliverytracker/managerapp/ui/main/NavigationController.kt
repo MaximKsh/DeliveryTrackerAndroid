@@ -13,23 +13,17 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragmentMode
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class NavigationController (private val mainActivity: MainActivity) {
     private val containerId: Int
         get() = mainActivity.mainContainer.id
     private val fragmentManager: FragmentManager
         get() = mainActivity.supportFragmentManager
-
-    val info = mutableMapOf<String, Any>()
 
     fun closeCurrentFragment() {
         fragmentManager.popBackStack()
@@ -138,37 +132,4 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
-
-
-
-
-
-
-
-    fun navigateToAddTask() {
-        val fragment = TaskDetailsFragment.create(TaskDetailsFragmentMode.ADD)
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-    }
-
-    fun navigateToSelectPerformer() {
-        val fragment = SelectPerformerFragment()
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-    }
-
-    fun navigateToTask(taskId: UUID) {
-        val fragment = TaskDetailsFragment.create(TaskDetailsFragmentMode.READONLY, taskId)
-        fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
-    }
-
-
-
 }

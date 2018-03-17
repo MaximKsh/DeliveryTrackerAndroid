@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.core.webservice
 
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.networkError
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -45,12 +44,13 @@ class HttpManager: IHttpManager {
     private fun execute(request: Request): RawNetworkResult {
         return try {
             val response = client.newCall(request).execute()
-            RawNetworkResult(
+            val result = RawNetworkResult(
                     fetched = true,
-                    statusCode = response.code(),
-                    bodyContent = response.body()?.string() ?: EMPTY_STRING)
+                    statusCode = response.code())
+            result.entity = response.body()?.string() ?: EMPTY_STRING
+            result
         } catch (e: IOException) {
-            RawNetworkResult(errors = listOf(networkError()) )
+            RawNetworkResult(fetched = false)
         }
     }
 }

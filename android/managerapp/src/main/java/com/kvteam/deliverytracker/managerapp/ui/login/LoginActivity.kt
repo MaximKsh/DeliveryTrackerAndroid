@@ -3,13 +3,14 @@ package com.kvteam.deliverytracker.managerapp.ui.login
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.managerapp.ui.createinstance.CreateInstanceActivity
@@ -24,6 +25,9 @@ class LoginActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var session: ISession
+
+    @Inject
+    lateinit var errorHandler: IErrorHandler
 
     override val layoutId = R.layout.activity_login
 
@@ -60,16 +64,15 @@ class LoginActivity : DeliveryTrackerActivity() {
         startActivity(intent)
     }
 
-    private fun onLoginClick() {
+    private fun onLoginClick() = launchUI {
         val username = etLoginField.text.toString()
         val password = etPasswordField.text.toString()
 
-        setProcessingState()
-        invokeAsync({
-            session.loginAsync(username, password)
-        }, {
-            afterLogin(it)
-        })
+        val result = session.loginAsync(username, password)
+        if(errorHandler.handle(result))
+            return@launchUI
+
+        afterLogin(result)
     }
 
     private fun afterLogin(result: LoginResult) {
@@ -89,11 +92,6 @@ class LoginActivity : DeliveryTrackerActivity() {
             }
 
         }
-        setProcessingState(false)
-    }
-
-    private fun setProcessingState(processing: Boolean = true){
-        this.btnLogin.isEnabled = !processing
     }
 }
 

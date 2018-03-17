@@ -3,9 +3,7 @@
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
-import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
@@ -15,10 +13,9 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.SelectPerformerFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskdetails.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -122,23 +119,6 @@ abstract class AddClientFragmentModule {
             AndroidInjector.Factory<out Fragment>
 }
 
-@Module(subcomponents = arrayOf(AddTaskFragmentSubcomponent::class))
-abstract class AddTaskFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(TaskDetailsFragment::class)
-    internal abstract fun addTaskFragmentInjector(builder: AddTaskFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
-@Module(subcomponents = arrayOf(SelectPerformerFragmentSubcomponent::class))
-abstract class SelectPerformerFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(SelectPerformerFragment::class)
-    internal abstract fun selectPerformerFragmentInjector(builder: SelectPerformerFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
 
 @Module(subcomponents = arrayOf(ReferenceListFragmentSubcomponent::class))
 abstract class ReferenceListFragmentModule {

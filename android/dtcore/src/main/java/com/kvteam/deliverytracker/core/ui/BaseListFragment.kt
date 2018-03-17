@@ -10,11 +10,12 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.R
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTopItemInfo
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -30,6 +31,9 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     private var menuItemsMask : Int = Int.MAX_VALUE
 
@@ -55,22 +59,21 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        this.rvBaseList.layoutManager = LinearLayoutManager(
-                this.activity?.applicationContext,
+        rvBaseList.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
 
         ptrFrame.setPtrHandler(object : PtrHandler {
-            override fun onRefreshBegin(frame: PtrFrameLayout?) {
-                if (dropdownTop.items.size == 0) {
-                    ptrFrame.refreshComplete()
-                    return
+            override fun onRefreshBegin(frame: PtrFrameLayout?) = launchUI {
+                if (dropdownTop.items.size != 0) {
+                    val index = dropdownTop.lastSelectedIndex.get()
+                    val selectedItem = dropdownTop.items[index]
+                    updateList(selectedItem.viewName, selectedItem.entityType, index)
                 }
-                val index = dropdownTop.lastSelectedIndex.get()
-                val selectedItem = dropdownTop.items[index]
-                updateList(selectedItem.viewName, selectedItem.entityType, index, {ptrFrame.refreshComplete()})
+                ptrFrame.refreshComplete()
             }
 
             override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
@@ -159,55 +162,50 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         rvBaseList.adapter = mAdapter
     }
 
-    private fun updateList(viewName: String,
+    private suspend fun updateList(viewName: String,
                            type: String?,
                            groupIndex: Int,
-                           afterUpdate: (() -> Unit) = {},
                            arguments: Map<String, Any>? = null) {
-        invokeAsync({
-            viewWebservice.getViewResultAsync(viewGroup, viewName, arguments)
-        }, { result ->
-            if (result.success && groupIndex == dropdownTop.lastSelectedIndex.get()) {
-                handleUpdateList(type!!, result.entity!!.viewResult!!)
-                afterUpdate()
-                dropdownTop.update()
-            }
-        })
+        val result = viewWebservice.getViewResultAsync(viewGroup, viewName, arguments)
+        if(eh.handle(result)) {
+            return
+        }
+        if (groupIndex == dropdownTop.lastSelectedIndex.get()) {
+            handleUpdateList(type!!, result.entity!!.viewResult!!)
+            dropdownTop.update()
+        }
     }
 
-    private fun setCategories() {
-        invokeAsync({
-            viewWebservice.getDigestAsync(viewGroup)
-        }, { result ->
-            val res = result
-            if (result.success) {
-                val digest = result.entity?.digest
-                        ?.toList()
-                        ?.sortedBy { it.second.order ?: Int.MAX_VALUE }!!
+    private suspend fun setCategories() {
+        val result = viewWebservice.getDigestAsync(viewGroup)
+        if(eh.handle(result)) {
+            return
+        }
+        val digest = result.entity?.digest
+                ?.toList()
+                ?.sortedBy { it.second.order ?: Int.MAX_VALUE }!!
 
-                val categoriesEnumeration = digest.map { category ->
-                    DropdownTopItemInfo(
-                            category.first,
-                            category.second.entityType ?: EMPTY_STRING,
-                            lm.getString(category.second.caption!!),
-                            category.second.count!!.toInt(),
-                            { index ->
-                                dropdownTop.clearSearchText()
-                                updateList(category.first, category.second.entityType, index)
-                            })
-                }
-                val categories = ArrayList(categoriesEnumeration)
+        val categoriesEnumeration = digest.map { category ->
+            DropdownTopItemInfo(
+                    category.first,
+                    category.second.entityType ?: EMPTY_STRING,
+                    lm.getString(category.second.caption!!),
+                    category.second.count!!.toInt(),
+                    { index ->
+                        dropdownTop.clearSearchText()
+                        updateList(category.first, category.second.entityType, index)
+                    })
+        }
+        val categories = ArrayList(categoriesEnumeration)
 
-                dropdownTop.updateDataSet(categories)
-                val idx = dropdownTop.lastSelectedIndex.get()
-                val prevSearchText = dropdownTop.searchText
-                val args =
-                        if(prevSearchText.isNotBlank())
-                            getViewFilterArguments(digest[idx].first, digest[idx].second.entityType, idx, prevSearchText)
-                        else null
-                updateList(digest[idx].first, digest[idx].second.entityType, idx, arguments = args)
-            }
-        })
+        dropdownTop.updateDataSet(categories)
+        val idx = dropdownTop.lastSelectedIndex.get()
+        val prevSearchText = dropdownTop.searchText
+        val args =
+                if(prevSearchText.isNotBlank())
+                    getViewFilterArguments(digest[idx].first, digest[idx].second.entityType, idx, prevSearchText)
+                else null
+        updateList(digest[idx].first, digest[idx].second.entityType, idx, arguments = args)
     }
 }
 

@@ -10,7 +10,6 @@ import com.kvteam.deliverytracker.core.ui.BaseListItem
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.flexibleadapter.utils.DrawableUtils
 import kotlinx.android.synthetic.main.fragment_user_list_item.view.*
 
 
@@ -20,7 +19,7 @@ class UserListItem(val user: User, header: BaseListHeader)
         get() = user.code!!
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : UserListViewHolder {
-        return UserListViewHolder(view, adapter);
+        return UserListViewHolder(view, adapter)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListViewHolder, position: Int, payloads: MutableList<Any>?) {

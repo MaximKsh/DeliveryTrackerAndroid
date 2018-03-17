@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.os.Bundle
-import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
@@ -20,9 +19,9 @@ open class FilterProductsFragment : BaseListFragment() {
     override val viewGroup: String = "ReferenceViewGroup"
 
     private val productActions = object : IBaseListItemActions<ProductListItem> {
-        override fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
 
-        override fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
             emitter.signal("FilterProductSignal", item.product)
             navigationController.closeCurrentFragment()
         }
@@ -53,17 +52,15 @@ open class FilterProductsFragment : BaseListFragment() {
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
         toolbarController.enableSearchMode({text ->
             mAdapter.searchText = text
-            invokeAsync({
-                viewWebservice.getViewResultAsync(viewGroup, "ProductsView", mapOf(
-                        "name" to text
-                ))
-            }, {
-                if (it.success) {
-                    val result = it.entity?.viewResult!!
-                    val productsList = formatProducts(result)
-                    (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
-                }
-            })
+            val result = viewWebservice.getViewResultAsync(viewGroup, "ProductsView", mapOf(
+                    "name" to text
+            ))
+            if(eh.handle(result)) {
+                return@enableSearchMode
+            }
+            val productsList = formatProducts(result.entity?.viewResult!!)
+            (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
+
         })
         super.onActivityCreated(savedInstanceState)
     }

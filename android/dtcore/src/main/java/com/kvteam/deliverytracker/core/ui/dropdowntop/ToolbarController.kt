@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.core.ui.dropdowntop
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
@@ -47,7 +48,7 @@ class ToolbarController(
         activity.toolbar_title.isClickable = false
     }
 
-    fun enableSearchMode (callback: (String) -> Unit, callbackDelay:Long = 500) {
+    fun enableSearchMode (callback: suspend (String) -> Unit, callbackDelay:Long = 500) {
         activity.toolbar_title.visibility = View.GONE
         activity.rlToolbarSearch.visibility = View.VISIBLE
         activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
@@ -61,7 +62,7 @@ class ToolbarController(
                 timer = Timer()
                 timer.schedule(
                         object : TimerTask() {
-                            override fun run() {
+                            override fun run() = launchUI {
                                 callback(p0.toString())
                             }
                         },

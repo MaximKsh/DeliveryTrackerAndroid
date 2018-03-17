@@ -3,7 +3,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Product
@@ -11,6 +11,7 @@ import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -32,6 +33,9 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var emitter: IEventEmitter
+
+    @Inject
+    lateinit var eh: IErrorHandler
 
     @Inject
     lateinit var lm: ILocalizationManager
@@ -101,21 +105,20 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_task, container, false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                invokeAsync({
-                    val task = TaskInfo()
-                    taskWebservice.createAsync(task)
-                }, {
-                    if (it.success) {
-                        navigationController.closeCurrentFragment()
-                    }
-                })
+                val task = TaskInfo()
+                val result = taskWebservice.createAsync(task)
+                if(eh.handle(result)) {
+                    return@launchUI
+                }
+                navigationController.closeCurrentFragment()
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_edit_task_menu, menu)

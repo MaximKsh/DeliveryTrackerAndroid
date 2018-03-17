@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
+import com.kvteam.deliverytracker.core.async.launchUI
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
@@ -21,7 +22,7 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
     var hideDeleteButton = false
 
     init {
-        viewBinderHelper.setOpenOnlyOne(true);
+        viewBinderHelper.setOpenOnlyOne(true)
     }
 
     abstract class BaseListHolder(itemView: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : FlexibleViewHolder(itemView, adapter) {
@@ -56,11 +57,15 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
 
             val item = getItem(position)!!
             holder.tvDeleteItem.setOnClickListener {
-                itemActions.onDelete(this, noHeaderItems, item)
+                launchUI {
+                    itemActions.onDelete(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                }
             }
 
             holder.container.setOnClickListener {
-                itemActions.onItemClicked(this, noHeaderItems, item)
+                launchUI {
+                    itemActions.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                }
             }
 
             viewBinderHelper.bind(holder.swipeRevealLayout, item.key)
