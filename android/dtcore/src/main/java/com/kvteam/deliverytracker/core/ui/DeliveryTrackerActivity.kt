@@ -8,8 +8,8 @@ import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.session.CheckSessionResult
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.toolbar.*

@@ -3,9 +3,8 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarConfiguration
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject

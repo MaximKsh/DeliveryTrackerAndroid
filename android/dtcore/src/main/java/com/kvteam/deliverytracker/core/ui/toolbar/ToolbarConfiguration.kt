@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.ui.dropdowntop
+package com.kvteam.deliverytracker.core.ui.toolbar
 
 data class ToolbarConfiguration(
         val useToolbar: Boolean = false,

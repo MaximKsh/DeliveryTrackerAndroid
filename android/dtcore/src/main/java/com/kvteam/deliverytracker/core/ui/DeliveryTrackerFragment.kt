@@ -2,7 +2,7 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 
 abstract class DeliveryTrackerFragment: Fragment() {
     protected val dtActivity
