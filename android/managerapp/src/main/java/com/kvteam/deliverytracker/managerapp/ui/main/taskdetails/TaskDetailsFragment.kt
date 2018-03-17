@@ -69,7 +69,7 @@ class TaskDetailsFragment : DeliveryTrackerFragment() {
         taskInfo.taskProducts[0].quantity = 1
 
         invokeAsync({
-            taskWebservice.create(taskInfo)
+            taskWebservice.createAsync(taskInfo)
         }, {
             val result = it
             if(result.success) {

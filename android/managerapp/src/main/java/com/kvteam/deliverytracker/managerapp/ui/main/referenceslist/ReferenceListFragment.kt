@@ -52,7 +52,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                referenceWebservice.delete("PaymentType", item.paymentType.id!!)
+                referenceWebservice.deleteAsync("PaymentType", item.paymentType.id!!)
             }, {
                 if (it.success) {
                     itemList.remove(item)
@@ -70,7 +70,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                referenceWebservice.delete("Warehouse", item.warehouse.id!!)
+                referenceWebservice.deleteAsync("Warehouse", item.warehouse.id!!)
             }, {
                 if (it.success) {
                     itemList.remove(item)
@@ -88,7 +88,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                referenceWebservice.delete("Product", item.product.id!!)
+                referenceWebservice.deleteAsync("Product", item.product.id!!)
             }, {
                 if (it.success) {
                     itemList.remove(item)
@@ -106,7 +106,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                referenceWebservice.delete("Client", item.client.id!!)
+                referenceWebservice.deleteAsync("Client", item.client.id!!)
             }, {
                 if (it.success) {
                     itemList.remove(item)

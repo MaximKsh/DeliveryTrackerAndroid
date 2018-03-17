@@ -9,72 +9,30 @@ import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.buildDefaultGson
 import com.kvteam.deliverytracker.core.common.invalidResponseBody
-import com.kvteam.deliverytracker.core.common.unauthorized
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
-import com.kvteam.deliverytracker.core.webservice.IHttpManager
-import com.kvteam.deliverytracker.core.webservice.NetworkResult
+import com.kvteam.deliverytracker.core.webservice.*
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
+import kotlinx.coroutines.experimental.async
 import java.util.*
+import java.util.concurrent.atomic.AtomicReference
 
 class Session (
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
         context: Context) : ISession {
-    private val gson = buildDefaultGson()
-    private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 
-    override var id: UUID?
-        get() {
-            val idOrNull = getUserDataOrNull("_id")
-            return if (idOrNull != null) {
-                UUID.fromString(idOrNull)
-            } else {
-                null
-            }
-        }
-        private set(v) = setUserDataOrNull("_id", v?.toString())
-
-    override var instanceId: UUID?
-        get() {
-            val idOrNull = getUserDataOrNull("_instanceId")
-            return if (idOrNull != null) {
-                UUID.fromString(idOrNull)
-            } else {
-                null
-            }
-        }
-        private set(v) = setUserDataOrNull("_instanceId", v?.toString())
-
-    override var code: String?
-        get() = getUserDataOrNull("_username")
-        private set(v) = setUserDataOrNull("_username", v)
-    override var surname: String?
-        get() = getUserDataOrNull("_surname")
-        private set(v) = setUserDataOrNull("_surname", v)
-    override var name: String?
-        get() = getUserDataOrNull("_name")
-        private set(v) = setUserDataOrNull("_name", v)
-    override var patronymic: String?
-        get() = getUserDataOrNull("_patronymic")
-        private set(v) = setUserDataOrNull("_patronymic", v)
-    override var phoneNumber: String?
-        get() = getUserDataOrNull("_phoneNumber")
-        private set(v) = setUserDataOrNull("_phoneNumber", v)
-    override var role: UUID?
-        get() {
-            val roleOrNull = getUserDataOrNull("_role")
-            return if (roleOrNull != null) {
-                UUID.fromString(roleOrNull)
-            } else {
-                null
-            }
-        }
-        private set(v) = setUserDataOrNull("_role", v?.toString())
 
     private val accountManager = AccountManager.get(context)
+    private val gson = buildDefaultGson()
+    private val baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
+
+    private val userAR = AtomicReference<Lazy<User?>>( lazy { getUserFromAccount() })
+
+    override val user = userAR.get().value
+
 
     override fun getToken(): String? {
         try {
@@ -89,7 +47,7 @@ class Session (
                     null)
                     .result
 
-            return result.getString("authtoken")
+            return result.getString(AccountManager.KEY_AUTHTOKEN)
         } catch(e: Exception) {
             return null
         }
@@ -103,38 +61,17 @@ class Session (
         }
     }
 
-    override fun checkSession(): CheckSessionResult {
-        val url = baseUrl + "/api/account/check"
-        var headers = getAuthorizationHeaders(this) ?: return CheckSessionResult.Wrong
-        var result = httpManager.get(url, headers)
-        // Если нет доступа в сеть, дальше нет смысла что-либо делать
-        if(!result.fetched) {
-            return CheckSessionResult.Undefined
+    override fun setAccountExplicitly(
+            username: String,
+            password: String,
+            token: String,
+            user: User) : LoginResult {
+        try{
+            createAccount(username, password, token, user)
+        } catch (e: Exception) {
+            return LoginResult(LoginResultType.Error, fetched = false)
         }
-
-        if (result.statusCode == 403) {
-            invalidateToken()
-            headers = getAuthorizationHeaders(this) ?: return CheckSessionResult.Wrong
-            result = httpManager.get(url, headers)
-        }
-        if(!result.fetched) {
-            return CheckSessionResult.Undefined
-        }
-        return when(result.statusCode) {
-            200 -> CheckSessionResult.Correct
-            403 -> CheckSessionResult.Wrong
-            else -> CheckSessionResult.Undefined
-        }
-    }
-
-    override fun setTokenExplicitly(token: String) : Boolean {
-        val account = accountManager.getAccountsByType(sessionInfo.accountType).firstOrNull()
-        if(account != null) {
-            val authtokenType = sessionInfo.accountType
-            accountManager.setAuthToken(account, authtokenType, token)
-            return true
-        }
-        return false
+        return LoginResult(LoginResultType.Success)
     }
 
     override fun hasAccount(): Boolean {
@@ -161,7 +98,24 @@ class Session (
                 }
     }
 
-    override fun login(username: String, password: String): LoginResult {
+
+    override suspend fun checkSessionAsync(): CheckSessionResult = async {
+        val url = baseUrl + "/api/account/check"
+        val result = doubleTimeRequest(this@Session, true) {
+            httpManager.get(url, it)
+        }
+        // Если нет доступа в сеть, дальше нет смысла что-либо делать
+        if(!result.fetched) {
+            return@async CheckSessionResult.ServiceUnavailable
+        }
+        return@async when(result.statusCode) {
+            OK_HTTP_STATUS -> CheckSessionResult.OK
+            INVALID_TOKEN_HTTP_STATUS -> CheckSessionResult.Incorrect
+            else -> CheckSessionResult.ServiceUnavailable
+        }
+    }.await()
+
+    override suspend fun loginAsync(username: String, password: String): LoginResult = async {
         val request = AccountRequest(codePassword = CodePassword(username, password))
         val rawRequestBody = gson.toJson(request)
         val response = httpManager.post(
@@ -170,8 +124,8 @@ class Session (
                 mapOf(),
                 "application/json")
         if(!response.success
-            || response.statusCode !in 200..201) {
-            return LoginResult(
+            || response.statusCode !in OK_HTTP_STATUS..CREATED_HTTP_STATUS) {
+            return@async LoginResult(
                     LoginResultType.Error,
                     fetched = response.fetched,
                     statusCode = response.statusCode,
@@ -181,7 +135,7 @@ class Session (
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return LoginResult(
+            return@async LoginResult(
                     LoginResultType.Error,
                     fetched = true,
                     statusCode = response.statusCode,
@@ -190,79 +144,41 @@ class Session (
         val tokenRole = accountResponse?.user?.role
         if(tokenRole != null
                 && !sessionInfo.allowRoles.contains(tokenRole.toRole())) {
-            return LoginResult(
+            return@async LoginResult(
                     LoginResultType.RoleMismatch,
                     fetched = true,
                     statusCode = response.statusCode,
                     errors = response.errors)
         }
-        val token = accountResponse.token
-
-        val account = Account(username, sessionInfo.accountType)
+        val token = accountResponse.token!!
+        val user = accountResponse.user!!
         try{
-            // Сначала удаляются все предыдущие
-            accountManager.getAccountsByType(sessionInfo.accountType)
-                    .filter { it != account }
-                    .forEach {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                            accountManager.removeAccountExplicitly(it)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            accountManager.removeAccount(it, null, null)
-                        }
-                    }
-
-            if (!hasAccount(username)) {
-                val authtokenType = sessionInfo.accountType
-                accountManager.addAccountExplicitly(account, password, null)
-                accountManager.setAuthToken(account, authtokenType, token)
-            } else {
-                accountManager.setPassword(account, password)
-            }
+            createAccount(username, password, token, user)
         } catch (e: Exception) {
-            return LoginResult(
+            return@async LoginResult(
                     LoginResultType.Error,
                     fetched = true,
                     statusCode = response.statusCode,
                     errors = response.errors)
         }
-
-        val user = accountResponse.user
-        id = user?.id
-        instanceId = user?.instanceId
-        code = username
-        surname = user?.surname ?: EMPTY_STRING
-        name = user?.name ?: EMPTY_STRING
-        patronymic = user?.patronymic ?: EMPTY_STRING
-        phoneNumber = user?.phoneNumber ?: EMPTY_STRING
-        role = tokenRole
-
         val resultType =
-                if(response.statusCode == 201) LoginResultType.Registered
+                if(response.statusCode == CREATED_HTTP_STATUS) LoginResultType.Registered
                 else LoginResultType.Success
-        return LoginResult(
+        return@async LoginResult(
                 resultType,
                 accountResponse,
                 fetched = true,
                 statusCode = response.statusCode)
-    }
+    }.await()
 
-    override fun refreshUserInfo(): NetworkResult<AccountResponse> {
-        var headers = getAuthorizationHeaders(this)
-                ?: return NetworkResult(errors = listOf(unauthorized()))
-        var response = httpManager.get(
-                baseUrl + "/api/account/about",
-                headers)
-        if(response.statusCode == 401) {
-            invalidateToken()
-            headers = getAuthorizationHeaders(this)
-                    ?: return NetworkResult(errors = listOf(unauthorized()))
-            response = httpManager.get(
+    override suspend fun refreshUserInfoAsync(): NetworkResult<AccountResponse> = async {
+        val response = doubleTimeRequest(this@Session, true) {
+            httpManager.get(
                     baseUrl + "/api/account/about",
-                    headers)
+                    it)
         }
         if(!response.success) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = response.errors)
@@ -271,48 +187,35 @@ class Session (
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = listOf(invalidResponseBody()))
         }
         val userInfo = accountResponse.user
-        if( userInfo != null) {
-            surname = userInfo.surname ?: "no surname"
-            name = userInfo.name ?: "no name"
-            phoneNumber = userInfo.phoneNumber ?: "no phone number"
-            role = userInfo.role
-        }
+        setUserToAccount(userInfo)
 
-        return NetworkResult(
+        return@async NetworkResult(
                 entity = accountResponse,
                 statusCode = response.statusCode,
                 fetched = response.fetched,
                 errors = response.errors)
-    }
+    }.await()
 
-    override fun editUserInfo(userInfo: User): NetworkResult<AccountResponse> {
+    override suspend fun editUserInfoAsync(
+            userInfo: User): NetworkResult<AccountResponse> = async {
         val request = AccountRequest(user = userInfo)
         val rawRequestBody = gson.toJson(request)
-        var headers = getAuthorizationHeaders(this)
-                ?: return NetworkResult(errors = listOf(unauthorized()))
-        var response = httpManager.post(
-                baseUrl + "/api/account/edit",
-                rawRequestBody,
-                headers,
-                "application/json")
-        if(response.statusCode == 401) {
-            invalidateToken()
-            headers = getAuthorizationHeaders(this)
-                    ?: return NetworkResult(errors = listOf(unauthorized()))
-            response = httpManager.post(
+        val response = doubleTimeRequest(this@Session, true) {
+            httpManager.post(
                     baseUrl + "/api/account/edit",
                     rawRequestBody,
-                    headers,
+                    it,
                     "application/json")
         }
+
         if(!response.success) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = response.errors)
@@ -321,49 +224,37 @@ class Session (
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = listOf(invalidResponseBody()))
         }
         val newUserInfo = accountResponse.user
-        if( newUserInfo != null) {
-            surname = newUserInfo.surname ?: EMPTY_STRING
-            name = newUserInfo.name ?: EMPTY_STRING
-            patronymic = newUserInfo.patronymic ?: EMPTY_STRING
-            phoneNumber = newUserInfo.phoneNumber ?: "no phone number"
-            role = newUserInfo.role
-        }
+        setUserToAccount(newUserInfo)
 
-        return NetworkResult(
+        return@async NetworkResult(
                 entity = accountResponse,
                 statusCode = response.statusCode,
                 fetched = response.fetched,
                 errors = response.errors)
-    }
+    }.await()
 
-    override fun changePassword(old: CodePassword, new: CodePassword): NetworkResult<AccountResponse> {
+    override suspend fun changePasswordAsync(
+            old: CodePassword,
+            new: CodePassword): NetworkResult<AccountResponse> = async {
         val request = AccountRequest(codePassword = old, newCodePassword = new)
         val rawRequestBody = gson.toJson(request)
-        var headers = getAuthorizationHeaders(this)
-                ?: return NetworkResult(errors = listOf(unauthorized()))
-        var response = httpManager.post(
-                baseUrl + "/api/account/change_password",
-                rawRequestBody,
-                headers,
-                "application/json")
-        if(response.statusCode == 401) {
-            invalidateToken()
-            headers = getAuthorizationHeaders(this)
-                    ?: return NetworkResult(errors = listOf(unauthorized()))
-            response = httpManager.post(
+
+        val response = doubleTimeRequest(this@Session, true) {
+            httpManager.post(
                     baseUrl + "/api/account/change_password",
                     rawRequestBody,
-                    headers,
+                    it,
                     "application/json")
         }
+
         if(!response.success) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = response.errors)
@@ -372,7 +263,7 @@ class Session (
         val accountResponse = try {
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
-            return NetworkResult(
+            return@async NetworkResult<AccountResponse>(
                     fetched = response.fetched,
                     statusCode = response.statusCode,
                     errors = listOf(invalidResponseBody()))
@@ -381,29 +272,87 @@ class Session (
         if(account != null) {
             accountManager.setPassword(account, new.password)
         }
-        return NetworkResult(
+        return@async NetworkResult(
                 entity = accountResponse,
                 statusCode = response.statusCode,
                 fetched = response.fetched,
                 errors = response.errors)
+    }.await()
+
+    private fun getUserFromAccount(): User? {
+        val user = User(
+                code = getUserDataOrNull(CODE_KEY),
+                surname = getUserDataOrNull(SURNAME_KEY),
+                name = getUserDataOrNull(NAME_KEY),
+                patronymic = getUserDataOrNull(PATRONYMIC_KEY),
+                phoneNumber = getUserDataOrNull(PHONE_NUMBER_KEY),
+                role = getUserDataUuidOrNull(ROLE_KEY))
+        user.id = getUserDataUuidOrNull(ID_KEY)
+        user.instanceId = getUserDataUuidOrNull(INSTANCE_ID_KEY)
+        return user
     }
 
+    private fun setUserToAccount(user: User?) {
+        setUserDataOrNull(ID_KEY, user?.id)
+        setUserDataOrNull(INSTANCE_ID_KEY, user?.instanceId)
+        setUserDataOrNull(CODE_KEY, user?.code)
+        setUserDataOrNull(SURNAME_KEY, user?.surname)
+        setUserDataOrNull(NAME_KEY, user?.name)
+        setUserDataOrNull(PATRONYMIC_KEY, user?.patronymic)
+        setUserDataOrNull(ROLE_KEY, user?.role)
+        userAR.set( lazy { getUserFromAccount() } )
+    }
 
 
     private fun getUserDataOrNull(key: String): String? {
-        val account = getFirstAccount()
-        return if(account != null) accountManager.getUserData(account, key)
-               else null
+        val account = getFirstAccount() ?: return null
+        return accountManager.getUserData(account, key)
     }
 
-    private fun setUserDataOrNull(key: String, value: String?) {
+    private fun getUserDataUuidOrNull(key: String): UUID? {
+        val idOrNull = getUserDataOrNull(key) ?: return null
+        return UUID.fromString(idOrNull)
+    }
+
+    private fun setUserDataOrNull(key: String, value: Any?) {
         val account = getFirstAccount()
         if(account != null) {
-            accountManager.setUserData(account, key, value)
+            accountManager.setUserData(account, key, value?.toString() ?: EMPTY_STRING)
         }
-
     }
 
     private fun getFirstAccount() =
             accountManager.getAccountsByType(sessionInfo.accountType).firstOrNull()
+
+    private fun createAccount(username: String, password: String, token: String, user: User) {
+        val account = Account(formatAccountName(user), sessionInfo.accountType)
+        // Сначала удаляются все предыдущие
+        accountManager.getAccountsByType(sessionInfo.accountType)
+                .filter { it != account }
+                .forEach {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        accountManager.removeAccountExplicitly(it)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        accountManager.removeAccount(it, null, null)
+                    }
+                }
+
+        if (!hasAccount(username)) {
+            val authTokenType = sessionInfo.accountType
+            accountManager.addAccountExplicitly(account, password, null)
+            accountManager.setAuthToken(account, authTokenType, token)
+        } else {
+            accountManager.setPassword(account, password)
+        }
+
+        setUserToAccount(user)
+    }
+
+    private fun formatAccountName(user: User) : String {
+        if(user.name == null && user.surname == null) {
+            return user.code ?: EMPTY_STRING
+        }
+        return "${user.name} ${user.surname}"
+    }
 }

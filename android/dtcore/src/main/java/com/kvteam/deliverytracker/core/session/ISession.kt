@@ -4,30 +4,25 @@ import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
-import java.util.*
 
 interface ISession {
     fun getToken(): String?
     fun invalidateToken()
-
-    fun checkSession(): CheckSessionResult
-    fun setTokenExplicitly(token: String) : Boolean
+    fun setAccountExplicitly(
+            username: String,
+            password: String,
+            token: String,
+            user: User) : LoginResult
     fun hasAccount(): Boolean
     fun hasAccount(username: String?): Boolean
     fun logout()
 
-    fun login(username: String, password: String): LoginResult
-    fun refreshUserInfo(): NetworkResult<AccountResponse>
-    fun editUserInfo(userInfo: User): NetworkResult<AccountResponse>
-    fun changePassword(old: CodePassword,
-                       new: CodePassword) : NetworkResult<AccountResponse>
+    suspend fun checkSessionAsync(): CheckSessionResult
+    suspend fun loginAsync(username: String, password: String): LoginResult
+    suspend fun refreshUserInfoAsync(): NetworkResult<AccountResponse>
+    suspend fun editUserInfoAsync(userInfo: User): NetworkResult<AccountResponse>
+    suspend fun changePasswordAsync(old: CodePassword,
+                            new: CodePassword) : NetworkResult<AccountResponse>
 
-    val id: UUID?
-    val instanceId: UUID?
-    val code: String?
-    val surname: String?
-    val name: String?
-    val patronymic: String?
-    val phoneNumber: String?
-    val role: UUID?
+    val user: User?
 }

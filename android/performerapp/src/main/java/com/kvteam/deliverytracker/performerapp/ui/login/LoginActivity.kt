@@ -4,14 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.models.*
-import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.LoginResult
 import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
-import com.kvteam.deliverytracker.core.webservice.*
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -55,7 +52,7 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         setProcessingState()
         invokeAsync({
-            session.login(username, password)
+            session.loginAsync(username, password)
         }, {
             navigateToNextActivity(it)
             setProcessingState(false)

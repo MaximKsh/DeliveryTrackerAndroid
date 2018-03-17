@@ -5,7 +5,6 @@ import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -55,7 +54,7 @@ open class FilterProductsFragment : BaseListFragment() {
         toolbarController.enableSearchMode({text ->
             mAdapter.searchText = text
             invokeAsync({
-                viewWebservice.getViewResult(viewGroup, "ProductsView", mapOf(
+                viewWebservice.getViewResultAsync(viewGroup, "ProductsView", mapOf(
                         "name" to text
                 ))
             }, {

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.session.CheckSessionResult
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
@@ -13,6 +13,7 @@ import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.coroutines.experimental.async
 import javax.inject.Inject
 
 abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentManager.OnBackStackChangedListener {
@@ -63,29 +64,27 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
     }
 
 
-    override fun onResume() {
+    override fun onResume() = launchUI {
         super.onResume()
 
         if (checkHasAccountOnResume) {
             if(!dtSession.hasAccount()) {
                 val intent = Intent(
-                        this,
+                        this@DeliveryTrackerActivity,
                         (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
                 startActivity(intent)
                 finish()
             } else {
-                invokeAsync({
-                    dtSession.checkSession()
-                }, {
-                    if(it == CheckSessionResult.Wrong) {
-                        dtSession.logout()
-                        val intent = Intent(
-                                this@DeliveryTrackerActivity,
-                                (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
-                        startActivity(intent)
-                        finish()
-                    }
-                })
+                val result = async { dtSession.checkSessionAsync() }.await()
+
+                if(result == CheckSessionResult.Incorrect) {
+                    dtSession.logout()
+                    val intent = Intent(
+                            this@DeliveryTrackerActivity,
+                            (application as DeliveryTrackerApplication).loginActivityType as Class<*>)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
     }

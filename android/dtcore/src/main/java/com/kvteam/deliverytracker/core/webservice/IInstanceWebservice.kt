@@ -6,9 +6,9 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InstanceResponse
 
 interface IInstanceWebservice {
-    fun create(instance: Instance,
-               creator: User,
-               codePassword: CodePassword) : NetworkResult<InstanceResponse>
+    suspend fun createAsync(instance: Instance,
+                            creator: User,
+                            codePassword: CodePassword): NetworkResult<InstanceResponse>
 
-    fun get() : NetworkResult<InstanceResponse>
+    suspend fun getAsync(): NetworkResult<InstanceResponse>
 }

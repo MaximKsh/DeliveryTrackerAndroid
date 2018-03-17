@@ -4,21 +4,21 @@ import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 import java.lang.reflect.Type
 
 interface IWebservice {
-    fun get(
+    suspend fun getAsync(
             url: String,
             withToken: Boolean = false): RawNetworkResult
 
-    fun <T : ResponseBase> get(
+    suspend fun <T : ResponseBase> getAsync(
             url: String,
             responseType: Type,
             withToken: Boolean = false): NetworkResult<T>
 
-    fun post(
+    suspend fun postAsync(
             url: String,
             content: Any?,
             withToken: Boolean = false): RawNetworkResult
 
-    fun <T : ResponseBase> post(
+    suspend fun <T : ResponseBase> postAsync(
             url: String,
             content: Any?,
             responseType: Type,

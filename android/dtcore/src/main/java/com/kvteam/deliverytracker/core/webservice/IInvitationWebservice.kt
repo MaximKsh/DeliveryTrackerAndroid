@@ -4,7 +4,7 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InvitationResponse
 
 interface IInvitationWebservice  {
-    fun create(preliminaryUserData: User): NetworkResult<InvitationResponse>
-    fun get(code: String): NetworkResult<InvitationResponse>
-    fun delete(code: String): NetworkResult<InvitationResponse>
+    suspend fun createAsync(preliminaryUserData: User): NetworkResult<InvitationResponse>
+    suspend fun getAsync(code: String): NetworkResult<InvitationResponse>
+    suspend fun deleteAsync(code: String): NetworkResult<InvitationResponse>
 }

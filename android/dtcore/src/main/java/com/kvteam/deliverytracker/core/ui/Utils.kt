@@ -20,7 +20,7 @@ fun removeShiftMode(view: BottomNavigationView): Boolean {
             item.setChecked(item.itemData.isChecked)
         }
     } catch (e: NoSuchFieldException) {
-        Log.e("ERROR NO SUCH FIELD", "Unable to get shift mode field")
+        Log.e("ERROR NO SUCH FIELD", "Unable to getAsync shift mode field")
         return false
     } catch (e: IllegalAccessException) {
         Log.e("ERROR ILLEGAL ALG", "Unable to change value of shift mode")

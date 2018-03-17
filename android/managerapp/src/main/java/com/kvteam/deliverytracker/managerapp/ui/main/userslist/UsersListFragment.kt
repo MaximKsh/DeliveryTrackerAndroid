@@ -1,7 +1,9 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.Invitation
@@ -10,7 +12,6 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
@@ -47,7 +48,7 @@ open class UsersListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                userWebservice.delete(item.user.id!!)
+                userWebservice.deleteAsync(item.user.id!!)
             }, {
                 if(it.success) {
                     itemList.remove(item)
@@ -69,7 +70,7 @@ open class UsersListFragment : BaseListFragment() {
                 return
             }
             invokeAsync({
-                invitationWebservice.delete(item.invitation.invitationCode!!)
+                invitationWebservice.deleteAsync(item.invitation.invitationCode!!)
             }, {
                 if(it.success) {
                     itemList.remove(item)

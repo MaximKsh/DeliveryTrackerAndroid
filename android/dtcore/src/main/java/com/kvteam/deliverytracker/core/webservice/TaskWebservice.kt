@@ -11,31 +11,31 @@ class TaskWebservice(private val webservice: IWebservice,
 
     private val tasksBaseUrl = "/api/tasks"
 
-    override fun create(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
+    override suspend fun createAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
         val request = TaskRequest()
         request.taskInfo = taskInfo
 
-        val result = webservice.post<TaskResponse>(
-                "$tasksBaseUrl/create",
+        val result = webservice.postAsync<TaskResponse>(
+                "$tasksBaseUrl/createAsync",
                 request,
                 TaskResponse::class.java,
                 true)
         return result
     }
 
-    override fun get(id: UUID): NetworkResult<TaskResponse> {
-        val result = webservice.get<TaskResponse>(
-                "$tasksBaseUrl/get?id=$id",
+    override suspend fun getAsync(id: UUID): NetworkResult<TaskResponse> {
+        val result = webservice.getAsync<TaskResponse>(
+                "$tasksBaseUrl/getAsync?id=$id",
                 TaskResponse::class.java,
                 true)
         return result
     }
 
-    override fun edit(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
+    override suspend fun editAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
         val request = TaskRequest()
         request.taskInfo = taskInfo
 
-        val result = webservice.post<TaskResponse>(
+        val result = webservice.postAsync<TaskResponse>(
                 "$tasksBaseUrl/edit",
                 request,
                 TaskResponse::class.java,
@@ -43,15 +43,15 @@ class TaskWebservice(private val webservice: IWebservice,
         return result
     }
 
-    override fun changeState(id: UUID, newStateId: UUID): NetworkResult<TaskResponse> {
+    override suspend fun changeStateAsync(id: UUID, newStateId: UUID): NetworkResult<TaskResponse> {
         val taskInfo = TaskInfo()
         taskInfo.id = id
         taskInfo.taskStateId = newStateId
-        taskInfo.instanceId = session.instanceId
+        taskInfo.instanceId = session.user!!.instanceId
         val request = TaskRequest()
         request.taskInfo = taskInfo
 
-        val result = webservice.post<TaskResponse>(
+        val result = webservice.postAsync<TaskResponse>(
                 "$tasksBaseUrl/change_state",
                 request,
                 TaskResponse::class.java,

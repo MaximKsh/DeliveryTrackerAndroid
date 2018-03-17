@@ -29,9 +29,10 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
 
         if(savedInstanceState == null) {
-            etConfirmSurname.setText(session.surname ?: EMPTY_STRING)
-            etConfirmName.setText(session.name ?: EMPTY_STRING)
-            etConfirmPhoneNumber.setText(session.phoneNumber ?: EMPTY_STRING)
+            val user = session.user!!
+            etConfirmSurname.setText(user.surname ?: EMPTY_STRING)
+            etConfirmName.setText(user.name ?: EMPTY_STRING)
+            etConfirmPhoneNumber.setText(user.phoneNumber ?: EMPTY_STRING)
         } else {
             etConfirmSurname.setText(savedInstanceState.getString(surnameKey, EMPTY_STRING))
             etConfirmName.setText(savedInstanceState.getString(nameKey, EMPTY_STRING))
@@ -57,7 +58,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
             userInfo.surname = etConfirmSurname.text.toString()
             userInfo.name = etConfirmName.text.toString()
             userInfo.phoneNumber = etConfirmPhoneNumber.text.toString()
-            session.editUserInfo(userInfo)
+            session.editUserInfoAsync(userInfo)
         }, {
             if(it.success) {
                 val intent = Intent(this@ConfirmDataActivity, MainActivity::class.java)

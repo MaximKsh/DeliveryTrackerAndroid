@@ -8,16 +8,26 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
+import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.buildDefaultGson
 import com.kvteam.deliverytracker.core.models.CodePassword
-import com.kvteam.deliverytracker.core.webservice.IWebservice
+import com.kvteam.deliverytracker.core.webservice.CREATED_HTTP_STATUS
+import com.kvteam.deliverytracker.core.webservice.IHttpManager
+import com.kvteam.deliverytracker.core.webservice.OK_HTTP_STATUS
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 
 class AccountAuthenticator(
         private val application: DeliveryTrackerApplication,
-        private val webservice: IWebservice,
+        private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo): AbstractAccountAuthenticator(application) {
+
+    private val gson = buildDefaultGson()
+    private val baseUrl: String = application.getString(R.string.Core_WebserviceUrl)
+
     override fun addAccount(
             response: AccountAuthenticatorResponse?,
             accountType: String?,
@@ -38,21 +48,18 @@ class AccountAuthenticator(
     }
 
     override fun editProperties(p0: AccountAuthenticatorResponse?, p1: String?): Bundle {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun hasFeatures(p0: AccountAuthenticatorResponse?, p1: Account?, p2: Array<out String>?): Bundle {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun getAuthToken(
-            response: AccountAuthenticatorResponse?,
-            account: Account?,
-            authTokenType: String?,
-            bundle: Bundle?): Bundle {
-        response!!
-        account!!
-        authTokenType!!
+            response: AccountAuthenticatorResponse,
+            account: Account,
+            authTokenType: String,
+            bundle: Bundle): Bundle {
 
         val am = AccountManager.get(application)
 
@@ -61,24 +68,62 @@ class AccountAuthenticator(
 
         if (TextUtils.isEmpty(authToken)) {
             // В кэше токена нет, логинимся по новой
-            val codePassword = CodePassword(account.name, am.getPassword(account))
-            val accountResponse = webservice.post<AccountResponse>(
-                    "/api/account/login",
-                    AccountRequest(codePassword = codePassword),
-                    AccountResponse::class.java)
-            authToken = accountResponse.entity?.token
+            val codePassword = CodePassword(am.getUserData(account, CODE_KEY), am.getPassword(account))
+            authToken = relogin(codePassword)
         }
 
         if (!TextUtils.isEmpty(authToken)) {
             // Есть токен, возвращаем бандл с токеном
-            val result = Bundle()
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-            result.putString(AccountManager.KEY_AUTHTOKEN, authToken)
-            return result
+            return putTokenIntoBundle(account, authToken)
         }
 
         // нет токена, редиректим на страницу логина
+        return redirectToLogin(response, authTokenType)
+    }
+
+    override fun updateCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: String?, p3: Bundle?): Bundle {
+        TODO("not implemented")
+    }
+
+    override fun confirmCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: Bundle?): Bundle {
+        TODO("not implemented")
+    }
+
+    override fun getAuthTokenLabel(p0: String?): String {
+        TODO("not implemented")
+    }
+
+    private fun relogin(codePassword: CodePassword) : String {
+        val request = AccountRequest(codePassword = codePassword)
+        val rawRequestBody = gson.toJson(request)
+        val response = httpManager.post(
+                baseUrl + "/api/account/login",
+                rawRequestBody,
+                mapOf(),
+                "application/json")
+        if(!response.success
+                || response.statusCode !in OK_HTTP_STATUS..CREATED_HTTP_STATUS) {
+            return EMPTY_STRING
+        }
+
+        val accountResponse = try {
+            gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
+        } catch (e: JsonSyntaxException) {
+            return EMPTY_STRING
+        }
+        return accountResponse?.token ?: EMPTY_STRING
+    }
+
+    private fun putTokenIntoBundle(account: Account, authToken: String) : Bundle {
+        val result = Bundle()
+        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
+        result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
+        result.putString(AccountManager.KEY_AUTHTOKEN, authToken)
+        return result
+    }
+
+    private fun redirectToLogin(response: AccountAuthenticatorResponse,
+                                authTokenType: String) : Bundle{
         val intent = Intent(application, (application).loginActivityType as Class<*>)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra(sessionInfo.accountType, accountType)
@@ -87,18 +132,6 @@ class AccountAuthenticator(
         val retBundle = Bundle()
         retBundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return retBundle
-    }
-
-    override fun updateCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: String?, p3: Bundle?): Bundle {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun confirmCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: Bundle?): Bundle {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getAuthTokenLabel(p0: String?): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

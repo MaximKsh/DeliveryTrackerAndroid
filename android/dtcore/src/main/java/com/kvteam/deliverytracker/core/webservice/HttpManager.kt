@@ -50,10 +50,7 @@ class HttpManager: IHttpManager {
                     statusCode = response.code(),
                     bodyContent = response.body()?.string() ?: EMPTY_STRING)
         } catch (e: IOException) {
-            RawNetworkResult(
-                    errors = listOf(networkError())
-            )
+            RawNetworkResult(errors = listOf(networkError()) )
         }
     }
-
 }

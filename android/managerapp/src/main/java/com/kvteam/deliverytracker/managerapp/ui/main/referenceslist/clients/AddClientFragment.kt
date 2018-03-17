@@ -3,22 +3,22 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.models.Client
+import com.kvteam.deliverytracker.core.models.ClientAddress
+import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
-import android.view.inputmethod.InputMethodManager
-import com.chauthai.swipereveallayout.ViewBinderHelper
-import com.kvteam.deliverytracker.core.models.Client
-import com.kvteam.deliverytracker.core.models.ClientAddress
-import com.kvteam.deliverytracker.core.models.CollectionEntityAction
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import kotlinx.android.synthetic.main.client_address_item.view.*
 import kotlinx.android.synthetic.main.fragment_add_client.*
+import javax.inject.Inject
 
 
 class AddClientFragment : DeliveryTrackerFragment() {
@@ -102,7 +102,7 @@ class AddClientFragment : DeliveryTrackerFragment() {
                     client.surname = etSurnameField.text.toString()
                     client.patronymic = etPatronymicField.text.toString()
                     client.phoneNumber = etPhoneNumberField.text.toString()
-                    referenceWebservice.create("Client", client)
+                    referenceWebservice.createAsync("Client", client)
                 }, {
                     if (it.success) {
                         val view =  activity!!.currentFocus

@@ -37,7 +37,7 @@ class GeopositionSender : BroadcastReceiver() {
                                 val pos = Geoposition()
                                 pos.latitude = location.latitude
                                 pos.longitude = location.longitude
-                                webservice.post(
+                                webservice.postAsync(
                                         "/api/performer/update_position",
                                         pos,
                                         true)

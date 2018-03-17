@@ -1,8 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
 import android.arch.persistence.room.Embedded
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
@@ -26,7 +24,6 @@ data class User(
     @SerializedName("Online", alternate = ["online"])
     var online: Boolean = false
 ): ModelBase(), Serializable {
-
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)
         code = map["Code"] as? String
@@ -38,5 +35,4 @@ data class User(
         geoposition = deserializeObjectFromMap("Geoposition", map, {Geoposition()})
         online = map["Online"] as? Boolean ?: false
     }
-
 }

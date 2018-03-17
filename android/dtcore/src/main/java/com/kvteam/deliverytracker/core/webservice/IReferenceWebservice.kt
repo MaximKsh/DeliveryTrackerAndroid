@@ -6,15 +6,15 @@ import java.util.*
 
 interface IReferenceWebservice {
 
-    fun getTypes() : NetworkResult<ReferenceResponse>
+    suspend fun getTypesAsync() : NetworkResult<ReferenceResponse>
 
-    fun create(type: String, entity: ModelBase)
+    suspend fun createAsync(type: String, entity: ModelBase)
             : NetworkResult<ReferenceResponse>
-    fun edit(type: String, id: UUID, newData: ModelBase)
+    suspend fun editAsync(type: String, id: UUID, newData: ModelBase)
             : NetworkResult<ReferenceResponse>
-    fun get(type: String, id: UUID)
+    suspend fun getAsync(type: String, id: UUID)
             : NetworkResult<ReferenceResponse>
-    fun delete(type: String, id: UUID)
+    suspend fun deleteAsync(type: String, id: UUID)
             : NetworkResult<ReferenceResponse>
 
 }

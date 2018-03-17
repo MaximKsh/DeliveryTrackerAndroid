@@ -5,7 +5,10 @@ import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -61,6 +64,10 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
         ptrFrame.setPtrHandler(object : PtrHandler {
             override fun onRefreshBegin(frame: PtrFrameLayout?) {
+                if (dropdownTop.items.size == 0) {
+                    ptrFrame.refreshComplete()
+                    return
+                }
                 val index = dropdownTop.lastSelectedIndex.get()
                 val selectedItem = dropdownTop.items[index]
                 updateList(selectedItem.viewName, selectedItem.entityType, index, {ptrFrame.refreshComplete()})
@@ -158,7 +165,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                            afterUpdate: (() -> Unit) = {},
                            arguments: Map<String, Any>? = null) {
         invokeAsync({
-            viewWebservice.getViewResult(viewGroup, viewName, arguments)
+            viewWebservice.getViewResultAsync(viewGroup, viewName, arguments)
         }, { result ->
             if (result.success && groupIndex == dropdownTop.lastSelectedIndex.get()) {
                 handleUpdateList(type!!, result.entity!!.viewResult!!)
@@ -170,8 +177,9 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     private fun setCategories() {
         invokeAsync({
-            viewWebservice.getDigest(viewGroup)
+            viewWebservice.getDigestAsync(viewGroup)
         }, { result ->
+            val res = result
             if (result.success) {
                 val digest = result.entity?.digest
                         ?.toList()

@@ -5,11 +5,11 @@ import com.kvteam.deliverytracker.core.webservice.viewmodels.TaskResponse
 import java.util.*
 
 interface ITaskWebservice {
-    fun create(taskInfo: TaskInfo): NetworkResult<TaskResponse>
+    suspend fun createAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse>
 
-    fun get(id: UUID): NetworkResult<TaskResponse>
+    suspend fun getAsync(id: UUID): NetworkResult<TaskResponse>
 
-    fun edit(taskInfo: TaskInfo): NetworkResult<TaskResponse>
+    suspend fun editAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse>
 
-    fun changeState(id: UUID, newStateId: UUID): NetworkResult<TaskResponse>
+    suspend fun changeStateAsync(id: UUID, newStateId: UUID): NetworkResult<TaskResponse>
 }

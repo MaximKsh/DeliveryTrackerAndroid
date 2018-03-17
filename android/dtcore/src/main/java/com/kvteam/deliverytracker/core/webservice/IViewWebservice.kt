@@ -3,12 +3,12 @@ package com.kvteam.deliverytracker.core.webservice
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ViewResponse
 
 interface IViewWebservice {
-    fun getGroups() : NetworkResult<ViewResponse>
+    suspend fun getGroupsAsync(): NetworkResult<ViewResponse>
 
-    fun getViews(viewGroup: String) : NetworkResult<ViewResponse>
+    suspend fun getViewsAsync(viewGroup: String): NetworkResult<ViewResponse>
 
-    fun getDigest(viewGroup: String) : NetworkResult<ViewResponse>
+    suspend fun getDigestAsync(viewGroup: String): NetworkResult<ViewResponse>
 
-    fun getViewResult(viewGroup: String, view: String, arguments: Map<String, Any>? = null) : NetworkResult<ViewResponse>
+    suspend fun getViewResultAsync(viewGroup: String, view: String, arguments: Map<String, Any>? = null): NetworkResult<ViewResponse>
 
 }

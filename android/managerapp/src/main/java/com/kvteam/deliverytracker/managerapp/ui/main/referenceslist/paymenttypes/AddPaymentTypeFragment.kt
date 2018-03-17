@@ -3,18 +3,18 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttype
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_add_payment_type.*
 import javax.inject.Inject
-import android.view.inputmethod.InputMethodManager
-import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 
 
 class AddPaymentTypeFragment : DeliveryTrackerFragment() {
@@ -56,7 +56,7 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
                 invokeAsync({
                     val paymentType = PaymentType()
                     paymentType.name = etNameField.text.toString()
-                    referenceWebservice.create("PaymentType", paymentType)
+                    referenceWebservice.createAsync("PaymentType", paymentType)
                 }, {
                     if (it.success) {
                         navigationController.closeCurrentFragment()

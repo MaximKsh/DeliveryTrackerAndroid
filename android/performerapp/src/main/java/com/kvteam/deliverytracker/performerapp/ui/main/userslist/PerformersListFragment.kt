@@ -26,7 +26,7 @@ class PerformersListFragment: UsersListFragment() {
         ignoreSavedState = false
 
         invokeAsync({
-            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
+            viewWebservice.getViewResultAsync("UserViewGroup", "PerformersView")
         }, {
             if(it.success) {
                 val performers = it.entity?.viewResult?.map{
@@ -43,7 +43,7 @@ class PerformersListFragment: UsersListFragment() {
 
     private fun refresh() {
         invokeAsync({
-            viewWebservice.getViewResult("UserViewGroup", "PerformersView")
+            viewWebservice.getViewResultAsync("UserViewGroup", "PerformersView")
         }, {
             if(it.success) {
                 val performers = it.entity?.viewResult?.map{

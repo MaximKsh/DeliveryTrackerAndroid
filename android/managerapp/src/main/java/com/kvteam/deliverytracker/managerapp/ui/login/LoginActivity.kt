@@ -66,7 +66,7 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         setProcessingState()
         invokeAsync({
-            session.login(username, password)
+            session.loginAsync(username, password)
         }, {
             afterLogin(it)
         })

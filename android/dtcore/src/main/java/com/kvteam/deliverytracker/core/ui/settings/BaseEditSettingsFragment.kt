@@ -12,10 +12,8 @@ import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
-import com.kvteam.deliverytracker.core.models.getUser
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
@@ -67,14 +65,14 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
         toolbarController.setToolbarTitle("Profile")
 
         val args = arguments
-        val user = if(args == null) {
-            val user = session.getUser()
+        val user = if(args?.containsKey(userKey) == true) {
+            args.getSerializable(userKey) as User
+        } else {
+            val user = session.user!!
             val bundle = Bundle()
             bundle.putSerializable(userKey, user)
             arguments = bundle
             user
-        } else {
-            args.getSerializable(userKey) as User
         }
 
         initControls(user)
@@ -113,11 +111,11 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
         invokeAsync({
             var editResult: NetworkResult<AccountResponse>? = null
             if(modifiedUser != null) {
-                editResult = session.editUserInfo(modifiedUser)
+                editResult = session.editUserInfoAsync(modifiedUser)
             }
             var changePasswordResult: NetworkResult<AccountResponse>? = null
             if(needChangePassword) {
-                changePasswordResult = session.changePassword(
+                changePasswordResult = session.changePasswordAsync(
                         CodePassword(password = oldPassword),
                         CodePassword(password = newPassword))
             }

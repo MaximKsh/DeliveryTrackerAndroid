@@ -12,7 +12,6 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
@@ -141,7 +140,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                     user.surname = etSurnameField.text.toString()
                     user.phoneNumber = etPhoneNumberField.text.toString()
                     user.role = selectedRole?.id
-                    invitationWebservice.create(user)
+                    invitationWebservice.createAsync(user)
                 }, {
                    if (it.success) {
                        val view =  this@AddUserFragment.activity!!.currentFocus

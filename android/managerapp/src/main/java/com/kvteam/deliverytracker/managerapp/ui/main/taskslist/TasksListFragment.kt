@@ -2,22 +2,18 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.view.*
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskInfo
-import com.kvteam.deliverytracker.core.ui.*
-import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTop
-import com.kvteam.deliverytracker.core.ui.dropdowntop.DropdownTopItemInfo
+import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.BaseListHeader
+import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
-import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
-import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import javax.inject.Inject
 
@@ -38,7 +34,7 @@ open class TasksListFragment : BaseListFragment() {
                 return
             }
 //            invokeAsync({
-//                tasksWebservice.get("", item.paymentType.id!!)
+//                tasksWebservice.getAsync("", item.paymentType.id!!)
 //            }, {
 //                if (it.success) {
                     itemList.remove(item)

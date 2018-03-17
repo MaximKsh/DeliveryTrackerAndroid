@@ -12,7 +12,7 @@ class InstanceWebservice (
 
     private val instanceBaseUrl = "/api/instance"
 
-    override fun create(
+    override suspend fun createAsync(
             instance: Instance,
             creator: User,
             codePassword: CodePassword) : NetworkResult<InstanceResponse> {
@@ -40,21 +40,17 @@ class InstanceWebservice (
         request.creator = creator
         request.codePassword = codePassword
 
-        val result = webservice.post<InstanceResponse>(
+        return webservice.postAsync(
                 "$instanceBaseUrl/create",
                 request,
                 InstanceResponse::class.java,
                 false)
-        return result
     }
 
-    override fun get() : NetworkResult<InstanceResponse> {
-        return webservice.get(
+    override suspend fun getAsync() : NetworkResult<InstanceResponse> {
+        return webservice.getAsync(
                 "$instanceBaseUrl/get",
                 InstanceResponse::class.java,
                 true)
     }
-
-
-
 }

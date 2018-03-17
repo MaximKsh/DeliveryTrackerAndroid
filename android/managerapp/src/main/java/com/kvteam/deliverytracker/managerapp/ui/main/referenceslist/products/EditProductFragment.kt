@@ -5,7 +5,6 @@ import android.view.*
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Product
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
@@ -55,7 +54,7 @@ class EditProductFragment : DeliveryTrackerFragment() {
                     product.cost = BigDecimal(etCostField.text.toString())
                     product.description = etDescriptionField.text.toString()
 
-                    referenceWebservice.create("Product", product)
+                    referenceWebservice.createAsync("Product", product)
                 }, {
                     if (it.success) {
                         navigationController.closeCurrentFragment()

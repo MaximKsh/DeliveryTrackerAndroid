@@ -6,10 +6,8 @@ import android.widget.AdapterView
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.TaskInfo
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
@@ -19,6 +17,7 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_edit_task.*
+import kotlinx.coroutines.experimental.runBlocking
 import javax.inject.Inject
 
 class EditTaskFragment : DeliveryTrackerFragment() {
@@ -67,18 +66,20 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         autocomplete.setAdapter(AutocompleteListAdapter(
                 activity!!,
                 {
-                    val networkResponse = viewWebservice.getViewResult(
-                        "ReferenceViewGroup",
-                        "ProductsView",
-                        mapOf("name" to it))
-                    val viewResult = networkResponse.entity?.viewResult!!
-                    val result = viewResult
-                            .map { referenceMap ->
-                                val product = Product()
-                                product.fromMap(referenceMap)
-                                product
-                            }.toMutableList()
-                    result
+                    runBlocking {
+                        val networkResponse = viewWebservice.getViewResultAsync(
+                                "ReferenceViewGroup",
+                                "ProductsView",
+                                mapOf("name" to it))
+                        val viewResult = networkResponse.entity?.viewResult!!
+                        val result = viewResult
+                                .map { referenceMap ->
+                                    val product = Product()
+                                    product.fromMap(referenceMap)
+                                    product
+                                }.toMutableList()
+                        result
+                    }
                 },
                 { it.name!! }
 
@@ -105,7 +106,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
             R.id.action_finish -> {
                 invokeAsync({
                     val task = TaskInfo()
-                    taskWebservice.create(task)
+                    taskWebservice.createAsync(task)
                 }, {
                     if (it.success) {
                         navigationController.closeCurrentFragment()

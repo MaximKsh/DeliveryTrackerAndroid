@@ -44,9 +44,10 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
 
 
         if(savedInstanceState == null) {
-            etSurnameField.setText(session.surname ?: EMPTY_STRING)
-            etNameField.setText(session.name ?: EMPTY_STRING)
-            etPhoneNumberField.setText(session.phoneNumber ?: EMPTY_STRING)
+            val user = session.user!!
+            etSurnameField.setText(user.surname ?: EMPTY_STRING)
+            etNameField.setText(user.name ?: EMPTY_STRING)
+            etPhoneNumberField.setText(user.phoneNumber ?: EMPTY_STRING)
         } else {
             etSurnameField.setText(savedInstanceState.getString(surnameKey, EMPTY_STRING))
             etNameField.setText(savedInstanceState.getString(nameKey, EMPTY_STRING))
@@ -75,7 +76,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
                 userInfo.phoneNumber = etPhoneNumberField.text.toString()
 
                 invokeAsync({
-                    session.editUserInfo(userInfo)
+                    session.editUserInfoAsync(userInfo)
                 }, {
                     navigateToMainAcitity(it)
                 })

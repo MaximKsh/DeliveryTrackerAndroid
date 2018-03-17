@@ -1,14 +1,14 @@
 package com.kvteam.deliverytracker.core.ui
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import com.chauthai.swipereveallayout.ViewBinderHelper
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.IFlexible
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.chauthai.swipereveallayout.SwipeRevealLayout
+import com.chauthai.swipereveallayout.ViewBinderHelper
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import kotlinx.android.synthetic.main.base_list_item.view.*
 
@@ -51,7 +51,7 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
         noHeaderItems = currentItems.filter { item: IFlexible<*> -> item is BaseListItem<*, *> }.toMutableList()
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int, payloads: MutableList<Any?>?) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BaseListHolder) {
 
             val item = getItem(position)!!
@@ -68,6 +68,6 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
             holder.swipeRevealLayout.setLockDrag(hideDeleteButton)
         }
 
-        super.onBindViewHolder(holder, position, payloads)
+        super.onBindViewHolder(holder, position)
     }
 }

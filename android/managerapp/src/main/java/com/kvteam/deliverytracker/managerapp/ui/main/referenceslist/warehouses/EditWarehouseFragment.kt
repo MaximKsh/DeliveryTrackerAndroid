@@ -5,7 +5,6 @@ import android.view.*
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Warehouse
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdowntop.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
@@ -52,7 +51,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
                     warehouse.name = etNameField.text.toString()
                     warehouse.rawAddress = etAddressField.text.toString()
 
-                    referenceWebservice.create("Warehouse", warehouse)
+                    referenceWebservice.createAsync("Warehouse", warehouse)
                 }, {
                     if (it.success) {
                         navigationController.closeCurrentFragment()

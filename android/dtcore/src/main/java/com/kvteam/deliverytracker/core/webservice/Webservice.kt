@@ -7,8 +7,8 @@ import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.buildDefaultGson
 import com.kvteam.deliverytracker.core.common.invalidResponseBody
 import com.kvteam.deliverytracker.core.session.ISession
-import com.kvteam.deliverytracker.core.session.getAuthorizationHeaders
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
+import kotlinx.coroutines.experimental.async
 import java.lang.reflect.Type
 
 class Webservice(context: Context,
@@ -19,95 +19,56 @@ class Webservice(context: Context,
 
     private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 
-    override fun get(
+    override suspend fun getAsync(
             url: String,
-            withToken: Boolean): RawNetworkResult {
-        var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return RawNetworkResult()
-                else mapOf()
-        var result = httpManager.get(baseUrl + url, headers)
-
-        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
-        if(withToken && result.statusCode == 403) {
-            session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
-            result = httpManager.get(baseUrl + url, headers)
+            withToken: Boolean): RawNetworkResult = async{
+        val result = doubleTimeRequest(session, withToken) {
+            httpManager.get(baseUrl + url, it)
         }
-        return result
-    }
+        return@async result
+    }.await()
 
-    override fun <T : ResponseBase> get(
+    override suspend fun <T : ResponseBase> getAsync(
             url: String,
             responseType: Type,
-            withToken: Boolean): NetworkResult<T> {
-        var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResult()
-                else mapOf()
-        var result = httpManager.get(baseUrl + url, headers)
+            withToken: Boolean): NetworkResult<T> = async {
 
-        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
-        if(withToken && result.statusCode == 403) {
-            session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResult()
-            result = httpManager.get(baseUrl + url, headers)
+        val result = doubleTimeRequest(session, withToken) {
+            httpManager.get(baseUrl + url, it)
         }
-        return processResponse(result, responseType)
-    }
+        return@async processResponse<T>(result, responseType)
+    }.await()
 
-    override fun post(
+    override suspend fun postAsync(
             url: String,
             content: Any?,
-            withToken: Boolean): RawNetworkResult {
-        var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return RawNetworkResult()
-                else mapOf()
-
+            withToken: Boolean): RawNetworkResult = async {
         val body = if(content != null) gson.toJson(content) else ""
-        var result = httpManager.post(
-                baseUrl + url,
-                body,
-                headers,
-                "application/json")
-        // Если дали токен, но сервер вернул unauthorized, может быть токен просрочен
-        if(withToken && result.statusCode == 403) {
-            session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return RawNetworkResult()
-            result = httpManager.post(
+        val result = doubleTimeRequest(session, withToken) {
+            httpManager.post(
                     baseUrl + url,
                     body,
-                    headers,
+                    it,
                     "application/json")
         }
-        return result
-    }
+        return@async result
+    }.await()
 
-    override fun <T : ResponseBase> post(
+    override suspend fun <T : ResponseBase> postAsync(
             url: String,
             content: Any?,
             responseType: Type,
-            withToken: Boolean): NetworkResult<T> {
-        var headers =
-                if(withToken) getAuthorizationHeaders(session) ?: return NetworkResult()
-                else mapOf()
-
+            withToken: Boolean): NetworkResult<T> = async {
         val body = if(content != null) gson.toJson(content) else ""
-        var result = httpManager.post(
-                baseUrl + url,
-                body,
-                headers,
-                "application/json")
-        // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
-        if(withToken && result.statusCode == 403) {
-            session.invalidateToken()
-            headers = getAuthorizationHeaders(session) ?: return NetworkResult()
-            result = httpManager.post(
+        val result = doubleTimeRequest(session, withToken) {
+            httpManager.post(
                     baseUrl + url,
                     body,
-                    headers,
+                    it,
                     "application/json")
         }
-        return processResponse(result, responseType)
-    }
+        return@async processResponse<T>(result, responseType)
+    }.await()
 
     private fun <T : ResponseBase> processResponse(
             result: RawNetworkResult,
