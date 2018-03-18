@@ -107,8 +107,9 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_finish -> {
+            R.id.action_add -> {
                 val task = TaskInfo()
+                task.taskNumber = etTaskNumber.text.toString()
                 val result = taskWebservice.createAsync(task)
                 if(eh.handle(result)) {
                     return@launchUI

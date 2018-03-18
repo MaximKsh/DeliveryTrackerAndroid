@@ -74,6 +74,15 @@ class ErrorHandler(
             return
         }
 
+        if (networkResult.statusCode == 404) {
+            AlertDialog.Builder(activity)
+                    .setMessage("Page not found")
+                    .setCancelable(true)
+                    .setPositiveButton("OK", {_, _ ->  })
+                    .show()
+            return
+        }
+
         val text = networkResult.errors.joinToString(separator = "\n", transform = { it.message })
         AlertDialog.Builder(activity)
                 .setMessage(text)

@@ -33,6 +33,7 @@ android {
         main {
             res.srcDirs =
                     [
+                            'src/main/resources/tasks',
                             'src/main/resources/baseList',
                             'src/main/resources/toolbar',
                             'src/main/resources/common',

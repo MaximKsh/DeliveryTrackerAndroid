@@ -10,6 +10,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.E
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
@@ -93,4 +94,10 @@ interface SettingsFragmentSubcomponent : AndroidInjector<SettingsFragment> {
 interface EditSettingsFragmentSubcomponent : AndroidInjector<EditSettingsFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditSettingsFragment>()
+}
+
+@Subcomponent
+interface TaskDetailsFragmentSubcomponent : AndroidInjector<TaskDetailsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskDetailsFragment>()
 }

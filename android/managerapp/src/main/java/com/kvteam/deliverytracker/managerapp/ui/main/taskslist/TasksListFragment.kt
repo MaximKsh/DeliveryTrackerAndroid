@@ -31,7 +31,12 @@ open class TasksListFragment : BaseListFragment() {
     private val tasksActions = object : IBaseListItemActions<TaskListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 
-        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {
+            val id = item.task.id
+            if(id != null) {
+                navigationController.navigateToTaskDetails(id)
+            }
+        }
     }
 
 
@@ -79,6 +84,7 @@ open class TasksListFragment : BaseListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
+        (mAdapter as TasksListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
     }
 

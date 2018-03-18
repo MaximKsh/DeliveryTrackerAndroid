@@ -52,7 +52,7 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
         noHeaderItems = currentItems.filter { item: IFlexible<*> -> item is BaseListItem<*, *> }.toMutableList()
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any?>) {
         if (holder is BaseListHolder) {
 
             val item = getItem(position)!!
@@ -73,6 +73,6 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
             holder.swipeRevealLayout.setLockDrag(hideDeleteButton)
         }
 
-        super.onBindViewHolder(holder, position)
+        super.onBindViewHolder(holder, position, payloads)
     }
 }

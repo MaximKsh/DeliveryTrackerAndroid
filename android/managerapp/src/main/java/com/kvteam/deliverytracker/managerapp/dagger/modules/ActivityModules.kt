@@ -28,6 +28,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.E
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
@@ -167,6 +168,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditSettingsFragmentModule::class))
     internal abstract fun editSettingsFragment(): EditSettingsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskDetailsFragmentModule::class))
+    internal abstract fun taskDetailsFragment(): TaskDetailsFragment
 
     @Module
     class MainActivityScopeModule {

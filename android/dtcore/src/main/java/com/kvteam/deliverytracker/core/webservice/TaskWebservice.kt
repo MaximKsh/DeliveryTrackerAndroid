@@ -16,7 +16,7 @@ class TaskWebservice(private val webservice: IWebservice,
         request.taskInfo = taskInfo
 
         val result = webservice.postAsync<TaskResponse>(
-                "$tasksBaseUrl/createAsync",
+                "$tasksBaseUrl/create",
                 request,
                 TaskResponse::class.java,
                 true)
@@ -25,7 +25,7 @@ class TaskWebservice(private val webservice: IWebservice,
 
     override suspend fun getAsync(id: UUID): NetworkResult<TaskResponse> {
         val result = webservice.getAsync<TaskResponse>(
-                "$tasksBaseUrl/getAsync?id=$id",
+                "$tasksBaseUrl/get?id=$id",
                 TaskResponse::class.java,
                 true)
         return result
