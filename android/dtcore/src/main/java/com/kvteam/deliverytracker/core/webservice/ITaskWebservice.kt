@@ -11,5 +11,5 @@ interface ITaskWebservice {
 
     suspend fun editAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse>
 
-    suspend fun changeStateAsync(id: UUID, newStateId: UUID): NetworkResult<TaskResponse>
+    suspend fun changeStateAsync(id: UUID, transitionId: UUID): NetworkResult<TaskResponse>
 }

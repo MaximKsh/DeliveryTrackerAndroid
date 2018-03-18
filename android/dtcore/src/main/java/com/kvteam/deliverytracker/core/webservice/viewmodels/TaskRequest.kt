@@ -5,5 +5,6 @@ import java.util.*
 
 class TaskRequest (
         var id: UUID? = null,
+        var transitionId: UUID? = null,
         var taskInfo: TaskInfo? = null
 ): RequestBase()

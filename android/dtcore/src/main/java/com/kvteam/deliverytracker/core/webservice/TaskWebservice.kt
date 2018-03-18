@@ -43,13 +43,10 @@ class TaskWebservice(private val webservice: IWebservice,
         return result
     }
 
-    override suspend fun changeStateAsync(id: UUID, newStateId: UUID): NetworkResult<TaskResponse> {
-        val taskInfo = TaskInfo()
-        taskInfo.id = id
-        taskInfo.taskStateId = newStateId
-        taskInfo.instanceId = session.user!!.instanceId
+    override suspend fun changeStateAsync(id: UUID, transitionId: UUID): NetworkResult<TaskResponse> {
         val request = TaskRequest()
-        request.taskInfo = taskInfo
+        request.id = id
+        request.transitionId = transitionId
 
         val result = webservice.postAsync<TaskResponse>(
                 "$tasksBaseUrl/change_state",
