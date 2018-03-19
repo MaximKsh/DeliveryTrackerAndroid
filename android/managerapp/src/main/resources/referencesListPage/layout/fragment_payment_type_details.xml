@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tvNameField"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:ems="10"
+            android:hint="@string/ManagerApp_EnterNameHint"
+            android:paddingEnd="45dp"
+            android:paddingStart="30dp" />
+
+
+        <ImageView
+            android:id="@+id/ivNameHintIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="13dp"
+            android:alpha="0.3"
+            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:src="@drawable/ic_attach_money_black_24dp" />
+
+    </RelativeLayout>
+</LinearLayout>

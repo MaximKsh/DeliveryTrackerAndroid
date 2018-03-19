@@ -11,6 +11,8 @@ import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
+import com.kvteam.deliverytracker.core.webservice.NetworkResult
+import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceResponse
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -31,20 +33,31 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var eh: IErrorHandler
 
+    private var paymentType = PaymentType()
+
+    private var mode = "CREATE"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
 
+    fun setPaymentType (paymentType: PaymentType?) {
+        if (paymentType != null) {
+            this.mode = "EDIT"
+            this.paymentType = paymentType
+        }
+    }
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Product")
+        toolbar.setToolbarTitle("Payment Type")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        etNameField.setText(paymentType.name)
         etNameField.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -59,7 +72,13 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
             R.id.action_finish -> {
                 val paymentType = PaymentType()
                 paymentType.name = etNameField.text.toString()
-                val result = referenceWebservice.createAsync("PaymentType", paymentType)
+                val result: NetworkResult<ReferenceResponse>
+                if (mode == "EDIT") {
+                    val currentTypeId = this@AddPaymentTypeFragment.paymentType.id!!
+                    result = referenceWebservice.editAsync("PaymentType", currentTypeId, paymentType)
+                } else {
+                    result = referenceWebservice.createAsync("PaymentType", paymentType)
+                }
                 if(eh.handle(result)) {
                     return@launchUI
                 }

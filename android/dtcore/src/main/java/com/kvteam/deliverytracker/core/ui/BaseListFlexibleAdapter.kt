@@ -56,6 +56,25 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
         if (holder is BaseListHolder) {
 
             val item = getItem(position)!!
+
+            holder.swipeRevealLayout.setSwipeListener(object: SwipeRevealLayout.SimpleSwipeListener() {
+                override fun onClosed(view: SwipeRevealLayout) {
+                    holder.container.setOnClickListener {
+                        launchUI {
+                            itemActions.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                        }
+                    }
+                }
+
+                override fun onOpened(view: SwipeRevealLayout) {
+                    holder.container.setOnClickListener {
+                        holder.swipeRevealLayout.close(true)
+                    }
+                }
+
+                override fun onSlide(view: SwipeRevealLayout, slideOffset: Float) {}
+            })
+
             holder.tvDeleteItem.setOnClickListener {
                 launchUI {
                     itemActions.onDelete(this@BaseListFlexibleAdapter, noHeaderItems, item)
@@ -76,3 +95,4 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
         super.onBindViewHolder(holder, position, payloads)
     }
 }
+

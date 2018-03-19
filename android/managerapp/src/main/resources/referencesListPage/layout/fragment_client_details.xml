@@ -16,16 +16,14 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etNameField"
+            <TextView
+                android:id="@+id/tvNameField"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:layout_height="60dp"
                 android:ems="10"
-                android:hint="@string/ManagerApp_EnterNameHint"
-                android:inputType="textPersonName"
                 android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="45dp" />
 
 
             <ImageView
@@ -44,16 +42,14 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etSurnameField"
+            <TextView
+                android:id="@+id/tvSurnameField"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:layout_height="60dp"
                 android:ems="10"
-                android:hint="@string/ManagerApp_EnterSurnameHint"
-                android:inputType="textPersonName"
                 android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="45dp" />
 
 
             <ImageView
@@ -71,16 +67,14 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etPatronymicField"
+            <TextView
+                android:id="@+id/tvPatronymicField"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:ems="10"
-                android:hint="@string/ManagerApp_EnterPatronymicHint"
-                android:inputType="textPersonName"
                 android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="45dp" />
 
 
             <ImageView
@@ -99,18 +93,14 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <br.com.sapereaude.maskedEditText.MaskedEditText
-                android:id="@+id/etPhoneNumberField"
+            <TextView
+                android:id="@+id/tvPhoneNumberField"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:inputType="phone"
-                android:typeface="monospace"
-                mask:allowed_chars="1234567890"
-                mask:mask="+7(###)###-##-##"
-                />
-
+                android:ems="10"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp" />
 
             <ImageView
                 android:id="@+id/ivPhoneNumberHintIcon"
@@ -134,16 +124,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvAddAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add address"
-                android:textSize="18sp"
-                android:textColor="@color/colorPrimary"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
+
         </LinearLayout>
 
     </LinearLayout>

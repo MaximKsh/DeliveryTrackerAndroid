@@ -59,7 +59,9 @@ open class ReferenceListFragment : BaseListFragment() {
             adapter.updateDataSet(itemList, true)
         }
 
-        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
+            navigationController.navigateToPaymentTypeDetails(item.paymentType)
+        }
     }
 
     private val warehousesActions = object : IBaseListItemActions<WarehouseListItem> {
@@ -107,7 +109,9 @@ open class ReferenceListFragment : BaseListFragment() {
             adapter.updateDataSet(itemList, true)
         }
 
-        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ClientListItem>, item: ClientListItem) {
+            navigationController.navigateToClientDetails(item.client.id!!)
+        }
     }
 
     private fun formatWarehouses(viewResult: List<Map<String, Any?>>): MutableList<WarehouseListItem> {
@@ -224,7 +228,7 @@ open class ReferenceListFragment : BaseListFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add_client -> {
-                navigationController.navigateToAddClient()
+                navigationController.navigateToEditClient()
             }
             R.id.action_add_payment_type -> {
                 navigationController.navigateToAddPaymentType()

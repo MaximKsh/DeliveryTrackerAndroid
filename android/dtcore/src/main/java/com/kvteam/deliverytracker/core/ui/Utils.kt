@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
+import android.text.Editable
 import android.util.Log
+import android.widget.EditText
 
 @SuppressLint("RestrictedApi")
 fun removeShiftMode(view: BottomNavigationView): Boolean {
@@ -27,4 +29,12 @@ fun removeShiftMode(view: BottomNavigationView): Boolean {
         return false
     }
     return true
+}
+
+fun EditText.setNullableText(str: String?) {
+    if (str != null) {
+        this.setText(str)
+    } else {
+        this.text.clear()
+    }
 }

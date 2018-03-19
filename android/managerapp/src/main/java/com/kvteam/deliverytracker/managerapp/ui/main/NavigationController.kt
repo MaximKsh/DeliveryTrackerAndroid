@@ -1,13 +1,17 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
+import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
+import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
@@ -55,8 +59,8 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    private val settingsFragment = SettingsFragment()
     fun navigateToSettings() {
+        val settingsFragment = SettingsFragment()
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, settingsFragment)
@@ -79,8 +83,8 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    private val taskDetailsFragment = TaskDetailsFragment()
     fun navigateToTaskDetails(id: UUID) {
+        val taskDetailsFragment = TaskDetailsFragment()
         taskDetailsFragment.setTaskId(id)
         fragmentManager.beginTransaction()
                 .replace(containerId, taskDetailsFragment)
@@ -104,18 +108,38 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToAddPaymentType() {
-        val fragment = AddPaymentTypeFragment()
+    fun navigateToAddPaymentType(paymentType: PaymentType? = null) {
+        val addPaymentTypeFragment = AddPaymentTypeFragment()
+        addPaymentTypeFragment.setPaymentType(paymentType)
         fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, addPaymentTypeFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToAddClient() {
-        val fragment = AddClientFragment()
+    fun navigateToPaymentTypeDetails(paymentType: PaymentType) {
+        val paymentTypeDetailsFragment = PaymentTypeDetailsFragment()
+        paymentTypeDetailsFragment.setPaymentType(paymentType)
         fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, paymentTypeDetailsFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToClientDetails(clientId: UUID) {
+        val clientDetailsFragment = ClientDetailsFragment()
+        clientDetailsFragment.clientId = clientId
+        fragmentManager.beginTransaction()
+                .replace(containerId, clientDetailsFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToEditClient(client: Client? = null) {
+        val editClientFragment = EditClientFragment()
+        editClientFragment.setClientInfo(client)
+        fragmentManager.beginTransaction()
+                .replace(containerId, editClientFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }

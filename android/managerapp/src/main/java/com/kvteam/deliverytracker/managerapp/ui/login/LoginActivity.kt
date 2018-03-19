@@ -37,7 +37,7 @@ class LoginActivity : DeliveryTrackerActivity() {
 
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         if(savedInstanceState != null){
-            etLoginField.setText(savedInstanceState.getString(usernameKey, EMPTY_STRING))
+//            etLoginField.setText(savedInstanceState.getString(usernameKey, EMPTY_STRING))
             etPasswordField.setText(savedInstanceState.getString(passwordKey, EMPTY_STRING))
         }
 
@@ -51,7 +51,7 @@ class LoginActivity : DeliveryTrackerActivity() {
             return
         }
 
-        outState.putString(usernameKey, this.etLoginField.text.toString())
+        outState.putString(usernameKey, this.etLoginField.code.toString())
         outState.putString(passwordKey, this.etPasswordField.text.toString())
     }
 
@@ -65,7 +65,7 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun onLoginClick() = launchUI {
-        val username = etLoginField.text.toString()
+        val username = etLoginField.code.toString()
         val password = etPasswordField.text.toString()
 
         val result = session.loginAsync(username, password)

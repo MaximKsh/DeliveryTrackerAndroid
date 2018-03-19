@@ -5,9 +5,11 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.managerapp.dagger.components.*
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
@@ -111,12 +113,30 @@ abstract class EditWarehouseFragmentModule {
             AndroidInjector.Factory<out Fragment>
 }
 
-@Module(subcomponents = arrayOf(AddClientSubcomponent::class))
-abstract class AddClientFragmentModule {
+@Module(subcomponents = arrayOf(EditClientSubcomponent::class))
+abstract class EditClientFragmentModule {
     @Binds
     @IntoMap
-    @FragmentKey(AddClientFragment::class)
-    internal abstract fun addClientFragmentInjector(builder: AddClientSubcomponent.Builder):
+    @FragmentKey(EditClientFragment::class)
+    internal abstract fun editClientFragmentInjector(builder: EditClientSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(ClientDetailsSubcomponent::class))
+abstract class ClientDetailsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(ClientDetailsFragment::class)
+    internal abstract fun clientDetailsFragmentInjector(builder: ClientDetailsSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(PaymentTypeDetailsSubcomponent::class))
+abstract class PaymentTypeDetailsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(PaymentTypeDetailsFragment::class)
+    internal abstract fun paymentTypeDetailsFragmentInjector(builder: PaymentTypeDetailsSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

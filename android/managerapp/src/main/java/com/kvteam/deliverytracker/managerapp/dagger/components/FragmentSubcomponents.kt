@@ -1,9 +1,11 @@
 package com.kvteam.deliverytracker.managerapp.dagger.components
 
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
@@ -55,9 +57,21 @@ interface FilterProductsSubcomponent : AndroidInjector<FilterProductsFragment> {
 }
 
 @Subcomponent
-interface AddClientSubcomponent : AndroidInjector<AddClientFragment> {
+interface EditClientSubcomponent : AndroidInjector<EditClientFragment> {
     @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<AddClientFragment>()
+    abstract class Builder : AndroidInjector.Builder<EditClientFragment>()
+}
+
+@Subcomponent
+interface ClientDetailsSubcomponent : AndroidInjector<ClientDetailsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<ClientDetailsFragment>()
+}
+
+@Subcomponent
+interface PaymentTypeDetailsSubcomponent : AndroidInjector<PaymentTypeDetailsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<PaymentTypeDetailsFragment>()
 }
 
 @Subcomponent

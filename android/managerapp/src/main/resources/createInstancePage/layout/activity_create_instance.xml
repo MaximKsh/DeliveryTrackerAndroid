@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mask="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llCreateInstanceMainView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -153,16 +154,17 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center">
 
-                <EditText
+                <br.com.sapereaude.maskedEditText.MaskedEditText
                     android:id="@+id/etPhoneNumberField"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="@string/ManagerApp_EnterPhoneNumberHint"
-                    android:inputType="phone"
-                    android:paddingEnd="45dp"
                     android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
+                    android:paddingEnd="45dp"
+                    android:layout_height="60dp"
+                    android:inputType="phone"
+                    android:typeface="monospace"
+                    mask:allowed_chars="1234567890"
+                    mask:mask="+7(###)###-##-##"
+                    />
 
 
                 <ImageView
@@ -206,7 +208,8 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout><!--<LinearLayout--><!--android:orientation="vertical"--><!--android:layout_height="match_parent"--><!--android:layout_width="match_parent"--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--tools:contecom.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivityvity"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--&gt;-->
+</LinearLayout>
+    <!--<LinearLayout--><!--android:orientation="vertical"--><!--android:layout_height="match_parent"--><!--android:layout_width="match_parent"--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--tools:contecom.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivityvity"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--&gt;-->
 
     <!--<android.support.design.widget.AppBarLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">--><!--<android.support.v7.widget.Toolbar--><!--android:id="@+id/toolbar_top"--><!--android:layout_height="wrap_content"--><!--android:layout_width="match_parent"--><!--android:theme="@style/ToolbarColoredBackArrow"--><!--android:background="@color/colorPrimary">-->
 

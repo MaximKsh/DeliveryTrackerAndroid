@@ -5,6 +5,7 @@ import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -77,7 +78,22 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             }
 
             override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header)
+                if(!PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header)) {
+                    return false
+                }
+                val frag = content as RecyclerView
+                val adapter = frag.adapter as BaseListFlexibleAdapter<*, *, *>
+                val viewHolders = adapter.getAllBoundViewHolders().toMutableSet()
+
+                for(vh in viewHolders) {
+                    if(vh is BaseListFlexibleAdapter.BaseListHolder
+                        && !vh.swipeRevealLayout.isOpened
+                        && !vh.swipeRevealLayout.isClosed) {
+                        return false
+                    }
+                }
+
+                return true
             }
         })
 

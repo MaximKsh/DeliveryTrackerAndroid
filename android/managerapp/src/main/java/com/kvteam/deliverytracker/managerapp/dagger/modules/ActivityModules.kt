@@ -19,9 +19,11 @@ import com.kvteam.deliverytracker.managerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.AddClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
@@ -150,8 +152,16 @@ abstract class MainActivityModule {
     internal abstract fun editWarehouseFragment(): EditWarehouseFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(AddClientFragmentModule::class))
-    internal abstract fun addClientFragment(): AddClientFragment
+    @ContributesAndroidInjector(modules = arrayOf(EditClientFragmentModule::class))
+    internal abstract fun editClientFragment(): EditClientFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(ClientDetailsFragmentModule::class))
+    internal abstract fun clientDetailsFragment(): ClientDetailsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(PaymentTypeDetailsFragmentModule::class))
+    internal abstract fun paymentTypeDetailsFragment(): PaymentTypeDetailsFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditClientAddressFragmentModule::class))
