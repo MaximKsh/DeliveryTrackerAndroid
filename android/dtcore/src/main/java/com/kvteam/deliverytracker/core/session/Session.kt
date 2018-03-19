@@ -87,17 +87,7 @@ class Session (
         return accounts.any { p -> p.name == username }
     }
 
-    override fun logout() {
-        accountManager.getAccountsByType(sessionInfo.accountType)
-                .forEach {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        accountManager.removeAccountExplicitly(it)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        accountManager.removeAccount(it, null, null)
-                    }
-                }
-    }
+
 
 
     override suspend fun checkSessionAsync(): CheckSessionResult = async {
@@ -229,6 +219,29 @@ class Session (
         }
         return@async NetworkResult.create(response,accountResponse)
     }.await()
+
+    override suspend fun logoutAsync() = async {
+        val headers =  getAuthorizationHeaders(this@Session)
+        if (headers != null) {
+            httpManager.post(
+                    baseUrl + "/api/account/logout",
+                    EMPTY_STRING,
+                    headers,
+                    "application/json")
+        }
+
+        accountManager.getAccountsByType(sessionInfo.accountType)
+                .forEach {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        accountManager.removeAccountExplicitly(it)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        accountManager.removeAccount(it, null, null)
+                    }
+                }
+
+    }.await()
+
 
     private fun getUserFromAccount(): User? {
         val user = User(
