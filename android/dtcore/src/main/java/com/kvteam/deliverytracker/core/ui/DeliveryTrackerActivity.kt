@@ -78,7 +78,7 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
                 val result = async { dtSession.checkSessionAsync() }.await()
 
                 if(result == CheckSessionResult.Incorrect) {
-                    dtSession.logout()
+                    dtSession.logoutAsync()
                     val intent = Intent(
                             this@DeliveryTrackerActivity,
                             (application as DeliveryTrackerApplication).loginActivityType as Class<*>)

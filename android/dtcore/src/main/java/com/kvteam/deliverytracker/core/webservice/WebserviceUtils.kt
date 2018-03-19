@@ -37,7 +37,7 @@ fun doubleTimeRequest(
     return result
 }
 
-private fun  getAuthorizationHeaders(session: ISession) : Map<String, String>? {
+fun  getAuthorizationHeaders(session: ISession) : Map<String, String>? {
     try {
         val token: String? = session.getToken() ?: return null
         return mapOf("Authorization" to "Bearer $token")

@@ -8,6 +8,7 @@ import android.view.*
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.roles.Role
@@ -59,13 +60,14 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
                 .buildRound((name?.get(0)?.toString() ?: EMPTY_STRING) + (surname?.get(0)?.toString() ?: EMPTY_STRING), Color.LTGRAY)
         ivUserAvatar.setImageDrawable(materialAvatarDefault)
 
-        bttnLogout.setOnClickListener {
-            session.logout()
-            val loginActivity =
-                    (context?.applicationContext as DeliveryTrackerApplication).loginActivityType as Class<*>
-            val intent = Intent(activity, loginActivity)
-            startActivity(intent)
-            activity?.finish()
+        bttnLogout.setOnClickListener { launchUI {
+                session.logoutAsync()
+                val loginActivity =
+                        (activity?.application as DeliveryTrackerApplication).loginActivityType as Class<*>
+                val intent = Intent(activity, loginActivity)
+                startActivity(intent)
+                activity?.finish()
+            }
         }
     }
 
