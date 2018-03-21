@@ -11,7 +11,6 @@ import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
-import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -20,9 +19,6 @@ import javax.inject.Inject
 open class TasksListFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
-
-    @Inject
-    lateinit var tasksWebservice: ITaskWebservice
 
     override val viewGroup: String = "TaskViewGroup"
 
@@ -39,17 +35,11 @@ open class TasksListFragment : BaseListFragment() {
         }
     }
 
-
-    private fun formatTasks(viewResult: List<Map<String, Any?>>): MutableList<TaskListItem> {
+    override fun handleTasks(tasks: List<TaskInfo>) {
         var date: String? = null
         var header = BaseListHeader("A")
 
-        return viewResult
-                .map { taskMap ->
-                    val task = TaskInfo()
-                    task.fromMap(taskMap)
-                    task
-                }
+        val list = tasks
                 .sortedByDescending { a -> a.created }
                 .map { task ->
                     val dateCaption = task.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
@@ -59,21 +49,13 @@ open class TasksListFragment : BaseListFragment() {
                     }
                     TaskListItem(task, header, lm)
                 }.toMutableList()
-    }
-
-    override fun handleUpdateList(type: String, viewResult: List<Map<String, Any?>>) {
-        when (type) {
-            "TaskInfo" -> {
-                val referencesList = formatTasks(viewResult)
-                val adapter = mAdapter as? TasksListFlexibleAdapter
-                setMenuMask(TASKS_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(referencesList, true)
-                } else {
-                    mAdapter = TasksListFlexibleAdapter(referencesList, tasksActions)
-                    initAdapter()
-                }
-            }
+        val adapter = mAdapter as? TasksListFlexibleAdapter
+        setMenuMask(TASKS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(list, true)
+        } else {
+            mAdapter = TasksListFlexibleAdapter(list, tasksActions)
+            initAdapter()
         }
     }
 

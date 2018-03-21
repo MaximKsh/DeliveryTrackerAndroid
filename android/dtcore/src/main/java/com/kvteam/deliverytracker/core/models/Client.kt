@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.core.models
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
+
 data class Client(
     @SerializedName("Surname", alternate = ["surname"])
     var surname: String? = null,

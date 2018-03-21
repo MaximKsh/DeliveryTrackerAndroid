@@ -14,13 +14,17 @@ import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.*
+import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.DropdownTopItemInfo
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
+import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.base_list.*
+import java.util.*
 import javax.inject.Inject
 
 abstract class BaseListFragment : DeliveryTrackerFragment() {
@@ -36,13 +40,14 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var eh: IErrorHandler
 
+    @Inject
+    lateinit var dp: DataProvider
+
     private var menuItemsMask : Int = Int.MAX_VALUE
 
     abstract val viewGroup: String
 
     protected lateinit var mAdapter: FlexibleAdapter<*>
-
-    protected abstract fun handleUpdateList (type: String, viewResult: List<Map<String, Any?>>)
 
 
 
@@ -72,7 +77,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                 if (dropdownTop.items.size != 0) {
                     val index = dropdownTop.lastSelectedIndex.get()
                     val selectedItem = dropdownTop.items[index]
-                    updateList(selectedItem.viewName, selectedItem.entityType, index)
+                    updateList(selectedItem.viewName, selectedItem.entityType, index, null, DataProviderGetMode.FORCE_WEB)
                 }
                 ptrFrame.refreshComplete()
             }
@@ -169,7 +174,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                     index,
                     arguments = args)
         }, {
-            setCategories()
+            setCategories(DataProviderGetMode.PREFER_WEB)
         })
     }
 
@@ -178,28 +183,138 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         rvBaseList.adapter = mAdapter
     }
 
-    private suspend fun updateList(viewName: String,
-                           type: String?,
-                           groupIndex: Int,
-                           arguments: Map<String, Any>? = null) {
-        val result = viewWebservice.getViewResultAsync(viewGroup, viewName, arguments)
-        if(eh.handle(result)) {
-            return
+    protected open fun handleUsers(users: List<User>) {}
+
+    protected open fun handleInvitations(invitations: List<Invitation>) {}
+
+    protected open fun handleTasks(tasks: List<TaskInfo>) {}
+
+    protected open fun handlePaymentTypes(paymentTypes: List<PaymentType>) {}
+
+    protected open fun handleProducts(products: List<Product>) {}
+
+    protected open fun handleClients(clients: List<Client>) {}
+
+    protected open fun handleWarehouses(warehouses: List<Warehouse>) {}
+
+    protected open fun handleErrorNetworkResult(result: NetworkResult<*>) {}
+
+    private suspend fun updateList(
+            viewName: String,
+            type: String?,
+            groupIndex: Int,
+            arguments: Map<String, Any>? = null,
+            getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
+        try {
+            when (type) {
+                "User" -> {
+                    loadTypedList(
+                            dp.userViews,
+                            dp.users,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleUsers)
+                }
+                "Invitation" -> {
+                    loadTypedList(
+                            dp.invitationView,
+                            dp.invitations,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleInvitations)
+                }
+                "TaskInfo" -> {
+                    loadTypedList(
+                            dp.taskInfoViews,
+                            dp.taskInfos,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleTasks)
+                }
+                "PaymentType" -> {
+                    loadTypedList(
+                            dp.paymentTypesViews,
+                            dp.paymentTypes,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handlePaymentTypes)
+                }
+                "Product" -> {
+                    loadTypedList(
+                            dp.productsViews,
+                            dp.products,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleProducts)
+                }
+                "Client" -> {
+                    loadTypedList(
+                            dp.clientsViews,
+                            dp.clients,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleClients)
+                }
+                "Warehouse" -> {
+                    loadTypedList(
+                            dp.warehousesViews,
+                            dp.warehouses,
+                            groupIndex,
+                            viewName,
+                            arguments,
+                            getMode,
+                            ::handleWarehouses)
+                }
+            }
+        } catch (e: NetworkException) {
+            handleErrorNetworkResult(e.result)
+        }
+    }
+
+    private suspend fun <T : ModelBase> loadTypedList(
+            viewComponent: IViewComponent,
+            dataComponent: IDataComponent<T>,
+            groupIndex: Int,
+            viewName: String,
+            arguments: Map<String, Any>? = null,
+            getMode: DataProviderGetMode,
+            handle: (MutableList<T>) -> Unit) {
+        val result = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
+        val entities = mutableListOf<T>()
+        for(id in result) {
+            try{
+                val e = dataComponent.getAsync(id, DataProviderGetMode.FORCE_CACHE)
+                entities.add(e)
+            } catch (e: CacheException) {}
         }
         if (groupIndex == dropdownTop.lastSelectedIndex.get()) {
-            handleUpdateList(type!!, result.entity!!.viewResult!!)
+            handle(entities)
             dropdownTop.update()
         }
     }
 
-    private suspend fun setCategories() {
-        val result = viewWebservice.getDigestAsync(viewGroup)
-        if(eh.handle(result)) {
+    private suspend fun setCategories(getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
+        val result = try {
+            dp.viewDigest.getDigestAsync(viewGroup, getMode)
+        } catch (e: NetworkException) {
+            eh.handle(e.result)
             return
         }
-        val digest = result.entity?.digest
-                ?.toList()
-                ?.sortedBy { it.second.order ?: Int.MAX_VALUE }!!
+        val digest = result
+                .toList()
+                .sortedBy { it.second.order ?: Int.MAX_VALUE }
 
         val categoriesEnumeration = digest.map { category ->
             DropdownTopItemInfo(

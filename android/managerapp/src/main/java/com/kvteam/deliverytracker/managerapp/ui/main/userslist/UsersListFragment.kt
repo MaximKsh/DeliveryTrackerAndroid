@@ -77,16 +77,11 @@ open class UsersListFragment : BaseListFragment() {
 
     private var role: Role = Role.Manager
 
-    private fun formatUsers(viewResult: List<Map<String, Any?>>): MutableList<UserListItem> {
+    override fun handleUsers(users: List<User>) {
         var letter: Char? = null
         var header = BaseListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
 
-        return viewResult
-                .map { userMap ->
-                    val user = User()
-                    user.fromMap(userMap)
-                    user
-                }
+        val userList = users
                 .sortedWith (Comparator<User> { u1, u2 ->
                     if(u1.role?.toRole() == Role.Creator) -1
                     else if(u2.role?.toRole() == Role.Creator) 1
@@ -103,18 +98,21 @@ open class UsersListFragment : BaseListFragment() {
                         UserListItem(user, header)
                     }
                 }.toMutableList()
+        val adapter = mAdapter as? UserListFlexibleAdapter
+        setMenuMask(MANAGERS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(userList, true)
+        } else {
+            mAdapter = UserListFlexibleAdapter(userList, userActions)
+            initAdapter()
+        }
     }
 
-    private fun formatInvitations(viewResult: List<Map<String, Any?>>): MutableList<UserInvitationListItem> {
+    override fun handleInvitations(invitations: List<Invitation>) {
         var date: String? = null
         var header = BaseListHeader("A")
 
-        return viewResult
-                .map { invitationMap ->
-                    val invitation = Invitation()
-                    invitation.fromMap(invitationMap)
-                    invitation
-                }
+        val invitationList = invitations
                 .sortedByDescending { a -> a.created }
                 .map { invitation ->
                     val dateCaption = invitation.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
@@ -124,32 +122,13 @@ open class UsersListFragment : BaseListFragment() {
                     }
                     UserInvitationListItem(invitation, header, lm)
                 }.toMutableList()
-    }
-
-    override fun handleUpdateList(type: String, viewResult: List<Map<String, Any?>>) {
-        when (type) {
-            "User" -> {
-                val userList = formatUsers(viewResult)
-                val adapter = mAdapter as? UserListFlexibleAdapter
-                setMenuMask(MANAGERS_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(userList, true)
-                } else {
-                    mAdapter = UserListFlexibleAdapter(userList, userActions)
-                    initAdapter()
-                }
-            }
-            "Invitation" -> {
-                val invitationList = formatInvitations(viewResult)
-                val adapter = mAdapter as? UserInvitationListFlexibleAdapter
-                setMenuMask(IVITATIONS_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(invitationList, true)
-                } else {
-                    mAdapter = UserInvitationListFlexibleAdapter(invitationList, invitationActions)
-                    initAdapter()
-                }
-            }
+        val adapter = mAdapter as? UserInvitationListFlexibleAdapter
+        setMenuMask(IVITATIONS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(invitationList, true)
+        } else {
+            mAdapter = UserInvitationListFlexibleAdapter(invitationList, invitationActions)
+            initAdapter()
         }
     }
 

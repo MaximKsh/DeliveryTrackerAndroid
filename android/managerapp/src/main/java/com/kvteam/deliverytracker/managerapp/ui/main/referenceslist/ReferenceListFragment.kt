@@ -114,43 +114,40 @@ open class ReferenceListFragment : BaseListFragment() {
         }
     }
 
-    private fun formatWarehouses(viewResult: List<Map<String, Any?>>): MutableList<WarehouseListItem> {
-        return viewResult
-                .map { referenceMap ->
-                    val warehouse = Warehouse()
-                    warehouse.fromMap(referenceMap)
-                    WarehouseListItem(warehouse, null, lm)
-                }.toMutableList()
+
+    override fun handlePaymentTypes(paymentTypes: List<PaymentType>) {
+        val referencesList = paymentTypes
+                .map { PaymentTypeListItem(it, null, lm) }
+                .toMutableList()
+        val adapter = mAdapter as? PaymentTypesListFlexibleAdapter
+        setMenuMask(PAYMENT_TYPES__MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(referencesList, true)
+        } else {
+            mAdapter = PaymentTypesListFlexibleAdapter(referencesList, paymentTypesActions)
+            initAdapter()
+        }
     }
 
-    private fun formatPaymentTypes(viewResult: List<Map<String, Any?>>): MutableList<PaymentTypeListItem> {
-        return viewResult
-                .map { referenceMap ->
-                    val payment = PaymentType()
-                    payment.fromMap(referenceMap)
-                    PaymentTypeListItem(payment, null, lm)
-                }.toMutableList()
+    override fun handleProducts(products: List<Product>) {
+        val referencesList = products
+                .map { ProductListItem(it, null, lm) }
+                .toMutableList()
+        val adapter = mAdapter as? ProductsListFlexibleAdapter
+        setMenuMask(PRODUCTS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(referencesList, true)
+        } else {
+            mAdapter = ProductsListFlexibleAdapter(referencesList, productsActions)
+            initAdapter()
+        }
     }
 
-    private fun formatProducts(viewResult: List<Map<String, Any?>>): MutableList<ProductListItem> {
-        return viewResult
-                .map { referenceMap ->
-                    val product = Product()
-                    product.fromMap(referenceMap)
-                    ProductListItem(product, null, lm)
-                }.toMutableList()
-    }
-
-    private fun formatClients(viewResult: List<Map<String, Any?>>): MutableList<ClientListItem> {
+    override fun handleClients(clients: List<Client>) {
         var letter: Char? = null
         var header = BaseListHeader("A")
 
-        return viewResult
-                .map { clientMap ->
-                    val client = Client()
-                    client.fromMap(clientMap)
-                    client
-                }
+        val referencesList = clients
                 .sortedBy { c -> c.surname }
                 .map { client ->
                     val firstLetter = client.surname?.firstOrNull()
@@ -160,54 +157,27 @@ open class ReferenceListFragment : BaseListFragment() {
                     }
                     ClientListItem(client, header, lm)
                 }.toMutableList()
+        val adapter = mAdapter as? ClientsListFlexibleAdapter
+        setMenuMask(CLIENTS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(referencesList, true)
+        } else {
+            mAdapter = ClientsListFlexibleAdapter(referencesList, clientsActions)
+            initAdapter()
+        }
     }
 
-    override fun handleUpdateList(type: String, viewResult: List<Map<String, Any?>>) {
-        when (type) {
-            "PaymentType" -> {
-                val referencesList = formatPaymentTypes(viewResult)
-                val adapter = mAdapter as? PaymentTypesListFlexibleAdapter
-                setMenuMask(PAYMENT_TYPES__MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(referencesList, true)
-                } else {
-                    mAdapter = PaymentTypesListFlexibleAdapter(referencesList, paymentTypesActions)
-                    initAdapter()
-                }
-            }
-            "Product" -> {
-                val referencesList = formatProducts(viewResult)
-                val adapter = mAdapter as? ProductsListFlexibleAdapter
-                setMenuMask(PRODUCTS_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(referencesList, true)
-                } else {
-                    mAdapter = ProductsListFlexibleAdapter(referencesList, productsActions)
-                    initAdapter()
-                }
-            }
-            "Client" -> {
-                val referencesList = formatClients(viewResult)
-                val adapter = mAdapter as? ClientsListFlexibleAdapter
-                setMenuMask(CLIENTS_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(referencesList, true)
-                } else {
-                    mAdapter = ClientsListFlexibleAdapter(referencesList, clientsActions)
-                    initAdapter()
-                }
-            }
-            "Warehouse" -> {
-                val referencesList = formatWarehouses(viewResult)
-                val adapter = mAdapter as? WarehousesListFlexibleAdapter
-                setMenuMask(WAREHOUSES_MENU_MASK)
-                if (adapter != null) {
-                    adapter.updateDataSet(referencesList, true)
-                } else {
-                    mAdapter = WarehousesListFlexibleAdapter(referencesList, warehousesActions)
-                    initAdapter()
-                }
-            }
+    override fun handleWarehouses(warehouses: List<Warehouse>) {
+        val referencesList = warehouses
+                .map { WarehouseListItem(it, null, lm) }
+                .toMutableList()
+        val adapter = mAdapter as? WarehousesListFlexibleAdapter
+        setMenuMask(WAREHOUSES_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(referencesList, true)
+        } else {
+            mAdapter = WarehousesListFlexibleAdapter(referencesList, warehousesActions)
+            initAdapter()
         }
     }
 

@@ -3,8 +3,11 @@ package com.kvteam.deliverytracker.core.webservice
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InvitationRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InvitationResponse
+import java.util.*
 
 class InvitationWebservice(private val webservice: IWebservice): IInvitationWebservice {
+
+
     private val invitationBaseUrl = "/api/invitation"
 
     override suspend fun createAsync(preliminaryUserData: User) : NetworkResult<InvitationResponse> {
@@ -28,6 +31,12 @@ class InvitationWebservice(private val webservice: IWebservice): IInvitationWebs
                 true)
     }
 
+    suspend override fun getAsync(id: UUID): NetworkResult<InvitationResponse> {
+        return webservice.getAsync(
+                "$invitationBaseUrl/get?id=$id",
+                InvitationResponse::class.java,
+                true)    }
+
     override suspend fun deleteAsync(code: String): NetworkResult<InvitationResponse> {
         val request = InvitationRequest()
         request.code = code
@@ -37,5 +46,14 @@ class InvitationWebservice(private val webservice: IWebservice): IInvitationWebs
                 InvitationResponse::class.java,
                 true)
     }
+
+    override suspend fun deleteAsync(id: UUID): NetworkResult<InvitationResponse> {
+        val request = InvitationRequest()
+        request.id = id
+        return webservice.postAsync(
+                "$invitationBaseUrl/delete",
+                request,
+                InvitationResponse::class.java,
+                true)    }
 
 }

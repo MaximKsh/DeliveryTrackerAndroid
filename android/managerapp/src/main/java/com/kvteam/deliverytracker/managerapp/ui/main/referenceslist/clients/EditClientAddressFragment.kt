@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IEventEmitter
+import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.EMPTY_UUID
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -28,13 +30,26 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
     @Inject
-    lateinit var ee: IEventEmitter
+    lateinit var dp: DataProvider
+
+    private val clientIdKey = "client"
+    private var clientId
+        get() = arguments?.getSerializable(clientIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(clientIdKey, value)!!
+
+    private val addressIdKey = "address"
+    private var addressId
+        get() = arguments?.getSerializable(addressIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(addressIdKey, value)!!
 
 
-    private var type = CollectionEntityAction.Create
+    fun setAddress (clientId: UUID, addressId: UUID?) {
+        this.clientId = clientId
+        this.addressId = addressId ?: EMPTY_UUID
+    }
 
-    private var address = EMPTY_STRING
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -48,17 +63,13 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
 
-        val args = arguments
+        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+        val address = client.clientAddresses.firstOrNull { it.id == addressId }
+        etAddress.setText(address?.rawAddress)
 
-        if(args != null) {
-            type = args.get(TYPE_KEY) as CollectionEntityAction
-            address = args.get(ADDRESS_KEY) as? String ?: EMPTY_STRING
-        }
-
-        etAddress.setText(address)
         etAddress.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
@@ -68,19 +79,27 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_client_address, container, false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                val address = ClientAddress()
+                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+                var address = client.clientAddresses.firstOrNull { it.id == addressId }
+                if(address == null) {
+                    address = ClientAddress()
+                    address.id = UUID.randomUUID()
+                    address.action = CollectionEntityAction.Create
+                    client.clientAddresses.add(address)
+                } else {
+                    address.action = CollectionEntityAction.Edit
+                }
                 address.rawAddress = etAddress.text.toString()
-                address.action = type
-                address.id = UUID.randomUUID()
-                ee.signal("address", address)
                 navigationController.closeCurrentFragment()
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+        return@launchUI
+    }, {
+        super.onOptionsItemSelected(item)
+    })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_edit_client_address_menu, menu)

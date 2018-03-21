@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.IEventEmitter
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -32,9 +31,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     lateinit var viewWebservice: IViewWebservice
 
     @Inject
-    lateinit var emitter: IEventEmitter
-
-    @Inject
     lateinit var eh: IErrorHandler
 
     @Inject
@@ -44,16 +40,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val selectedProduct = emitter.get("EditTaskFragment", "FilterProductSignal")
-        if(selectedProduct != null
-            && selectedProduct is Product) {
-            val autocomplete = acvProductAutocomplete.autoCompleteTextView
-            autocomplete.setText(selectedProduct.name)
-        }
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
@@ -95,7 +81,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         }
 
         acvProductAutocomplete.listSelectionButton.setOnClickListener {
-            emitter.subscribe("EditTaskFragment", "FilterProductSignal")
             navigationController.navigateToFilterProducts()
         }
 
