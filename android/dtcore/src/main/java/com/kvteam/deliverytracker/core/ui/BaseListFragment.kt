@@ -281,6 +281,8 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             }
         } catch (e: NetworkException) {
             handleErrorNetworkResult(e.result)
+        } catch (e: CacheException) {
+            // TODO: обработка
         }
     }
 
