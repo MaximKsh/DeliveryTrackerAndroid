@@ -3,7 +3,6 @@ package com.kvteam.deliverytracker.core.dataprovider
 import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import kotlinx.coroutines.experimental.async
-import java.util.*
 
 abstract class BaseViewComponent <out T : ModelBase> (
         private val viewWebservice: IViewWebservice,
@@ -16,7 +15,7 @@ abstract class BaseViewComponent <out T : ModelBase> (
             viewGroup: String,
             view: String,
             arguments: Map<String, Any>?,
-            mode: DataProviderGetMode): List<UUID> = async{
+            mode: DataProviderGetMode): DataProviderViewResult = async{
         when(mode) {
             DataProviderGetMode.FORCE_WEB -> getForceWebViewResultAsync(viewGroup, view, arguments)
             DataProviderGetMode.FORCE_CACHE -> getForceCacheViewResult(viewGroup, view, arguments)
@@ -28,7 +27,7 @@ abstract class BaseViewComponent <out T : ModelBase> (
 
     private suspend fun getForceWebViewResultAsync(viewGroup: String,
                                                    view: String,
-                                                   arguments: Map<String, Any>?) : List<UUID> {
+                                                   arguments: Map<String, Any>?) : DataProviderViewResult {
         val viewResult = viewWebservice.getViewResultAsync(viewGroup, view, arguments)
         if(!viewResult.success) {
             throw NetworkException(viewResult)
@@ -45,18 +44,19 @@ abstract class BaseViewComponent <out T : ModelBase> (
         val ids = entries.map { it.id!! }.toList()
         dataContainer.putView(key, ids)
 
-        return ids
+        return DataProviderViewResult(ids, DataProviderGetOrigin.WEB)
     }
 
     private fun getForceCacheViewResult(viewGroup: String,
                                         view: String,
-                                        arguments: Map<String, Any>?) : List<UUID> {
-        return dataContainer.getView(ViewRequestKey(viewGroup, view, arguments)) ?: throw CacheException()
+                                        arguments: Map<String, Any>?) : DataProviderViewResult {
+        val result = dataContainer.getView(ViewRequestKey(viewGroup, view, arguments)) ?: throw CacheException()
+        return DataProviderViewResult(result, DataProviderGetOrigin.CACHE)
     }
 
     private suspend fun getPreferWebAsync(viewGroup: String,
                                           view: String,
-                                          arguments: Map<String, Any>?) : List<UUID> {
+                                          arguments: Map<String, Any>?) : DataProviderViewResult {
         return try {
             getForceWebViewResultAsync(viewGroup, view, arguments)
         } catch (e: NetworkException) {
@@ -66,7 +66,7 @@ abstract class BaseViewComponent <out T : ModelBase> (
 
     private suspend fun getPreferCacheAsync(viewGroup: String,
                                             view: String,
-                                            arguments: Map<String, Any>?) : List<UUID> {
+                                            arguments: Map<String, Any>?) : DataProviderViewResult {
         return try {
             getForceCacheViewResult(viewGroup, view, arguments)
         } catch (e: CacheException) {

@@ -4,6 +4,10 @@ import android.app.AlertDialog
 import android.support.design.widget.Snackbar
 import com.kvteam.deliverytracker.core.common.ErrorListResult
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetResult
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderViewResult
+import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import com.kvteam.deliverytracker.core.webservice.RawNetworkResult
@@ -14,6 +18,7 @@ class ErrorHandler(
         private val rootLayoutId: Int,
         private val lm: ILocalizationManager
 ) : IErrorHandler {
+
 
     private val ctx: ErrorHandlerContext by lazy {
         ErrorHandlerContext(
@@ -53,8 +58,30 @@ class ErrorHandler(
         return true
     }
 
-    private fun handleListInternal(errorListResult: ErrorListResult) {
+    override fun handleNoInternetWarn(origin: DataProviderGetOrigin): Boolean {
+        if(origin != DataProviderGetOrigin.WEB) {
+            Snackbar
+                    .make(ctx.rootView, "No Internet", Snackbar.LENGTH_LONG)
+                    .show()
+            return true
+        }
+        return false
+    }
 
+    override fun <T : ModelBase> handleNoInternetWarn(result: DataProviderGetResult<T>): Boolean {
+        return handleNoInternetWarn(result.origin)
+    }
+
+    override fun handleNoInternetWarn(result: DataProviderViewResult): Boolean {
+        return handleNoInternetWarn(result.origin)
+    }
+
+    private fun handleListInternal(errorListResult: ErrorListResult) {
+        val text = errorListResult.errors.joinToString(separator = "\n", transform = { it.message })
+        AlertDialog.Builder(activity)
+                .setMessage(text)
+                .setCancelable(true)
+                .show()
     }
 
     private fun  <T : ResponseBase> handleNetworkInternal(networkResult: NetworkResult<T>) {
@@ -83,14 +110,34 @@ class ErrorHandler(
             return
         }
 
-        val text = networkResult.errors.joinToString(separator = "\n", transform = { it.message })
-        AlertDialog.Builder(activity)
-                .setMessage(text)
-                .setCancelable(true)
-                .show()
+        handleListInternal(networkResult)
     }
 
     private fun handleRawNetworkInternal(networkResult: RawNetworkResult) {
+        if (!networkResult.fetched) {
+            Snackbar
+                    .make(ctx.rootView, "No Internet", Snackbar.LENGTH_LONG)
+                    .show()
+            return
+        }
 
+        if (networkResult.statusCode == 403) {
+            AlertDialog.Builder(activity)
+                    .setMessage("Invalid credentials")
+                    .setCancelable(true)
+                    .setPositiveButton("OK", {_, _ ->  })
+                    .show()
+            return
+        }
+
+        if (networkResult.statusCode == 404) {
+            AlertDialog.Builder(activity)
+                    .setMessage("Page not found")
+                    .setCancelable(true)
+                    .setPositiveButton("OK", {_, _ ->  })
+                    .show()
+            return
+        }
+        handleListInternal(networkResult)
     }
 }

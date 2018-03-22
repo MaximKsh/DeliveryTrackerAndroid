@@ -20,6 +20,8 @@ open class TasksListFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    override val tracer = navigationController.fragmentTracer
+
     override val viewGroup: String = "TaskViewGroup"
 
     private val TASKS_MENU_MASK = 1

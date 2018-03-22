@@ -14,8 +14,6 @@ import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
-import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
-import com.kvteam.deliverytracker.core.webservice.IUserWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -26,14 +24,11 @@ open class UsersListFragment : BaseListFragment() {
 
     override var viewGroup = "UserViewGroup"
 
+    override val tracer = navigationController.fragmentTracer
+
     @Inject
     lateinit var navigationController: NavigationController
 
-    @Inject
-    lateinit var userWebservice: IUserWebservice
-
-    @Inject
-    lateinit var invitationWebservice: IInvitationWebservice
 
     private val INVITE_USER_MENU_ITEM = 1
     private val SHOW_ON_MAP_MENU_ITEM = INVITE_USER_MENU_ITEM shl 1
@@ -48,7 +43,7 @@ open class UsersListFragment : BaseListFragment() {
                 return
             }
             try {
-                dp.paymentTypes.deleteAsync(item.user.id!!)
+                dp.users.deleteAsync(item.user.id!!)
             } catch (e: NetworkException) {
                 eh.handle(e.result)
                 return
@@ -70,7 +65,7 @@ open class UsersListFragment : BaseListFragment() {
                 return
             }
             try {
-                dp.paymentTypes.deleteAsync(item.invitation.id!!)
+                dp.invitations.deleteAsync(item.invitation.id!!)
             } catch (e: NetworkException) {
                 eh.handle(e.result)
                 return

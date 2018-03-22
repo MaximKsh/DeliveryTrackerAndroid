@@ -75,7 +75,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
         ))
 
-        autocomplete.onItemClickListener = AdapterView.OnItemClickListener { av, it, pos, id ->
+        autocomplete.onItemClickListener = AdapterView.OnItemClickListener { av, _, pos, _ ->
             val item = av.getItemAtPosition(pos) as Product
             autocomplete.setText(item.name)
         }

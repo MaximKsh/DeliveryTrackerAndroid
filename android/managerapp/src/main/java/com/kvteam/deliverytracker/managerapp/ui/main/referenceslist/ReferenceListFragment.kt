@@ -35,6 +35,8 @@ open class ReferenceListFragment : BaseListFragment() {
     @Inject
     lateinit var referenceWebservice: IReferenceWebservice
 
+    override val tracer = navigationController.fragmentTracer
+
     override val viewGroup: String = "ReferenceViewGroup"
 
     private val PRODUCTS_MENU_ITEM = 1

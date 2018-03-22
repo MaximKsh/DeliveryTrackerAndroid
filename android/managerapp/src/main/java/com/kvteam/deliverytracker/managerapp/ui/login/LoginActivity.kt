@@ -91,6 +91,8 @@ class LoginActivity : DeliveryTrackerActivity() {
                 this.startActivity(intent)
             }
 
+            else -> {
+            }
         }
     }
 }

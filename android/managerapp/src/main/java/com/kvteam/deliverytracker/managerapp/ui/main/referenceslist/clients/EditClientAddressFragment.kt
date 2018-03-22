@@ -66,7 +66,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
 
-        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
         val address = client.clientAddresses.firstOrNull { it.id == addressId }
         etAddress.setText(address?.rawAddress)
 
@@ -82,7 +82,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 var address = client.clientAddresses.firstOrNull { it.id == addressId }
                 if(address == null) {
                     address = ClientAddress()

@@ -1,8 +1,10 @@
 package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.support.v4.app.Fragment
-import com.kvteam.deliverytracker.performerapp.dagger.components.*
-import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskFragment
+import com.kvteam.deliverytracker.performerapp.dagger.components.ManagersListFragmentSubcomponent
+import com.kvteam.deliverytracker.performerapp.dagger.components.MyTasksListFragmentSubcomponent
+import com.kvteam.deliverytracker.performerapp.dagger.components.PerformersListFragmentSubcomponent
+import com.kvteam.deliverytracker.performerapp.dagger.components.UndistributedTasksListFragmentSubcomponent
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
@@ -31,14 +33,6 @@ abstract class MyTasksListFragmentModule {
             AndroidInjector.Factory<out Fragment>
 }
 
-@Module(subcomponents = arrayOf(TaskFragmentSubcomponent::class))
-abstract class TaskFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(TaskFragment::class)
-    internal abstract fun taskFragmentInjector(builder: TaskFragmentSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
 
 @Module(subcomponents = arrayOf(UndistributedTasksListFragmentSubcomponent::class))
 abstract class UndistributedTasksListFragmentModule {

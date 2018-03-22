@@ -47,7 +47,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        val client = dp.clients.getAsync(clientId, DataProviderGetMode.FORCE_WEB)
+        val client = dp.clients.getAsync(clientId, DataProviderGetMode.FORCE_WEB).entry
 
         tvNameField.text = client.name
         tvSurnameField.text = client.surname

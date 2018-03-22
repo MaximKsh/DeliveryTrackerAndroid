@@ -79,10 +79,10 @@ class EditClientFragment : DeliveryTrackerFragment() {
             tryPrefetch = false
         }
 
-        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
 
         tvAddAddress.setOnClickListener { _ -> launchUI {
-                val c = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+                val c = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 c.name = etNameField.text.toString()
                 c.surname = etSurnameField.text.toString()
                 c.patronymic = etPatronymicField.text.toString()
@@ -126,7 +126,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_finish -> {
-                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 client.name = etNameField.text.toString()
                 client.surname = etSurnameField.text.toString()
                 client.patronymic = etPatronymicField.text.toString()

@@ -11,12 +11,13 @@ class TaskStateTransitionDataComponent(
         throw ActionNotSupportedException()
     }
 
-    override suspend fun getAsync(id: UUID, mode: DataProviderGetMode): TaskStateTransition {
+    override suspend fun getAsync(id: UUID, mode: DataProviderGetMode): DataProviderGetResult<TaskStateTransition> {
         if(mode != DataProviderGetMode.FORCE_CACHE) {
             throw ActionNotSupportedException()
         }
         val cleanEntity = dataContainer.getEntry(id)
-        return cleanEntity?.deepCopy() ?: throw CacheException()
+        val copy = cleanEntity?.deepCopy() ?: throw CacheException()
+        return DataProviderGetResult(copy, DataProviderGetOrigin.CACHE)
     }
 
     override suspend fun deleteAsync(id: UUID) {

@@ -63,9 +63,7 @@ open class UsersListFragment : DeliveryTrackerFragment() {
                     && layoutManager != null) {
                 if(containsKey(usersListKey)
                         && containsKey(layoutManagerKey)) {
-                    val savedUsers = getParcelableArray(usersListKey).map { it as User }
                     adapter.items.clear()
-                    adapter.items.addAll(savedUsers)
                     layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
                 } else {
                     ignoreSavedState = true

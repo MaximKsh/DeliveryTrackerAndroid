@@ -47,9 +47,9 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     abstract val viewGroup: String
 
+    abstract val tracer: FragmentTracer
+
     protected lateinit var mAdapter: FlexibleAdapter<*>
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -205,6 +205,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             groupIndex: Int,
             arguments: Map<String, Any>? = null,
             getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
+        val mode = if(tracer.atTheBeginning()) DataProviderGetMode.PREFER_WEB else getMode
         try {
             when (type) {
                 "User" -> {
@@ -214,7 +215,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleUsers)
                 }
                 "Invitation" -> {
@@ -224,7 +225,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleInvitations)
                 }
                 "TaskInfo" -> {
@@ -234,7 +235,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleTasks)
                 }
                 "PaymentType" -> {
@@ -244,7 +245,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handlePaymentTypes)
                 }
                 "Product" -> {
@@ -254,7 +255,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleProducts)
                 }
                 "Client" -> {
@@ -264,7 +265,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleClients)
                 }
                 "Warehouse" -> {
@@ -274,7 +275,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                             groupIndex,
                             viewName,
                             arguments,
-                            getMode,
+                            mode,
                             ::handleWarehouses)
                 }
             }
@@ -291,11 +292,13 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             arguments: Map<String, Any>? = null,
             getMode: DataProviderGetMode,
             handle: (MutableList<T>) -> Unit) {
-        val result = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
+        val (result, origin) = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
+        eh.handleNoInternetWarn(origin)
+
         val entities = mutableListOf<T>()
         for(id in result) {
             try{
-                val e = dataComponent.getAsync(id, DataProviderGetMode.FORCE_CACHE)
+                val (e, _) = dataComponent.getAsync(id, DataProviderGetMode.FORCE_CACHE)
                 entities.add(e)
             } catch (e: CacheException) {}
         }
@@ -306,8 +309,10 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
     }
 
     private suspend fun setCategories(getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
+        val mode = if(tracer.atTheBeginning()) DataProviderGetMode.PREFER_WEB else getMode
+
         val result = try {
-            dp.viewDigest.getDigestAsync(viewGroup, getMode)
+            dp.viewDigest.getDigestAsync(viewGroup, mode)
         } catch (e: NetworkException) {
             eh.handle(e.result)
             return

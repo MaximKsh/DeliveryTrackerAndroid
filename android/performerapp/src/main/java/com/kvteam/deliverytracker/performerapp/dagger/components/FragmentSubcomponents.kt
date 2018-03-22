@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.performerapp.dagger.components
 
-import com.kvteam.deliverytracker.performerapp.ui.main.task.TaskFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
@@ -19,12 +18,6 @@ interface ManagersListFragmentSubcomponent : AndroidInjector<ManagersListFragmen
 interface PerformersListFragmentSubcomponent : AndroidInjector<PerformersListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<PerformersListFragment>()
-}
-
-@Subcomponent
-interface TaskFragmentSubcomponent : AndroidInjector<TaskFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<TaskFragment>()
 }
 
 @Subcomponent

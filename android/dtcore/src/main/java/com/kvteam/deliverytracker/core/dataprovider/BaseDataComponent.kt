@@ -35,15 +35,13 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         return@async
     }.await()
 
-    override suspend fun getAsync(
-            id: UUID,
-            mode: DataProviderGetMode) : T = async {
+    override suspend fun getAsync(id: UUID, mode: DataProviderGetMode): DataProviderGetResult<T> = async {
         when(mode) {
             DataProviderGetMode.FORCE_WEB -> getForceWebAsync(id)
             DataProviderGetMode.FORCE_CACHE -> getForceCache(id)
             DataProviderGetMode.PREFER_WEB -> getPreferWebAsync(id)
             DataProviderGetMode.PREFER_CACHE -> getPreferCacheAsync(id)
-            DataProviderGetMode.DIRTY -> getDirty(id)
+            DataProviderGetMode.DIRTY -> throw ActionNotSupportedException()
         }
     }.await()
 
@@ -65,26 +63,25 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         }
     }
 
-    private suspend fun getForceWebAsync(id: UUID) : T = async {
+    private suspend fun getForceWebAsync(id: UUID) : DataProviderGetResult<T> = async {
         val result = getRequestAsync(id)
         if(result.success) {
             val entry = transformRequestToEntry(result)
             dataContainer.putEntry(entry)
-            return@async entry.deepCopy()
+            return@async DataProviderGetResult(entry.deepCopy(), DataProviderGetOrigin.WEB)
         }
         throw NetworkException(result)
     }.await()
 
-    private fun getForceCache(id: UUID) : T {
+    private fun getForceCache(id: UUID) : DataProviderGetResult<T> {
         val cleanEntity = dataContainer.getEntry(id)
         if(cleanEntity != null) {
-            val copy = cleanEntity.deepCopy()
-            return copy
+            return DataProviderGetResult(cleanEntity.deepCopy(), DataProviderGetOrigin.CACHE)
         }
         throw CacheException()
     }
 
-    private suspend fun getPreferWebAsync(id: UUID) : T {
+    private suspend fun getPreferWebAsync(id: UUID) : DataProviderGetResult<T> {
         return try {
             getForceWebAsync(id)
         } catch (e: NetworkException) {
@@ -92,29 +89,29 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         }
     }
 
-    private suspend fun getPreferCacheAsync(id: UUID) : T {
+    private suspend fun getPreferCacheAsync(id: UUID) : DataProviderGetResult<T> {
         return try {
             getForceCache(id)
         } catch (e: Exception) {
             getForceWebAsync(id)
         }
     }
-    private suspend fun getDirty(id: UUID): T = async {
+    private fun getDirty(id: UUID): T {
         val dirtyEntity = dataContainer.getDirty(id)
         if(dirtyEntity != null) {
-            return@async dirtyEntity
+            return dirtyEntity
         }
         val cleanEntity = dataContainer.getEntry(id)
         if(cleanEntity != null) {
             val copy = cleanEntity.deepCopy()
             dataContainer.putDirty(copy)
-            return@async copy
+            return copy
         }
 
         val client = entryFactory()
         client.id = id
         dataContainer.putDirty(client)
-        return@async client
-    }.await()!!
+        return client
+    }
 
 }

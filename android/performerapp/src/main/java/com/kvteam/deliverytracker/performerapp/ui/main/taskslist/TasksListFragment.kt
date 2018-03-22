@@ -10,18 +10,13 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.ui.AutoClearedValue
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.performerapp.R
-import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
-import javax.inject.Inject
 
 
 open class TasksListFragment : DeliveryTrackerFragment() {
     protected val layoutManagerKey = "layoutManager"
     protected val tasksListKey = "tasksListKey"
-
-    @Inject
-    lateinit var navigationController: NavigationController
 
     protected lateinit var adapter: AutoClearedValue<TasksListAdapter>
 
@@ -51,13 +46,6 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         rvTasksList.addItemDecoration(
                 DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        adapter = AutoClearedValue(
-                this,
-                TasksListAdapter(this::onTaskClicked, { context!!.getString(it) }),
-                {
-                    it?.onTaskClick = null
-                    it?.getLocalizedString = null
-                })
         rvTasksList.adapter = adapter.value
 
         savedInstanceState?.apply {
@@ -78,27 +66,4 @@ open class TasksListFragment : DeliveryTrackerFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.apply {
-            val adapter = adapter.value
-            val layoutManager = rvTasksList?.layoutManager
-            /*if(adapter != null
-                    && layoutManager != null) {
-                putParcelableArray(
-                        tasksListKey,
-                        adapter.items.toTypedArray())
-                putParcelable(
-                        layoutManagerKey,
-                        layoutManager.onSaveInstanceState())
-            }*/
-        }
-    }
-
-    private fun onTaskClicked(task: Any) {
-        /*val id = task.id
-        if(id != null) {
-            navigationController.navigateToTask(id)
-        }*/
-    }
 }

@@ -12,6 +12,8 @@ open class FilterProductsFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
+    override val tracer = navigationController.fragmentTracer
+
     override val viewGroup: String = "ReferenceViewGroup"
 
     private val productActions = object : IBaseListItemActions<ProductListItem> {
