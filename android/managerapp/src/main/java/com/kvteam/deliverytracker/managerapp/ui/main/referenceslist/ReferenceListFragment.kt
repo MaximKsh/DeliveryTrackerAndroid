@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
@@ -51,8 +52,10 @@ open class ReferenceListFragment : BaseListFragment() {
             if (adapter !is PaymentTypesListFlexibleAdapter) {
                 return
             }
-            val result = referenceWebservice.deleteAsync("PaymentType", item.paymentType.id!!)
-            if(eh.handle(result)) {
+            try {
+                dp.paymentTypes.deleteAsync(item.paymentType.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)
@@ -69,8 +72,10 @@ open class ReferenceListFragment : BaseListFragment() {
             if (adapter !is WarehousesListFlexibleAdapter) {
                 return
             }
-            val result = referenceWebservice.deleteAsync("Warehouse", item.warehouse.id!!)
-            if(eh.handle(result)) {
+            try {
+                dp.warehouses.deleteAsync(item.warehouse.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)
@@ -85,8 +90,10 @@ open class ReferenceListFragment : BaseListFragment() {
             if (adapter !is ProductsListFlexibleAdapter) {
                 return
             }
-            val result = referenceWebservice.deleteAsync("Product", item.product.id!!)
-            if(eh.handle(result)) {
+            try {
+                dp.paymentTypes.deleteAsync(item.product.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)
@@ -101,8 +108,11 @@ open class ReferenceListFragment : BaseListFragment() {
             if (adapter !is ClientsListFlexibleAdapter) {
                 return
             }
-            val result = referenceWebservice.deleteAsync("Client", item.client.id!!)
-            if(eh.handle(result)) {
+
+            try {
+                dp.paymentTypes.deleteAsync(item.client.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)

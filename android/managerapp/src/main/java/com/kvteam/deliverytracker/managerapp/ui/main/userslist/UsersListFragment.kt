@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
@@ -46,8 +47,10 @@ open class UsersListFragment : BaseListFragment() {
             if(adapter !is UserListFlexibleAdapter) {
                 return
             }
-            val result = userWebservice.deleteAsync(item.user.id!!)
-            if(eh.handle(result)) {
+            try {
+                dp.paymentTypes.deleteAsync(item.user.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)
@@ -66,8 +69,10 @@ open class UsersListFragment : BaseListFragment() {
             if(adapter !is UserInvitationListFlexibleAdapter) {
                 return
             }
-            val result = invitationWebservice.deleteAsync(item.invitation.invitationCode!!)
-            if(eh.handle(result)) {
+            try {
+                dp.paymentTypes.deleteAsync(item.invitation.id!!)
+            } catch (e: NetworkException) {
+                eh.handle(e.result)
                 return
             }
             itemList.remove(item)

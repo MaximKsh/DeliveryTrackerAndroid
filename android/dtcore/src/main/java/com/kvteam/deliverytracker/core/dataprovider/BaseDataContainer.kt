@@ -39,7 +39,8 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
 
     override fun removeEntry(id: UUID) {
         entriesTimes.remove(id)
-        entries.remove(id)    }
+        entries.remove(id)
+    }
 
     override fun clearEntries() {
         entriesTimes.clear()
