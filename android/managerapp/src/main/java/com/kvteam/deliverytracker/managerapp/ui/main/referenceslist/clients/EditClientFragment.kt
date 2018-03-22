@@ -42,7 +42,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
     private val viewBinderHelper = ViewBinderHelper()
 
     init {
-        viewBinderHelper.setOpenOnlyOne(true);
+        viewBinderHelper.setOpenOnlyOne(true)
     }
 
     private val clientIdKey = "client"
@@ -75,13 +75,20 @@ class EditClientFragment : DeliveryTrackerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         if(tryPrefetch) {
-            dp.clients.getAsync(clientId, DataProviderGetMode.PREFER_WEB)
+            dp.clients.getAsync(clientId, DataProviderGetMode.PREFER_CACHE)
+            tryPrefetch = false
         }
 
         val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
 
-        tvAddAddress.setOnClickListener { _ ->
-            navigationController.navigateToEditClientAddress(clientId)
+        tvAddAddress.setOnClickListener { _ -> launchUI {
+                val c = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY)
+                c.name = etNameField.text.toString()
+                c.surname = etSurnameField.text.toString()
+                c.patronymic = etPatronymicField.text.toString()
+                c.phoneNumber = etPhoneNumberField.text.toString()
+                navigationController.navigateToEditClientAddress(clientId)
+            }
         }
 
         etNameField.setText(client.name)
