@@ -49,7 +49,11 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     abstract val tracer: FragmentTracer
 
-    protected lateinit var mAdapter: FlexibleAdapter<*>
+    protected var mAdapter : FlexibleAdapter<*>
+        get() = rvBaseList.adapter as FlexibleAdapter<*>
+        set(value) {
+            rvBaseList.adapter = value
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -112,7 +116,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         } else {
             dropdownTop.lastSelectedIndex.set(0)
         }
-        initAdapter()
+
         setCategories()
     }
 
@@ -178,24 +182,19 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         })
     }
 
-    protected fun initAdapter() {
-        mAdapter.setDisplayHeadersAtStartUp(true)
-        rvBaseList.adapter = mAdapter
-    }
+    protected open fun handleUsers(users: List<User>, animate: Boolean) {}
 
-    protected open fun handleUsers(users: List<User>) {}
+    protected open fun handleInvitations(invitations: List<Invitation>, animate: Boolean) {}
 
-    protected open fun handleInvitations(invitations: List<Invitation>) {}
+    protected open fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {}
 
-    protected open fun handleTasks(tasks: List<TaskInfo>) {}
+    protected open fun handlePaymentTypes(paymentTypes: List<PaymentType>, animate: Boolean) {}
 
-    protected open fun handlePaymentTypes(paymentTypes: List<PaymentType>) {}
+    protected open fun handleProducts(products: List<Product>, animate: Boolean) {}
 
-    protected open fun handleProducts(products: List<Product>) {}
+    protected open fun handleClients(clients: List<Client>, animate: Boolean) {}
 
-    protected open fun handleClients(clients: List<Client>) {}
-
-    protected open fun handleWarehouses(warehouses: List<Warehouse>) {}
+    protected open fun handleWarehouses(warehouses: List<Warehouse>, animate: Boolean) {}
 
     protected open fun handleErrorNetworkResult(result: NetworkResult<*>) {}
 
@@ -293,9 +292,12 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             viewName: String,
             arguments: Map<String, Any>? = null,
             getMode: DataProviderGetMode,
-            handle: (MutableList<T>) -> Unit) {
+            handle: (MutableList<T>, Boolean) -> Unit) {
         val (result, origin) = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
-        eh.handleNoInternetWarn(origin)
+        if(getMode == DataProviderGetMode.PREFER_WEB
+                || getMode == DataProviderGetMode.FORCE_WEB) {
+            eh.handleNoInternetWarn(origin)
+        }
 
         val entities = mutableListOf<T>()
         for(id in result) {
@@ -305,7 +307,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             } catch (e: CacheException) {}
         }
         if (groupIndex == dropdownTop.lastSelectedIndex.get()) {
-            handle(entities)
+            handle(entities, origin == DataProviderGetOrigin.WEB)
             dropdownTop.update()
         }
     }

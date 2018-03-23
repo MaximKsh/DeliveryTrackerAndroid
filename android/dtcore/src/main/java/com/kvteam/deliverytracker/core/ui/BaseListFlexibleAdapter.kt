@@ -12,17 +12,25 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import kotlinx.android.synthetic.main.base_list_item.view.*
+import java.lang.ref.WeakReference
 
 
 abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : BaseListItem.BaseListViewHolder >(
         private var noHeaderItems: MutableList<T2>,
-        private val itemActions: IBaseListItemActions<T2>) : FlexibleAdapter<T2>(noHeaderItems) {
+        itemActions: IBaseListItemActions<T2>) : FlexibleAdapter<T2>(noHeaderItems) {
     private val viewBinderHelper = ViewBinderHelper()
+
+    private var itemActionsWeak: WeakReference<IBaseListItemActions<T2>>
 
     var hideDeleteButton = false
 
     init {
         viewBinderHelper.setOpenOnlyOne(true)
+        itemActionsWeak = WeakReference(itemActions)
+    }
+
+    fun setActions(itemActions: IBaseListItemActions<T2>) {
+        itemActionsWeak = WeakReference(itemActions)
     }
 
     abstract class BaseListHolder(itemView: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : FlexibleViewHolder(itemView, adapter) {
@@ -61,7 +69,7 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
                 override fun onClosed(view: SwipeRevealLayout) {
                     holder.container.setOnClickListener {
                         launchUI {
-                            itemActions.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                            itemActionsWeak.get()?.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
                         }
                     }
                 }
@@ -77,13 +85,13 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
 
             holder.tvDeleteItem.setOnClickListener {
                 launchUI {
-                    itemActions.onDelete(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                    itemActionsWeak.get()?.onDelete(this@BaseListFlexibleAdapter, noHeaderItems, item)
                 }
             }
 
             holder.container.setOnClickListener {
                 launchUI {
-                    itemActions.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
+                    itemActionsWeak.get()?.onItemClicked(this@BaseListFlexibleAdapter, noHeaderItems, item)
                 }
             }
 

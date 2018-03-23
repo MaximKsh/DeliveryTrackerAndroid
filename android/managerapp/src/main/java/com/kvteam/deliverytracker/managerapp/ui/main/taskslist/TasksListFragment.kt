@@ -20,7 +20,8 @@ open class TasksListFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    override val tracer = navigationController.fragmentTracer
+    override val tracer
+            get() = navigationController.fragmentTracer
 
     override val viewGroup: String = "TaskViewGroup"
 
@@ -37,7 +38,7 @@ open class TasksListFragment : BaseListFragment() {
         }
     }
 
-    override fun handleTasks(tasks: List<TaskInfo>) {
+    override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
         var date: String? = null
         var header = BaseListHeader("A")
 
@@ -54,10 +55,9 @@ open class TasksListFragment : BaseListFragment() {
         val adapter = mAdapter as? TasksListFlexibleAdapter
         setMenuMask(TASKS_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(list, true)
+            adapter.updateDataSet(list, animate)
         } else {
             mAdapter = TasksListFlexibleAdapter(list, tasksActions)
-            initAdapter()
         }
     }
 

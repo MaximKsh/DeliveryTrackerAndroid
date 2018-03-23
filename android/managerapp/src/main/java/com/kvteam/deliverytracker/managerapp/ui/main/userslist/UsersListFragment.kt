@@ -24,7 +24,8 @@ open class UsersListFragment : BaseListFragment() {
 
     override var viewGroup = "UserViewGroup"
 
-    override val tracer = navigationController.fragmentTracer
+    override val tracer
+            get() = navigationController.fragmentTracer
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -77,7 +78,7 @@ open class UsersListFragment : BaseListFragment() {
 
     private var role: Role = Role.Manager
 
-    override fun handleUsers(users: List<User>) {
+    override fun handleUsers(users: List<User>, animate: Boolean) {
         var letter: Char? = null
         var header = BaseListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
 
@@ -101,14 +102,13 @@ open class UsersListFragment : BaseListFragment() {
         val adapter = mAdapter as? UserListFlexibleAdapter
         setMenuMask(MANAGERS_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(userList, true)
+            adapter.updateDataSet(userList, animate)
         } else {
             mAdapter = UserListFlexibleAdapter(userList, userActions)
-            initAdapter()
         }
     }
 
-    override fun handleInvitations(invitations: List<Invitation>) {
+    override fun handleInvitations(invitations: List<Invitation>, animate: Boolean) {
         var date: String? = null
         var header = BaseListHeader("A")
 
@@ -125,10 +125,9 @@ open class UsersListFragment : BaseListFragment() {
         val adapter = mAdapter as? UserInvitationListFlexibleAdapter
         setMenuMask(IVITATIONS_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(invitationList, true)
+            adapter.updateDataSet(invitationList, animate)
         } else {
             mAdapter = UserInvitationListFlexibleAdapter(invitationList, invitationActions)
-            initAdapter()
         }
     }
 

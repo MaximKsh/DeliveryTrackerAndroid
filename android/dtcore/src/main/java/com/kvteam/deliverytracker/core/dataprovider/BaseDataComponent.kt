@@ -32,6 +32,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         val newEntity = transformRequestToEntry(result)
         dataContainer.putEntry(newEntity)
         dataContainer.removeDirty(entity.id!!)
+        dataContainer.clearViews()
         return@async
     }.await()
 
@@ -41,7 +42,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             DataProviderGetMode.FORCE_CACHE -> getForceCache(id)
             DataProviderGetMode.PREFER_WEB -> getPreferWebAsync(id)
             DataProviderGetMode.PREFER_CACHE -> getPreferCacheAsync(id)
-            DataProviderGetMode.DIRTY -> throw ActionNotSupportedException()
+            DataProviderGetMode.DIRTY -> getDirty(id)
         }
     }.await()
 
@@ -96,22 +97,22 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             getForceWebAsync(id)
         }
     }
-    private fun getDirty(id: UUID): T {
+    private fun getDirty(id: UUID): DataProviderGetResult<T> {
         val dirtyEntity = dataContainer.getDirty(id)
         if(dirtyEntity != null) {
-            return dirtyEntity
+            return DataProviderGetResult(dirtyEntity, DataProviderGetOrigin.DIRTY)
         }
         val cleanEntity = dataContainer.getEntry(id)
         if(cleanEntity != null) {
             val copy = cleanEntity.deepCopy()
             dataContainer.putDirty(copy)
-            return copy
+            return DataProviderGetResult(copy, DataProviderGetOrigin.DIRTY)
         }
 
         val client = entryFactory()
         client.id = id
         dataContainer.putDirty(client)
-        return client
+        return DataProviderGetResult(client, DataProviderGetOrigin.DIRTY)
     }
 
 }

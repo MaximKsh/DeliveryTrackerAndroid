@@ -35,7 +35,8 @@ open class ReferenceListFragment : BaseListFragment() {
     @Inject
     lateinit var referenceWebservice: IReferenceWebservice
 
-    override val tracer = navigationController.fragmentTracer
+    override val tracer
+            get() = navigationController.fragmentTracer
 
     override val viewGroup: String = "ReferenceViewGroup"
 
@@ -93,7 +94,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 return
             }
             try {
-                dp.paymentTypes.deleteAsync(item.product.id!!)
+                dp.products.deleteAsync(item.product.id!!)
             } catch (e: NetworkException) {
                 eh.handle(e.result)
                 return
@@ -112,7 +113,7 @@ open class ReferenceListFragment : BaseListFragment() {
             }
 
             try {
-                dp.paymentTypes.deleteAsync(item.client.id!!)
+                dp.clients.deleteAsync(item.client.id!!)
             } catch (e: NetworkException) {
                 eh.handle(e.result)
                 return
@@ -127,35 +128,33 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
 
-    override fun handlePaymentTypes(paymentTypes: List<PaymentType>) {
+    override fun handlePaymentTypes(paymentTypes: List<PaymentType>, animate: Boolean) {
         val referencesList = paymentTypes
                 .map { PaymentTypeListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? PaymentTypesListFlexibleAdapter
         setMenuMask(PAYMENT_TYPES__MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(referencesList, true)
+            adapter.updateDataSet(referencesList, animate)
         } else {
             mAdapter = PaymentTypesListFlexibleAdapter(referencesList, paymentTypesActions)
-            initAdapter()
         }
     }
 
-    override fun handleProducts(products: List<Product>) {
+    override fun handleProducts(products: List<Product>, animate: Boolean) {
         val referencesList = products
                 .map { ProductListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? ProductsListFlexibleAdapter
         setMenuMask(PRODUCTS_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(referencesList, true)
+            adapter.updateDataSet(referencesList, animate)
         } else {
             mAdapter = ProductsListFlexibleAdapter(referencesList, productsActions)
-            initAdapter()
         }
     }
 
-    override fun handleClients(clients: List<Client>) {
+    override fun handleClients(clients: List<Client>, animate: Boolean) {
         var letter: Char? = null
         var header = BaseListHeader("A")
 
@@ -172,24 +171,22 @@ open class ReferenceListFragment : BaseListFragment() {
         val adapter = mAdapter as? ClientsListFlexibleAdapter
         setMenuMask(CLIENTS_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(referencesList, true)
+            adapter.updateDataSet(referencesList, animate)
         } else {
             mAdapter = ClientsListFlexibleAdapter(referencesList, clientsActions)
-            initAdapter()
         }
     }
 
-    override fun handleWarehouses(warehouses: List<Warehouse>) {
+    override fun handleWarehouses(warehouses: List<Warehouse>, animate: Boolean) {
         val referencesList = warehouses
                 .map { WarehouseListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? WarehousesListFlexibleAdapter
         setMenuMask(WAREHOUSES_MENU_MASK)
         if (adapter != null) {
-            adapter.updateDataSet(referencesList, true)
+            adapter.updateDataSet(referencesList, animate)
         } else {
             mAdapter = WarehousesListFlexibleAdapter(referencesList, warehousesActions)
-            initAdapter()
         }
     }
 

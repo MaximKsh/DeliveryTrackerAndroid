@@ -12,7 +12,8 @@ open class FilterProductsFragment : BaseListFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
-    override val tracer = navigationController.fragmentTracer
+    override val tracer
+            get() = navigationController.fragmentTracer
 
     override val viewGroup: String = "ReferenceViewGroup"
 
@@ -34,9 +35,9 @@ open class FilterProductsFragment : BaseListFragment() {
                 }.toMutableList()
     }
 
-    override fun handleProducts(products: List<Product>) {
+    override fun handleProducts(products: List<Product>, animate: Boolean) {
         val productsList = products.map { ProductListItem(it, null, lm)}.toMutableList()
-        (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
+        (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
     }
 
     override fun onDestroy() {
