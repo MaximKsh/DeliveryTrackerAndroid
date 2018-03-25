@@ -30,7 +30,8 @@ class Session (
 
     private val userAR = AtomicReference<Lazy<User?>>( lazy { getUserFromAccount() })
 
-    override val user = userAR.get().value
+    override val user
+        get() = userAR.get().value
 
 
     override fun getToken(): String? {

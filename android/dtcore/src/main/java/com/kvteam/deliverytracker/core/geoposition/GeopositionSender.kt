@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.performerapp.geoposition
+package com.kvteam.deliverytracker.core.geoposition
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,7 +11,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import dagger.android.AndroidInjection
@@ -30,21 +30,19 @@ class GeopositionSender : BroadcastReceiver() {
             criteria.powerRequirement = Criteria.POWER_LOW
             val bestProvider = ls.getBestProvider(criteria, true)
             ls.requestSingleUpdate(bestProvider, object: LocationListener {
-                override fun onLocationChanged(location: Location?) {
+                override fun onLocationChanged(location: Location?) = launchUI {
                     if(location != null){
-                        invokeAsync({
-                            try {
-                                val pos = Geoposition()
-                                pos.latitude = location.latitude
-                                pos.longitude = location.longitude
-                                webservice.postAsync(
-                                        "/api/performer/update_position",
-                                        pos,
-                                        true)
-                            } catch (ex: Exception) {
-                                Log.e("Update geoposition", "${ex.message}\n${ex.stackTrace}")
-                            }
-                        })
+                        try {
+                            val pos = Geoposition()
+                            pos.latitude = location.latitude
+                            pos.longitude = location.longitude
+                            webservice.postAsync(
+                                    "/api/performer/update_position",
+                                    pos,
+                                    true)
+                        } catch (ex: Exception) {
+                            Log.e("Geoposition", ex.message, ex)
+                        }
                     }
                 }
 
@@ -56,8 +54,7 @@ class GeopositionSender : BroadcastReceiver() {
 
                 override fun onProviderDisabled(provider: String?) {
                 }
-            },
-                    null)
+            }, null)
         }
     }
 }

@@ -1,12 +1,15 @@
 package com.kvteam.deliverytracker.performerapp.dagger.modules
 
+import com.kvteam.deliverytracker.core.dagger.modules.DeliveryTrackerFirebaseInstanceIdServiceModule
+import com.kvteam.deliverytracker.core.dagger.modules.DeliveryTrackerFirebaseMessageServiceModule
+import com.kvteam.deliverytracker.core.dagger.modules.GeopositionSenderModule
 import com.kvteam.deliverytracker.core.dagger.modules.ServiceModules
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.ServiceScope
+import com.kvteam.deliverytracker.core.geoposition.GeopositionSender
+import com.kvteam.deliverytracker.core.notifications.DeliveryTrackerFirebaseMessageService
+import com.kvteam.deliverytracker.core.session.DeliveryTrackerInstanceIdService
 import com.kvteam.deliverytracker.core.session.SessionService
-import com.kvteam.deliverytracker.performerapp.geoposition.GeopositionSender
-import com.kvteam.deliverytracker.performerapp.notification.PerformerFirebaseInstanceIdService
-import com.kvteam.deliverytracker.performerapp.notification.PerformerFirebaseMessageService
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -17,29 +20,29 @@ import dagger.android.ContributesAndroidInjector
 internal abstract class AndroidBindingModule {
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = arrayOf(LoginActivityModule::class))
+    @ContributesAndroidInjector(modules = [(LoginActivityModule::class)])
     internal abstract fun loginActivity(): LoginActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = arrayOf(ConfirmDataActivityModule::class))
+    @ContributesAndroidInjector(modules = [(ConfirmDataActivityModule::class)])
     internal abstract fun confirmDataActivity(): ConfirmDataActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = arrayOf(MainActivityModule::class))
+    @ContributesAndroidInjector(modules = [(MainActivityModule::class)])
     internal abstract fun mainActivity(): MainActivity
 
     @ServiceScope
-    @ContributesAndroidInjector(modules = arrayOf(ServiceModules::class))
+    @ContributesAndroidInjector(modules = [(ServiceModules::class)])
     internal abstract fun sessionService(): SessionService
 
     @ServiceScope
-    @ContributesAndroidInjector(modules = arrayOf(PerformerFirebaseInstanceIdServiceModule::class))
-    internal abstract fun performerFirebaseInstanceIdService(): PerformerFirebaseInstanceIdService
+    @ContributesAndroidInjector(modules = [(DeliveryTrackerFirebaseInstanceIdServiceModule::class)])
+    internal abstract fun firebaseInstanceIdService(): DeliveryTrackerInstanceIdService
 
     @ServiceScope
-    @ContributesAndroidInjector(modules = arrayOf(PerformerFirebaseMessageServiceModule::class))
-    internal abstract fun performerFirebaseMessageService(): PerformerFirebaseMessageService
+    @ContributesAndroidInjector(modules = [(DeliveryTrackerFirebaseMessageServiceModule::class)])
+    internal abstract fun firebaseMessageService(): DeliveryTrackerFirebaseMessageService
 
-    @ContributesAndroidInjector(modules = arrayOf(GeopositionSenderModule::class))
+    @ContributesAndroidInjector(modules = [(GeopositionSenderModule::class)])
     internal abstract fun geopositionSenderBroadcastReceiver(): GeopositionSender
 }

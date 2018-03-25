@@ -81,17 +81,22 @@ open class UsersListFragment : BaseListFragment() {
     override fun handleUsers(users: List<User>, animate: Boolean) {
         var letter: Char? = null
         var header = BaseListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
+        val emptyHeader = BaseListHeader(EMPTY_STRING)
 
         val userList = users
-                .sortedWith (Comparator<User> { u1, u2 ->
+                .sortedWith (Comparator { u1, u2 ->
                     if(u1.role?.toRole() == Role.Creator) -1
                     else if(u2.role?.toRole() == Role.Creator) 1
                     else u1.surname?.compareTo(u2.surname ?: EMPTY_STRING) ?: 0
                 })
-                .map { user ->
+                .map { usr ->
+                    val user = usr
                     if (user.role?.toRole() == Role.Creator) {
                         UserListItem(user, header)
                     } else {
+                        if(user.surname.isNullOrBlank()) {
+                            return@map UserListItem(user, emptyHeader)
+                        }
                         if (letter == null || letter != user.surname!![0]) {
                             letter = user.surname!![0]
                             header = BaseListHeader(letter!!.toString())

@@ -1,15 +1,16 @@
-package com.kvteam.deliverytracker.performerapp.dagger.modules
+package com.kvteam.deliverytracker.core.dagger.modules
 
 import android.content.BroadcastReceiver
-import com.kvteam.deliverytracker.performerapp.dagger.components.GeopositionSenderSubcomponent
-import com.kvteam.deliverytracker.performerapp.geoposition.GeopositionSender
+import com.kvteam.deliverytracker.core.dagger.components.GeopositionSenderSubcomponent
+import com.kvteam.deliverytracker.core.geoposition.GeopositionSender
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
 import dagger.android.BroadcastReceiverKey
 import dagger.multibindings.IntoMap
 
-@Module(subcomponents = arrayOf(GeopositionSenderSubcomponent::class))
+
+@Module(subcomponents = [(GeopositionSenderSubcomponent::class)])
 abstract class GeopositionSenderModule {
     @Binds
     @IntoMap

@@ -1,12 +1,13 @@
-package com.kvteam.deliverytracker.performerapp.notification
+package com.kvteam.deliverytracker.core.session
 
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.webservice.IWebservice
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class PerformerFirebaseInstanceIdService : FirebaseInstanceIdService() {
+class DeliveryTrackerInstanceIdService : FirebaseInstanceIdService() {
     @Inject
     lateinit var webservice: IWebservice
 
@@ -15,14 +16,11 @@ class PerformerFirebaseInstanceIdService : FirebaseInstanceIdService() {
         super.onCreate()
     }
 
-    override fun onTokenRefresh() {
+    override fun onTokenRefresh() = launchUI {
         val refreshedToken = FirebaseInstanceId.getInstance().token
+
         if(refreshedToken != null) {
-            /*invokeAsync({
-                webservice.post(
-                    "/api/session/update_device",
-                    DeviceModel(refreshedToken))
-            })*/
+            //webservice.postAsync("/api/session/update_device", DeviceModel())
         }
     }
 }

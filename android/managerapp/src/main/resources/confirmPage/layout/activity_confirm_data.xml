@@ -33,11 +33,11 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/ManagerApp_EnterNameHint" />
+            android:hint="@string/Core_EnterNameHint" />
 
 
         <ImageView
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:contentDescription="@string/Core_CodeHintIcon"
             android:id="@+id/ivNameHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -63,11 +63,11 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/ManagerApp_EnterSurnameHint" />
+            android:hint="@string/Core_EnterSurnameHint" />
 
 
         <ImageView
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:contentDescription="@string/Core_CodeHintIcon"
             android:id="@+id/ivSurnameHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -93,11 +93,11 @@
             android:ems="10"
             android:inputType="phone"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/ManagerApp_EnterPhoneNumberHint" />
+            android:hint="@string/Core_EnterPhoneNumberHint" />
 
 
         <ImageView
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:contentDescription="@string/Core_CodeHintIcon"
             android:id="@+id/ivPhoneNumberHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"

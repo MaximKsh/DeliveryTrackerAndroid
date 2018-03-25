@@ -2,22 +2,15 @@
     <string name="app_name">DeliveryTracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="ManagerApp_LoginActivity_EnterCodeHint">Invitation code</string>
-    <string name="ManagerApp_LoginActivity_EnterPasswordHint">Password</string>
-    <string name="ManagerApp_LoginActivity_Login">Sign in</string>
+
     <string name="ManagerApp_LoginActivity_ForgotPassword">Forgot password</string>
     <string name="ManagerApp_LoginActivity_CreateInstance">You can add your company</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
     <string name="ManagerApp_LoginActivity_Register">Register</string>
-    <string name="ManagerApp_CodeHintIcon" translatable="false">Code hint icon</string>
     <string name="ManagerApp_PasswordHintIcon" translatable="false">Password hint icon</string>
     <string name="ManagerApp_MainActivity" translatable="false">Main logo</string>
     <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Company name</string>
-    <string name="ManagerApp_EnterNameHint">Name</string>
-    <string name="ManagerApp_EnterSurnameHint">Surname</string>
-    <string name="ManagerApp_EnterPatronymicHint">Patronymic</string>
-    <string name="ManagerApp_EnterPhoneNumberHint">Phone number</string>
-    <string name="ManagerApp_Toolbar_Done">Continue</string>
+
     <string name="ManagerApp_ConfirmDataActivity_Confirm">Confirm</string>
     <string name="ManagerApp_MainActivity_Tasks">Tasks</string>
     <string name="ManagerApp_MainActivity_Staff">Staff</string>

@@ -2,10 +2,11 @@
     <string name="PerformerApp_AppName">Delivery Tracker</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="PerformerApp_MainActivity_Tasks">Tasks</string>
+    <string name="PerformerApp_MainActivity_Staff">Staff</string>
+    <string name="PerformerApp_MainActivity_Settings">Settings</string>
+
     <string name="PerformerApp_TaskFragment_ReserveButton">Reserve</string>
-    <string name="PerformerApp_TaskFragment_InWorkButton">Take into work</string>
-    <string name="PerformerApp_TaskFragment_PerformButton">Perform</string>
-    <string name="PerformerApp_TaskFragment_CancelButton">Cancel</string>
     <string name="PerformerApp_LoginActivity_SignInButton">Sign in</string>
     <string name="PerformerApp_LoginActivity_LoginLabel">Login</string>
     <string name="PerformerApp_LoginActivity_PasswordLabel">Password</string>
@@ -13,10 +14,6 @@
     <string name="PerformerApp_ConfirmDataActivity_Surname">Surname</string>
     <string name="PerformerApp_ConfirmDataActivity_Name">Name</string>
     <string name="PerformerApp_ConfirmDataActivity_PhoneNumber">Phone number</string>
-    <string name="PerformerApp_MainActivity_ManagerMenuItem">Managers</string>
-    <string name="PerformerApp_MainActivity_PerformersMenuItem">Performers</string>
-    <string name="PerformerApp_MainActivity_MyTasksMenuItem">My tasks</string>
-    <string name="PerformerApp_MainActivity_UndistibutedTasksMenuItem">Und. tasks</string>
     <string name="PerformerApp_UsersListFragment_CallUserContentDescription">Call</string>
     <string name="PerformerApp_UsersListFragment_FullnameFormat" translatable="false">%s %s</string>
 

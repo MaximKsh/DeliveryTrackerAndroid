@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
@@ -17,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:ems="10"
-            android:hint="@string/ManagerApp_EnterNameHint"
+            android:hint="@string/Core_EnterNameHint"
             android:inputType="textPersonName"
             android:paddingEnd="45dp"
             android:paddingStart="30dp"
@@ -30,7 +29,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="13dp"
             android:alpha="0.3"
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:contentDescription="@string/Core_CodeHintIcon"
             android:src="@drawable/ic_attach_money_black_24dp" />
 
     </RelativeLayout>

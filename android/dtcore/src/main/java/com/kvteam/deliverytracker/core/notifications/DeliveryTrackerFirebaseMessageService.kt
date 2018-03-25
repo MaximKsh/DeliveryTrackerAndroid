@@ -1,23 +1,12 @@
-package com.kvteam.deliverytracker.performerapp.notification
+package com.kvteam.deliverytracker.core.notifications
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.support.v4.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.performerapp.R
-import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-
-class PerformerFirebaseMessageService : FirebaseMessagingService() {
+class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
     @Inject
     lateinit var lm: ILocalizationManager
 
@@ -33,7 +22,7 @@ class PerformerFirebaseMessageService : FirebaseMessagingService() {
         if(remoteMessage == null) {
             return
         }
-        val notificationService =
+       /* val notificationService =
                 getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
 
         if (Build.VERSION.SDK_INT >= 26) {
@@ -60,6 +49,6 @@ class PerformerFirebaseMessageService : FirebaseMessagingService() {
             val pendingIntent = PendingIntent.getActivity(this, addTaskRequestCode, contentIntent, flags)
             builder.setContentIntent(pendingIntent)
         }
-        notificationService.notify(1, builder.build())
+        notificationService.notify(1, builder.build())*/
     }
 }

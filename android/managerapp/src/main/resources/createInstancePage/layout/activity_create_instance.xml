@@ -60,7 +60,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_business_black_24dp" />
 
             </RelativeLayout>
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
-                    android:hint="@string/ManagerApp_EnterNameHint"
+                    android:hint="@string/Core_EnterNameHint"
                     android:inputType="textPersonName"
                     android:paddingEnd="45dp"
                     android:paddingStart="45dp"
@@ -88,7 +88,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_assignment_ind_black_24dp" />
 
             </RelativeLayout>
@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
-                    android:hint="@string/ManagerApp_EnterSurnameHint"
+                    android:hint="@string/Core_EnterSurnameHint"
                     android:inputType="textPersonName"
                     android:paddingEnd="45dp"
                     android:paddingStart="45dp"
@@ -116,7 +116,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_assignment_ind_black_24dp" />
 
             </RelativeLayout>
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
-                    android:hint="@string/ManagerApp_EnterPatronymicHint"
+                    android:hint="@string/Core_EnterPatronymicHint"
                     android:inputType="textPersonName"
                     android:paddingEnd="45dp"
                     android:paddingStart="45dp"
@@ -144,7 +144,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_assignment_ind_black_24dp" />
 
             </RelativeLayout>
@@ -173,7 +173,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_phone_black_24dp" />
 
             </RelativeLayout>
@@ -188,7 +188,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:ems="10"
-                    android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint"
+                    android:hint="@string/Core_EnterPasswordHint"
                     android:inputType="textPassword"
                     android:paddingEnd="45dp"
                     android:paddingStart="45dp"
@@ -201,7 +201,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_lock_black_24dp" />
 
             </RelativeLayout>

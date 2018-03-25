@@ -15,7 +15,6 @@ import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.R.id.action_done
 import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_confirm_data.*
@@ -73,7 +72,7 @@ class ConfirmDataActivity : DeliveryTrackerActivity() {
             android.R.id.home -> {
                 finish()
             }
-            action_done -> {
+            R.id.action_done -> {
                 val userInfo = User()
                 userInfo.surname = etSurnameField.text.toString()
                 userInfo.name = etNameField.text.toString()

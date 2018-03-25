@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DeliveryTracker</string>
-    <string name="ManagerApp_LoginActivity_EnterCodeHint">Код приглашения</string>
-    <string name="ManagerApp_LoginActivity_EnterPasswordHint">Пароль</string>
-    <string name="ManagerApp_LoginActivity_Login">Войти</string>
+    <string name="Core_EnterCodeHint">Код приглашения</string>
+    <string name="Core_EnterPasswordHint">Пароль</string>
+    <string name="Core_LoginButton">Войти</string>
     <string name="ManagerApp_LoginActivity_ForgotPassword">Забыли пароль</string>
     <string name="ManagerApp_LoginActivity_CreateInstance">Вы можете добавить свою компанию</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Добавление компании</string>
     <string name="ManagerApp_LoginActivity_Register">Зарегистрировать</string>
     <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Название компании</string>
-    <string name="ManagerApp_EnterNameHint">Имя</string>
-    <string name="ManagerApp_EnterSurnameHint">Фамилия</string>
-    <string name="ManagerApp_EnterPatronymicHint">Отчество</string>
-    <string name="ManagerApp_EnterPhoneNumberHint">Номер телефона</string>
-    <string name="ManagerApp_Toolbar_Done">Продолжить</string>
+    <string name="Core_EnterNameHint">Имя</string>
+    <string name="Core_EnterSurnameHint">Фамилия</string>
+    <string name="Core_EnterPatronymicHint">Отчество</string>
+    <string name="Core_EnterPhoneNumberHint">Номер телефона</string>
+    <string name="Core_Toolbar_Done">Продолжить</string>
     <string name="ManagerApp_ConfirmDataActivity_Confirm">Подтвердить</string>
     <string name="ManagerApp_MainActivity_Tasks">Задания</string>
     <string name="ManagerApp_MainActivity_Staff">Сотрудники</string>

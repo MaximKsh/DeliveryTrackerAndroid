@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.userslist
+package com.kvteam.deliverytracker.performerapp.ui.main.userslist
 
 import android.graphics.Color
 import android.view.View
@@ -7,7 +7,7 @@ import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.BaseListItem
-import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.performerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.fragment_user_list_item.view.*

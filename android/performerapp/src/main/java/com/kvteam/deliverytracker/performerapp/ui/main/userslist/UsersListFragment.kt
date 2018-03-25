@@ -1,98 +1,86 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.userslist
 
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.ContextCompat.checkSelfPermission
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.User
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.BaseListHeader
+import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.performerapp.R
-import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_users_list.*
+import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import javax.inject.Inject
+
+// TODO: rename managersList xml to userslist
+open class UsersListFragment : BaseListFragment() {
+
+    override var viewGroup = "UserViewGroup"
+
+    override val tracer
+            get() = navigationController.fragmentTracer
+
+    @Inject
+    lateinit var navigationController: NavigationController
 
 
-open class UsersListFragment : DeliveryTrackerFragment() {
-    protected val layoutManagerKey = "layoutManager"
-    protected val usersListKey = "usersList"
+    private val userActions = object: IBaseListItemActions<UserListItem> {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+        }
 
-    protected lateinit var adapter: AutoClearedValue<UsersListAdapter>
-    protected var ignoreSavedState = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+        }
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_users_list, container, false)
+
+    override fun handleUsers(users: List<User>, animate: Boolean) {
+        var letter: Char? = null
+        var header = BaseListHeader(lm.getString(R.string.ServerMessage_Roles_CreatorRole))
+        val emptyHeader = BaseListHeader(EMPTY_STRING)
+
+        val userList = users
+                .sortedWith (Comparator { u1, u2 ->
+                    if(u1.role?.toRole() == Role.Creator) -1
+                    else if(u2.role?.toRole() == Role.Creator) 1
+                    else u1.surname?.compareTo(u2.surname ?: EMPTY_STRING) ?: 0
+                })
+                .map { user ->
+                    if (user.role?.toRole() == Role.Creator) {
+                        UserListItem(user, header)
+                    } else {
+                        if(user.surname.isNullOrBlank()) {
+                            return@map UserListItem(user, emptyHeader)
+                        }
+                        if (letter == null || letter != user.surname!![0]) {
+                            letter = user.surname!![0]
+                            header = BaseListHeader(letter!!.toString())
+                        }
+                        UserListItem(user, header)
+                    }
+                }.toMutableList()
+        val adapter = mAdapter as? UserListFlexibleAdapter
+        if (adapter != null) {
+            adapter.updateDataSet(userList, animate)
+        } else {
+            mAdapter = UserListFlexibleAdapter(userList, userActions)
+        }
+    }
+
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("search" to value)
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbarController.enableDropdown()
+        useSearchInToolbar(toolbar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
         super.onActivityCreated(savedInstanceState)
-        rvUsersList.layoutManager = LinearLayoutManager(
-                activity!!.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
-        rvUsersList.addItemDecoration(
-                DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        adapter = AutoClearedValue(
-                this,
-                UsersListAdapter(this::onCallClicked, { context!!.getString(it) }),
-                {
-                    it?.onCallClick = null
-                    it?.getLocalizedString = null
-                })
-        rvUsersList.adapter = adapter.value
-
-        savedInstanceState?.apply {
-            val adapter = adapter.value
-            val layoutManager = rvUsersList?.layoutManager
-            if(adapter != null
-                    && layoutManager != null) {
-                if(containsKey(usersListKey)
-                        && containsKey(layoutManagerKey)) {
-                    adapter.items.clear()
-                    layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
-                } else {
-                    ignoreSavedState = true
-                }
-            }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.apply {
-            val adapter = adapter.value
-            val layoutManager = rvUsersList?.layoutManager
-            if(adapter != null
-                    && layoutManager != null) {
-                putParcelable(
-                        layoutManagerKey,
-                        layoutManager.onSaveInstanceState())
-            }
-
-        }
-    }
-
-    private fun onCallClicked(user: User) {
-        if(user.phoneNumber != null
-                && checkSelfPermission(activity!!, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            val intent = Intent(Intent.ACTION_CALL)
-            intent.data = Uri.parse("tel:${user.phoneNumber}")
-            activity!!.startActivity(intent)
-        }
+        (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
     }
 }
+

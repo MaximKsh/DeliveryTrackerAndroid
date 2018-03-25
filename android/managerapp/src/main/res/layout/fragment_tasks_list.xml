@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment">
+    tools:context="com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TasksListFragment">
 
     <include layout="@layout/dropdown_top"/>
 

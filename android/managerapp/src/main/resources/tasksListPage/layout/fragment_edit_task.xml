@@ -49,7 +49,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -79,7 +79,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -109,7 +109,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -139,7 +139,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -176,7 +176,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -206,7 +206,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -235,7 +235,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>
@@ -307,7 +307,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="13dp"
                     android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                    android:contentDescription="@string/Core_CodeHintIcon"
                     android:src="@drawable/ic_tasks_black_24dp" />
 
             </RelativeLayout>

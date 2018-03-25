@@ -10,6 +10,7 @@ import com.kvteam.deliverytracker.core.session.LoginResultType
 import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -29,30 +30,22 @@ class LoginActivity : DeliveryTrackerActivity() {
 
     override val layoutId: Int = R.layout.activity_login
 
+    override fun getToolbarConfiguration(): ToolbarConfiguration {
+        return ToolbarConfiguration(false, false)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
-        savedInstanceState?.apply {
-            etLoginUsername.setText(
-                    getString(usernameKey, EMPTY_STRING))
-            etLoginPassword.setText(
-                    getString(passwordKey, EMPTY_STRING))
-        }
-        bttnSignIn.setOnClickListener { onSignInClicked() }
+        btnLogin.setOnClickListener { onSignInClicked() }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.apply {
-            putString(usernameKey, etLoginUsername.text.toString())
-            putString(passwordKey, etLoginPassword.text.toString())
-        }
-    }
 
     private fun onSignInClicked() = launchUI {
-        val username = etLoginUsername.text.toString()
-        val password = etLoginPassword.text.toString()
+        val username = etLoginField.code.joinToString(EMPTY_STRING)
+        val password = etPasswordField.text.toString()
 
         val loginResult = session.loginAsync(username, password)
         if(eh.handle(loginResult)) {

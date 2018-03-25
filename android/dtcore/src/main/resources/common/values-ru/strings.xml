@@ -1,64 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="PerformerApp_AppName">DTCore</string>
-    <string name="Core_TaskState_NewUndistributed">Новое нераспределенное</string>
-    <string name="Core_TaskState_New">Новое</string>
-    <string name="Core_TaskState_InWork">В работе</string>
-    <string name="Core_TaskState_Performed">Выполнено</string>
-    <string name="Core_TaskState_Cancelled">Отменено</string>
-    <string name="Core_TaskState_CancelledByManager">Отменено управляющим</string>
-    <string name="ServerMessage_Error_InvalidInputParameter">Некорректный параметр запроса</string>
-    <string name="ServerMessage_Error_UserNotFound">Пользователь не найден</string>
-    <string name="ServerMessage_Error_UserWithoutRole">Пользователь без роли</string>
-    <string name="ServerMessage_Error_UserNotInRole">Пользователь не входит в требуемую роль</string>
-    <string name="ServerMessage_Error_IdentityError">Ошибка авторизации</string>
-    <string name="ServerMessage_Error_InvitationDoesnotExist">Приглашение не существует</string>
-    <string name="ServerMessage_Error_InvitationExpired">Приглашение просрочено</string>
-    <string name="ServerMessage_Error_GroupAlreadyHasCreator">У группы уже указан создатель</string>
-    <string name="ServerMessage_Error_PerformerInAnotherGroup">Исполнитель не найден</string>
-    <string name="ServerMessage_Error_TaskNotFound">Задание не найдено</string>
-    <string name="ServerMessage_Error_IncorrectTaskState">Некорректное состояние задания</string>
-    <string name="ServerMessage_Error_IncorrectTaskStateTransition">Некорректный переход состояний задания</string>
-    <string name="ServerMessage_Error_TaskIsForbidden">Задание недоступно</string>
-    <string name="ServerMessage_Error_DisplayableNameIsRequired">Укажите \'DisplayableName\'</string>
-    <string name="ServerMessage_Error_InvitationCodeIsRequired">Укажите \'InstanceName\'</string>
-    <string name="ServerMessage_Error_LongitudeIsRequired">Укажите \'Longitude\'</string>
-    <string name="ServerMessage_Error_LatitudeIsRequired">Укажите \'Latitude\'</string>
-    <string name="ServerMessage_Error_AccessDenied">Доступ запрещен</string>
-    <string name="ServerMessage_Error_UserDeleted">Пользователь был удален</string>
-    <string name="ServerMessage_Error_RoleRange">Укажите корректную роль</string>
-    <string name="ServerMessage_PushMessage_AddTask">Вам добавлено новое задание</string>
-    <string name="ServerMessage_Roles_CreatorRole">Создатель</string>
-    <string name="ServerMessage_Roles_ManagerRole">Управляющий</string>
-    <string name="ServerMessage_Roles_PerformerRole">Исполнитель</string>
-    <string name="Core_UnknownError">Неизвестная ошибка</string>
-    <string name="Core_OK">Принять</string>
-    <string name="Core_NotificationHeader">Уведомление</string>
-    <string name="Core_Error_NetworkError">Ошибка сети</string>
-    <string name="Core_Error_InvalidJson">Кривой JSON</string>
-    <string name="Core_Error_InvalidRole">Неверная роль</string>
-    <string name="Core_InstanceManager_Error_ErrorTitle">Ошибка при действии с компанией</string>
-    <string name="Core_Session_Error_Login">Вход</string>
-    <string name="Core_Session_Error_WrongCredentials">Неверный логин/пароль</string>
-    <string name="Core_Session_Error_RefreshUserInfo">Ошибка обновления пользовательких данных</string>
-    <string name="Core_Session_Error_EditUserInfo">Ошибка изменения пользовательских данных</string>
-    <string name="Core_Session_Error_Unauthorized">Вы не авторизованы</string>
+    <string name="Core_TaskState_NewUndistributed">New undistributed</string>
+    <string name="Core_TaskState_New">New</string>
+    <string name="Core_TaskState_InWork">In work</string>
+    <string name="Core_TaskState_Performed">Performed</string>
+    <string name="Core_TaskState_Cancelled">Cancelled</string>
+    <string name="Core_TaskState_CancelledByManager">CancelledByManager</string>
+    <string name="ServerMessage_Error_InvalidInputParameter">Invalid input parameter</string>
+    <string name="ServerMessage_Error_UserNotFound">User not found</string>
+    <string name="ServerMessage_Error_UserWithoutRole">User without role</string>
+    <string name="ServerMessage_Error_UserNotInRole">User hasn\'t required role</string>
+    <string name="ServerMessage_Error_IdentityError">Identity error</string>
+    <string name="ServerMessage_Error_InvitationDoesnotExist">Invitation doesn\' exist</string>
+    <string name="ServerMessage_Error_InvitationExpired">Invitation expired</string>
+    <string name="ServerMessage_Error_GroupAlreadyHasCreator">Group already has creator</string>
+    <string name="ServerMessage_Error_PerformerInAnotherGroup">Performer not found</string>
+    <string name="ServerMessage_Error_TaskNotFound">Task not found</string>
+    <string name="ServerMessage_Error_IncorrectTaskState">Incorrect task state</string>
+    <string name="ServerMessage_Error_IncorrectTaskStateTransition">Incorrect task state transition</string>
+    <string name="ServerMessage_Error_TaskIsForbidden">Task is forbidden</string>
+    <string name="ServerMessage_Error_DisplayableNameIsRequired">DisplayableName is required</string>
+    <string name="ServerMessage_Error_InvitationCodeIsRequired">InstanceName is required</string>
+    <string name="ServerMessage_Error_LongitudeIsRequired">Longitude is required</string>
+    <string name="ServerMessage_Error_LatitudeIsRequired">Latitude is required</string>
+    <string name="ServerMessage_Error_AccessDenied">Access denied</string>
+    <string name="ServerMessage_Error_UserDeleted">User was deleted</string>
+    <string name="ServerMessage_Error_RoleRange">Specify correct role</string>
+    <string name="ServerMessage_PushMessage_AddTask">You have new task</string>
+    <string name="ServerMessage_Roles_CreatorRole">Creator</string>
+    <string name="ServerMessage_Roles_ManagerRole">Manager</string>
+    <string name="ServerMessage_Roles_PerformerRole">Performer</string>
+    <string name="Core_ThreeDots" translatable="false">...</string>
+    <string name="Core_UnknownError">Unknown error</string>
+    <string name="Core_OK">OK</string>
+    <string name="Core_NotificationHeader">Notification</string>
+    <string name="Core_Error_NetworkError">Network error</string>
+    <string name="Core_Error_InvalidJson">Invalid JSON</string>
+    <string name="Core_Error_InvalidRole">Invalid role</string>
+    <string name="Core_InstanceManager_Error_ErrorTitle">Company action error</string>
+    <string name="Core_Session_Error_Login">Login</string>
+    <string name="Core_Session_Error_WrongCredentials">Invalid username/password</string>
+    <string name="Core_Session_Error_RefreshUserInfo">Refresh user info error</string>
+    <string name="Core_Session_Error_EditUserInfo">Edit user info error</string>
+    <string name="Core_Session_Error_Unauthorized">Unauthorized</string>
 
-    <string name="Core_Product_Name">Название продукта</string>
-    <string name="Core_Product_Vendor_Code">Артикул</string>
-    <string name="Core_Product_Cost">Цена</string>
-    <string name="Core_Product_Description">Описание</string>
-
-    <string name="Core_Delete_List_Item">Удалить</string>
-
-    <string name="ServerMessage_Views_ManagersView">Менеджеры</string>
-    <string name="ServerMessage_Views_PerformersView">Исполнители</string>
-    <string name="ServerMessage_Views_InvitationsView">Приглашения</string>
-    <string name="ServerMessage_Views_TasksManagersView">Задачи</string>
-    <string name="ServerMessage_Views_TasksPerformersView">Задачи</string>
-    <string name="ServerMessage_TaskStates_Unconfirmed">Не подтвержденно</string>
+    <string name="Core_Product_Name">Product name</string>
+    <string name="Core_Product_Vendor_Code">Vendor Code</string>
+    <string name="Core_Product_Cost">Cost</string>
+    <string name="Core_Product_Description">Description</string>
 
 
-    <string name="Core_SelectFromList">Выбрать из списка</string>
+    <string name="ServerMessage_Views_ManagersView">Managers</string>
+    <string name="ServerMessage_Views_PerformersView">Performers</string>
+    <string name="ServerMessage_Views_TasksManagersView">Tasks</string>
+    <string name="ServerMessage_Views_TasksPerformersView">Tasks</string>
+    <string name="ServerMessage_Views_InvitationsView">Invitations</string>
+    <string name="ServerMessage_TaskStates_Unconfirmed">Unconfirmed</string>
 
+    <string name="Core_Dropdown_Top_Quantity"> (%d)</string>
+
+    <string name="Core_Delete_List_Item">Delete</string>
+    <string name="Core_SelectFromList">Select from list</string>
 </resources>
