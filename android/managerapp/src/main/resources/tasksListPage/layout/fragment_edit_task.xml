@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginBottom="55dp"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvTaskInfo"
@@ -54,71 +53,59 @@
 
             </RelativeLayout>
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlDeliveryFrom"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
+            <LinearLayout
+                android:id="@+id/llDeliveryDateContainer"
+                android:orientation="vertical"
                 android:layout_below="@id/rlTaskNumber"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etDeliveryFrom"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="Delivery from"
-                    android:inputType="datetime"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivDeliveryFromHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlDeliveryTo"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@id/rlDeliveryFrom"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/etDeliveryTo"
+                <TextView
+                    android:textSize="19sp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="Delivery to"
-                    android:inputType="datetime"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
+                    android:layout_height="wrap_content"
+                    android:text="Delivery date"/>
 
+                <LinearLayout
+                    android:id="@+id/llDeliveryDateTypes"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ivDeliveryToHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
+            <LinearLayout
+                android:id="@+id/llDeliveryTimeContainer"
+                android:orientation="vertical"
+                android:layout_below="@id/llDeliveryDateContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            </RelativeLayout>
+                <TextView
+                    android:textSize="19sp"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery interval"/>
+
+                <LinearLayout
+                    android:id="@+id/llDeliveryTimeTypes"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </LinearLayout>
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/rlReceiptAt"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/rlDeliveryTo"
+                android:layout_below="@id/llDeliveryTimeContainer"
                 android:layout_gravity="center">
 
                 <EditText

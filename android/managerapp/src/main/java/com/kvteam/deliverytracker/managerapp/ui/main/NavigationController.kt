@@ -101,8 +101,9 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditTask() {
+    fun navigateToEditTask(taskId: UUID? = null) {
         val fragment = EditTaskFragment()
+        fragment.setTask(taskId)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
