@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.core.dagger.modules
 
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.common.ILocalizationManagerExtension
-import com.kvteam.deliverytracker.core.common.LocalizationManager
+import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.dataprovider.*
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.ISessionInfo
@@ -20,6 +18,12 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
+    fun gsonProvider(): IDeliveryTrackerGsonProvider {
+        return DeliveryTrackerGsonProvider()
+    }
+
+    @Provides
+    @Singleton
     fun httpManager(): IHttpManager {
         return HttpManager()
     }
@@ -27,10 +31,12 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Provides
     @Singleton
     fun session(
+            gson: IDeliveryTrackerGsonProvider,
             httpManager: IHttpManager,
             app: T,
             sessionInfo: ISessionInfo): ISession {
         return Session(
+                gson,
                 httpManager,
                 sessionInfo,
                 app.applicationContext)
@@ -39,10 +45,11 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Provides
     @Singleton
     fun webservice(
+            gson: IDeliveryTrackerGsonProvider,
             app: T,
             session: ISession,
             httpManager: IHttpManager): IWebservice {
-        return Webservice(app.applicationContext, session, httpManager)
+        return Webservice(gson, app.applicationContext, session, httpManager)
     }
 
     @Provides

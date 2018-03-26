@@ -16,12 +16,13 @@ interface ISession {
     fun hasAccount(): Boolean
     fun hasAccount(username: String?): Boolean
 
+    suspend fun updateDeviceAsync()
     suspend fun checkSessionAsync(): CheckSessionResult
     suspend fun loginAsync(username: String, password: String): LoginResult
     suspend fun refreshUserInfoAsync(): NetworkResult<AccountResponse>
     suspend fun editUserInfoAsync(userInfo: User): NetworkResult<AccountResponse>
     suspend fun changePasswordAsync(old: CodePassword,
-                            new: CodePassword) : NetworkResult<AccountResponse>
+                                    new: CodePassword) : NetworkResult<AccountResponse>
     suspend fun logoutAsync()
 
     val user: User?

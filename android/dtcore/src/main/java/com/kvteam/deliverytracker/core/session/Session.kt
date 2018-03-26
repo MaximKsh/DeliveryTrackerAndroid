@@ -3,12 +3,15 @@ package com.kvteam.deliverytracker.core.session
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.buildDefaultGson
+import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.CodePassword
+import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.*
@@ -18,14 +21,18 @@ import kotlinx.coroutines.experimental.async
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
+
 class Session (
+        gsonProvider: IDeliveryTrackerGsonProvider,
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
-        context: Context) : ISession {
+        private val context: Context) : ISession {
 
+    private val deviceType = "ANDROID"
+
+    val gson = gsonProvider.gson
 
     private val accountManager = AccountManager.get(context)
-    private val gson = buildDefaultGson()
     private val baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 
     private val userAR = AtomicReference<Lazy<User?>>( lazy { getUserFromAccount() })
@@ -88,8 +95,35 @@ class Session (
         return accounts.any { p -> p.name == username }
     }
 
+    override suspend fun updateDeviceAsync(): Unit = async {
+        val refreshedToken = FirebaseInstanceId.getInstance().token ?: return@async
+        val user = this@Session.user ?: return@async
+
+        val device = Device()
+        device.userId = user.id
+        device.type = deviceType
+        device.version = Build.VERSION.SDK_INT.toString()
+        device.language = Locale.getDefault().language
+        device.firebaseId = refreshedToken
+        try {
+            val pInfo = this@Session.context.packageManager.getPackageInfo(this@Session.context.packageName, 0)
+            device.applicationType = pInfo.packageName
+            device.applicationVersion = pInfo.versionCode.toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
 
 
+        val request = AccountRequest(device = device)
+        val rawRequestBody = gson.toJson(request)
+        doubleTimeRequest(this@Session, true) {
+            httpManager.post(
+                    baseUrl + "/api/account/update_device",
+                    rawRequestBody,
+                    it,
+                    "application/json")
+        }
+    }.await()
 
     override suspend fun checkSessionAsync(): CheckSessionResult = async {
         val url = baseUrl + "/api/account/check"
@@ -137,6 +171,9 @@ class Session (
         } catch (e: Exception) {
             return@async LoginResult.error(response, accountResponse)
         }
+
+        updateDeviceAsync()
+
         val resultType =
                 if(response.statusCode == CREATED_HTTP_STATUS) LoginResultType.Registered
                 else LoginResultType.Success

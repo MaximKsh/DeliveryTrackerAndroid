@@ -61,6 +61,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                 val code = user.code!!
                 val password = etPasswordField.text.toString()
                 session.setAccountExplicitly(code, password, token, user)
+                session.updateDeviceAsync()
                 navigateToMainActivity()
             }
         }

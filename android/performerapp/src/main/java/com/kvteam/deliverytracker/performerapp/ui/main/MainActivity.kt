@@ -1,6 +1,11 @@
 package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.os.Bundle
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.notifications.PUSH_ACTION
+import com.kvteam.deliverytracker.core.notifications.PUSH_ACTION_KEY
+import com.kvteam.deliverytracker.core.notifications.PUSH_DATA_SERIALIZED
+import com.kvteam.deliverytracker.core.notifications.PUSH_DATA_TYPE_KEY
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
@@ -12,8 +17,6 @@ import javax.inject.Inject
 
 class MainActivity : DeliveryTrackerActivity() {
     private val bnvSelectedItemKey = "bnvSelectedItem"
-
-    private val accessPermissionsRequestCode = 1234
 
     private val defaultItem = R.id.navigation_staff
     private val menuItemMapper = mapOf(
@@ -41,14 +44,25 @@ class MainActivity : DeliveryTrackerActivity() {
         super.onCreate(savedInstanceState)
         removeShiftMode(navigation)
 
-        if (savedInstanceState == null) {
-            menuItemMapper[defaultItem]?.invoke()
-            navigation.selectedItemId = defaultItem
-        } else {
+        if(intent.action == PUSH_ACTION) {
+            val action = intent.extras[PUSH_ACTION_KEY] as? String ?: EMPTY_STRING
+            val dataType = intent.extras[PUSH_DATA_TYPE_KEY] as? String ?: EMPTY_STRING
+            val dataSerialized = intent.extras[PUSH_DATA_SERIALIZED] as? String ?: EMPTY_STRING
+            if(action.isNotBlank()
+                    && dataType.isNotBlank()
+                    && dataSerialized.isNotBlank()) {
+                onPushClicked(action, dataType, dataSerialized)
+            } else {
+                menuItemMapper[defaultItem]?.invoke()
+                navigation.selectedItemId = defaultItem
+            }
+        } else if (savedInstanceState != null) {
             navigation.selectedItemId =
                     savedInstanceState.getInt(bnvSelectedItemKey, defaultItem)
+        } else {
+            menuItemMapper[defaultItem]?.invoke()
+            navigation.selectedItemId = defaultItem
         }
-
 
         navigation.setOnNavigationItemSelectedListener {
             if(navigation.selectedItemId != it.itemId) {
@@ -56,14 +70,6 @@ class MainActivity : DeliveryTrackerActivity() {
             }
             true
         }
-/*
-        if(ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    accessPermissionsRequestCode)
-        }*/
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -74,6 +80,12 @@ class MainActivity : DeliveryTrackerActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+    }
+
+    private fun onPushClicked(action: String,
+                              dataType: String,
+                              dataSerialized: String) {
 
     }
 }

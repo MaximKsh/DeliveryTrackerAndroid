@@ -54,6 +54,24 @@
                 android:resource="@xml/account_authenticator" />
         </service>
 
+        <service
+            android:name="com.kvteam.deliverytracker.core.session.DeliveryTrackerInstanceIdService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.kvteam.deliverytracker.core.notifications.DeliveryTrackerFirebaseMessageService"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBzt6RkXyoAk7t91NVupbST9GwM4ST_wps" />
