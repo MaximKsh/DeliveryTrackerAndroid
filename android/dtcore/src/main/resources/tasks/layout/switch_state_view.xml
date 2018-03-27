@@ -2,12 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlSwitchStateMainView"
+    android:background="@color/colorWhite"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/state_transition_item_height">
 
-    <Button
-        android:id="@+id/bttnSwitchState"
+    <TextView
+        android:id="@+id/tvNewTaskState"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/state_transition_item_height" />
 
 </RelativeLayout>

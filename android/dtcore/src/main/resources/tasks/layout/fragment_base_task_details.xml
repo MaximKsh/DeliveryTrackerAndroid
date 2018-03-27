@@ -1,22 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tvTaskNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvTaskState"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/rlChangeState">
+        <RelativeLayout
+            android:id="@+id/rlTaskInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/llDatesAndAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
+                <RelativeLayout
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp">
+                    <TextView
+                        android:id="@+id/tvCreationLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Creation date"/>
+                    <EditText
+                        android:enabled="false"
+                        android:layout_below="@id/tvCreationLabel"
+                        android:id="@+id/tvCreateDate"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvReceiptLabel"
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/tvCreateDate"
+                        android:layout_height="match_parent"
+                        android:text="Receipt"/>
+                    <EditText
+                        android:enabled="false"
+                        android:id="@+id/tvReceiptDate"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/tvReceiptLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvDeliveryLabel"
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/tvReceiptDate"
+                        android:layout_height="match_parent"
+                        android:text="Delivery"/>
+
+                    <EditText
+                        android:enabled="false"
+                        android:id="@+id/ivDeliveryDate"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/tvDeliveryLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp">
+                    <ImageView
+                        android:id="@+id/ivPerformerAvatar"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="15dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_centerVertical="true"
+                        android:contentDescription=""/>
+
+                    <TextView
+                        android:id="@+id/ivPerformerName"
+                        android:layout_below="@id/ivPerformerAvatar"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvPaymentType"
+                android:layout_below="@id/llDatesAndAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvClientName"
+                android:layout_below="@id/tvPaymentType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvClientPhone"
+                android:layout_below="@id/tvClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvClientAddress"
+                android:layout_below="@id/tvClientPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvCost"
+                android:layout_below="@id/tvClientAddress"
+                android:layout_toStartOf="@id/tvDeliveryCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tvDeliveryCost"
+                android:layout_below="@id/tvClientAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvProductsHeader"
+                android:text="Products"
+                android:layout_below="@id/tvCost"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/llProducts"
+                android:layout_below="@id/tvProductsHeader"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </ScrollView>
 
     <LinearLayout
         android:id="@+id/llTransitionButtons"
+        android:layout_above="@id/rlChangeState"
+        android:background="@drawable/shape_border"
+        android:padding="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="vertical"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rlChangeState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        
+        <TextView
+            android:id="@+id/tvTaskState"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/ivTaskStateExpandIcon"
+            android:layout_alignParentEnd="true"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+        
+        
+    </RelativeLayout>
+
+</RelativeLayout>

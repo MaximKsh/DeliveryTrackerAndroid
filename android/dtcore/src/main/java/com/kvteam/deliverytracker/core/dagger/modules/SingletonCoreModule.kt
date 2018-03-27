@@ -125,15 +125,13 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
                      invitationView: InvitationViewComponent,
                      taskInfos: TaskInfoDataComponent,
                      taskInfoViews: TaskInfoViewComponent,
-                     taskStateTransitions: TaskStateTransitionDataComponent,
                      clientContainer: ClientDataContainer,
                      paymentTypesContainer: PaymentTypeDataContainer,
                      productsContainer: ProductDataContainer,
                      warehousesContainer: WarehouseDataContainer,
                      userContainer: UserDataContainer,
                      invitationContainer: InvitationDataContainer,
-                     taskInfoContainer: TaskInfoDataContainer,
-                     taskStateContainer: TaskStateTransitionDataContainer) : DataProvider {
+                     taskInfoContainer: TaskInfoDataContainer) : DataProvider {
         return DataProvider(
                 viewDigestComponent,
                 clientComponent,
@@ -150,15 +148,13 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
                 invitationView,
                 taskInfos,
                 taskInfoViews,
-                taskStateTransitions,
                 clientContainer,
                 paymentTypesContainer,
                 productsContainer,
                 warehousesContainer,
                 userContainer,
                 invitationContainer,
-                taskInfoContainer,
-                taskStateContainer)
+                taskInfoContainer)
     }
 
     @Provides
@@ -283,18 +279,6 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun taskStateTransitionContainer() : TaskStateTransitionDataContainer {
-        return TaskStateTransitionDataContainer()
-    }
-
-    @Provides
-    @Singleton
-    fun taskStateTransitionComponent(container: TaskStateTransitionDataContainer): TaskStateTransitionDataComponent {
-        return TaskStateTransitionDataComponent(container)
-    }
-
-    @Provides
-    @Singleton
     fun taskInfoContainer() : TaskInfoDataContainer {
         return TaskInfoDataContainer()
     }
@@ -302,7 +286,6 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Provides
     @Singleton
     fun taskInfoComponent(webservice: ITaskWebservice,
-                          taskStateTransitionDataContainer: TaskStateTransitionDataContainer,
                           productsDataContainer: ProductDataContainer,
                           paymentTypeDataContainer: PaymentTypeDataContainer,
                           warehouseDataContainer: WarehouseDataContainer,
@@ -310,7 +293,6 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
                           userDataContainer: UserDataContainer,
                           container: TaskInfoDataContainer): TaskInfoDataComponent {
         return TaskInfoDataComponent(webservice,
-                taskStateTransitionDataContainer,
                 productsDataContainer,
                 paymentTypeDataContainer,
                 warehouseDataContainer,

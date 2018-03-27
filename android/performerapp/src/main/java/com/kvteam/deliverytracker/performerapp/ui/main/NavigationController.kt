@@ -62,7 +62,7 @@ class NavigationController (private val mainActivity: MainActivity) {
     fun navigateToTaskDetails(id: UUID) {
         val taskDetailsFragment = TaskDetailsFragment()
         fragmentTracer.next(taskDetailsFragment)
-        taskDetailsFragment.setTaskId(id)
+        taskDetailsFragment.setTask(id)
         fragmentManager.beginTransaction()
                 .replace(containerId, taskDetailsFragment)
                 .addToBackStack(null)
