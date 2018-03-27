@@ -18,7 +18,7 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.client_address_item.view.*
-import kotlinx.android.synthetic.main.fragment_add_client.*
+import kotlinx.android.synthetic.main.fragment_edit_client.*
 import java.util.*
 import javax.inject.Inject
 
@@ -120,12 +120,21 @@ class EditClientFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_client, container, false)
+        return inflater.inflate(R.layout.fragment_edit_client, container, false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val view =  activity!!.currentFocus
+        if (view != null) {
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_finish -> {
+            R.id.action_save -> {
                 val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 client.name = etNameField.text.toString()
                 client.surname = etSurnameField.text.toString()
@@ -134,11 +143,6 @@ class EditClientFragment : DeliveryTrackerFragment() {
 
                 dp.clients.upsertAsync(client)
 
-                val view =  activity!!.currentFocus
-                if (view != null) {
-                    val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.windowToken, 0)
-                }
                 navigationController.closeCurrentFragment()
             }
         }
@@ -153,7 +157,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_client_menu, menu)
+        inflater.inflate(R.menu.toolbar_save_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

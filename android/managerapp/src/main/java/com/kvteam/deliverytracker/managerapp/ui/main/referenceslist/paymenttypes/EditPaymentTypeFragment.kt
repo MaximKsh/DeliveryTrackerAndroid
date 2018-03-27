@@ -6,21 +6,21 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.PaymentType
+import com.kvteam.deliverytracker.core.dataprovider.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
-import com.kvteam.deliverytracker.core.webservice.NetworkResult
-import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceResponse
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_add_payment_type.*
+import kotlinx.android.synthetic.main.fragment_edit_payment_type.*
+import java.util.*
 import javax.inject.Inject
 
 
-class AddPaymentTypeFragment : DeliveryTrackerFragment() {
+class EditPaymentTypeFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -33,30 +33,43 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var eh: IErrorHandler
 
-    private var paymentType = PaymentType()
+    @Inject
+    lateinit var dp: DataProvider
 
-    private var mode = "CREATE"
+    private val paymentTypeIdKey = "payment_type"
+    private var paymentTypeId
+        get() = arguments?.getSerializable(paymentTypeIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(paymentTypeIdKey, value)!!
+
+    private val tryPrefetchKey = "tryPrefetch"
+    private var tryPrefetch : Boolean
+        get() = arguments?.getBoolean(tryPrefetchKey) ?: false
+        set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
+
+
+    fun setPaymentType (id: UUID?) {
+        this.paymentTypeId = id ?: UUID.randomUUID()
+        this.tryPrefetch = id != null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
-
-    fun setPaymentType (paymentType: PaymentType?) {
-        if (paymentType != null) {
-            this.mode = "EDIT"
-            this.paymentType = paymentType
-        }
-    }
-
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
         toolbar.setToolbarTitle("Payment Type")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+        if(tryPrefetch) {
+            dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.PREFER_CACHE)
+            tryPrefetch = false
+        }
+        val paymentType = dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.DIRTY).entry
+
         etNameField.setText(paymentType.name)
         etNameField.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -64,24 +77,25 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_payment_type, container, false)
+        return inflater.inflate(R.layout.fragment_edit_payment_type, container, false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val view =  activity!!.currentFocus
+        if (view != null) {
+            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
-            R.id.action_finish -> {
-                val paymentType = PaymentType()
+            R.id.action_save -> {
+                val paymentType = dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.DIRTY).entry
                 paymentType.name = etNameField.text.toString()
-                val result: NetworkResult<ReferenceResponse>
-                if (mode == "EDIT") {
-                    val currentTypeId = this@AddPaymentTypeFragment.paymentType.id!!
-                    result = referenceWebservice.editAsync("PaymentType", currentTypeId, paymentType)
-                } else {
-                    result = referenceWebservice.createAsync("PaymentType", paymentType)
-                }
-                if(eh.handle(result)) {
-                    return@launchUI
-                }
+                dp.paymentTypes.upsertAsync(paymentType)
+
                 navigationController.closeCurrentFragment()
             }
         }
@@ -90,7 +104,7 @@ class AddPaymentTypeFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_payment_type_menu, menu)
+        inflater.inflate(R.menu.toolbar_save_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

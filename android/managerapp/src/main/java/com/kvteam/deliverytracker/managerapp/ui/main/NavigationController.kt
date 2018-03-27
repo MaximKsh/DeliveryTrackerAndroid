@@ -1,18 +1,19 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
-import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.EditPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -120,22 +121,32 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToAddPaymentType(paymentType: PaymentType? = null) {
-        val addPaymentTypeFragment = AddPaymentTypeFragment()
-        fragmentTracer.next(addPaymentTypeFragment)
-        addPaymentTypeFragment.setPaymentType(paymentType)
+    fun navigateToEditPaymentType(id: UUID? = null) {
+        val editPaymentTypeFragment = EditPaymentTypeFragment()
+        fragmentTracer.next(editPaymentTypeFragment)
+        editPaymentTypeFragment.setPaymentType(id)
         fragmentManager.beginTransaction()
-                .replace(containerId, addPaymentTypeFragment)
+                .replace(containerId, editPaymentTypeFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToPaymentTypeDetails(paymentType: PaymentType) {
+    fun navigateToPaymentTypeDetails(id: UUID) {
         val paymentTypeDetailsFragment = PaymentTypeDetailsFragment()
         fragmentTracer.next(paymentTypeDetailsFragment)
-        paymentTypeDetailsFragment.setPaymentType(paymentType)
+        paymentTypeDetailsFragment.setPaymentType(id)
         fragmentManager.beginTransaction()
                 .replace(containerId, paymentTypeDetailsFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToProductDetails(id: UUID) {
+        val fragment = ProductDetailsFragment()
+        fragmentTracer.next(fragment)
+        fragment.setProduct(id)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
@@ -160,9 +171,10 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditProduct() {
+    fun navigateToEditProduct(id: UUID? = null) {
         val fragment = EditProductFragment()
         fragmentTracer.next(fragment)
+        fragment.setProduct(id)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .addToBackStack(null)
@@ -178,9 +190,20 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditWarehouse() {
+    fun navigateToEditWarehouse(id: UUID? = null) {
         val fragment = EditWarehouseFragment()
         fragmentTracer.next(fragment)
+        fragment.setWarehouse(id)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToWarehouseDetails(id: UUID) {
+        val fragment = WarehouseDetailsFragment()
+        fragmentTracer.next(fragment)
+        fragment.setWarehouse(id)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .addToBackStack(null)

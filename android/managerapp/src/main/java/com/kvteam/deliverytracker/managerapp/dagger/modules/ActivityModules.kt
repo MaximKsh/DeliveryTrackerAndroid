@@ -20,13 +20,15 @@ import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.EditPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -133,7 +135,7 @@ abstract class MainActivityModule {
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(AddPaymentTypeFragmentModule::class))
-    internal abstract fun addPaymentTypeFragment(): AddPaymentTypeFragment
+    internal abstract fun addPaymentTypeFragment(): EditPaymentTypeFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditProductFragmentModule::class))
@@ -152,12 +154,20 @@ abstract class MainActivityModule {
     internal abstract fun editWarehouseFragment(): EditWarehouseFragment
 
     @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(WarehouseDetailsFragmentModule::class))
+    internal abstract fun warehouseDetailsFragment(): WarehouseDetailsFragment
+
+    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditClientFragmentModule::class))
     internal abstract fun editClientFragment(): EditClientFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(ClientDetailsFragmentModule::class))
     internal abstract fun clientDetailsFragment(): ClientDetailsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(ProductDetailsFragmentModule::class))
+    internal abstract fun productDetailsFragment(): ProductDetailsFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(PaymentTypeDetailsFragmentModule::class))

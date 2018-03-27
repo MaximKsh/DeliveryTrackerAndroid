@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_finish"
-        android:title="@string/ManagerApp_Toolbar_AddClient"
+        android:id="@+id/action_save"
+        android:title="@string/ManagerApp_Toolbar_Save"
         app:showAsAction="collapseActionView"/>
 
 </menu>

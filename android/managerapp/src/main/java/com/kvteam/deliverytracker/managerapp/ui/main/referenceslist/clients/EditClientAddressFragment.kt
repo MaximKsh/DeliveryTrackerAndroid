@@ -81,7 +81,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_finish -> {
+            R.id.action_save -> {
                 val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 var address = client.clientAddresses.firstOrNull { it.id == addressId }
                 if(address == null) {
@@ -102,7 +102,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_edit_client_address_menu, menu)
+        inflater.inflate(R.menu.toolbar_save_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

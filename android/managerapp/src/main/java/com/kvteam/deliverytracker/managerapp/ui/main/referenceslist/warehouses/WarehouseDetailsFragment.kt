@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
+package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses
 
 import android.os.Bundle
 import android.view.*
@@ -14,12 +14,12 @@ import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.client_address_item.view.*
-import kotlinx.android.synthetic.main.fragment_client_details.*
+import kotlinx.android.synthetic.main.fragment_warehouse_details.*
 import java.util.*
 import javax.inject.Inject
 
-class ClientDetailsFragment : DeliveryTrackerFragment() {
+
+class WarehouseDetailsFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -32,41 +32,17 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var eh: IErrorHandler
 
-
     @Inject
     lateinit var dp: DataProvider
 
-    private val clientIdKey = "client"
-    private var clientId
-        get() = arguments?.getSerializable(clientIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(clientIdKey, value)!!
+    private val warehouseIdKey = "warehouse_id"
+    private var warehouseId
+        get() = arguments?.getSerializable(warehouseIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(warehouseIdKey, value)!!
 
 
-    fun setClient (id: UUID) {
-        this.clientId = id
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-        val (client, origin) = try {
-            dp.clients.getAsync(clientId, DataProviderGetMode.PREFER_WEB)
-        } catch (e: CacheException) {
-            return@launchUI
-        }
-        eh.handleNoInternetWarn(origin)
-
-        tvNameField.text = client.name
-        tvSurnameField.text = client.surname
-        tvPatronymicField.text = client.patronymic
-        tvPhoneNumberField.text = client.phoneNumber
-
-        client.clientAddresses.forEach { clientAddress ->
-            val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
-            view.tvClientAddress.text = clientAddress.rawAddress
-            view.tvDeleteItem.visibility = View.GONE
-            llAddressesContainer.addView(view)
-        }
+    fun setWarehouse (id: UUID) {
+        this.warehouseId = id
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,22 +53,39 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Client")
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        super.onActivityCreated(savedInstanceState)
+
+        val (warehouse, origin) = try {
+            dp.warehouses.getAsync(warehouseId, DataProviderGetMode.PREFER_WEB)
+        } catch (e: CacheException) {
+            return@launchUI
+        }
+        eh.handleNoInternetWarn(origin)
+
+        val name = warehouse.name
+        tvNameField.text = name
+        tvAddressField.text = warehouse.rawAddress
+
+        if(name?.isNotBlank() == true) {
+            toolbarController.setToolbarTitle(name)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_client_details, container, false)
+        return inflater.inflate(R.layout.fragment_warehouse_details, container, false)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_edit -> {
-                navigationController.navigateToEditClient(clientId)
+                navigationController.navigateToEditWarehouse(warehouseId)
             }
         }
-    }, {
-        super.onOptionsItemSelected(item)
-    })
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_edit_menu, menu)

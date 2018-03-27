@@ -1,14 +1,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:mask="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:orientation="vertical"
-        android:padding="30dp">
+        android:padding="10dp">
 
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,13 +15,13 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etNameField"
+            <TextView
+                android:id="@+id/tvNameField"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:ems="10"
-                android:hint="@string/Core_EnterNameHint"
-                android:inputType="textPersonName"
+                android:gravity="center_vertical"
+                android:hint="@string/Core_Product_Name"
                 android:paddingEnd="45dp"
                 android:paddingStart="45dp"
                 android:theme="@style/EditTextTheme" />
@@ -44,20 +43,20 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etSurnameField"
+            <TextView
+                android:id="@+id/tvVendorCodeField"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:gravity="center_vertical"
                 android:ems="10"
-                android:hint="@string/Core_EnterSurnameHint"
-                android:inputType="textPersonName"
+                android:hint="@string/Core_Product_Vendor_Code"
                 android:paddingEnd="45dp"
                 android:paddingStart="45dp"
                 android:theme="@style/EditTextTheme" />
 
 
             <ImageView
-                android:id="@+id/ivSurnameHintIcon"
+                android:id="@+id/ivVendorCodeHintIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
@@ -71,20 +70,20 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/etPatronymicField"
+            <TextView
+                android:id="@+id/tvCostField"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:gravity="center_vertical"
                 android:ems="10"
-                android:hint="@string/Core_EnterPatronymicHint"
-                android:inputType="textPersonName"
+                android:hint="@string/Core_Product_Cost"
                 android:paddingEnd="45dp"
                 android:paddingStart="45dp"
                 android:theme="@style/EditTextTheme" />
 
 
             <ImageView
-                android:id="@+id/ivPatronymicHintIcon"
+                android:id="@+id/ivCostHintIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
@@ -99,17 +98,16 @@
             android:layout_height="60dp"
             android:layout_gravity="center">
 
-            <br.com.sapereaude.maskedEditText.MaskedEditText
-                android:id="@+id/etPhoneNumberField"
+            <TextView
+                android:id="@+id/tvDescriptionField"
                 android:layout_width="match_parent"
-                android:paddingStart="45dp"
-                android:paddingEnd="45dp"
                 android:layout_height="60dp"
-                android:inputType="phone"
-                android:typeface="monospace"
-                mask:allowed_chars="1234567890"
-                mask:mask="+7(###)###-##-##"
-                />
+                android:ems="10"
+                android:hint="@string/Core_Product_Description"
+                android:gravity="center_vertical"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
 
 
             <ImageView
@@ -122,29 +120,6 @@
                 android:src="@drawable/ic_phone_black_24dp" />
 
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Addresses" />
-
-        <LinearLayout
-            android:id="@+id/llAddressesContainer"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvAddAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add address"
-                android:textSize="18sp"
-                android:textColor="@color/colorPrimary"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

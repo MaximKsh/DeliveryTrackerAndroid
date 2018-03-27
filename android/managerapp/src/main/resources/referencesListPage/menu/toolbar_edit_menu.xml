@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_finish"
-        android:title="@string/ManagerApp_Toolbar_AddProduct"
+        android:id="@+id/action_edit"
+        android:title="@string/ManagerApp_Toolbar_Edit"
         app:showAsAction="collapseActionView"/>
 
 </menu>
