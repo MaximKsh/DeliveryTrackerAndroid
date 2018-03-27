@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/svEditTask"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -53,156 +54,49 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/llDeliveryDateContainer"
-                android:orientation="vertical"
                 android:layout_below="@id/rlTaskNumber"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:textSize="19sp"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Delivery date"/>
-
-                <LinearLayout
-                    android:id="@+id/llDeliveryDateTypes"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/llDeliveryTimeContainer"
-                android:orientation="vertical"
                 android:layout_below="@id/llDeliveryDateContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:textSize="19sp"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Delivery interval"/>
-
-                <LinearLayout
-                    android:id="@+id/llDeliveryTimeTypes"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-            </LinearLayout>
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlReceiptAt"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
+            <FrameLayout
+                android:id="@+id/llReceiptAtContainer"
                 android:layout_below="@id/llDeliveryTimeContainer"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etReceiptAt"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="Receipt at"
-                    android:inputType="datetime"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivReceiptsAtHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlPaymentType"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@id/rlReceiptAt"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content" />
 
-                <com.kvteam.deliverytracker.core.ui.autocomplete.DelayAutoCompleteTextView
-                    android:id="@+id/acPaymentType"
-                    android:inputType="textCapSentences"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:imeOptions="flagNoExtractUi|actionSearch"/>
-
-                <ProgressBar
-                    android:id="@+id/pbPaymentType"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="16dp"
-                    android:visibility="gone"/>
-
-
-                <ImageView
-                    android:id="@+id/ivPaymentTypeHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlDeliveryType"
+            <FrameLayout
+                android:id="@+id/llPaymentTypesContainer"
+                android:layout_below="@id/llReceiptAtContainer"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@id/rlPaymentType"
-                android:layout_gravity="center">
+                android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/etDeliveryCost"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="AUTOCOMPLITE DELIVERY TYPE"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
+            <FrameLayout
+                android:id="@+id/llPerformerSelectionContainer"
+                android:layout_below="@id/llPaymentTypesContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-
-                <ImageView
-                    android:id="@+id/ivDeliveryTypeHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/ManagerApp_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/llSelectedPerformer"
+                android:layout_below="@id/llPerformerSelectionContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <include layout="@layout/selected_performer_item" />
+            </FrameLayout>
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/rlTaskComment"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/rlDeliveryType"
+                android:layout_below="@id/llSelectedPerformer"
                 android:layout_gravity="center">
 
                 <EditText

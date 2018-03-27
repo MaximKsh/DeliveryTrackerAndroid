@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.app.Dialog
 import android.app.DialogFragment
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
@@ -17,39 +16,58 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.R.layout.delivery_date_type_item
+import com.kvteam.deliverytracker.managerapp.R.layout.selectable_item
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.delivery_date_type_item.*
-import kotlinx.android.synthetic.main.delivery_date_type_item.view.*
+import kotlinx.android.synthetic.main.selectable_item.view.*
 import kotlinx.android.synthetic.main.fragment_edit_task.*
 import kotlinx.coroutines.experimental.runBlocking
 import javax.inject.Inject
 import android.widget.TimePicker
-import android.text.format.DateFormat.is24HourFormat
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import android.app.DatePickerDialog
-import android.icu.text.DateFormat
-import android.widget.TextView
+import android.graphics.Color
+import android.widget.Toast
+import com.amulyakhare.textdrawable.TextDrawable
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.PaymentType
+import com.kvteam.deliverytracker.core.models.User
+import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
+import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import kotlinx.android.synthetic.main.fragment_edit_task.view.*
+import kotlinx.android.synthetic.main.selected_performer_item.*
+import kotlinx.android.synthetic.main.selected_performer_item.view.*
 import org.joda.time.DateTime
 import java.util.*
-import kotlin.collections.ArrayList
+
+data class DeliveryReceiptAtItem(
+        var name: String,
+        var selectedDateTime: DateTime?
+)
 
 data class DeliveryDateTypeItem(
     var name: String,
-    val handleFunction: (index: Int) -> Unit,
     var selectedDateTime: DateTime?
 )
 
 data class DeliveryTimeTypeItem(
         var name: String,
-        val handleFunction: (index: Int) -> Unit,
         var fromTime: DateTime?,
         var toTime: DateTime?
+)
+
+data class PaymentTypeItem(
+        var name: String,
+        var paymentType: PaymentType? = null
+)
+
+data class PerformerTypeItem(
+        var name: String,
+        var performerId: UUID? = null
 )
 
 class EditTaskFragment : DeliveryTrackerFragment(){
@@ -115,41 +133,18 @@ class EditTaskFragment : DeliveryTrackerFragment(){
     private val DATE_TOMORROW = "Tomorrow"
     private val DATE_CUSTOM = "Custom date"
 
+    private lateinit var dateTypesDropdownSelect: DropdownSelect<DeliveryDateTypeItem>
+
     private val selectedDeliveryDateTypeKey = "delivery_date_type"
-    private var selectedDeliveryDateTypeIndex
-        get() = arguments?.getInt(selectedDeliveryDateTypeKey)!!
-        set(value) = arguments?.putInt(selectedDeliveryDateTypeKey, value)!!
+    private var selectedDeliveryDateTypeIndex : Int?
+        get() = arguments?.get(selectedDeliveryDateTypeKey) as Int?
+        set(value) = arguments?.putInt(selectedDeliveryDateTypeKey, value!!)!!
 
-    private val deliveryDateTypes = arrayListOf<DeliveryDateTypeItem>(
-            DeliveryDateTypeItem(DATE_TODAY, ::onDeliveryDateSelect, DateTime.now()),
-            DeliveryDateTypeItem(DATE_TOMORROW, ::onDeliveryDateSelect, DateTime.now().plusDays(1)),
-            DeliveryDateTypeItem(DATE_CUSTOM, ::onDeliveryDateCustomSelect, null)
+    private val deliveryDateTypes = arrayListOf<DropdownSelectItem<DeliveryDateTypeItem>>(
+            DropdownSelectItem(DeliveryDateTypeItem(DATE_TODAY, DateTime.now())),
+            DropdownSelectItem(DeliveryDateTypeItem(DATE_TOMORROW, DateTime.now().plusDays(1))),
+            DropdownSelectItem(DeliveryDateTypeItem(DATE_CUSTOM, null))
     )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Task")
-        toolbar.showBackButton()
-    }
-
-    private fun refreshDeliveryTypesViewsList (view: View? = null) {
-        val actualView = view ?: this.view
-        actualView!!.llDeliveryDateTypes.removeAllViews()
-        deliveryDateTypes.forEachIndexed { index, deliveryType ->
-            val layout = activity!!.layoutInflater.inflate(delivery_date_type_item, actualView.llDeliveryDateTypes, false)
-            layout.tvDeliveryDateTypeName.text = deliveryType.name
-            layout.setOnClickListener { deliveryType.handleFunction(index) }
-            if (index == selectedDeliveryDateTypeIndex)
-                layout.ivDeliveryDateTypeSelectedIcon.visibility = View.VISIBLE
-            actualView.llDeliveryDateTypes.addView(layout)
-        }
-    }
 
     private fun setTaskDate (date: DateTime) = launchUI {
         val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
@@ -158,32 +153,29 @@ class EditTaskFragment : DeliveryTrackerFragment(){
         task.deliveryTo = dateReal.withDate(date.toLocalDate())
     }
 
-    private fun onDeliveryDateSelect (index: Int): Unit = launchUI{
-        selectedDeliveryDateTypeIndex = index
-        refreshDeliveryTypesViewsList()
-        setTaskDate(deliveryDateTypes[index].selectedDateTime!!)
+    private fun deliveryDateTypeTextSelector (deliveryDateTypeItem: DeliveryDateTypeItem): String {
+        return deliveryDateTypeItem.name
     }
 
-    private fun updateCustomDateView (date: DateTime) {
-        val customDateItem = deliveryDateTypes[selectedDeliveryDateTypeIndex] as DeliveryDateTypeItem
-        customDateItem.name = date.toString("dd/MM")
-        customDateItem.selectedDateTime = date
-        setTaskDate(date)
-        refreshDeliveryTypesViewsList()
-    }
-
-    private fun onDeliveryDateCustomSelect (index: Int): Unit = launchUI {
-        if (selectedDeliveryDateTypeIndex == index || deliveryDateTypes[index].selectedDateTime == null) {
-            selectedDeliveryDateTypeIndex = index
+    private fun onDeliveryDateSelect (index: Int, oldIndex: Int): Unit = launchUI{
+        if ((oldIndex == index && index == deliveryDateTypes.size - 1) || deliveryDateTypes[index].data.selectedDateTime == null) {
             val datePickerFragment = DatePickerFragment()
-            datePickerFragment.setOnDateSelectCallback(::updateCustomDateView)
-            val selectedDate = deliveryDateTypes[index].selectedDateTime
+            datePickerFragment.setOnDateSelectCallback({ date: DateTime -> updateCustomDateView(date, index) })
+            val selectedDate = deliveryDateTypes[index].data.selectedDateTime
             datePickerFragment.setStartDate(selectedDate)
             datePickerFragment.show(activity!!.fragmentManager, "datePicker")
         }
 
         selectedDeliveryDateTypeIndex = index
-        refreshDeliveryTypesViewsList()
+        setTaskDate(deliveryDateTypes[index].data.selectedDateTime!!)
+    }
+
+    private fun updateCustomDateView (date: DateTime, index: Int) {
+        val customDateItem = deliveryDateTypes[index].data
+        customDateItem.name = date.toString("dd/MM")
+        customDateItem.selectedDateTime = date
+        setTaskDate(date)
+        dateTypesDropdownSelect.refreshDropDownSelect()
     }
 
     // SECTION: DatePicker --END--
@@ -195,35 +187,37 @@ class EditTaskFragment : DeliveryTrackerFragment(){
     private val TIME_EVENING = "18:00 - 22:00"
     private val TIME_CUSTOM = "Exact time"
 
+    private lateinit var timeTypesDropdownSelect: DropdownSelect<DeliveryTimeTypeItem>
+    
     private val selectedDeliveryTimeTypeKey = "delivery_time_type"
-    private var selectedDeliveryTimeTypeIndex
-        get() = arguments?.getInt(selectedDeliveryTimeTypeKey)!!
-        set(value) = arguments?.putInt(selectedDeliveryTimeTypeKey, value)!!
+    private var selectedDeliveryTimeTypeIndex : Int?
+        get() = arguments?.get(selectedDeliveryTimeTypeKey) as Int?
+        set(value) = arguments?.putInt(selectedDeliveryTimeTypeKey, value!!)!!
 
-    private val deliveryTimeTypes = arrayListOf<DeliveryTimeTypeItem>(
-            DeliveryTimeTypeItem(
-                    TIME_MORNING,
-                    ::onDeliveryTimeSelect,
-                    DateTime.now().withTime(9, 0, 0, 0),
-                    DateTime.now().withTime(11, 59, 59, 999)
+    private val deliveryTimeTypes = arrayListOf<DropdownSelectItem<DeliveryTimeTypeItem>>(
+            DropdownSelectItem(
+                    DeliveryTimeTypeItem(
+                            TIME_MORNING,
+                            DateTime.now().withTime(9, 0, 0, 0),
+                            DateTime.now().withTime(11, 59, 59, 999))
             ),
-            DeliveryTimeTypeItem(
-                    TIME_AFTERNOON,
-                    ::onDeliveryTimeSelect,
-                    DateTime.now().withTime(12, 0, 0, 0),
-                    DateTime.now().withTime(17, 59, 59, 999)
+            DropdownSelectItem(
+                    DeliveryTimeTypeItem(
+                            TIME_AFTERNOON,
+                            DateTime.now().withTime(12, 0, 0, 0),
+                            DateTime.now().withTime(17, 59, 59, 999))
             ),
-            DeliveryTimeTypeItem(
-                    TIME_EVENING,
-                    ::onDeliveryTimeSelect,
-                    DateTime.now().withTime(18, 0, 0, 0),
-                    DateTime.now().withTime(21, 59, 59, 999)
+            DropdownSelectItem(
+                    DeliveryTimeTypeItem(
+                            TIME_EVENING,
+                            DateTime.now().withTime(18, 0, 0, 0),
+                            DateTime.now().withTime(21, 59, 59, 999))
             ),
-            DeliveryTimeTypeItem(
-                    TIME_CUSTOM,
-                    ::onDeliveryCustomTimeSelect,
-                    null,
-                    null
+            DropdownSelectItem(
+                    DeliveryTimeTypeItem(
+                            TIME_CUSTOM,
+                            null,
+                            null)
             )
     )
 
@@ -257,59 +251,226 @@ class EditTaskFragment : DeliveryTrackerFragment(){
         task.deliveryTo = timeToReal.withTime(toTime.toLocalTime())
     }
 
-    private fun updateCustomTimeView (date: DateTime) {
-        val customTimeItem = deliveryTimeTypes[selectedDeliveryTimeTypeIndex] as DeliveryTimeTypeItem
-        customTimeItem.name = date.toString("hh:mm")
+    private fun updateCustomTimeView (date: DateTime, index: Int) {
+        val customTimeItem = deliveryTimeTypes[index].data
+        customTimeItem.name = date.toString("HH:mm")
         customTimeItem.fromTime = date
         customTimeItem.toTime = date
         setTaskTime(date, date)
-        refreshDeliveryTimeTypesViewsList()
+        timeTypesDropdownSelect.refreshDropDownSelect()
     }
 
-    private fun onDeliveryCustomTimeSelect (index: Int): Unit = launchUI {
-        if (selectedDeliveryTimeTypeIndex == index || deliveryTimeTypes[index].fromTime == null) {
-            selectedDeliveryTimeTypeIndex = index
+    private fun deliveryTimeTypeTextSelector (deliveryTimeTypeItem: DeliveryTimeTypeItem): String {
+        return deliveryTimeTypeItem.name
+    }
+
+    private fun onDeliveryTimeSelect (index: Int, oldIndex: Int): Unit = launchUI{
+        if ((oldIndex == index && index == deliveryTimeTypes.size - 1) || deliveryTimeTypes[index].data.fromTime == null) {
             val timePickerFragment = TimePickerFragment()
-            timePickerFragment.setOnTimeSelectCallback(::updateCustomTimeView)
-            val selectedTime = deliveryTimeTypes[index].fromTime
+            timePickerFragment.setOnTimeSelectCallback({ date: DateTime -> updateCustomTimeView(date, index)})
+            val selectedTime = deliveryTimeTypes[index].data.fromTime
             timePickerFragment.setStartTime(selectedTime)
             timePickerFragment.show(activity!!.fragmentManager, "timePicker")
         }
 
         selectedDeliveryTimeTypeIndex = index
-        refreshDeliveryTimeTypesViewsList()
-    }
-
-    private fun onDeliveryTimeSelect (index: Int): Unit = launchUI{
-        selectedDeliveryTimeTypeIndex = index
-        refreshDeliveryTimeTypesViewsList()
-        setTaskTime(deliveryTimeTypes[index].fromTime!!, deliveryTimeTypes[index].toTime!!)
-    }
-
-    private fun refreshDeliveryTimeTypesViewsList(view: View? = null) {
-        val actualView = view ?: this.view
-        actualView!!.llDeliveryTimeTypes.removeAllViews()
-        deliveryTimeTypes.forEachIndexed { index, deliveryTimeType ->
-            val layout = activity!!.layoutInflater.inflate(delivery_date_type_item, actualView.llDeliveryTimeTypes, false)
-            layout.tvDeliveryDateTypeName.text = deliveryTimeType.name
-            layout.setOnClickListener { deliveryTimeType.handleFunction(index) }
-            if (index == selectedDeliveryTimeTypeIndex)
-                layout.ivDeliveryDateTypeSelectedIcon.visibility = View.VISIBLE
-            actualView.llDeliveryTimeTypes.addView(layout)
-        }
+        setTaskTime(deliveryTimeTypes[index].data.fromTime!!, deliveryTimeTypes[index].data.toTime!!)
     }
 
     // SECTION: TimePicker --END--
 
+    // SECTION: ReceiptAt --START--
+
+    private val RECEIPT_ASAP = "As soon as possible"
+    private val RECEIPT_AUTO = "Auto"
+    private val RECEIPT_CUSTOM= "Exact time"
+
+    private val selectedReceiptDateKey = "delivery_receipt_at"
+    private var selectedReceiptDateIndex : Int?
+        get() = arguments?.get(selectedReceiptDateKey) as Int?
+        set(value) = arguments?.putInt(selectedReceiptDateKey, value!!)!!
+
+    private val receiptTypes = arrayListOf<DropdownSelectItem<DeliveryReceiptAtItem>>(
+            DropdownSelectItem(DeliveryReceiptAtItem(RECEIPT_AUTO, DateTime.now())),
+            DropdownSelectItem(DeliveryReceiptAtItem(RECEIPT_ASAP, DateTime.now())),
+            DropdownSelectItem(DeliveryReceiptAtItem(RECEIPT_CUSTOM, DateTime.now()), false, true)
+    )
+
+    private fun setTaskReceiptAtDate (date: DateTime) = launchUI {
+        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
+        val dateReal = task.receipt?: DateTime.now()
+        task.receipt = dateReal.withDate(date.toLocalDate())
+    }
+
+    private fun onReceiptAtSelect (index: Int, oldIndex: Int): Unit = launchUI{
+        selectedReceiptDateIndex = index
+        setTaskReceiptAtDate(receiptTypes[index].data.selectedDateTime!!)
+    }
+
+    private fun receiptTextSelector(receiptAtItem: DeliveryReceiptAtItem): String {
+        return receiptAtItem.name
+    }
+
+    // SECTION: ReceiptAt --END--
+
+    // SECTION: PaymentTypes --START--
+
+    private val selectedPaymentTypeKey = "delivery_payment_type"
+    private var selectedPaymentTypeIndex : Int?
+        get() = arguments?.get(selectedPaymentTypeKey) as Int?
+        set(value) = arguments?.putInt(selectedPaymentTypeKey, value!!)!!
+
+    private val paymentTypes = mutableListOf<DropdownSelectItem<PaymentTypeItem>>(
+            DropdownSelectItem(PaymentTypeItem("Add", null), true, false)
+    )
+
+    private fun setTaskPaymentType (paymentType: PaymentType) = launchUI {
+        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
+        task.paymentTypeId = paymentType.id
+    }
+
+    private fun onPaymentTypeSelect (index: Int, oldIndex: Int): Unit = launchUI{
+        selectedPaymentTypeIndex = index
+        if (paymentTypes[index].isLink) {
+            navigationController.navigateToAddPaymentType()
+        } else {
+            setTaskPaymentType(paymentTypes[index].data.paymentType!!)
+        }
+    }
+
+    private fun paymentTypeTextSelector (paymentTypeItem: PaymentTypeItem): String {
+        return paymentTypeItem.name
+    }
+
+    // SECTION: PaymentTypes --END--
+
+    // SECTION: Performer --START--
+
+    private val PERFORMER_AUTO = "Auto"
+    private val PERFORMER_UNASSIGNED = "Unassigned"
+    private val PERFORMER_OUTSOURCE = "Delivery Couriers"
+    private val PERFORMER_EXACT = "From staff"
+
+    private val selectedPerformerTypeKey = "delivery_performer_type"
+    private var selectedPerformerTypeIndex : Int?
+        get() = arguments?.get(selectedPerformerTypeKey) as Int?
+        set(value) = arguments?.putInt(selectedPerformerTypeKey, value!!)!!
+
+    private val performersTypes = arrayListOf<DropdownSelectItem<PerformerTypeItem>>(
+            DropdownSelectItem(PerformerTypeItem(PERFORMER_AUTO, null)),
+            DropdownSelectItem(PerformerTypeItem(PERFORMER_OUTSOURCE, null), false, true),
+            DropdownSelectItem(PerformerTypeItem(PERFORMER_UNASSIGNED, null)),
+            DropdownSelectItem(PerformerTypeItem(PERFORMER_EXACT, null))
+    )
+
+    private fun setTaskPerformer (performerId: UUID?) = launchUI {
+        if (performerId != null) {
+            val performer = dp.users.getAsync(performerId, DataProviderGetMode.FORCE_CACHE).entry
+
+            val materialAvatarDefault = TextDrawable.builder()
+                    .buildRound(performer.name!![0].toString() + performer.surname!![0].toString(), Color.LTGRAY)
+
+            rlSelectedPerformer.ivUserAvatar.setImageDrawable(materialAvatarDefault)
+            rlSelectedPerformer.tvPerformerName.text = performer.name
+            rlSelectedPerformer.tvSurname.text = performer.surname
+            rlSelectedPerformer.ivOnlineStatus.visibility = if (performer.online) View.VISIBLE else View.INVISIBLE
+            rlSelectedPerformer.visibility = View.VISIBLE
+        } else {
+            rlSelectedPerformer.visibility = View.GONE
+        }
+
+        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
+        task.performerId = performerId
+    }
+
+    private fun onPerformerTypeSelect (index: Int, oldIndex: Int): Unit = launchUI{
+        selectedPerformerTypeIndex = index
+        when (index) {
+            0 -> {
+                if (index == 0) {
+                    val performersIds = dp.userViews.getViewResultAsync("UserViewGroup", "PerformersView").viewResult
+                    if (performersIds.isEmpty()) {
+                        Toast.makeText(activity, "No available performers", Toast.LENGTH_LONG).show()
+                    } else {
+                        performersTypes[index].data.performerId = performersIds[0]
+                        setTaskPerformer(performersTypes[index].data.performerId!!)
+                    }
+                }
+            }
+            1 -> {}
+            2 -> {
+                setTaskPerformer(null)
+            }
+            3 -> {
+                navigationController.navigateToFilterUsers(taskId)
+            }
+        }
+    }
+
+    private fun performerTextSelector(performerTypeItem: PerformerTypeItem): String {
+        return performerTypeItem.name
+    }
+
+    // SECTION: Performer --END-
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.disableDropDown()
+        toolbar.setToolbarTitle("Task")
+        toolbar.showBackButton()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+        val position = savedInstanceState?.getInt("SCROLL_POSITION")
+        if (position != null)
+            svEditTask.scrollX = position
 
-//        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
-//        selectedDeliveryDateTypeIndex = -1
-//        selectedDeliveryTimeTypeIndex = -1
+        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
 
-//        refreshDeliveryTypesViewsList()
-//        refreshDeliveryTimeTypesViewsList()
+        if (task.performerId != null) {
+            val performer = dp.users.getAsync(task.performerId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+
+            val materialAvatarDefault = TextDrawable.builder()
+                    .buildRound(performer.name!![0].toString() + performer.surname!![0].toString(), Color.LTGRAY)
+
+            rlSelectedPerformer.ivUserAvatar.setImageDrawable(materialAvatarDefault)
+            rlSelectedPerformer.tvPerformerName.text = performer.name
+            rlSelectedPerformer.tvSurname.text = performer.surname
+            rlSelectedPerformer.ivOnlineStatus.visibility = if (performer.online) View.VISIBLE else View.INVISIBLE
+            rlSelectedPerformer.visibility = View.VISIBLE
+        } else {
+            rlSelectedPerformer.visibility = View.GONE
+        }
+
+        val paymentTypesData = dp.paymentTypesViews
+                .getViewResultAsync("ReferenceViewGroup", "PaymentTypesView").viewResult
+
+        if (paymentTypesData.isNotEmpty()) {
+            paymentTypes.removeAt(0)
+            for(id in paymentTypesData) {
+                try{
+                    val (e, _) = dp.paymentTypes.getAsync(id, DataProviderGetMode.FORCE_CACHE)
+                    val item = PaymentTypeItem(e.name!!, e)
+                    paymentTypes.add(DropdownSelectItem(item, false, false))
+                } catch (e: CacheException) {}
+            }
+        }
+
+        DropdownSelect<PaymentTypeItem>(
+                "Payment type",
+                paymentTypes,
+                selectedPaymentTypeIndex,
+                ::onPaymentTypeSelect,
+                ::paymentTypeTextSelector,
+                llPaymentTypesContainer,
+                activity!!
+        )
 
         val autocomplete = acvProductAutocomplete.autoCompleteTextView
         autocomplete.setAutoCompleteDelay(200L)
@@ -349,11 +510,48 @@ class EditTaskFragment : DeliveryTrackerFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_edit_task, container, false)
-        selectedDeliveryDateTypeIndex = -1
-        selectedDeliveryTimeTypeIndex = -1
-        refreshDeliveryTypesViewsList(view)
-        refreshDeliveryTimeTypesViewsList(view)
+        dateTypesDropdownSelect = DropdownSelect<DeliveryDateTypeItem>(
+                "Delivery date",
+                deliveryDateTypes,
+                selectedDeliveryDateTypeIndex,
+                ::onDeliveryDateSelect,
+                ::deliveryDateTypeTextSelector,
+                view.llDeliveryDateContainer,
+                activity!!
+        )
+        timeTypesDropdownSelect = DropdownSelect<DeliveryTimeTypeItem>(
+                "Delivery interval",
+                deliveryTimeTypes,
+                selectedDeliveryTimeTypeIndex,
+                ::onDeliveryTimeSelect,
+                ::deliveryTimeTypeTextSelector,
+                view.llDeliveryTimeContainer,
+                activity!!
+        )
+        DropdownSelect<DeliveryReceiptAtItem>(
+                "Receipt at",
+                receiptTypes,
+                selectedReceiptDateIndex,
+                ::onReceiptAtSelect,
+                ::receiptTextSelector,
+                view.llReceiptAtContainer,
+                activity!!
+        )
+        DropdownSelect<PerformerTypeItem>(
+                "Performer type",
+                performersTypes,
+                selectedPerformerTypeIndex,
+                ::onPerformerTypeSelect,
+                ::performerTextSelector,
+                view.llPerformerSelectionContainer,
+                activity!!
+        )
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SCROLL_POSITION", svEditTask.scrollY)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
