@@ -20,6 +20,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -102,8 +103,9 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditTask() {
+    fun navigateToEditTask(taskId: UUID? = null) {
         val fragment = EditTaskFragment()
+        fragment.setTask(taskId)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
@@ -190,7 +192,17 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditWarehouse(id: UUID? = null) {
+    fun navigateToFilterUsers(taskId: UUID) {
+        val fragment = FilterUsersFragment()
+        fragment.setEditTaskId(taskId)
+        fragmentTracer.next(fragment)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToEditWarehouse() {
         val fragment = EditWarehouseFragment()
         fragmentTracer.next(fragment)
         fragment.setWarehouse(id)

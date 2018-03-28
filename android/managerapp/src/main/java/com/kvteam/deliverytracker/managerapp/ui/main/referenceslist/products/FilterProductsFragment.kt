@@ -1,6 +1,8 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.os.Bundle
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
@@ -25,16 +27,6 @@ open class FilterProductsFragment : BaseListFragment() {
         }
     }
 
-
-    private fun formatProducts(viewResult: List<Map<String, Any?>>): MutableList<ProductListItem> {
-        return viewResult
-                .map { referenceMap ->
-                    val product = Product()
-                    product.fromMap(referenceMap)
-                    ProductListItem(product, null, lm)
-                }.toMutableList()
-    }
-
     override fun handleProducts(products: List<Product>, animate: Boolean) {
         val productsList = products.map { ProductListItem(it, null, lm)}.toMutableList()
         (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
@@ -49,16 +41,22 @@ open class FilterProductsFragment : BaseListFragment() {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
         toolbarController.enableSearchMode({text ->
-            mAdapter.searchText = text
-            val result = viewWebservice.getViewResultAsync(viewGroup, "ProductsView", mapOf(
-                    "name" to text
-            ))
-            if(eh.handle(result)) {
-                return@enableSearchMode
-            }
-            val productsList = formatProducts(result.entity?.viewResult!!)
-            (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, true)
+            val (result, origin) = dp.productsViews.getViewResultAsync(
+                    "ReferenceViewGroup",
+                    "ProductsView",
+                    mapOf(
+                            "name" to text
+                    ),
+                    DataProviderGetMode.FORCE_WEB)
 
+            val entities = mutableListOf<Product>()
+            for(id in result) {
+                try{
+                    val (e, _) = dp.products.getAsync(id, DataProviderGetMode.FORCE_CACHE)
+                    entities.add(e)
+                } catch (e: CacheException) {}
+            }
+            // (mAdapter as ProductsListFlexibleAdapter).updateDataSet(entities, true)
         })
         super.onActivityCreated(savedInstanceState)
     }
