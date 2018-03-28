@@ -47,11 +47,11 @@ class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
                     .createNotificationChannel(channel)
         }
 
-        val title = remoteMessage.data?.get("title") ?: EMPTY_STRING
-        val message = remoteMessage.data?.get("message") ?: EMPTY_STRING
-        val action = remoteMessage.data?.get("action") ?: EMPTY_STRING
-        val dataType = remoteMessage.data?.get("dataType") ?: EMPTY_STRING
-        val dataSerialized = remoteMessage.data?.get("data") ?: EMPTY_STRING
+        val title = remoteMessage.data?.get("Title") ?: EMPTY_STRING
+        val message = remoteMessage.data?.get("Message") ?: EMPTY_STRING
+        val action = remoteMessage.data?.get("Action") ?: EMPTY_STRING
+        val dataType = remoteMessage.data?.get("DataType") ?: EMPTY_STRING
+        val dataSerialized = remoteMessage.data?.get("Data") ?: EMPTY_STRING
 
         val builder = NotificationCompat.Builder(this, notificationChannel)
         builder.setSmallIcon(R.drawable.ic_tasks_black_24dp)

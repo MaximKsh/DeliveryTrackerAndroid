@@ -9,7 +9,18 @@ abstract class BaseViewComponent <out T : ModelBase> (
         private val dataContainer: IDataContainer<T>
 ) : IViewComponent {
 
-    abstract fun entryFactory() : T
+    protected abstract fun entryFactory() : T
+
+    override fun getViewResult(
+            viewGroup: String,
+            view: String,
+            arguments: Map<String, Any>?,
+            mode: DataProviderGetMode): DataProviderViewResult {
+        if(mode != DataProviderGetMode.FORCE_CACHE) {
+            throw ActionNotSupportedException()
+        }
+        return getForceCacheViewResult(viewGroup, view, arguments)
+    }
 
     override suspend fun getViewResultAsync(
             viewGroup: String,
@@ -21,9 +32,17 @@ abstract class BaseViewComponent <out T : ModelBase> (
             DataProviderGetMode.FORCE_CACHE -> getForceCacheViewResult(viewGroup, view, arguments)
             DataProviderGetMode.PREFER_WEB -> getPreferWebAsync(viewGroup, view, arguments)
             DataProviderGetMode.PREFER_CACHE -> getPreferCacheAsync(viewGroup, view, arguments)
-            DataProviderGetMode.DIRTY -> throw IllegalArgumentException()
+            DataProviderGetMode.DIRTY -> throw ActionNotSupportedException()
         }
     }.await()
+
+    override fun invalidate() {
+        dataContainer.clearViews()
+    }
+
+    override fun invalidate(viewGroup: String, view: String, arguments: Map<String, Any>?) {
+        dataContainer.removeView(ViewRequestKey(viewGroup, view, arguments))
+    }
 
     private suspend fun getForceWebViewResultAsync(viewGroup: String,
                                                    view: String,

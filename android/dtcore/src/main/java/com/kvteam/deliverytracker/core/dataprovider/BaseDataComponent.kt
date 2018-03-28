@@ -12,13 +12,13 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     private val dataContainer: IDataContainer<T>
 ) : IDataComponent<T> {
 
-    abstract suspend fun createRequestAsync(entity: T): NetworkResult<R>
-    abstract suspend fun editRequestAsync(entity: T): NetworkResult<R>
-    abstract suspend fun getRequestAsync(id: UUID): NetworkResult<R>
-    abstract suspend fun deleteRequestAsync(id: UUID): NetworkResult<R>
+    protected abstract suspend fun createRequestAsync(entity: T): NetworkResult<R>
+    protected abstract suspend fun editRequestAsync(entity: T): NetworkResult<R>
+    protected abstract suspend fun getRequestAsync(id: UUID): NetworkResult<R>
+    protected abstract suspend fun deleteRequestAsync(id: UUID): NetworkResult<R>
 
-    abstract fun transformRequestToEntry(result: NetworkResult<R>): T
-    abstract fun entryFactory() : T
+    protected abstract fun transformRequestToEntry(result: NetworkResult<R>): T
+    protected abstract fun entryFactory() : T
 
     override suspend fun upsertAsync(entity: T): Unit = async {
         val origin = dataContainer.getEntry(entity.id!!)
@@ -35,6 +35,14 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         dataContainer.clearViews()
         return@async
     }.await()
+
+    override fun get(id: UUID, mode: DataProviderGetMode): DataProviderGetResult<T> {
+        return when(mode) {
+            DataProviderGetMode.FORCE_CACHE -> getForceCache(id)
+            DataProviderGetMode.DIRTY -> getDirty(id)
+            else ->throw ActionNotSupportedException()
+        }
+    }
 
     override suspend fun getAsync(id: UUID, mode: DataProviderGetMode): DataProviderGetResult<T> = async {
         when(mode) {
@@ -53,6 +61,10 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         }
         invalidate(id)
     }.await()
+
+    override fun hasDirty(id: UUID) : Boolean {
+        return dataContainer.getDirty(id) != null
+    }
 
     override fun invalidate(id: UUID?) {
         if(id == null) {

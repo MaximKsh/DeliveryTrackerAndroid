@@ -2,10 +2,9 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.notifications.PUSH_ACTION
-import com.kvteam.deliverytracker.core.notifications.PUSH_ACTION_KEY
-import com.kvteam.deliverytracker.core.notifications.PUSH_DATA_SERIALIZED
-import com.kvteam.deliverytracker.core.notifications.PUSH_DATA_TYPE_KEY
+import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.models.TaskInfo
+import com.kvteam.deliverytracker.core.notifications.*
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
@@ -24,6 +23,10 @@ class MainActivity : DeliveryTrackerActivity() {
             R.id.navigation_tasks to {navigationController.navigateToTasks()},
             R.id.navigation_settings to {navigationController.navigateToSettings()}
     )
+
+
+    @Inject
+    lateinit var gsonProvider: IDeliveryTrackerGsonProvider
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -86,6 +89,12 @@ class MainActivity : DeliveryTrackerActivity() {
     private fun onPushClicked(action: String,
                               dataType: String,
                               dataSerialized: String) {
-
+        val gson = gsonProvider.gson
+        when(action) {
+            PUSH_OPEN_TASK -> {
+                val tInfo = gson.fromJson<TaskInfo>(dataSerialized, TaskInfo::class.java)
+                navigationController.navigateToTaskDetails(tInfo.id!!)
+            }
+        }
     }
 }

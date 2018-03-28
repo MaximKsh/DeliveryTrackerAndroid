@@ -3,10 +3,20 @@ package com.kvteam.deliverytracker.core.dataprovider
 import com.kvteam.deliverytracker.core.models.ViewDigest
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import kotlinx.coroutines.experimental.async
+
 class ViewDigestComponent (
         private val container: ViewDigestContainer,
         private val viewWebservice: IViewWebservice
 ) : IViewDigestComponent {
+
+    override fun getDigest(
+            viewGroup: String,
+            getMode: DataProviderGetMode): Map<String, ViewDigest> {
+        if(getMode != DataProviderGetMode.FORCE_CACHE) {
+            throw ActionNotSupportedException()
+        }
+        return getForceCache(viewGroup)
+    }
 
     override suspend fun getDigestAsync(
             viewGroup: String,
@@ -16,9 +26,17 @@ class ViewDigestComponent (
             DataProviderGetMode.FORCE_CACHE -> getForceCache(viewGroup)
             DataProviderGetMode.PREFER_WEB -> getPreferWebAsync(viewGroup)
             DataProviderGetMode.PREFER_CACHE -> getPreferCacheAsync(viewGroup)
-            DataProviderGetMode.DIRTY -> throw IllegalArgumentException()
+            DataProviderGetMode.DIRTY -> throw ActionNotSupportedException()
         }
     }.await()
+
+    override fun invalidate(viewGroup: String?) {
+        if(viewGroup == null) {
+            container.clearViewDigests()
+        } else {
+            container.removeViewDigest(viewGroup)
+        }
+    }
 
     private suspend fun getForceWebAsync(viewGroup: String) : Map<String, ViewDigest> {
         val result = viewWebservice.getDigestAsync(viewGroup)

@@ -197,6 +197,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
     private fun onChangeStateClick(transitionId: UUID) = launchUI {
         val transitResult = taskWebservice.changeStateAsync(taskId, transitionId)
+        dp.taskInfoViews.invalidate()
         if(eh.handle(transitResult)) {
             return@launchUI
         }
