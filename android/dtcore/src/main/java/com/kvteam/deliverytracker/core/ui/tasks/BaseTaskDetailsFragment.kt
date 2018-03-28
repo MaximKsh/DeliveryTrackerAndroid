@@ -103,7 +103,15 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
         tvCreateDate.setText (task.created?.toString("dd/MM HH:mm") )
         tvReceiptDate.setText( task.receipt?.toString("dd/MM HH:mm") )
-        ivDeliveryDate.setText ( task.deliveryFrom?.toString("dd/MM HH:mm") + " - " + task.deliveryTo?.toString("dd/MM HH:mm") )
+        if(task.deliveryFrom != null && task.deliveryTo != null) {
+            ivDeliveryDate.setText ( task.deliveryFrom?.toString("dd/MM HH:mm") + " - " + task.deliveryTo?.toString("dd/MM HH:mm") )
+        } else if( task.deliveryFrom != null ) {
+            ivDeliveryDate.setText ( "After ${task.deliveryFrom?.toString("dd/MM HH:mm")}")
+
+        } else if (task.deliveryTo != null) {
+            ivDeliveryDate.setText ( "Before ${task.deliveryTo?.toString("dd/MM HH:mm")}")
+
+        }
 
         if (task.performerId != null) {
             val user = dp.users.getAsync(task.performerId!!, DataProviderGetMode.FORCE_CACHE).entry
