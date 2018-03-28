@@ -202,7 +202,7 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToEditWarehouse() {
+    fun navigateToEditWarehouse(id: UUID? = null) {
         val fragment = EditWarehouseFragment()
         fragmentTracer.next(fragment)
         fragment.setWarehouse(id)

@@ -69,7 +69,7 @@
     <string name="ServerMessage_Views_ClientsView">Clients</string>
     <string name="ServerMessage_Views_WarehousesView">Warehouses</string>
 
-
+    <string name="ManagerApp_Toolbar_Done">Done</string>
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>
     <string name="ManagerApp_InvitationItem_CancelInvitation">Cancel</string>
 

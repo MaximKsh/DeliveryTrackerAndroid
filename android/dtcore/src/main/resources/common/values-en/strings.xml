@@ -51,6 +51,20 @@
     <string name="Core_Session_Error_EditUserInfo">Edit user info error</string>
     <string name="Core_Session_Error_Unauthorized">Unauthorized</string>
 
+    <string name="ServerMessage_StateTransitionButton_ManagerUnconfirmedNew">Confirm</string>
+    <string name="ServerMessage_StateTransitionButton_ManagerInProgressCancelled">Cancel</string>
+    <string name="ServerMessage_StateTransitionButton_CreatorUnconfirmedNew">Confirm</string>
+    <string name="ServerMessage_StateTransitionButton_CreatorInProgressCancelled">Cancel</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerNewInProgress">Take into work</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerInProgressComplete">Complete</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
+    <string name="ServerMessage_TaskStates_New">New</string>
+    <string name="ServerMessage_TaskStates_InProgress">In progress</string>
+    <string name="ServerMessage_TaskStates_Complete">Complete</string>
+    <string name="ServerMessage_TaskStates_Cancelled">Cancelled</string>
+
+
+
     <string name="Core_Product_Name">Product name</string>
     <string name="Core_Product_Vendor_Code">Vendor Code</string>
     <string name="Core_Product_Cost">Cost</string>

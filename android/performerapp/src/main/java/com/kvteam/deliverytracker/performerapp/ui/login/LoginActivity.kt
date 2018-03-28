@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.session.ISession
@@ -70,6 +71,7 @@ class LoginActivity : DeliveryTrackerActivity() {
                 startActivity(intent)
             }
             else -> {
+                Toast.makeText(this, "Wrong role", Toast.LENGTH_LONG).show()
             }
         }
     }

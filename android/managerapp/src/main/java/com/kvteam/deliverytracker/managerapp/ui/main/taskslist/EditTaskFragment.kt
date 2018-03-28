@@ -1,48 +1,44 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.DialogFragment
+import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
+import android.widget.DatePicker
+import android.widget.TimePicker
+import android.widget.Toast
+import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.NetworkException
+import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
-import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
+import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
+import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.R.layout.selectable_item
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.selectable_item.view.*
 import kotlinx.android.synthetic.main.fragment_edit_task.*
-import kotlinx.coroutines.experimental.runBlocking
-import javax.inject.Inject
-import android.widget.TimePicker
-import android.app.TimePickerDialog
-import android.widget.DatePicker
-import android.app.DatePickerDialog
-import android.graphics.Color
-import android.widget.Toast
-import com.amulyakhare.textdrawable.TextDrawable
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.models.PaymentType
-import com.kvteam.deliverytracker.core.models.User
-import com.kvteam.deliverytracker.core.roles.Role
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import kotlinx.android.synthetic.main.fragment_edit_task.view.*
 import kotlinx.android.synthetic.main.selected_performer_item.*
 import kotlinx.android.synthetic.main.selected_performer_item.view.*
+import kotlinx.coroutines.experimental.runBlocking
 import org.joda.time.DateTime
 import java.util.*
+import javax.inject.Inject
 
 data class DeliveryReceiptAtItem(
         var name: String,
@@ -332,7 +328,7 @@ class EditTaskFragment : DeliveryTrackerFragment(){
     private fun onPaymentTypeSelect (index: Int, oldIndex: Int): Unit = launchUI{
         selectedPaymentTypeIndex = index
         if (paymentTypes[index].isLink) {
-            navigationController.navigateToAddPaymentType()
+            navigationController.navigateToEditPaymentType()
         } else {
             setTaskPaymentType(paymentTypes[index].data.paymentType!!)
         }
@@ -557,11 +553,12 @@ class EditTaskFragment : DeliveryTrackerFragment(){
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_add -> {
-                val task = TaskInfo()
+                val (task, _) = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY)
                 task.taskNumber = etTaskNumber.text.toString()
-                val result = taskWebservice.createAsync(task)
-                if(eh.handle(result)) {
-                    return@launchUI
+                try {
+                    dp.taskInfos.upsertAsync(task)
+                } catch (e: NetworkException) {
+                    eh.handle(e.result)
                 }
                 navigationController.closeCurrentFragment()
             }
