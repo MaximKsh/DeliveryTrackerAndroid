@@ -19,6 +19,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -101,6 +102,15 @@ abstract class FilterProductsFragmentModule {
     @IntoMap
     @FragmentKey(FilterProductsFragment::class)
     internal abstract fun filterProductsFragmentInjector(builder: FilterProductsSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(FilterUsersSubcomponent::class))
+abstract class FilterUsersFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(FilterUsersFragment::class)
+    internal abstract fun filterUsersFragmentInjector(builder: FilterUsersSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 
