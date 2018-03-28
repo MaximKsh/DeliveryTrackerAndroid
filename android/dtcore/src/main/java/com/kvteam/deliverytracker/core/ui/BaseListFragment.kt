@@ -68,7 +68,6 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.base_list, container, false)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         rvBaseList.layoutManager = LinearLayoutManager(
@@ -106,18 +105,20 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             }
         })
 
-        dropdownTop.clearSearchText()
-        val args = arguments
-        if(args != null) {
-            if(args.containsKey(selectedIndexKey))
-                dropdownTop.lastSelectedIndex.set(args.getInt(selectedIndexKey))
-            if(args.containsKey(searchTextKey))
-                dropdownTop.searchText = args.getString(searchTextKey)
-        } else {
-            dropdownTop.lastSelectedIndex.set(0)
+        if (toolbarController.isDropdownEnabled) {
+            dropdownTop.clearSearchText()
+            val args = arguments
+            if(args != null) {
+                if(args.containsKey(selectedIndexKey))
+                    dropdownTop.lastSelectedIndex.set(args.getInt(selectedIndexKey))
+                if(args.containsKey(searchTextKey))
+                    dropdownTop.searchText = args.getString(searchTextKey)
+            } else {
+                dropdownTop.lastSelectedIndex.set(0)
+            }
         }
 
-        setCategories()
+        initializeAsync()
     }
 
     override fun onStop() {
@@ -141,16 +142,24 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         }
     }
 
+    protected open suspend fun initializeAsync() {
+        if (toolbarController.isDropdownEnabled) {
+            setCategories()
+        }
+    }
+
     protected fun setMenuMask(mask: Int) {
         menuItemsMask = mask
         activity?.invalidateOptionsMenu()
     }
 
+    @Suppress("unused")
     protected fun showMenuItem(item: Int) {
         menuItemsMask = menuItemsMask or item
         activity?.invalidateOptionsMenu()
     }
 
+    @Suppress("unused")
     protected fun hideMenuItem(item: Int) {
         menuItemsMask = menuItemsMask and item.inv()
         activity?.invalidateOptionsMenu()
@@ -306,9 +315,13 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                 entities.add(e)
             } catch (e: CacheException) {}
         }
-        if (groupIndex == dropdownTop.lastSelectedIndex.get()) {
+        if (toolbarController.isDropdownEnabled) {
+            if(groupIndex == dropdownTop.lastSelectedIndex.get()) {
+                handle(entities, origin == DataProviderGetOrigin.WEB)
+                dropdownTop.update()
+            }
+        } else {
             handle(entities, origin == DataProviderGetOrigin.WEB)
-            dropdownTop.update()
         }
     }
 

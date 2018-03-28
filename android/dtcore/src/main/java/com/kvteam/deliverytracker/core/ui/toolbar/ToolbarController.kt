@@ -15,9 +15,20 @@ class ToolbarController(
 
     val dropDownTop = DropdownTop(arrayListOf(), activity)
 
+    var isBackButtonEnabled: Boolean = false
+        private set
+
+    var isSearchEnabled: Boolean = false
+        private set
+
+    private var _dropdownEnabled = false
+    val isDropdownEnabled
+        get() = toolbarConfiguration.useDropdown && _dropdownEnabled
+
     fun init() {
         if(toolbarConfiguration.useDropdown) {
             dropDownTop.init()
+            _dropdownEnabled = true
         }
         hideBackButton()
     }
@@ -27,10 +38,12 @@ class ToolbarController(
     }
 
     fun showBackButton() {
+        isBackButtonEnabled = true
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     fun hideBackButton() {
+        isBackButtonEnabled = false
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
@@ -39,6 +52,7 @@ class ToolbarController(
             dropDownTop.showIconCollapsed()
         }
         activity.toolbar_title.isClickable = true
+        _dropdownEnabled = true
     }
 
     fun disableDropDown() {
@@ -46,9 +60,11 @@ class ToolbarController(
             dropDownTop.hideIcon()
         }
         activity.toolbar_title.isClickable = false
+        _dropdownEnabled = false
     }
 
     fun enableSearchMode (callback: suspend (String) -> Unit, callbackDelay:Long = 500) {
+        isSearchEnabled = true
         activity.toolbar_title.visibility = View.GONE
         activity.rlToolbarSearch.visibility = View.VISIBLE
         activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
@@ -73,6 +89,7 @@ class ToolbarController(
     }
 
     fun disableSearchMode () {
+        isSearchEnabled = false
         if(toolbarConfiguration.useDropdown) {
             enableDropdown()
         }
