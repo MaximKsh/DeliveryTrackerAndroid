@@ -48,7 +48,9 @@ data class TaskInfo(
     @SerializedName("DeliveryCost", alternate = ["deliveryCost"])
     var deliveryCost: BigDecimal? = null,
     @SerializedName("TaskProducts", alternate = ["taskProducts"])
-    var taskProducts: MutableList<TaskProduct> = mutableListOf()
+    var taskProducts: MutableList<TaskProduct> = mutableListOf(),
+    @SerializedName("TaskStateTransitions", alternate = ["taskStateTransitions"])
+    var taskStateTransitions: MutableList<TaskStateTransition> = mutableListOf()
 ) : ModelBase(), Serializable {
 
     override fun fromMap(map: Map<*, *>) {
@@ -74,5 +76,6 @@ data class TaskInfo(
         cost = deserializeBigDecimalFromMap("Cost", map)
         deliveryCost = deserializeBigDecimalFromMap("DeliveryCost", map)
         taskProducts = deserializeListObjectsFromMap("TaskProducts", map, { TaskProduct() })
+        taskStateTransitions = deserializeListObjectsFromMap("TaskStateTransitions", map, { TaskStateTransition() })
     }
 }

@@ -93,6 +93,9 @@ dependencies {
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'ru.egslava:MaskedEditText:1.0.5'
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"

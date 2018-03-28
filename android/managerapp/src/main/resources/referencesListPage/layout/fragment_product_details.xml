@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tvNameField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="@string/Core_Product_Name"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivNameHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/Core_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tvVendorCodeField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:ems="10"
+                android:hint="@string/Core_Product_Vendor_Code"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivVendorCodeHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/Core_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tvCostField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:ems="10"
+                android:hint="@string/Core_Product_Cost"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivCostHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/Core_CodeHintIcon"
+                android:src="@drawable/ic_assignment_ind_black_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/tvDescriptionField"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:hint="@string/Core_Product_Description"
+                android:gravity="center_vertical"
+                android:paddingEnd="45dp"
+                android:paddingStart="45dp"
+                android:theme="@style/EditTextTheme" />
+
+
+            <ImageView
+                android:id="@+id/ivPhoneNumberHintIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="13dp"
+                android:alpha="0.3"
+                android:contentDescription="@string/Core_CodeHintIcon"
+                android:src="@drawable/ic_phone_black_24dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

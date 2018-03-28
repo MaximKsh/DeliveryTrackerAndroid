@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
@@ -13,6 +14,7 @@ import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.client_address_item.view.*
 import kotlinx.android.synthetic.main.fragment_client_details.*
 import java.util.*
 import javax.inject.Inject
@@ -47,12 +49,24 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        val client = dp.clients.getAsync(clientId, DataProviderGetMode.FORCE_WEB).entry
+        val (client, origin) = try {
+            dp.clients.getAsync(clientId, DataProviderGetMode.PREFER_WEB)
+        } catch (e: CacheException) {
+            return@launchUI
+        }
+        eh.handleNoInternetWarn(origin)
 
         tvNameField.text = client.name
         tvSurnameField.text = client.surname
         tvPatronymicField.text = client.patronymic
         tvPhoneNumberField.text = client.phoneNumber
+
+        client.clientAddresses.forEach { clientAddress ->
+            val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
+            view.tvClientAddress.text = clientAddress.rawAddress
+            view.tvDeleteItem.visibility = View.GONE
+            llAddressesContainer.addView(view)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +86,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_edit_client -> {
+            R.id.action_edit -> {
                 navigationController.navigateToEditClient(clientId)
             }
         }
@@ -81,7 +95,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_client_details_menu, menu)
+        inflater.inflate(R.menu.toolbar_edit_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

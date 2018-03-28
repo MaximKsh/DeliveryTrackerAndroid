@@ -1,14 +1,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:mask="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:orientation="vertical"
-        android:padding="30dp">
+        android:padding="10dp">
 
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,7 +31,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
                 android:alpha="0.3"
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:contentDescription="@string/Core_CodeHintIcon"
                 android:src="@drawable/ic_assignment_ind_black_24dp" />
 
         </RelativeLayout>
@@ -58,7 +57,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
                 android:alpha="0.3"
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:contentDescription="@string/Core_CodeHintIcon"
                 android:src="@drawable/ic_assignment_ind_black_24dp" />
         </RelativeLayout>
 
@@ -83,7 +82,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
                 android:alpha="0.3"
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:contentDescription="@string/Core_CodeHintIcon"
                 android:src="@drawable/ic_assignment_ind_black_24dp" />
 
         </RelativeLayout>
@@ -108,7 +107,7 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="13dp"
                 android:alpha="0.3"
-                android:contentDescription="@string/ManagerApp_CodeHintIcon"
+                android:contentDescription="@string/Core_CodeHintIcon"
                 android:src="@drawable/ic_phone_black_24dp" />
 
         </RelativeLayout>

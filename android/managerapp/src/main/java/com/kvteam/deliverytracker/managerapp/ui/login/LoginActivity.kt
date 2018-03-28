@@ -65,7 +65,7 @@ class LoginActivity : DeliveryTrackerActivity() {
     }
 
     private fun onLoginClick() = launchUI {
-        val username = etLoginField.code.toString()
+        val username = etLoginField.code.joinToString(EMPTY_STRING)
         val password = etPasswordField.text.toString()
 
         val result = session.loginAsync(username, password)

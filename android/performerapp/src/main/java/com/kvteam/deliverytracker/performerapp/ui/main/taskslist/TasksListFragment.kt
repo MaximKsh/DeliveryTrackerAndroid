@@ -2,68 +2,69 @@ package com.kvteam.deliverytracker.performerapp.ui.main.taskslist
 
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.kvteam.deliverytracker.core.ui.AutoClearedValue
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.performerapp.R
-import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_tasks_list.*
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.models.TaskInfo
+import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.BaseListHeader
+import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
+import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import javax.inject.Inject
 
+open class TasksListFragment : BaseListFragment() {
+    @Inject
+    lateinit var navigationController: NavigationController
 
-open class TasksListFragment : DeliveryTrackerFragment() {
-    protected val layoutManagerKey = "layoutManager"
-    protected val tasksListKey = "tasksListKey"
+    override val tracer
+            get() = navigationController.fragmentTracer
 
-    protected lateinit var adapter: AutoClearedValue<TasksListAdapter>
+    override val viewGroup: String = "TaskViewGroup"
 
-    protected var ignoreSavedState = false
+    private val TASKS_MENU_MASK = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-    }
+    private val tasksActions = object : IBaseListItemActions<TaskListItem> {
+        override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(
-                R.layout.fragment_tasks_list,
-                container,
-                false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        rvTasksList.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
-        rvTasksList.addItemDecoration(
-                DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-        rvTasksList.adapter = adapter.value
-
-        savedInstanceState?.apply {
-            val adapter = adapter.value
-            val layoutManager = rvTasksList?.layoutManager
-            if(adapter != null
-                    && layoutManager != null) {
-                if(containsKey(tasksListKey)
-                        && containsKey(layoutManagerKey)) {
-                    val savedTasks = getParcelableArray(tasksListKey).map { it /*as TaskModel*/ }
-                    adapter.items.clear()
-                    adapter.items.addAll(savedTasks)
-                    layoutManager.onRestoreInstanceState(getParcelable(layoutManagerKey))
-                } else {
-                    ignoreSavedState = true
-                }
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {
+            val id = item.task.id
+            if(id != null) {
+                 navigationController.navigateToTaskDetails(id)
             }
         }
     }
 
+    override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
+        var date: String? = null
+        var header = BaseListHeader("A")
+
+        val list = tasks
+                .sortedByDescending { a -> a.created }
+                .map { task ->
+                    val dateCaption = task.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
+                    if (date == null || date != dateCaption) {
+                        date = dateCaption
+                        header = BaseListHeader(dateCaption)
+                    }
+                    TaskListItem(task, header, lm)
+                }.toMutableList()
+        val adapter = mAdapter as? TasksListFlexibleAdapter
+        setMenuMask(TASKS_MENU_MASK)
+        if (adapter != null) {
+            adapter.updateDataSet(list, animate)
+        } else {
+            mAdapter = TasksListFlexibleAdapter(list, tasksActions)
+        }
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.enableDropdown()
+        toolbar.dropDownTop.hideSearch()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
+        (mAdapter as TasksListFlexibleAdapter).hideDeleteButton = true
+        super.onActivityCreated(savedInstanceState)
+    }
 }

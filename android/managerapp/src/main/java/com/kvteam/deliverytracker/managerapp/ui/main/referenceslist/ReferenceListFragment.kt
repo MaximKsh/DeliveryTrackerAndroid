@@ -66,7 +66,7 @@ open class ReferenceListFragment : BaseListFragment() {
         }
 
         override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
-            navigationController.navigateToPaymentTypeDetails(item.paymentType)
+            navigationController.navigateToPaymentTypeDetails(item.paymentType.id!!)
         }
     }
 
@@ -85,7 +85,9 @@ open class ReferenceListFragment : BaseListFragment() {
             adapter.updateDataSet(itemList, true)
         }
 
-        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<WarehouseListItem>, item: WarehouseListItem) {
+            navigationController.navigateToWarehouseDetails(item.warehouse.id!!)
+        }
     }
 
     private val productsActions = object : IBaseListItemActions<ProductListItem> {
@@ -103,7 +105,9 @@ open class ReferenceListFragment : BaseListFragment() {
             adapter.updateDataSet(itemList, true)
         }
 
-        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
+        override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
+            navigationController.navigateToProductDetails(item.product.id!!)
+        }
     }
 
     private val clientsActions = object : IBaseListItemActions<ClientListItem> {
@@ -210,7 +214,7 @@ open class ReferenceListFragment : BaseListFragment() {
                 navigationController.navigateToEditClient()
             }
             R.id.action_add_payment_type -> {
-                navigationController.navigateToAddPaymentType()
+                navigationController.navigateToEditPaymentType()
             }
             R.id.action_add_product -> {
                 navigationController.navigateToEditProduct()

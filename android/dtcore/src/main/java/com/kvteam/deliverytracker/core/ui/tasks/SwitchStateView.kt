@@ -3,8 +3,8 @@ package com.kvteam.deliverytracker.core.ui.tasks
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.Button
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.kvteam.deliverytracker.core.R
 import kotlinx.android.synthetic.main.switch_state_view.view.*
 
@@ -21,7 +21,7 @@ class SwitchStateView: RelativeLayout {
         initializeViews()
     }
 
-    lateinit var button: Button
+    lateinit var button: TextView
         private set
 
     private fun initializeViews() {
@@ -29,6 +29,6 @@ class SwitchStateView: RelativeLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.switch_state_view, this)
 
-        button = bttnSwitchState
+        button = tvNewTaskState
     }
 }

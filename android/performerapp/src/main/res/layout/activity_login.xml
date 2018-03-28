@@ -1,63 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/llLoginActivityRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:padding="30dp"
+    android:gravity="center_horizontal"
     tools:context="com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@id/etLoginUsername"
-            android:text="@string/PerformerApp_LoginActivity_LoginLabel" />
-        <EditText
-            android:id="@+id/etLoginUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@id/etLoginPassword"
-            android:text="@string/PerformerApp_LoginActivity_PasswordLabel" />
-        <EditText
-            android:id="@+id/etLoginPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/bttnSignIn"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/main_logo"
+        android:layout_marginTop="50dp"
+        />
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+
+        <!--<EditText-->
+        <!--android:id="@+id/etLoginField"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:paddingStart="45dp"-->
+        <!--android:paddingEnd="45dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="text"-->
+        <!--android:theme="@style/EditTextTheme"-->
+        <!--android:hint="@string/ManagerApp_LoginActivity_EnterCodeHint" />-->
+
+
+        <ImageView
+            android:contentDescription="@string/Core_CodeHintIcon"
+            android:id="@+id/ivInvitationHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_insert_invitation_black_24dp" />
+
+        <com.github.glomadrian.codeinputlib.CodeInput
+            android:id="@+id/etLoginField"
+            android:layout_toEndOf="@id/ivInvitationHintIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/PerformerApp_LoginActivity_SignInButton" />
-    </LinearLayout>
+            app:hint_text="Invitation code"
+            />
 
-    <TextView
-        android:id="@+id/tvLoginError"
-        android:layout_width="wrap_content"
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        >
+
+        <EditText
+            android:id="@+id/etPasswordField"
+            android:layout_width="match_parent"
+            android:paddingStart="45dp"
+            android:paddingEnd="45dp"
+            android:layout_height="60dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:theme="@style/EditTextTheme"
+            android:hint="@string/Core_EnterPasswordHint" />
+
+
+        <ImageView
+            android:contentDescription="@string/Core_EnterPasswordHint"
+            android:id="@+id/ivPasswordHintIcon"
+            android:alpha="0.3"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_lock_black_24dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/errorText"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:text="" />
-</RelativeLayout>
+        android:text="@string/Core_LoginButton"
+        android:theme="@style/PrimaryButtonTheme"
+        />
+
+
+</LinearLayout>

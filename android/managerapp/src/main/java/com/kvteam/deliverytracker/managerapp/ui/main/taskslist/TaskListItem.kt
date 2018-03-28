@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
-import android.graphics.Color
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -9,8 +8,7 @@ import com.kvteam.deliverytracker.core.ui.BaseListItem
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.flexibleadapter.utils.DrawableUtils
-import kotlinx.android.synthetic.main.task_list_item.view.*
+import kotlinx.android.synthetic.main.fragment_task_list_item.view.*
 
 class TaskListItem(
         val task: TaskInfo,
@@ -31,7 +29,7 @@ class TaskListItem(
 
     open class TasksListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int
-            get() = R.layout.task_list_item
+            get() = R.layout.fragment_task_list_item
 
         val tvTaskCaption = view.tvTaskCaption!!
         val tvTaskNumber = view.tvTaskNumber!!

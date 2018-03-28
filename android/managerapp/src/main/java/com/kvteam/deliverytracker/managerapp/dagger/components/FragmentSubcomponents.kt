@@ -2,13 +2,15 @@ package com.kvteam.deliverytracker.managerapp.dagger.components
 
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.AddPaymentTypeFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.EditPaymentTypeFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes.PaymentTypeDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.EditProductFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.FilterProductsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -28,9 +30,9 @@ interface AddUserFragmentSubcomponent : AndroidInjector<AddUserFragment> {
 }
 
 @Subcomponent
-interface AddPaymentTypeSubcomponent : AndroidInjector<AddPaymentTypeFragment> {
+interface AddPaymentTypeSubcomponent : AndroidInjector<EditPaymentTypeFragment> {
     @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<AddPaymentTypeFragment>()
+    abstract class Builder : AndroidInjector.Builder<EditPaymentTypeFragment>()
 }
 
 @Subcomponent
@@ -49,6 +51,18 @@ interface EditTaskSubcomponent : AndroidInjector<EditTaskFragment> {
 interface EditWarehouseSubcomponent : AndroidInjector<EditWarehouseFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditWarehouseFragment>()
+}
+
+@Subcomponent
+interface WarehouseDetailsSubcomponent : AndroidInjector<WarehouseDetailsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<WarehouseDetailsFragment>()
+}
+
+@Subcomponent
+interface ProductDetailsSubcomponent : AndroidInjector<ProductDetailsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<ProductDetailsFragment>()
 }
 
 @Subcomponent

@@ -23,8 +23,16 @@ class UserListItem(val user: User, header: BaseListHeader)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListViewHolder, position: Int, payloads: MutableList<Any>?) {
+        val text = StringBuilder(4)
+        if(user.name?.isNotBlank() == true) {
+            text.append(user.name!![0].toString())
+        }
+        if(user.surname?.isNotBlank() == true) {
+            text.append(user.surname!![0].toString())
+        }
+
         val materialAvatarDefault = TextDrawable.builder()
-                .buildRound(user.name!![0].toString() + user.surname!![0].toString(), Color.LTGRAY)
+                .buildRound(text.toString(), Color.LTGRAY)
 
         holder.ivUserAvatar.setImageDrawable(materialAvatarDefault)
         holder.tvName.text = user.name

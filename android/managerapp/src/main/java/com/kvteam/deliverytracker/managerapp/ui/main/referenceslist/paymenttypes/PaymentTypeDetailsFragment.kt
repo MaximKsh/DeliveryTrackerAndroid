@@ -2,8 +2,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttype
 
 import android.os.Bundle
 import android.view.*
+import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.PaymentType
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
@@ -12,6 +15,7 @@ import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_payment_type_details.*
+import java.util.*
 import javax.inject.Inject
 
 class PaymentTypeDetailsFragment : DeliveryTrackerFragment() {
@@ -27,7 +31,18 @@ class PaymentTypeDetailsFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var eh: IErrorHandler
 
-    private var paymentType = PaymentType()
+    @Inject
+    lateinit var dp: DataProvider
+
+    private val paymentTypeIdKey = "payment_type"
+    private var paymentTypeId
+        get() = arguments?.getSerializable(paymentTypeIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(paymentTypeIdKey, value)!!
+
+
+    fun setPaymentType (id: UUID) {
+        this.paymentTypeId = id
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -35,18 +50,26 @@ class PaymentTypeDetailsFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
-    fun setPaymentType (paymentType: PaymentType) {
-        this.paymentType = paymentType
-    }
-
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Payment Type")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        tvNameField.text = paymentType.name
+
+        val (paymentType, origin) = try {
+            dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.PREFER_WEB)
+        } catch (e: CacheException) {
+            return@launchUI
+        }
+        eh.handleNoInternetWarn(origin)
+
+        val name = paymentType.name
+        tvNameField.text = name
+
+        if(name?.isNotBlank() == true) {
+            toolbarController.setToolbarTitle(name)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,15 +78,15 @@ class PaymentTypeDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_edit_payment_type -> {
-                navigationController.navigateToAddPaymentType(paymentType)
+            R.id.action_edit -> {
+                navigationController.navigateToEditPaymentType(paymentTypeId)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_payment_type_details_menu, menu)
+        inflater.inflate(R.menu.toolbar_edit_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

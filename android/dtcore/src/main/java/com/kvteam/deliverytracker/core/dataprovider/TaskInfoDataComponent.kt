@@ -8,7 +8,6 @@ import java.util.*
 
 class TaskInfoDataComponent (
         private val taskWebservice: ITaskWebservice,
-        private val taskStateTransitionDataContainer: IDataContainer<TaskStateTransition>,
         private val productsDataContainer: IDataContainer<Product>,
         private val paymentTypeDataContainer: IDataContainer<PaymentType>,
         private val warehouseDataContainer: IDataContainer<Warehouse>,
@@ -35,10 +34,8 @@ class TaskInfoDataComponent (
     override fun transformRequestToEntry(result: NetworkResult<TaskResponse>): TaskInfo {
         val taskInfo = result.entity?.taskPackage?.taskInfo?.first()!!
         val references = result.entity?.taskPackage?.linkedReferences!!
-        val stateTransitions = result.entity?.taskPackage?.linkedTaskStateTransitions!!
         val users = result.entity?.taskPackage?.linkedUsers!!
 
-        stateTransitions.forEach{ taskStateTransitionDataContainer.putEntry(it) }
         users.forEach { userDataContainer.putEntry(it.value) }
 
         taskInfo.taskProducts

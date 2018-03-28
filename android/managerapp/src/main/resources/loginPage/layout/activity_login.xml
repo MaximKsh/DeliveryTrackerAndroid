@@ -42,7 +42,7 @@
 
 
         <ImageView
-            android:contentDescription="@string/ManagerApp_CodeHintIcon"
+            android:contentDescription="@string/Core_CodeHintIcon"
             android:id="@+id/ivInvitationHintIcon"
             android:alpha="0.3"
             android:layout_marginTop="13dp"
@@ -76,7 +76,7 @@
             android:ems="10"
             android:inputType="textPassword"
             android:theme="@style/EditTextTheme"
-            android:hint="@string/ManagerApp_LoginActivity_EnterPasswordHint" />
+            android:hint="@string/Core_EnterPasswordHint" />
 
 
         <ImageView
@@ -95,7 +95,7 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ManagerApp_LoginActivity_Login"
+        android:text="@string/Core_LoginButton"
         android:theme="@style/PrimaryButtonTheme"
         />
 

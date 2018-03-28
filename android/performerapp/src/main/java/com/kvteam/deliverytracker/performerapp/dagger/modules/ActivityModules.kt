@@ -13,10 +13,11 @@ import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
-import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.MyTasksListFragment
-import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.UndistributedTasksListFragment
-import com.kvteam.deliverytracker.performerapp.ui.main.userslist.ManagersListFragment
-import com.kvteam.deliverytracker.performerapp.ui.main.userslist.PerformersListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TaskDetailsFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.performerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -79,22 +80,25 @@ abstract class MainActivityModule {
     internal abstract fun mainActivityInjector(builder: MainActivitySubcomponent.Builder):
             AndroidInjector.Factory<out Activity>
 
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(UsersListFragmentModule::class))
+    internal abstract fun usersListFragment(): UsersListFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(MyTasksListFragmentModule::class))
-    internal abstract fun myTasksListFragment(): MyTasksListFragment
+    @ContributesAndroidInjector(modules = arrayOf(TasksListFragmentModule::class))
+    internal abstract fun tasksListFragment(): TasksListFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(UndistributedTasksListFragmentModule::class))
-    internal abstract fun undistributedTasksListFragment(): UndistributedTasksListFragment
+    @ContributesAndroidInjector(modules = arrayOf(SettingsFragmentModule::class))
+    internal abstract fun settingsFragment(): SettingsFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(PerformersListFragmentModule::class))
-    internal abstract fun performersListFragment(): PerformersListFragment
+    @ContributesAndroidInjector(modules = arrayOf(EditSettingsFragmentModule::class))
+    internal abstract fun editSettingsFragment(): EditSettingsFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(ManagersListFragmentModule::class))
-    internal abstract fun managersListFragment(): ManagersListFragment
+    @ContributesAndroidInjector(modules = arrayOf(TaskDetailsFragmentModule::class))
+    internal abstract fun taskDetailsFragment(): TaskDetailsFragment
 
     @Module
     class MainActivityNavigationControllerModule {

@@ -4,6 +4,9 @@
     <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.79:5000</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
+    <string name="Core_EnterCodeHint">Invitation code</string>
+    <string name="Core_EnterPasswordHint">Password</string>
+    <string name="Core_LoginButton">Sign in</string>
     <string name="Core_TaskState_NewUndistributed">New undistributed</string>
     <string name="Core_TaskState_New">New</string>
     <string name="Core_TaskState_InWork">In work</string>
@@ -53,11 +56,17 @@
     <string name="Core_Product_Cost">Cost</string>
     <string name="Core_Product_Description">Description</string>
 
+    <string name="Core_EnterNameHint">Name</string>
+    <string name="Core_EnterSurnameHint">Surname</string>
+    <string name="Core_EnterPatronymicHint">Patronymic</string>
+    <string name="Core_EnterPhoneNumberHint">Phone number</string>
+    <string name="Core_CodeHintIcon" translatable="false">Code hint icon</string>
+    <string name="Core_Toolbar_Done">Continue</string>
 
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>
     <string name="ServerMessage_Views_TasksManagersView">Tasks</string>
-    <string name="ServerMessage_Views_TasksPerformersView">Tasks</string>
+    <string name="ServerMessage_Views_TasksPerformerView">Tasks</string>
     <string name="ServerMessage_Views_InvitationsView">Invitations</string>
     <string name="ServerMessage_TaskStates_Unconfirmed">Unconfirmed</string>
 

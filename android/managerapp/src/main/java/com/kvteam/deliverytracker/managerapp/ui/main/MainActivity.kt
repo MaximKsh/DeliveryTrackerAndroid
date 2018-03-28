@@ -2,6 +2,10 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.models.TaskInfo
+import com.kvteam.deliverytracker.core.notifications.*
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.ui.removeShiftMode
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
@@ -12,6 +16,9 @@ import javax.inject.Inject
 
 class MainActivity : DeliveryTrackerActivity() {
     private val bnvSelectedItemKey = "bnvSelectedItem"
+
+    @Inject
+    lateinit var gsonProvider: IDeliveryTrackerGsonProvider
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -58,13 +65,26 @@ class MainActivity : DeliveryTrackerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            navigationController.navigateToStaff()
-            navigation.selectedItemId = R.id.navigation_staff
-        } else {
+        if(intent.action == PUSH_ACTION) {
+            val action = intent.extras[PUSH_ACTION_KEY] as? String ?: EMPTY_STRING
+            val dataType = intent.extras[PUSH_DATA_TYPE_KEY] as? String ?: EMPTY_STRING
+            val dataSerialized = intent.extras[PUSH_DATA_SERIALIZED] as? String ?: EMPTY_STRING
+            if(action.isNotBlank()
+                    && dataType.isNotBlank()
+                    && dataSerialized.isNotBlank()) {
+                onPushClicked(action, dataType, dataSerialized)
+            } else {
+                navigationController.navigateToStaff()
+                navigation.selectedItemId = R.id.navigation_staff
+            }
+        } else if (savedInstanceState != null) {
             navigation.selectedItemId =
                     savedInstanceState.getInt(bnvSelectedItemKey)
+        } else {
+            navigationController.navigateToStaff()
+            navigation.selectedItemId = R.id.navigation_staff
         }
+
 
         removeShiftMode(navigation)
 
@@ -75,6 +95,18 @@ class MainActivity : DeliveryTrackerActivity() {
         super.onSaveInstanceState(outState)
         outState?.apply {
             putInt(bnvSelectedItemKey, navigation.selectedItemId)
+        }
+    }
+
+    private fun onPushClicked(action: String,
+                              dataType: String,
+                              dataSerialized: String) {
+        val gson = gsonProvider.gson
+        when(action) {
+            PUSH_OPEN_TASK -> {
+                val tInfo = gson.fromJson<TaskInfo>(dataSerialized, TaskInfo::class.java)
+                navigationController.navigateToTaskDetails(tInfo.id!!)
+            }
         }
     }
 }
