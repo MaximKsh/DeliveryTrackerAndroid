@@ -198,7 +198,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     protected open fun handleErrorNetworkResult(result: NetworkResult<*>) {}
 
-    private suspend fun updateList(
+    protected suspend fun updateList(
             viewName: String,
             type: String?,
             groupIndex: Int,

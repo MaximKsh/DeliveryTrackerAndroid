@@ -1,0 +1,26 @@
+<RelativeLayout
+    android:id="@+id/rlSelectableItem"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_centerVertical="true"
+        android:textSize="18sp"
+        android:layout_alignParentStart="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/ivSelectedIcon"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:contentDescription="@string/ManagerApp_Toolbar_Done"
+        android:src="@drawable/ic_done_black_24dp"
+        />
+</RelativeLayout>
