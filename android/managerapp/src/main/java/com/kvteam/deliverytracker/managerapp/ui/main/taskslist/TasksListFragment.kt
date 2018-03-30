@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
@@ -14,6 +15,9 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.Duration
 import javax.inject.Inject
 
 open class TasksListFragment : BaseListFragment() {
@@ -40,17 +44,29 @@ open class TasksListFragment : BaseListFragment() {
 
     override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
         var date: String? = null
-        var header = BaseListHeader("A")
+        val headerThisWeek = BaseListHeader("This week")
+        val headerPreviousWeek = BaseListHeader("Previous week")
+        // TODO: fix this fate range
+        val headerLongTimeAgo = BaseListHeader("Long time ago")
 
         val list = tasks
                 .sortedByDescending { a -> a.created }
                 .map { task ->
-                    val dateCaption = task.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
-                    if (date == null || date != dateCaption) {
-                        date = dateCaption
-                        header = BaseListHeader(dateCaption)
+                    val header: BaseListHeader
+                    val dateValue = task.created!!
+                    val duration = Duration(dateValue, DateTime.now(DateTimeZone.UTC))
+                    when (duration.standardDays) {
+                        in 0..7 -> {
+                            header = headerThisWeek
+                        }
+                        in 8..14 -> {
+                            header = headerPreviousWeek
+                        }
+                        else -> {
+                            header = headerLongTimeAgo
+                        }
                     }
-                    TaskListItem(task, header, lm)
+                    TaskListItem(task, header, lm, dp, context!!)
                 }.toMutableList()
         val adapter = mAdapter as? TasksListFlexibleAdapter
         setMenuMask(TASKS_MENU_MASK)

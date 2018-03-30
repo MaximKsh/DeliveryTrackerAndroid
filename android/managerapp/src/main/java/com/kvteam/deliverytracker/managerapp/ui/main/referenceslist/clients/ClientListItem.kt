@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Client
@@ -21,15 +22,16 @@ class ClientListItem(
     override val key: String
         get() = client.id!!.toString()
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : ClientsListViewHolder {
-        return ClientsListViewHolder(view, adapter);
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): ClientsListViewHolder {
+        return ClientsListViewHolder(view!!, adapter);
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: ClientsListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.tvName.text = client.name
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: ClientsListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        holder!!.tvName.text = client.name
         holder.tvSurname.text = client.surname
         holder.tvPhoneNumber.text = client.phoneNumber
     }
+
 
     open class ClientsListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int

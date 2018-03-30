@@ -18,5 +18,9 @@
     <color name="colorBlack">#212121</color>
     <color name="colorAccent">#CDDC39</color>
     <color name="colorGreen">#27ae60</color>
-    <color name="colorGray">#bdc3c7</color>
+    <color name="colorGray">#a6abae</color>
+    <color name="colorLightGray">#f9f9f9</color>
+    <color name="colorBlueGray">#607D8B</color>
+    <color name="colorYellow">#FFC107</color>
+    <color name="colorBlue">#03A9F4</color>
 </resources>

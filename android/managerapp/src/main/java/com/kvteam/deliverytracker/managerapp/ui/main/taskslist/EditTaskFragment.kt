@@ -35,6 +35,8 @@ import kotlinx.android.synthetic.main.fragment_edit_task.*
 import kotlinx.android.synthetic.main.fragment_edit_task.view.*
 import kotlinx.android.synthetic.main.selected_performer_item.*
 import kotlinx.android.synthetic.main.selected_performer_item.view.*
+import kotlinx.android.synthetic.main.selected_product_item.*
+import kotlinx.android.synthetic.main.selected_product_item.view.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.joda.time.DateTime
 import java.util.*
@@ -429,6 +431,21 @@ class EditTaskFragment : DeliveryTrackerFragment(){
 
         val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
 
+        tvSelectProduct.setOnClickListener { _ ->
+            navigationController.navigateToFilterProducts(taskId)
+        }
+
+        if (task.taskProducts.size != 0) {
+            val firstProduct = dp.products.getAsync(task.taskProducts[0].productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+
+            rlSelectedProduct.tvName.text = firstProduct.name
+            rlSelectedProduct.tvCost.text = firstProduct.cost.toString()
+            rlSelectedProduct.tvVendorCode.text = firstProduct.vendorCode.toString()
+            rlSelectedProduct.visibility = View.VISIBLE
+        } else {
+            rlSelectedProduct.visibility = View.GONE
+        }
+
         if (task.performerId != null) {
             val performer = dp.users.getAsync(task.performerId as UUID, DataProviderGetMode.FORCE_CACHE).entry
 
@@ -467,41 +484,6 @@ class EditTaskFragment : DeliveryTrackerFragment(){
                 llPaymentTypesContainer,
                 activity!!
         )
-
-        val autocomplete = acvProductAutocomplete.autoCompleteTextView
-        autocomplete.setAutoCompleteDelay(200L)
-        autocomplete.threshold = 2
-        autocomplete.setAdapter(AutocompleteListAdapter(
-                activity!!,
-                {
-                    runBlocking {
-                        val networkResponse = viewWebservice.getViewResultAsync(
-                                "ReferenceViewGroup",
-                                "ProductsView",
-                                mapOf("name" to it))
-                        val viewResult = networkResponse.entity?.viewResult!!
-                        val result = viewResult
-                                .map { referenceMap ->
-                                    val product = Product()
-                                    product.fromMap(referenceMap)
-                                    product
-                                }.toMutableList()
-                        result
-                    }
-                },
-                { it.name!! }
-
-        ))
-
-        autocomplete.onItemClickListener = AdapterView.OnItemClickListener { av, _, pos, _ ->
-            val item = av.getItemAtPosition(pos) as Product
-            autocomplete.setText(item.name)
-        }
-
-        acvProductAutocomplete.listSelectionButton.setOnClickListener {
-            navigationController.navigateToFilterProducts()
-        }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

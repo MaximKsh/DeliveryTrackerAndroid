@@ -183,8 +183,9 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToFilterProducts() {
+    fun navigateToFilterProducts(id: UUID) {
         val fragment = FilterProductsFragment()
+        fragment.setEditTaskId(id)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)

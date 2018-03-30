@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:mode="same_level"
     app:dragEdge="right"
+    android:background="@drawable/shape_bottom_border"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
@@ -12,13 +13,13 @@
         <TextView
             android:id="@+id/tvDeleteItem"
             android:layout_width="wrap_content"
+            android:layout_height="70dp"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:background="@color/colorRed"
             android:textColor="@color/colorWhite"
             android:gravity="center"
-            android:text="@string/Core_Delete_List_Item"
-            android:layout_height="65dp" />
+            android:text="@string/Core_Delete_List_Item" />
     </FrameLayout>
 
     <FrameLayout

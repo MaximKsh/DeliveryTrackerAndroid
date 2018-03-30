@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "582160349082",
+    "project_id": "deliverytracker-1509568875907"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582160349082:android:c7c35808d6a148a6",
+        "android_client_info": {
+          "package_name": "com.kvteam.deliverytracker.managerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582160349082-n7ud5bak7n8317c921uha9ld935v5od4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeyNTKMlePHfVBfPthP7RfdjIv1Vgqo3o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582160349082:android:126e06da244b786e",
+        "android_client_info": {
+          "package_name": "com.kvteam.deliverytracker.performerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582160349082-n7ud5bak7n8317c921uha9ld935v5od4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeyNTKMlePHfVBfPthP7RfdjIv1Vgqo3o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

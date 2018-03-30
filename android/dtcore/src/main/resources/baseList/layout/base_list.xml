@@ -16,16 +16,37 @@
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         cube_ptr:ptr_resistance="1.7">
 
-
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvBaseList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
+            android:background="@color/colorWhite"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/base_list_item" />
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
+    <RelativeLayout
+        android:id="@+id/rlNoListHolder"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivNoDataInList"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/no_list_data"/>
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/aviDataListLoadingIndicator"
+            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:indicatorColor="@color/colorPrimary"
+            app:indicatorName="BallSpinFadeLoaderIndicator" />
+    </RelativeLayout>
 </FrameLayout>

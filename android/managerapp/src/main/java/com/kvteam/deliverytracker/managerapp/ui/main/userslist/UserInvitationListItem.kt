@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Invitation
@@ -21,12 +22,12 @@ class UserInvitationListItem(
     override val key: String
         get() = invitation.invitationCode!!
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : InvitationListViewHolder {
-        return InvitationListViewHolder(view, adapter)
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): InvitationListViewHolder {
+        return InvitationListViewHolder(view!!, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: InvitationListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.tvName.text = invitation.preliminaryUser?.name
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: InvitationListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        holder!!.tvName.text = invitation.preliminaryUser?.name
         holder.tvSurname.text = invitation.preliminaryUser?.surname
         holder.tvInvitationCode.text = invitation.invitationCode
         holder.tvExpiresAt.text = invitation.expires?.toString("dd.MM.yyyy")
