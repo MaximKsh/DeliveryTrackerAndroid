@@ -201,7 +201,7 @@ class DropdownTop (
             layoutParams.height = value
             activity.ll_dropdown_top.layoutParams = layoutParams
         }
-        anim.duration = 100L * items.size
+        anim.duration = 75L * items.size
         anim.start()
 
         val anim2 = ValueAnimator.ofFloat(0.4f, 0f)
@@ -213,7 +213,7 @@ class DropdownTop (
             }
         }
 
-        anim2.duration = 100L * items.size
+        anim2.duration = 75L * items.size
         anim2.start()
 
         showIconCollapsed()
