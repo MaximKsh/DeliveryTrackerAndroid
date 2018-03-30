@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -27,6 +28,9 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
 
     protected open val allowSettingsContext
         get() = true
+
+    open val fabButton: FloatingActionButton?
+        get() = null
 
     lateinit var toolbarController: ToolbarController
         private set

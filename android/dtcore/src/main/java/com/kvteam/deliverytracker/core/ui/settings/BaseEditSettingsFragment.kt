@@ -84,14 +84,14 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_save_settings -> editSettings()
+            R.id.action_done -> editSettings()
         }
     }, {
         super.onOptionsItemSelected(item)
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_base_edit_settings_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

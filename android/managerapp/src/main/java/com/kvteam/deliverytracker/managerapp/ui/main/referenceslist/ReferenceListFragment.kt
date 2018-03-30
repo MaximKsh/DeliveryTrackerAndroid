@@ -1,9 +1,11 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
@@ -203,26 +205,26 @@ open class ReferenceListFragment : BaseListFragment() {
         useSearchInToolbar(toolbar)
     }
 
+    override fun configureFloatingActionButton(button: FloatingActionButton) {
+        button.visibility = View.VISIBLE
+        button.setImageResource(R.drawable.ic_add_black_24dp)
+        button.setOnClickListener {
+            val selected = dtActivity.toolbarController.dropDownTop.lastSelectedIndex.get()
+            when (selected) {
+                0 -> navigationController.navigateToEditProduct()
+                1 -> navigationController.navigateToEditPaymentType()
+                2 -> navigationController.navigateToEditClient()
+                3 -> navigationController.navigateToEditWarehouse()
+            }
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
         super.onActivityCreated(savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_add_client -> {
-                navigationController.navigateToEditClient()
-            }
-            R.id.action_add_payment_type -> {
-                navigationController.navigateToEditPaymentType()
-            }
-            R.id.action_add_product -> {
-                navigationController.navigateToEditProduct()
-            }
-            R.id.action_add_warehouse -> {
-                navigationController.navigateToEditWarehouse()
-            }
-        }
         return super.onOptionsItemSelected(item)
     }
 

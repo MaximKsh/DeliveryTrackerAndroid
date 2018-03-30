@@ -75,7 +75,10 @@
     <string name="Core_EnterPatronymicHint">Patronymic</string>
     <string name="Core_EnterPhoneNumberHint">Phone number</string>
     <string name="Core_CodeHintIcon" translatable="false">Code hint icon</string>
-    <string name="Core_Toolbar_Done">Continue</string>
+
+    <string name="Core_Done">Done</string>
+    <string name="Core_Edit">Edit</string>
+    <string name="Core_Search">Search</string>
 
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>

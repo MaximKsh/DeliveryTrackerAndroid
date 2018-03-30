@@ -27,9 +27,22 @@
             app:itemIconTint="@drawable/bnv_item_color_selector"
             app:itemTextColor="@drawable/bnv_item_color_selector"
             app:menu="@menu/navigation" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            android:tint="@color/colorWhite"
+            android:src="@drawable/ic_person_add_black_24dp"
+            android:layout_margin="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/navigation"
+            android:layout_gravity="end|bottom" />
     </RelativeLayout>
-
-
 
     <include layout="@layout/toolbar" />
     <include layout="@layout/dropdown_top" />

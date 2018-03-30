@@ -4,6 +4,7 @@ import android.app.Activity
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
+import com.kvteam.deliverytracker.core.ui.UIState
 import com.kvteam.deliverytracker.core.ui.errorhandling.ErrorHandler
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.performerapp.dagger.components.ConfirmDataActivitySubcomponent
@@ -72,7 +73,7 @@ abstract class ConfirmDataActivityModule {
 }
 
 @Module(subcomponents = arrayOf(MainActivitySubcomponent::class),
-        includes = arrayOf(MainActivityModule.MainActivityNavigationControllerModule::class, MainActivityModule.ScopeModule::class))
+        includes = arrayOf(MainActivityModule.ScopeModule::class))
 abstract class MainActivityModule {
     @Binds
     @IntoMap
@@ -101,16 +102,13 @@ abstract class MainActivityModule {
     internal abstract fun taskDetailsFragment(): TaskDetailsFragment
 
     @Module
-    class MainActivityNavigationControllerModule {
+    class ScopeModule {
         @Provides
         @ActivityScope
         fun navigationController(activity: MainActivity): NavigationController {
             return NavigationController(activity)
         }
-    }
 
-    @Module
-    class ScopeModule {
         @Provides
         @ActivityScope
         fun errorHandler(activity: MainActivity, lm: ILocalizationManager): IErrorHandler {
@@ -118,6 +116,12 @@ abstract class MainActivityModule {
                     activity,
                     0,
                     lm)
+        }
+
+        @Provides
+        @ActivityScope
+        fun uiState() : UIState {
+            return UIState()
         }
     }
 }

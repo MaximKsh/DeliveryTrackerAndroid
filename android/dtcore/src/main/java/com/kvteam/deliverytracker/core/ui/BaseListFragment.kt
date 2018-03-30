@@ -4,6 +4,7 @@ import `in`.srain.cube.views.ptr.PtrDefaultHandler
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,8 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.dataprovider.*
 import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -24,12 +24,14 @@ import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.base_list.*
+import kotlinx.android.synthetic.main.base_list.view.*
 import java.util.*
 import javax.inject.Inject
 
 abstract class BaseListFragment : DeliveryTrackerFragment() {
     private val selectedIndexKey = "selectedIndex"
-    private val searchTextKey = "searchTex"
+    private val searchTextKey = "searchText"
+    private val scrollPositionKey = "scrollPositionKey"
 
     @Inject
     lateinit var viewWebservice: IViewWebservice
@@ -42,6 +44,9 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var dp: DataProvider
+
+    @Inject
+    lateinit var uiState: UIState
 
     private var menuItemsMask : Int = Int.MAX_VALUE
 
@@ -65,74 +70,26 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.base_list, container, false)
+        val view = inflater.inflate(R.layout.base_list, container, false)
+        view.rvBaseList.layoutManager = LinearLayoutManager(
+                activity?.applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+        restoreState(view)
+        prepareView(view)
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        rvBaseList.layoutManager = LinearLayoutManager(
-                activity?.applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
-
-        ptrFrame.setPtrHandler(object : PtrHandler {
-            override fun onRefreshBegin(frame: PtrFrameLayout?) = launchUI {
-                if (dropdownTop.items.size != 0) {
-                    val index = dropdownTop.lastSelectedIndex.get()
-                    val selectedItem = dropdownTop.items[index]
-                    updateList(selectedItem.viewName, selectedItem.entityType, index, null, DataProviderGetMode.FORCE_WEB)
-                }
-                ptrFrame.refreshComplete()
-            }
-
-            override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
-                if(!PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header)) {
-                    return false
-                }
-                val frag = content as RecyclerView
-                val adapter = frag.adapter as BaseListFlexibleAdapter<*, *, *>
-                val viewHolders = adapter.getAllBoundViewHolders().toMutableSet()
-
-                for(vh in viewHolders) {
-                    if(vh is BaseListFlexibleAdapter.BaseListHolder
-                        && !vh.swipeRevealLayout.isOpened
-                        && !vh.swipeRevealLayout.isClosed) {
-                        return false
-                    }
-                }
-
-                return true
-            }
-        })
-
-        if (toolbarController.isDropdownEnabled) {
-            dropdownTop.clearSearchText()
-            val args = arguments
-            if(args != null) {
-                if(args.containsKey(selectedIndexKey))
-                    dropdownTop.lastSelectedIndex.set(args.getInt(selectedIndexKey))
-                if(args.containsKey(searchTextKey))
-                    dropdownTop.searchText = args.getString(searchTextKey)
-            } else {
-                dropdownTop.lastSelectedIndex.set(0)
-            }
-        }
-
+        setPtrHandler()
         initializeAsync()
+        restoreStateAfterActivityCreated()
     }
 
     override fun onStop() {
         super.onStop()
-        val args = arguments
-        if(args == null) {
-            val bundle = Bundle()
-            bundle.putInt(selectedIndexKey, dropdownTop.lastSelectedIndex.get())
-            bundle.putString(searchTextKey, dropdownTop.searchText)
-            arguments = bundle
-        } else {
-            args.putInt(selectedIndexKey, dropdownTop.lastSelectedIndex.get())
-            args.putString(searchTextKey, dropdownTop.searchText)
-        }
+        saveState()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -140,6 +97,40 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         for(i in 0 until menu.size()) {
             menu.getItem(i).isVisible = menuItemsMask and (1 shl i) != 0
         }
+    }
+
+    protected open fun saveState() {
+        val state = uiState.forFragment(name)
+        state[selectedIndexKey] = dropdownTop.lastSelectedIndex.get()
+        state[searchTextKey] = dropdownTop.searchText
+
+        val lmState = rvBaseList.layoutManager.onSaveInstanceState()
+        state[scrollPositionKey] = lmState
+    }
+
+    protected open fun restoreState(view: View) {
+        if (toolbarController.isDropdownEnabled) {
+            val state = uiState.forFragment(name)
+
+            if(state.containsKey(selectedIndexKey))
+                dropdownTop.lastSelectedIndex.set(state.getInt(selectedIndexKey))
+            else
+                dropdownTop.lastSelectedIndex.set(0)
+            if(state.containsKey(searchTextKey))
+                dropdownTop.searchText = state.getString(searchTextKey)
+
+        }
+    }
+
+    protected open fun restoreStateAfterActivityCreated() {
+        val state = uiState.forFragment(this@BaseListFragment)
+        if(state.containsKey(scrollPositionKey))
+            rvBaseList.layoutManager.onRestoreInstanceState(state.getVal<String, Any?, Parcelable>(scrollPositionKey))
+
+    }
+
+    protected open fun prepareView(rootView: View) {
+
     }
 
     protected open suspend fun initializeAsync() {
@@ -359,6 +350,38 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                     getViewFilterArguments(digest[idx].first, digest[idx].second.entityType, idx, prevSearchText)
                 else null
         updateList(digest[idx].first, digest[idx].second.entityType, idx, arguments = args)
+    }
+
+    private fun setPtrHandler() {
+        ptrFrame.setPtrHandler(object : PtrHandler {
+            override fun onRefreshBegin(frame: PtrFrameLayout?) = launchUI {
+                if (dropdownTop.items.size != 0) {
+                    val index = dropdownTop.lastSelectedIndex.get()
+                    val selectedItem = dropdownTop.items[index]
+                    updateList(selectedItem.viewName, selectedItem.entityType, index, null, DataProviderGetMode.FORCE_WEB)
+                }
+                ptrFrame.refreshComplete()
+            }
+
+            override fun checkCanDoRefresh(frame: PtrFrameLayout?, content: View?, header: View?): Boolean {
+                if(!PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header)) {
+                    return false
+                }
+                val frag = content as RecyclerView
+                val adapter = frag.adapter as BaseListFlexibleAdapter<*, *, *>
+                val viewHolders = adapter.getAllBoundViewHolders().toMutableSet()
+
+                for(vh in viewHolders) {
+                    if(vh is BaseListFlexibleAdapter.BaseListHolder
+                            && !vh.swipeRevealLayout.isOpened
+                            && !vh.swipeRevealLayout.isClosed) {
+                        return false
+                    }
+                }
+
+                return true
+            }
+        })
     }
 }
 

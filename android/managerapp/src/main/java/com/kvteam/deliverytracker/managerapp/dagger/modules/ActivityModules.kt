@@ -6,6 +6,7 @@ import android.app.Activity
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
+import com.kvteam.deliverytracker.core.ui.UIState
 import com.kvteam.deliverytracker.core.ui.errorhandling.ErrorHandler
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.managerapp.R
@@ -213,6 +214,12 @@ abstract class MainActivityModule {
                     activity,
                     R.id.mainContainer,
                     lm)
+        }
+
+        @Provides
+        @ActivityScope
+        fun uiState() : UIState {
+            return UIState()
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Invitation
@@ -29,14 +31,6 @@ open class UsersListFragment : BaseListFragment() {
 
     @Inject
     lateinit var navigationController: NavigationController
-
-
-    private val INVITE_USER_MENU_ITEM = 1
-    private val SHOW_ON_MAP_MENU_ITEM = INVITE_USER_MENU_ITEM shl 1
-
-    private val IVITATIONS_MENU_MASK = 0
-    private val MANAGERS_MENU_MASK = INVITE_USER_MENU_ITEM
-    private val PERFORMERS_MENU_MASK = INVITE_USER_MENU_ITEM and SHOW_ON_MAP_MENU_ITEM
 
     private val userActions = object: IBaseListItemActions<UserListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
@@ -105,7 +99,6 @@ open class UsersListFragment : BaseListFragment() {
                     }
                 }.toMutableList()
         val adapter = mAdapter as? UserListFlexibleAdapter
-        setMenuMask(MANAGERS_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(userList, animate)
         } else {
@@ -128,7 +121,6 @@ open class UsersListFragment : BaseListFragment() {
                     UserInvitationListItem(invitation, header, lm)
                 }.toMutableList()
         val adapter = mAdapter as? UserInvitationListFlexibleAdapter
-        setMenuMask(IVITATIONS_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(invitationList, animate)
         } else {
@@ -145,6 +137,14 @@ open class UsersListFragment : BaseListFragment() {
         useSearchInToolbar(toolbar)
     }
 
+    override fun configureFloatingActionButton(button: FloatingActionButton) {
+        button.visibility = View.VISIBLE
+        button.setImageResource(R.drawable.ic_person_add_black_24dp)
+        button.setOnClickListener {
+            navigationController.navigateToAddUser(this.role)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
         super.onActivityCreated(savedInstanceState)
@@ -152,18 +152,15 @@ open class UsersListFragment : BaseListFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_show_on_map -> {
+            R.id.action_search -> {
 
-            }
-            R.id.action_add -> {
-                navigationController.navigateToAddUser(this.role)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_user_list_menu, menu)
+        inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

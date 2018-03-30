@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.FloatingActionButton
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -22,6 +23,9 @@ class MainActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var navigationController: NavigationController
+
+    override val fabButton: FloatingActionButton?
+        get() = fabAddButton
 
     override val layoutId = R.layout.activity_main
 

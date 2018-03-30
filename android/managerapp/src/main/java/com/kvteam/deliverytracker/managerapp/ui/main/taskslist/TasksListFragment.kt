@@ -2,9 +2,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
@@ -66,6 +68,14 @@ open class TasksListFragment : BaseListFragment() {
         toolbar.dropDownTop.hideSearch()
     }
 
+    override fun configureFloatingActionButton(button: FloatingActionButton) {
+        button.visibility = View.VISIBLE
+        button.setImageResource(R.drawable.ic_add_black_24dp)
+        button.setOnClickListener {
+            navigationController.navigateToEditTask()
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
         (mAdapter as TasksListFlexibleAdapter).hideDeleteButton = true
@@ -75,7 +85,6 @@ open class TasksListFragment : BaseListFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add -> {
-                navigationController.navigateToEditTask()
             }
         }
         return super.onOptionsItemSelected(item)

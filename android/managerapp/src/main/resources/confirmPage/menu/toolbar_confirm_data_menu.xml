@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_done"
         android:icon="@drawable/ic_done_black_24dp"
-        android:title="@string/Core_Toolbar_Done"
+        android:title="@string/Core_Done"
         app:showAsAction="ifRoom"/>
 
 </menu>
