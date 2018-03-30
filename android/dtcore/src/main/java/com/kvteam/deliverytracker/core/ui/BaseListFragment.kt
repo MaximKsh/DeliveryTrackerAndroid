@@ -328,6 +328,7 @@ abstract class BaseListFragment :
         if (entities.size == 0) {
             ivNoDataInList.visibility = View.VISIBLE
         } else {
+            ivNoDataInList.visibility = View.GONE
             rlNoListHolder.visibility = View.GONE
         }
         if (toolbarController.isDropdownEnabled) {
