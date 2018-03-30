@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Warehouse
@@ -21,12 +22,12 @@ class WarehouseListItem(
     override val key: String
         get() = warehouse.id!!.toString()
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : WarehousesListViewHolder {
-        return WarehousesListViewHolder(view, adapter);
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): WarehousesListViewHolder {
+        return WarehousesListViewHolder(view!!, adapter);
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: WarehousesListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.tvName.text = warehouse.name
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: WarehousesListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        holder!!.tvName.text = warehouse.name
         holder.tvAddress.text = warehouse.rawAddress
     }
 

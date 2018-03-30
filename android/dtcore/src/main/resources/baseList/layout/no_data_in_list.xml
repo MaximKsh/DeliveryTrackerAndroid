@@ -1,0 +1,15 @@
+<FrameLayout
+    android:id="@+id/ffNoDataInList"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:background="@color/colorRed"
+        android:textColor="@color/colorRed"
+        android:gravity="center"
+        android:text="Empty list" />
+</FrameLayout>

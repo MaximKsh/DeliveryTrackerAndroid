@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.PaymentType
@@ -21,12 +22,12 @@ class PaymentTypeListItem(
     override val key: String
         get() = paymentType.id!!.toString()
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : PaymentTypesListViewHolder {
-        return PaymentTypesListViewHolder(view, adapter);
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): PaymentTypesListViewHolder {
+        return PaymentTypesListViewHolder(view!!, adapter);
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: PaymentTypesListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.tvName.text = paymentType.name
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: PaymentTypesListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+        holder!!.tvName.text = paymentType.name
     }
 
     open class PaymentTypesListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {

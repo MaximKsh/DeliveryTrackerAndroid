@@ -58,10 +58,6 @@
     <string name="ServerMessage_StateTransitionButton_PerformerNewInProgress">Take into work</string>
     <string name="ServerMessage_StateTransitionButton_PerformerInProgressComplete">Complete</string>
     <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
-    <string name="ServerMessage_TaskStates_New">New</string>
-    <string name="ServerMessage_TaskStates_InProgress">In progress</string>
-    <string name="ServerMessage_TaskStates_Complete">Complete</string>
-    <string name="ServerMessage_TaskStates_Cancelled">Cancelled</string>
 
 
 
@@ -86,6 +82,15 @@
     <string name="ServerMessage_Views_TasksPerformerView">Tasks</string>
     <string name="ServerMessage_Views_InvitationsView">Invitations</string>
     <string name="ServerMessage_TaskStates_Unconfirmed">Unconfirmed</string>
+
+    <string name="ServerMessage_TaskStates_Preparing">Preparing</string>
+    <string name="ServerMessage_TaskStates_Queue">In queue</string>
+    <string name="ServerMessage_TaskStates_Waiting">Awaits execution</string>
+    <string name="ServerMessage_TaskStates_IntoWork">In work</string>
+    <string name="ServerMessage_TaskStates_Delivered">Delivered</string>
+    <string name="ServerMessage_TaskStates_Complete">Completed</string>
+    <string name="ServerMessage_TaskStates_Revoked">Revoked</string>
+
 
     <string name="Core_Dropdown_Top_Quantity"> (%d)</string>
 

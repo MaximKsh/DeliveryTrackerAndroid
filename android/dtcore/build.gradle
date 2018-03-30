@@ -81,8 +81,8 @@ dependencies {
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
 
     // Using JCenter
-    compile 'eu.davidea:flexible-adapter:5.0.0-rc4'
-    compile 'eu.davidea:flexible-adapter-ui:1.0.0-b2'
+    compile 'eu.davidea:flexible-adapter:5.0.3'
+    compile 'eu.davidea:flexible-adapter-ui:1.0.0-b3'
 
     // Using MavenSnapshots repository for continuous updates from my development
     compile 'eu.davidea:flexible-adapter:5.0.0-SNAPSHOT'

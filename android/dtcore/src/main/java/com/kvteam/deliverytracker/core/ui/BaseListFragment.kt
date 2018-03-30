@@ -23,12 +23,18 @@ import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import kotlinx.android.synthetic.main.base_list.*
 import kotlinx.android.synthetic.main.base_list.view.*
 import java.util.*
 import javax.inject.Inject
+import android.support.design.widget.Snackbar
+import android.util.Log
+import android.widget.Toast
+import kotlinx.android.synthetic.main.no_data_in_list.*
 
-abstract class BaseListFragment : DeliveryTrackerFragment() {
+abstract class BaseListFragment :
+        DeliveryTrackerFragment(){
     private val selectedIndexKey = "selectedIndex"
     private val searchTextKey = "searchText"
     private val scrollPositionKey = "scrollPositionKey"
@@ -58,7 +64,7 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
         get() = rvBaseList.adapter as FlexibleAdapter<*>
         set(value) {
             rvBaseList.adapter = value
-        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -293,7 +299,11 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
             arguments: Map<String, Any>? = null,
             getMode: DataProviderGetMode,
             handle: (MutableList<T>, Boolean) -> Unit) {
+
+        rlNoListHolder.visibility = View.VISIBLE
         val (result, origin) = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
+        aviDataListLoadingIndicator.visibility = View.GONE
+
         if(getMode == DataProviderGetMode.PREFER_WEB
                 || getMode == DataProviderGetMode.FORCE_WEB) {
             eh.handleNoInternetWarn(origin)
@@ -306,6 +316,12 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
                 entities.add(e)
             } catch (e: CacheException) {}
         }
+        if (entities.size == 0) {
+            ivNoDataInList.visibility = View.VISIBLE
+        } else {
+            ivNoDataInList.visibility = View.GONE
+            rlNoListHolder.visibility = View.GONE
+        }
         if (toolbarController.isDropdownEnabled) {
             if(groupIndex == dropdownTop.lastSelectedIndex.get()) {
                 handle(entities, origin == DataProviderGetOrigin.WEB)
@@ -317,6 +333,8 @@ abstract class BaseListFragment : DeliveryTrackerFragment() {
     }
 
     private suspend fun setCategories(getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
+        rlNoListHolder.visibility = View.VISIBLE
+
         val mode = if(tracer.atTheBeginning()) DataProviderGetMode.PREFER_WEB else getMode
 
         val result = try {

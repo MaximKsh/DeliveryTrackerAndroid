@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Product
@@ -22,20 +23,22 @@ class ProductListItem(
     override val key: String
         get() = product.id!!.toString()
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : ProductsListViewHolder {
-        return ProductsListViewHolder(view, adapter);
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): ProductsListViewHolder {
+        return ProductsListViewHolder(view!!, adapter);
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: ProductsListViewHolder, position: Int, payloads: MutableList<Any>?) {
-        if (adapter!!.hasSearchText()) {
-            FlexibleUtils.highlightText(
-                    holder.tvName, product.name, adapter.searchText, Color.MAGENTA)
-        } else {
-            holder.tvName.text = product.name
-        }
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: ProductsListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+//        if (adapter!!.hasSearchText()) {
+//            FlexibleUtils.highlightText(
+//                    holder!!.tvName, product.name, adapter.searchText, Color.MAGENTA)
+//        } else {
+//            holder!!.tvName.text = product.name
+//        }
+        holder!!.tvName.text = product.name
         holder.tvCost.text = product.cost.toString()
         holder.tvVendorCode.text = product.vendorCode
     }
+
 
     open class ProductsListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int

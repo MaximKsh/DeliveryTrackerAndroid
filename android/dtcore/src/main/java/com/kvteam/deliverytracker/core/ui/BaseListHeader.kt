@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.ui
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -28,11 +29,11 @@ class BaseListHeader(
         return letter.hashCode()
     }
 
-    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<out IFlexible<*>>?): BaseListHeaderViewHolder {
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): BaseListHeaderViewHolder {
         return BaseListHeaderViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: BaseListHeaderViewHolder?, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: BaseListHeaderViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.tvLetter?.text = letter
     }
 

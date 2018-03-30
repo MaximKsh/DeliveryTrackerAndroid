@@ -76,16 +76,11 @@ open class FilterUsersFragment : BaseListFragment() {
         toolbarController.disableSearchMode()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-        dropdownTop.lastSelectedIndex.set(1)
-        mAdapter = UserListFlexibleAdapter(mutableListOf(), userActions)
-        (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
-
+    private suspend fun updateDataList (argument: Map<String, Any>? = null) : MutableList<User> {
         val (result, origin) = dp.userViews.getViewResultAsync(
                 viewGroup,
                 "PerformersView",
-                null,
+                argument,
                 DataProviderGetMode.FORCE_WEB)
         val entities = mutableListOf<User>()
         for(id in result) {
@@ -94,26 +89,25 @@ open class FilterUsersFragment : BaseListFragment() {
                 entities.add(e)
             } catch (e: CacheException) {}
         }
+        return entities
+    }
 
-        handleUsers(entities, origin == DataProviderGetOrigin.WEB)
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        super.onActivityCreated(savedInstanceState)
+        dropdownTop.lastSelectedIndex.set(1)
+        mAdapter = UserListFlexibleAdapter(mutableListOf(), userActions)
+        (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
+
+        val entities = updateDataList()
+
+        handleUsers(entities, false)
 
         toolbarController.enableSearchMode({text ->
-            val (result, origin) = dp.userViews.getViewResultAsync(
-                    viewGroup,
-                    "PerformersView",
-                    mapOf(
-                            "search" to text
-                    ),
-                    DataProviderGetMode.FORCE_WEB)
+            val filteredEntities = updateDataList(mapOf(
+                    "search" to text
+            ))
 
-            val entities = mutableListOf<User>()
-            for(id in result) {
-                try{
-                    val (e, _) = dp.users.getAsync(id, DataProviderGetMode.FORCE_CACHE)
-                    entities.add(e)
-                } catch (e: CacheException) {}
-            }
-            handleUsers(entities, true)
+            handleUsers(filteredEntities, true)
 
         })
         super.onActivityCreated(savedInstanceState)

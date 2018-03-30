@@ -92,7 +92,7 @@
                 <include layout="@layout/selected_performer_item" />
             </FrameLayout>
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout
                 android:id="@+id/rlTaskComment"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -131,27 +131,31 @@
             android:text="Products info"
             android:textSize="20sp" />
 
-        <RelativeLayout
-            android:id="@+id/rlTaskProductsInfo"
-            android:background="@color/colorWhite"
-            android:padding="10dp"
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/llSelectedProduct"
+            android:layout_below="@id/tvTaskProductsInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTaskProductsInfo">
+            android:layout_height="wrap_content" >
 
-
-            <com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteView
-                android:id="@+id/acvProductAutocomplete"
+            <TextView
+                android:text="Add product"
+                android:id="@+id/tvSelectProduct"
+                android:textColor="@color/colorGreen"
+                android:textSize="18sp"
+                android:padding="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+            <include layout="@layout/selected_product_item" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tvTaskClientInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rlTaskProductsInfo"
+            android:layout_below="@id/llSelectedProduct"
             android:padding="10dp"
             android:text="Client info"
             android:textSize="20sp" />
