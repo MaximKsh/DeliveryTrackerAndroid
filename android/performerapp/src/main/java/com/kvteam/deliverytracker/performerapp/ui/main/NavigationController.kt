@@ -19,8 +19,12 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     val fragmentTracer = FragmentTracer()
 
-    fun closeCurrentFragment() {
+    fun closeCurrentFragment(onBackStackEmpty: () -> Unit = {}) {
         fragmentManager.popBackStack()
+
+        if (fragmentManager.backStackEntryCount == 0) {
+            onBackStackEmpty()
+        }
     }
 
     private val usersListFragment = UsersListFragment()
