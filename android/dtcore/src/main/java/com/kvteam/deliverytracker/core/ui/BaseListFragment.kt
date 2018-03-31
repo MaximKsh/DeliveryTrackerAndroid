@@ -213,7 +213,7 @@ abstract class BaseListFragment :
 
     protected open fun handleErrorNetworkResult(result: NetworkResult<*>) {}
 
-    protected suspend fun updateList(
+    protected fun updateList(
             viewName: String,
             type: String?,
             groupIndex: Int,
@@ -300,14 +300,14 @@ abstract class BaseListFragment :
         }
     }
 
-    private suspend fun <T : ModelBase> loadTypedList(
+    private fun <T : ModelBase> loadTypedList(
             viewComponent: IViewComponent,
             dataComponent: IDataComponent<T>,
             groupIndex: Int,
             viewName: String,
             arguments: Map<String, Any>? = null,
             getMode: DataProviderGetMode,
-            handle: (MutableList<T>, Boolean) -> Unit) {
+            handle: (MutableList<T>, Boolean) -> Unit) = launchUI {
 
         rlNoListHolder.visibility = View.VISIBLE
         val (result, origin) = viewComponent.getViewResultAsync(viewGroup, viewName, arguments, getMode)
@@ -342,7 +342,7 @@ abstract class BaseListFragment :
     }
 
     private suspend fun setCategories(getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
-        rlNoListHolder.visibility = View.VISIBLE
+       // rlNoListHolder.visibility = View.VISIBLE
 
         val mode = if(tracer.atTheBeginning()) DataProviderGetMode.PREFER_WEB else getMode
 

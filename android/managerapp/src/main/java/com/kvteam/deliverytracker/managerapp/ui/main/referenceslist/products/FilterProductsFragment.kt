@@ -2,18 +2,17 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.TaskProduct
-import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.BaseFilterFragment
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import java.util.*
 import javax.inject.Inject
 
-open class FilterProductsFragment : BaseListFragment() {
+open class FilterProductsFragment : BaseFilterFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -21,6 +20,10 @@ open class FilterProductsFragment : BaseListFragment() {
             get() = navigationController.fragmentTracer
 
     override val viewGroup: String = "ReferenceViewGroup"
+
+    override val viewName = "ProductsView"
+
+    override val type = "Product"
 
     private val taskIdKey = "task_id_key"
     private var taskId
@@ -46,43 +49,19 @@ open class FilterProductsFragment : BaseListFragment() {
         (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
     }
 
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("search" to value)
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
+        (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
+        super.onActivityCreated(savedInstanceState)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         toolbarController.disableSearchMode()
-    }
-
-    private suspend fun updateDataList (argument: Map<String, Any>? = null) : MutableList<Product> {
-        val (result, origin) = dp.productsViews.getViewResultAsync(
-                viewGroup,
-                "ProductsView",
-                argument,
-                DataProviderGetMode.FORCE_WEB)
-        val entities = mutableListOf<Product>()
-        for(id in result) {
-            try{
-                val (e, _) = dp.products.getAsync(id, DataProviderGetMode.FORCE_CACHE)
-                entities.add(e)
-            } catch (e: CacheException) {}
-        }
-        return entities
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-        mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
-        (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
-
-        val entities = updateDataList()
-
-        handleProducts(entities, false)
-
-        toolbarController.enableSearchMode({text ->
-            val filteredEntities = updateDataList(mapOf(
-                    "search" to text
-            ))
-
-            handleProducts(filteredEntities, true)
-        })
-        super.onActivityCreated(savedInstanceState)
     }
 }

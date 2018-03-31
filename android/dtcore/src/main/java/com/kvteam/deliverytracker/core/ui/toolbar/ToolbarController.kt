@@ -3,13 +3,13 @@ package com.kvteam.deliverytracker.core.ui.toolbar
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
 
 
 class ToolbarController(
@@ -73,8 +73,10 @@ class ToolbarController(
         _dropdownEnabled = false
     }
 
+    var tw: TextWatcher? = null
+
     fun enableSearchMode (callback: suspend (String) -> Unit,
-                          callbackDelay:Long = 500,
+                          callbackDelay:Long = 100,
                           fragmentWide: Boolean = false,
                           focus: Boolean = false) {
         val ddEnabled = isDropdownEnabled
@@ -89,25 +91,24 @@ class ToolbarController(
         activity.updateMenuItems()
         activity.toolbar_title.visibility = View.GONE
         activity.rlToolbarSearch.visibility = View.VISIBLE
-        activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
+
+        tw = object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            private var timer = Timer()
-            override fun afterTextChanged(p0: Editable?) {
-                timer.cancel()
-                timer = Timer()
-                timer.schedule(
-                        object : TimerTask() {
-                            override fun run() = launchUI {
-                                callback(p0.toString())
-                            }
-                        },
-                        callbackDelay
-                )
+            private var lastTime = java.lang.System.currentTimeMillis()
+            override fun afterTextChanged(p0: Editable?) = launchUI {
+                val currentTime = java.lang.System.currentTimeMillis()
+                val diff = currentTime - lastTime
+                Log.e("AAAAAA", diff.toString())
+                if (diff > callbackDelay) {
+                    callback(p0.toString())
+                }
+                lastTime = currentTime
             }
-        })
+        }
+        activity.etToolbarSearch.addTextChangedListener(tw)
 
         if(focus) {
             activity.rlToolbarSearch.requestFocus()
@@ -126,6 +127,12 @@ class ToolbarController(
         isSearchFragmentWide = false
         activity.updateHomeUpButton()
         activity.updateMenuItems()
+
+        if(tw != null) {
+            activity.etToolbarSearch.removeTextChangedListener(tw)
+            tw = null
+        }
+
         activity.toolbar_title.visibility = View.VISIBLE
         activity.rlToolbarSearch.visibility = View.GONE
         activity.etToolbarSearch.setText(EMPTY_STRING)
