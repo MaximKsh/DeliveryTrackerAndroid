@@ -13,7 +13,7 @@
         <TextView
             android:id="@+id/tvDeleteItem"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="match_parent"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:background="@color/colorRed"

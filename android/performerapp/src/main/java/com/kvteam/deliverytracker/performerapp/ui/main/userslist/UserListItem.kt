@@ -41,12 +41,14 @@ class UserListItem(val user: User, header: BaseListHeader)
         val materialAvatarDefault = TextDrawable.builder()
                 .buildRound(text.toString(), Color.LTGRAY)
 
-        holder.ivUserAvatar.setImageDrawable(materialAvatarDefault)
+        holder!!.ivUserAvatar.setImageDrawable(materialAvatarDefault)
         holder.tvName.text = user.name
         holder.tvSurname.text = user.surname
         holder.ivOnlineStatus.visibility = if (user.online) View.VISIBLE else View.INVISIBLE
         holder.ivAdminStatusIcon.visibility = if (user.role == Role.Creator.id) View.VISIBLE else View.INVISIBLE
     }
+
+
 
     open class UserListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int

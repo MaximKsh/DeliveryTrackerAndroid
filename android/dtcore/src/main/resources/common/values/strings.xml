@@ -61,11 +61,11 @@
 
 
     <string name="NoTaskPerformer">No performer</string>
-
     <string name="Core_Product_Name">Product name</string>
     <string name="Core_Product_Vendor_Code">Vendor Code</string>
     <string name="Core_Product_Cost">Cost</string>
     <string name="Core_Product_Description">Description</string>
+    <string name="Core_Product_Cost_Template">₽%s</string>
 
     <string name="Core_EnterNameHint">Name</string>
     <string name="Core_EnterSurnameHint">Surname</string>

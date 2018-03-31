@@ -30,7 +30,7 @@ class UserInvitationListItem(
         holder!!.tvName.text = invitation.preliminaryUser?.name
         holder.tvSurname.text = invitation.preliminaryUser?.surname
         holder.tvInvitationCode.text = invitation.invitationCode
-        holder.tvExpiresAt.text = invitation.expires?.toString("dd.MM.yyyy")
+        holder.tvExpiresAt.text = invitation.expires?.toString("dd.MM")
         holder.tvPhoneNumber.text = invitation.preliminaryUser?.phoneNumber
         holder.tvRole.text = lm.getString(invitation.role?.toRole()?.localizationStringId ?: 0)
     }

@@ -148,7 +148,7 @@ open class ReferenceListFragment : BaseListFragment() {
 
     override fun handleProducts(products: List<Product>, animate: Boolean) {
         val referencesList = products
-                .map { ProductListItem(it, null, lm) }
+                .map { ProductListItem(it, null, lm, activity!!) }
                 .toMutableList()
         val adapter = mAdapter as? ProductsListFlexibleAdapter
         if (adapter != null) {

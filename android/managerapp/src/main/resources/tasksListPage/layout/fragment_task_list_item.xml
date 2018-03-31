@@ -28,7 +28,7 @@
         android:paddingTop="4dp"
         android:maxLines="1"
         android:textColor="@color/colorBlack"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvDeliveryDate"
@@ -39,7 +39,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorGray"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvTaskAddress"
@@ -52,7 +52,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorGray"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"

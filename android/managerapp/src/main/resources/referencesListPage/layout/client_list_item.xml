@@ -7,8 +7,6 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorBlack"
@@ -18,25 +16,70 @@
         android:id="@+id/tvSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/tvName"
-        android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvPhoneNumber"
-        android:layout_toEndOf="@id/tvSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/tvName"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textColor="@color/colorGray"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/tvOrdersCountLabel"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Orders"
+        android:textColor="@color/colorGray"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvOrdersCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tvOrdersCountLabel"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="0"
         android:textColor="@color/colorBlack"
         android:textSize="18sp" />
+
+    <View
+        android:id="@+id/vBottomBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvPhoneNumber"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_bottom_border_ltgray" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vBottomBorder"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingTop="5dp"
+        android:text="Bolshaya Pochtovaya st. 18/20, 30"
+        android:textColor="@color/colorGray"
+        android:textSize="14sp" />
 
 </RelativeLayout>
 

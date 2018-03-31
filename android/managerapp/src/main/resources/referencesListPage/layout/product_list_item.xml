@@ -3,12 +3,33 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
+    <ImageView
+        android:id="@+id/ivProductPicture"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_groceries"
+        android:layout_centerVertical="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
     <TextView
-        android:id="@+id/tvName"
+        android:id="@+id/tvVendorCode"
+        android:layout_toEndOf="@id/ivProductPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorGray"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_toEndOf="@+id/ivProductPicture"
+        android:layout_below="@+id/tvVendorCode"
+        android:layout_marginStart="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorBlack"
@@ -18,24 +39,13 @@
         android:id="@+id/tvCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/tvName"
-        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/ivProductPicture"
+        android:layout_below="@+id/tvName"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/colorBlack"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvVendorCode"
-        android:layout_toEndOf="@id/tvCost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
 </RelativeLayout>
