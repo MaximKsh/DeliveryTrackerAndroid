@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_add_user.*
 import javax.inject.Inject
 
 
-class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedListener {
+class AddUserFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -48,7 +47,6 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
             1 to Role.Performer
     )
 
-    private lateinit var mSubmitItem: MenuItem
     private lateinit var role: Role
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,8 +83,8 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
+        toolbar.disableSearchMode()
         toolbar.setToolbarTitle(resources.getString(R.string.ManagerApp_Toolbar_AddUser))
-        toolbar.showBackButton()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -112,33 +110,23 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
         }
         sUserRole.setSelection(adapter.getPosition(getString(this.role.localizationStringId)))
     }
-
-    // Role selection callbacks
-    override fun onItemSelected(parent: AdapterView<*>, view: View,
-                       pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {
-    }
-
     // MENU CALLBACKS
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
+        if (tvInvitationCodeInfo.visibility == View.VISIBLE) {
+            menu.getItem(0).isVisible = false
+            menu.getItem(1).isVisible = true
+        } else {
+            menu.getItem(0).isVisible = true
+            menu.getItem(1).isVisible = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
-        if (tvInvitationCodeInfo.visibility == View.VISIBLE) {
-            navigationController.closeCurrentFragment()
-            return@launchUI
-        }
-
-        item.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
         val selectedRole = selectedRoleMapper[sUserRole.selectedItemId.toInt()]
 
         when (item.itemId) {
-            R.id.action_finish -> {
+            R.id.action_send -> {
                 val user = User()
                 user.name = etNameField.text.toString()
                 user.surname = etSurnameField.text.toString()
@@ -155,6 +143,11 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
                 }
                 this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                 this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
+
+                activity?.invalidateOptionsMenu()
+            }
+            R.id.action_done -> {
+                navigationController.closeCurrentFragment()
             }
         }
     }, {
@@ -162,14 +155,7 @@ class AddUserFragment : DeliveryTrackerFragment(), AdapterView.OnItemSelectedLis
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_add_user_menu, menu)
-
-        mSubmitItem = menu.findItem(R.id.action_finish)
-
-        if(tvInvitationCodeInfo.visibility == View.VISIBLE) {
-            mSubmitItem.title = lm.getString(R.string.ManagerApp_Toolbar_Finish)
-        }
-
+        inflater.inflate(R.menu.add_user_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

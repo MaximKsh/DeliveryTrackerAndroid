@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
@@ -57,7 +58,7 @@ class ToolbarController(
 
     fun disableDropDown() {
         if(toolbarConfiguration.useDropdown) {
-            dropDownTop.hideIcon()
+            dropDownTop.disable()
         }
         activity.toolbar_title.isClickable = false
         _dropdownEnabled = false
@@ -65,6 +66,8 @@ class ToolbarController(
 
     fun enableSearchMode (callback: suspend (String) -> Unit, callbackDelay:Long = 500) {
         isSearchEnabled = true
+        activity.updateHomeUpButton()
+        activity.updateMenuItems()
         activity.toolbar_title.visibility = View.GONE
         activity.rlToolbarSearch.visibility = View.VISIBLE
         activity.etToolbarSearch.addTextChangedListener(object: TextWatcher {
@@ -90,10 +93,10 @@ class ToolbarController(
 
     fun disableSearchMode () {
         isSearchEnabled = false
-        if(toolbarConfiguration.useDropdown) {
-            enableDropdown()
-        }
+        activity.updateHomeUpButton()
+        activity.updateMenuItems()
         activity.toolbar_title.visibility = View.VISIBLE
         activity.rlToolbarSearch.visibility = View.GONE
+        activity.etToolbarSearch.setText(EMPTY_STRING)
     }
 }

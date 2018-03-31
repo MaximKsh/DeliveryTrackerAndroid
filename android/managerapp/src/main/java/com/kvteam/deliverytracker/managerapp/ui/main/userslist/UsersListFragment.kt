@@ -133,8 +133,8 @@ open class UsersListFragment : BaseListFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbarController.enableDropdown()
-        useSearchInToolbar(toolbar)
+        toolbar.enableDropdown()
+        toolbar.disableSearchMode()
     }
 
     override fun configureFloatingActionButton(button: FloatingActionButton) {
@@ -145,6 +145,14 @@ open class UsersListFragment : BaseListFragment() {
         }
     }
 
+    override fun refreshMenuItems() {
+        if(toolbarController.isSearchEnabled) {
+            setMenuMask(0)
+        } else {
+            setMenuMask(1)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
         super.onActivityCreated(savedInstanceState)
@@ -152,9 +160,7 @@ open class UsersListFragment : BaseListFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_search -> {
-
-            }
+            R.id.action_search -> search()
         }
         return super.onOptionsItemSelected(item)
     }

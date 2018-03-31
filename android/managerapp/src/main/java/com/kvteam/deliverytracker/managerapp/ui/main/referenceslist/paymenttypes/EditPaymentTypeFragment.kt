@@ -80,18 +80,9 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_payment_type, container, false)
     }
 
-    override fun onPause() {
-        super.onPause()
-        val view =  activity!!.currentFocus
-        if (view != null) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
-            R.id.action_save -> {
+            R.id.action_done -> {
                 val paymentType = dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.DIRTY).entry
                 paymentType.name = etNameField.text.toString()
                 dp.paymentTypes.upsertAsync(paymentType)
@@ -104,7 +95,7 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_save_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

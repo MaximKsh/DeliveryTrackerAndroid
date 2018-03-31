@@ -89,7 +89,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_save -> {
+            R.id.action_done -> {
                 val warehouse = dp.warehouses.getAsync(warehouseId, DataProviderGetMode.DIRTY).entry
                 warehouse.name = etNameField.text.toString()
                 warehouse.rawAddress = etAddressField.text.toString()
@@ -103,7 +103,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_save_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

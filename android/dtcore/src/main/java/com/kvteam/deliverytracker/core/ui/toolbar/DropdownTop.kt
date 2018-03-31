@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import kotlinx.android.synthetic.main.dropdown_top.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -17,10 +16,10 @@ import java.util.concurrent.atomic.AtomicInteger
 class DropdownTop (
         initialItems: ArrayList<DropdownTopItemInfo>,
         private val activity: FragmentActivity) {
-    private val paddingSize = 10
-    private val itemHeight = 45
     private val density = activity.resources.displayMetrics.density
     private var height = 0
+    private val paddingSize = 10
+    private val itemHeight = 45
     private val toggleIcon = ContextCompat.getDrawable(activity, R.drawable.ic_expand_more_black_24dp)
     private val toggleIconResized = BitmapDrawable(
             activity.resources,
@@ -35,12 +34,6 @@ class DropdownTop (
     private lateinit var dropdownTopItems: List<DropdownTopItem>
     private var isCollapsed: Boolean = true
     private var initialized = false
-
-    private val searchHeight
-        get() = activity.rvDropdownSearch.height
-
-    private val searchHeightEffective
-        get() = if(activity.rvDropdownSearch.visibility == View.VISIBLE) searchHeight else 0
 
     val lastSelectedIndex = AtomicInteger(0)
 
@@ -76,11 +69,11 @@ class DropdownTop (
     fun updateDataSet  (items: ArrayList<DropdownTopItemInfo>) {
         checkInitialized()
         activity.ll_dropdown_content.removeAllViews()
-        height = (searchHeightEffective + density * items.size * itemHeight + density * paddingSize).toInt()
         this.items = items
         var idx = lastSelectedIndex.get()
         idx = if(0 <= idx && idx < items.size) idx else 0
         lastSelectedIndex.set(idx)
+        height = (density * items.size * itemHeight + density * paddingSize).toInt()
         dropdownTopItems = items.mapIndexed { index, dropdownItem ->
             DropdownTopItem(
                     index,
@@ -94,51 +87,13 @@ class DropdownTop (
 
     }
 
-    var searchText: String
-        get() {
-            checkInitialized()
-            return if (activity.rvDropdownSearch.visibility == View.VISIBLE) {
-                activity.etDropdownSearch.text.toString()
-            } else {
-                return EMPTY_STRING
-            }
-        }
-        set(value) {
-            activity.etDropdownSearch.setText(value)
-        }
-
-    fun showSearch(searchAction: suspend (String) -> Unit = {},
-                   refreshDigest:suspend () -> Unit = {}) {
-        checkInitialized()
-        activity.rvDropdownSearch.visibility = View.VISIBLE
-        activity.ivDropdownSearch.setOnClickListener{
-            launchUI {
-                closeDropdown()
-                searchAction(activity.etDropdownSearch.text.toString())
-            }
-        }
-        activity.ivDropdownRefresh.setOnClickListener {
-            launchUI {
-                refreshDigest()
-            }
-        }
+    fun getSelectedItem() : DropdownTopItemInfo {
+        return items[lastSelectedIndex.get()]
     }
 
-    fun hideSearch() {
+    fun disable() {
         checkInitialized()
-        activity.rvDropdownSearch.visibility = View.GONE
-        clearSearchText()
-        activity.ivDropdownSearch.setOnClickListener { }
-        activity.ivDropdownRefresh.setOnClickListener { }
-    }
-
-    fun clearSearchText() {
-        checkInitialized()
-        activity.etDropdownSearch.setText(EMPTY_STRING)
-    }
-
-    fun hideIcon() {
-        checkInitialized()
+        closeDropdown()
         activity.toolbar_title.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
     }
 

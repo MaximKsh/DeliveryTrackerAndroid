@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
@@ -69,7 +67,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Client")
+        toolbar.setToolbarTitle("Edit client")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -123,18 +121,9 @@ class EditClientFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_client, container, false)
     }
 
-    override fun onPause() {
-        super.onPause()
-        val view =  activity!!.currentFocus
-        if (view != null) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_save -> {
+            R.id.action_done -> {
                 val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 client.name = etNameField.text.toString()
                 client.surname = etSurnameField.text.toString()
@@ -157,7 +146,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_save_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

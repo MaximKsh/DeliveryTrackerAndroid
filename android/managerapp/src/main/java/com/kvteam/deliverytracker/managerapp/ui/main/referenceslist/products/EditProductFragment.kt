@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
@@ -82,18 +80,9 @@ class EditProductFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_product, container, false)
     }
 
-    override fun onPause() {
-        super.onPause()
-        val view =  activity!!.currentFocus
-        if (view != null) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_save -> {
+            R.id.action_done -> {
                 val product = dp.products.getAsync(productId, DataProviderGetMode.DIRTY).entry
                 product.name = etNameField.text.toString()
                 product.vendorCode = etVendorCodeField.text.toString()
@@ -114,7 +103,7 @@ class EditProductFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_save_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

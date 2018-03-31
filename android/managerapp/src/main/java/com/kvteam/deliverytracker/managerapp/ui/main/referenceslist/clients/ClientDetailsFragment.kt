@@ -77,7 +77,13 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Client")
+        try {
+            val client = dp.clients.get(clientId, DataProviderGetMode.FORCE_CACHE)
+            toolbar.setToolbarTitle(client.entry.surname ?: "Client")
+
+        } catch (e: CacheException) {
+            toolbar.setToolbarTitle("Client")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,7 +101,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_edit_menu, menu)
+        inflater.inflate(R.menu.edit_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

@@ -7,13 +7,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
-import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -31,8 +28,6 @@ open class TasksListFragment : BaseListFragment() {
 
     override val viewGroup: String = "TaskViewGroup"
 
-    private val TASKS_MENU_MASK = 1
-
     private val tasksActions = object : IBaseListItemActions<TaskListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 
@@ -45,7 +40,6 @@ open class TasksListFragment : BaseListFragment() {
     }
 
     override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
-        var date: String? = null
         val headerThisWeek = BaseListHeader("This week")
         val headerPreviousWeek = BaseListHeader("Previous week")
         // TODO: fix this fate range
@@ -71,17 +65,11 @@ open class TasksListFragment : BaseListFragment() {
                     TaskListItem(task, header, lm, dp, context!!)
                 }.toMutableList()
         val adapter = mAdapter as? TasksListFlexibleAdapter
-        setMenuMask(TASKS_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(list, animate)
         } else {
             mAdapter = TasksListFlexibleAdapter(list, tasksActions)
         }
-    }
-
-    override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.enableDropdown()
-        toolbar.dropDownTop.hideSearch()
     }
 
     override fun configureFloatingActionButton(button: FloatingActionButton) {
@@ -98,16 +86,23 @@ open class TasksListFragment : BaseListFragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
+    override fun refreshMenuItems() {
+        if(toolbarController.isSearchEnabled) {
+            setMenuMask(0)
+        } else {
+            setMenuMask(1)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_add -> {
-            }
+            R.id.action_search -> search()
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_tasks_list_menu, menu)
+        inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

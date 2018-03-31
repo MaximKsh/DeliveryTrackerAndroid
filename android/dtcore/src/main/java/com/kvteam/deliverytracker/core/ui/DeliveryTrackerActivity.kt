@@ -98,13 +98,24 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        if (toolbarController.isSearchEnabled) {
+            toolbarController.disableSearchMode()
+            return true
+        }
         supportFragmentManager.popBackStack()
         return true
     }
 
-    private fun updateHomeUpButton() {
-        val canBack = supportFragmentManager.backStackEntryCount > 0
-        if(canBack) {
+    fun updateMenuItems() {
+        supportFragmentManager.fragments.forEach {
+            (it as? DeliveryTrackerFragment)?.refreshMenuItems()
+        }
+    }
+
+    fun updateHomeUpButton() {
+        val showBack = supportFragmentManager.backStackEntryCount > 0
+            || toolbarController.isSearchEnabled
+        if(showBack) {
             toolbarController.showBackButton()
         } else {
             toolbarController.hideBackButton()

@@ -88,7 +88,7 @@ class WarehouseDetailsFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_edit_menu, menu)
+        inflater.inflate(R.menu.edit_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

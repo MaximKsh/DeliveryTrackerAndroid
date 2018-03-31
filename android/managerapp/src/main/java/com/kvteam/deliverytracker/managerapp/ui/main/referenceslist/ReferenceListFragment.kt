@@ -139,7 +139,6 @@ open class ReferenceListFragment : BaseListFragment() {
                 .map { PaymentTypeListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? PaymentTypesListFlexibleAdapter
-        setMenuMask(PAYMENT_TYPES__MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(referencesList, animate)
         } else {
@@ -152,7 +151,6 @@ open class ReferenceListFragment : BaseListFragment() {
                 .map { ProductListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? ProductsListFlexibleAdapter
-        setMenuMask(PRODUCTS_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(referencesList, animate)
         } else {
@@ -175,7 +173,6 @@ open class ReferenceListFragment : BaseListFragment() {
                     ClientListItem(client, header, lm)
                 }.toMutableList()
         val adapter = mAdapter as? ClientsListFlexibleAdapter
-        setMenuMask(CLIENTS_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(referencesList, animate)
         } else {
@@ -188,7 +185,6 @@ open class ReferenceListFragment : BaseListFragment() {
                 .map { WarehouseListItem(it, null, lm) }
                 .toMutableList()
         val adapter = mAdapter as? WarehousesListFlexibleAdapter
-        setMenuMask(WAREHOUSES_MENU_MASK)
         if (adapter != null) {
             adapter.updateDataSet(referencesList, animate)
         } else {
@@ -201,8 +197,8 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbarController.enableDropdown()
-        useSearchInToolbar(toolbar)
+        toolbar.enableDropdown()
+        toolbar.disableSearchMode()
     }
 
     override fun configureFloatingActionButton(button: FloatingActionButton) {
@@ -219,17 +215,28 @@ open class ReferenceListFragment : BaseListFragment() {
         }
     }
 
+    override fun refreshMenuItems() {
+        if(toolbarController.isSearchEnabled) {
+            setMenuMask(0)
+        } else {
+            setMenuMask(1)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
         super.onActivityCreated(savedInstanceState)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_search) {
+            search()
+        }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_reference_list_menu, menu)
+        inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

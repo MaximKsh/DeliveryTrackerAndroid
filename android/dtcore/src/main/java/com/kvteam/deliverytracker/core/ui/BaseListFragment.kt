@@ -13,7 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.*
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.common.getInt
+import com.kvteam.deliverytracker.core.common.getVal
 import com.kvteam.deliverytracker.core.dataprovider.*
 import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -23,15 +26,10 @@ import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import kotlinx.android.synthetic.main.base_list.*
 import kotlinx.android.synthetic.main.base_list.view.*
 import java.util.*
 import javax.inject.Inject
-import android.support.design.widget.Snackbar
-import android.util.Log
-import android.widget.Toast
-import kotlinx.android.synthetic.main.no_data_in_list.*
 
 abstract class BaseListFragment :
         DeliveryTrackerFragment(){
@@ -105,10 +103,29 @@ abstract class BaseListFragment :
         }
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        toolbar.enableDropdown()
+        toolbar.disableSearchMode()
+
+        try {
+            if (toolbarController.isDropdownEnabled) {
+                val cache = dp.viewDigest.getDigest(viewGroup, DataProviderGetMode.FORCE_CACHE)
+                val state = uiState.forFragment(name)
+                if(state.containsKey(selectedIndexKey)) {
+                    val caption = cache.toList()[state.getInt(selectedIndexKey)].second.caption
+                    if(caption != null) {
+                        toolbar.setToolbarTitle(lm.getString(caption))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+
+        }
+    }
+
     protected open fun saveState() {
         val state = uiState.forFragment(name)
         state[selectedIndexKey] = dropdownTop.lastSelectedIndex.get()
-        state[searchTextKey] = dropdownTop.searchText
 
         val lmState = rvBaseList.layoutManager.onSaveInstanceState()
         state[scrollPositionKey] = lmState
@@ -122,8 +139,6 @@ abstract class BaseListFragment :
                 dropdownTop.lastSelectedIndex.set(state.getInt(selectedIndexKey))
             else
                 dropdownTop.lastSelectedIndex.set(0)
-            if(state.containsKey(searchTextKey))
-                dropdownTop.searchText = state.getString(searchTextKey)
 
         }
     }
@@ -169,22 +184,16 @@ abstract class BaseListFragment :
         return null
     }
 
-    protected fun useSearchInToolbar(toolbar: ToolbarController) {
-        toolbar.dropDownTop.showSearch({
-            val index = dropdownTop.lastSelectedIndex.get()
-            val selectedItem = dropdownTop.items[index]
-            val args = getViewFilterArguments(
-                    selectedItem.viewName,
-                    selectedItem.entityType,
-                    index,
-                    it)
+    protected fun search() {
+        val item = dropdownTop.getSelectedItem()
+        toolbarController.disableDropDown()
+        toolbarController.enableSearchMode({
             updateList(
-                    selectedItem.viewName,
-                    selectedItem.entityType,
-                    index,
-                    arguments = args)
-        }, {
-            setCategories(DataProviderGetMode.PREFER_WEB)
+                    item.viewName,
+                    item.entityType,
+                    dropdownTop.lastSelectedIndex.get(),
+                    getViewFilterArguments(item.viewName, item.entityType, dropdownTop.lastSelectedIndex.get(), it),
+                    DataProviderGetMode.FORCE_WEB)
         })
     }
 
@@ -354,7 +363,6 @@ abstract class BaseListFragment :
                     lm.getString(category.second.caption!!),
                     category.second.count!!.toInt(),
                     { index ->
-                        dropdownTop.clearSearchText()
                         updateList(category.first, category.second.entityType, index)
                     })
         }
@@ -362,12 +370,7 @@ abstract class BaseListFragment :
 
         dropdownTop.updateDataSet(categories)
         val idx = dropdownTop.lastSelectedIndex.get()
-        val prevSearchText = dropdownTop.searchText
-        val args =
-                if(prevSearchText.isNotBlank())
-                    getViewFilterArguments(digest[idx].first, digest[idx].second.entityType, idx, prevSearchText)
-                else null
-        updateList(digest[idx].first, digest[idx].second.entityType, idx, arguments = args)
+        updateList(digest[idx].first, digest[idx].second.entityType, idx)
     }
 
     private fun setPtrHandler() {

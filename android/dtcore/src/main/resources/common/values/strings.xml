@@ -75,6 +75,7 @@
     <string name="Core_Done">Done</string>
     <string name="Core_Edit">Edit</string>
     <string name="Core_Search">Search</string>
+    <string name="Core_Send">Done</string>
 
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>

@@ -13,6 +13,7 @@ import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
@@ -82,6 +83,14 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
         toolbar.showBackButton()
+
+        val taskResult = try {
+            dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE)
+        } catch (e: CacheException) {
+            return
+        }
+        val task = taskResult.entry
+        toolbar.setToolbarTitle(task.taskNumber ?: EMPTY_STRING)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
