@@ -1,8 +1,10 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
@@ -79,6 +81,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         val fragment = EditSettingsFragment()
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -88,6 +96,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         val fragment = AddUserFragment.create(role)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -98,6 +112,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(taskDetailsFragment)
         taskDetailsFragment.setTask(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, taskDetailsFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -108,6 +128,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragment.setTask(taskId)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -118,6 +144,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(fragment)
         fragment.setAddress(clientId, addressId)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -128,6 +160,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(editPaymentTypeFragment)
         editPaymentTypeFragment.setPaymentType(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, editPaymentTypeFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -138,6 +176,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(paymentTypeDetailsFragment)
         paymentTypeDetailsFragment.setPaymentType(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, paymentTypeDetailsFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -148,6 +192,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(fragment)
         fragment.setProduct(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -158,6 +208,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(clientDetailsFragment)
         clientDetailsFragment.setClient(clientId)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, clientDetailsFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -168,6 +224,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(editClientFragment)
         editClientFragment.setClient(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, editClientFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -178,6 +240,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(fragment)
         fragment.setProduct(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -188,6 +256,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragment.setEditTaskId(id)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -198,6 +272,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragment.setEditTaskId(taskId)
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -208,6 +288,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(fragment)
         fragment.setWarehouse(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -218,6 +304,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(fragment)
         fragment.setWarehouse(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()

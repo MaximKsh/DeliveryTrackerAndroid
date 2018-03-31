@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.userslist
 
 import android.graphics.Color
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.models.User
@@ -18,11 +19,11 @@ class UserListItem(val user: User, header: BaseListHeader)
     override val key: String
         get() = user.code!!
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : UserListViewHolder {
-        return UserListViewHolder(view, adapter)
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): UserListViewHolder {
+        return UserListViewHolder(view!!, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: UserListViewHolder, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: UserListViewHolder?, position: Int, payloads: MutableList<Any>?) {
         val text = StringBuilder(4)
         if(user.name?.isNotBlank() == true) {
             text.append(user.name!![0].toString())
@@ -34,12 +35,14 @@ class UserListItem(val user: User, header: BaseListHeader)
         val materialAvatarDefault = TextDrawable.builder()
                 .buildRound(text.toString(), Color.LTGRAY)
 
-        holder.ivUserAvatar.setImageDrawable(materialAvatarDefault)
+        holder!!.ivUserAvatar.setImageDrawable(materialAvatarDefault)
         holder.tvName.text = user.name
         holder.tvSurname.text = user.surname
         holder.ivOnlineStatus.visibility = if (user.online) View.VISIBLE else View.INVISIBLE
         holder.ivAdminStatusIcon.visibility = if (user.role == Role.Creator.id) View.VISIBLE else View.INVISIBLE
     }
+
+
 
     open class UserListViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : BaseListItem.BaseListViewHolder(view, adapter) {
         override val layoutID: Int
