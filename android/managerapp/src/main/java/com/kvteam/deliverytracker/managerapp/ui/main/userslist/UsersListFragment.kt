@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.core.models.User
@@ -155,7 +154,6 @@ open class UsersListFragment : BaseListFragment() {
         button.setOnClickListener {
             navigationController.navigateToAddUser(this.role)
         }
-        eh.handleNoInternetWarn(DataProviderGetOrigin.CACHE)
     }
 
     override fun refreshMenuItems() {
