@@ -7,7 +7,9 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -187,20 +189,6 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_base_task_details, container, false)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
-        when (item.itemId) {
-            R.id.action_edit_task -> {
-            }
-        }
-    }, {
-        super.onOptionsItemSelected(item)
-    })
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_base_task_details_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun onChangeStateClick(transitionId: UUID) = launchUI {

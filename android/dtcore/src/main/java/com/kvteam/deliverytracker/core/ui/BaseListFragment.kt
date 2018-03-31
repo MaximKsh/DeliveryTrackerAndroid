@@ -58,6 +58,8 @@ abstract class BaseListFragment :
 
     abstract val tracer: FragmentTracer
 
+    protected open val defaultHeader: String = EMPTY_STRING
+
     protected var mAdapter : FlexibleAdapter<*>
         get() = rvBaseList.adapter as FlexibleAdapter<*>
         set(value) {
@@ -89,6 +91,7 @@ abstract class BaseListFragment :
         setPtrHandler()
         initializeAsync()
         restoreStateAfterActivityCreated()
+
     }
 
     override fun onStop() {
@@ -109,17 +112,23 @@ abstract class BaseListFragment :
 
         try {
             if (toolbarController.isDropdownEnabled) {
-                val cache = dp.viewDigest.getDigest(viewGroup, DataProviderGetMode.FORCE_CACHE)
+                val (cache, _) = dp.viewDigest.getDigest(viewGroup, DataProviderGetMode.FORCE_CACHE)
                 val state = uiState.forFragment(name)
-                if(state.containsKey(selectedIndexKey)) {
+                if (state.containsKey(selectedIndexKey)) {
                     val caption = cache.toList()[state.getInt(selectedIndexKey)].second.caption
                     if(caption != null) {
                         toolbar.setToolbarTitle(lm.getString(caption))
+                    } else {
+                        toolbar.setToolbarTitle(defaultHeader)
                     }
+                } else {
+                    toolbar.setToolbarTitle(defaultHeader)
                 }
+            } else {
+                toolbar.setToolbarTitle(defaultHeader)
             }
         } catch (e: Exception) {
-
+            toolbar.setToolbarTitle(defaultHeader)
         }
     }
 
@@ -139,19 +148,15 @@ abstract class BaseListFragment :
                 dropdownTop.lastSelectedIndex.set(state.getInt(selectedIndexKey))
             else
                 dropdownTop.lastSelectedIndex.set(0)
-
+            if(state.containsKey(scrollPositionKey))
+                view.rvBaseList.layoutManager.onRestoreInstanceState(state.getVal<String, Any?, Parcelable>(scrollPositionKey))
         }
     }
 
     protected open fun restoreStateAfterActivityCreated() {
-        val state = uiState.forFragment(this@BaseListFragment)
-        if(state.containsKey(scrollPositionKey))
-            rvBaseList.layoutManager.onRestoreInstanceState(state.getVal<String, Any?, Parcelable>(scrollPositionKey))
-
     }
 
     protected open fun prepareView(rootView: View) {
-
     }
 
     protected open suspend fun initializeAsync() {
@@ -342,16 +347,24 @@ abstract class BaseListFragment :
     }
 
     private suspend fun setCategories(getMode: DataProviderGetMode = DataProviderGetMode.PREFER_CACHE) {
-       // rlNoListHolder.visibility = View.VISIBLE
+        rlNoListHolder.visibility = View.VISIBLE
 
         val mode = if(tracer.atTheBeginning()) DataProviderGetMode.PREFER_WEB else getMode
 
-        val result = try {
+        val (result, origin) = try {
             dp.viewDigest.getDigestAsync(viewGroup, mode)
         } catch (e: NetworkException) {
             eh.handle(e.result)
             return
+        } catch (e: CacheException) {
+            eh.handleNoInternetWarn(DataProviderGetOrigin.CACHE)
+            return
         }
+        if (mode == DataProviderGetMode.PREFER_WEB
+            || mode == DataProviderGetMode.FORCE_WEB) {
+            eh.handleNoInternetWarn(origin)
+        }
+
         val digest = result
                 .toList()
                 .sortedBy { it.second.order ?: Int.MAX_VALUE }

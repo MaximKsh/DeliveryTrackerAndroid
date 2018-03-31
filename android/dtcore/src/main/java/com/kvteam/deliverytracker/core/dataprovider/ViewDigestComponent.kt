@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
-import com.kvteam.deliverytracker.core.models.ViewDigest
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import kotlinx.coroutines.experimental.async
 
@@ -11,7 +10,7 @@ class ViewDigestComponent (
 
     override fun getDigest(
             viewGroup: String,
-            getMode: DataProviderGetMode): Map<String, ViewDigest> {
+            getMode: DataProviderGetMode): DataProviderViewDigestResult {
         if(getMode != DataProviderGetMode.FORCE_CACHE) {
             throw ActionNotSupportedException()
         }
@@ -20,7 +19,7 @@ class ViewDigestComponent (
 
     override suspend fun getDigestAsync(
             viewGroup: String,
-            getMode: DataProviderGetMode): Map<String, ViewDigest> = async {
+            getMode: DataProviderGetMode): DataProviderViewDigestResult = async {
         when(getMode) {
             DataProviderGetMode.FORCE_WEB -> getForceWebAsync(viewGroup)
             DataProviderGetMode.FORCE_CACHE -> getForceCache(viewGroup)
@@ -38,21 +37,22 @@ class ViewDigestComponent (
         }
     }
 
-    private suspend fun getForceWebAsync(viewGroup: String) : Map<String, ViewDigest> {
+    private suspend fun getForceWebAsync(viewGroup: String) : DataProviderViewDigestResult {
         val result = viewWebservice.getDigestAsync(viewGroup)
         if(!result.success) {
             throw NetworkException(result)
         }
         val digest = result.entity?.digest!!
         container.putViewDigest(viewGroup, digest)
-        return digest
+        return DataProviderViewDigestResult(digest, DataProviderGetOrigin.WEB)
     }
 
-    private fun getForceCache(viewGroup: String) : Map<String, ViewDigest> {
-        return container.getViewDigest(viewGroup) ?: throw CacheException()
+    private fun getForceCache(viewGroup: String) : DataProviderViewDigestResult {
+        val digest = container.getViewDigest(viewGroup) ?: throw CacheException()
+        return DataProviderViewDigestResult(digest, DataProviderGetOrigin.CACHE)
     }
 
-    private suspend fun getPreferWebAsync(viewGroup: String) : Map<String, ViewDigest> {
+    private suspend fun getPreferWebAsync(viewGroup: String) : DataProviderViewDigestResult {
         return try {
             getForceWebAsync(viewGroup)
         } catch (e: NetworkException) {
@@ -60,7 +60,7 @@ class ViewDigestComponent (
         }
     }
 
-    private suspend fun getPreferCacheAsync(viewGroup: String) : Map<String, ViewDigest> {
+    private suspend fun getPreferCacheAsync(viewGroup: String) : DataProviderViewDigestResult {
         return try {
             getForceCache(viewGroup)
         } catch (e: CacheException) {

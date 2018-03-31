@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.ui.errorhandling
 
 import android.app.AlertDialog
 import android.support.design.widget.Snackbar
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.ErrorListResult
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
@@ -78,8 +79,10 @@ class ErrorHandler(
 
     private fun handleListInternal(errorListResult: ErrorListResult) {
         val text = errorListResult.errors.joinToString(separator = "\n", transform = { it.message })
+        val defaultText = lm.getString(R.string.Core_UnknownError)
+        val actualText = if(text.isBlank()) defaultText else defaultText
         AlertDialog.Builder(activity)
-                .setMessage(text)
+                .setMessage(actualText)
                 .setCancelable(true)
                 .show()
     }
@@ -87,25 +90,25 @@ class ErrorHandler(
     private fun  <T : ResponseBase> handleNetworkInternal(networkResult: NetworkResult<T>) {
         if (!networkResult.fetched) {
             Snackbar
-                    .make(ctx.rootView, "No Internet", Snackbar.LENGTH_LONG)
+                    .make(ctx.rootView, lm.getString(R.string.Core_NoInternet), Snackbar.LENGTH_LONG)
                     .show()
             return
         }
 
         if (networkResult.statusCode == 403) {
             AlertDialog.Builder(activity)
-                    .setMessage("Invalid credentials")
+                    .setMessage(lm.getString(R.string.Core_InvalidCredentials))
                     .setCancelable(true)
-                    .setPositiveButton("OK", {_, _ ->  })
+                    .setPositiveButton(lm.getString(R.string.Core_OK), {_, _ ->  })
                     .show()
             return
         }
 
         if (networkResult.statusCode == 404) {
             AlertDialog.Builder(activity)
-                    .setMessage("Page not found")
+                    .setMessage(lm.getString(R.string.Core_PageNotFound))
                     .setCancelable(true)
-                    .setPositiveButton("OK", {_, _ ->  })
+                    .setPositiveButton(lm.getString(R.string.Core_OK), {_, _ ->  })
                     .show()
             return
         }
@@ -116,28 +119,29 @@ class ErrorHandler(
     private fun handleRawNetworkInternal(networkResult: RawNetworkResult) {
         if (!networkResult.fetched) {
             Snackbar
-                    .make(ctx.rootView, "No Internet", Snackbar.LENGTH_LONG)
+                    .make(ctx.rootView, lm.getString(R.string.Core_NoInternet), Snackbar.LENGTH_LONG)
                     .show()
             return
         }
 
         if (networkResult.statusCode == 403) {
             AlertDialog.Builder(activity)
-                    .setMessage("Invalid credentials")
+                    .setMessage(lm.getString(R.string.Core_InvalidCredentials))
                     .setCancelable(true)
-                    .setPositiveButton("OK", {_, _ ->  })
+                    .setPositiveButton(lm.getString(R.string.Core_OK), {_, _ ->  })
                     .show()
             return
         }
 
         if (networkResult.statusCode == 404) {
             AlertDialog.Builder(activity)
-                    .setMessage("Page not found")
+                    .setMessage(lm.getString(R.string.Core_PageNotFound))
                     .setCancelable(true)
-                    .setPositiveButton("OK", {_, _ ->  })
+                    .setPositiveButton(lm.getString(R.string.Core_OK), {_, _ ->  })
                     .show()
             return
         }
+
         handleListInternal(networkResult)
     }
 }

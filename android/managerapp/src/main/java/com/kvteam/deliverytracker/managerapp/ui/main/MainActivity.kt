@@ -89,7 +89,6 @@ class MainActivity : DeliveryTrackerActivity() {
             navigation.selectedItemId = R.id.navigation_staff
         }
 
-
         removeShiftMode(navigation)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)

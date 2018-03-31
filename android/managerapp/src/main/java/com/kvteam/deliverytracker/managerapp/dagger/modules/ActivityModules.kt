@@ -212,7 +212,7 @@ abstract class MainActivityModule {
         fun errorHandler(activity: MainActivity, lm: ILocalizationManager): IErrorHandler {
             return ErrorHandler(
                     activity,
-                    R.id.mainContainer,
+                    R.id.placeSnackBar,
                     lm)
         }
 

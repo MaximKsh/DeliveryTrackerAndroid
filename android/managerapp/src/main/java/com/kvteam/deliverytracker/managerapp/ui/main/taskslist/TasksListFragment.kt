@@ -28,6 +28,8 @@ open class TasksListFragment : BaseListFragment() {
 
     override val viewGroup: String = "TaskViewGroup"
 
+    override val defaultHeader by lazy { lm.getString(R.string.ServerMessage_Views_TasksManagersView) }
+
     private val tasksActions = object : IBaseListItemActions<TaskListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 

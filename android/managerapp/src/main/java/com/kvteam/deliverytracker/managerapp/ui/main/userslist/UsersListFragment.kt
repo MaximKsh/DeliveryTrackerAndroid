@@ -15,7 +15,6 @@ import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
-import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -31,6 +30,8 @@ open class UsersListFragment : BaseListFragment() {
 
     override val tracer
             get() = navigationController.fragmentTracer
+
+    override val defaultHeader by lazy { lm.getString(R.string.ServerMessage_Views_ManagersView) }
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -145,11 +146,6 @@ open class UsersListFragment : BaseListFragment() {
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
         return mapOf("search" to value)
-    }
-
-    override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.enableDropdown()
-        toolbar.disableSearchMode()
     }
 
     override fun configureFloatingActionButton(button: FloatingActionButton) {
