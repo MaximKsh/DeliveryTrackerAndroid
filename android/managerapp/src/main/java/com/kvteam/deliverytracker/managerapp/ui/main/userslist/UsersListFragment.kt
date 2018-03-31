@@ -19,6 +19,9 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.Duration
 import javax.inject.Inject
 
 // TODO: rename managersList xml to userslist
@@ -107,19 +110,31 @@ open class UsersListFragment : BaseListFragment() {
     }
 
     override fun handleInvitations(invitations: List<Invitation>, animate: Boolean) {
-        var date: String? = null
-        var header = BaseListHeader("A")
+        val headerThisWeek = BaseListHeader("This week")
+        val headerPreviousWeek = BaseListHeader("Previous week")
+        // TODO: fix this fate range
+        val headerLongTimeAgo = BaseListHeader("Long time ago")
 
         val invitationList = invitations
                 .sortedByDescending { a -> a.created }
                 .map { invitation ->
-                    val dateCaption = invitation.created?.toString("dd.MM.yyyy") ?: EMPTY_STRING
-                    if (date == null || date != dateCaption) {
-                        date = dateCaption
-                        header = BaseListHeader(dateCaption)
+                    val header: BaseListHeader
+                    val dateValue = invitation.created!!
+                    val duration = Duration(dateValue, DateTime.now(DateTimeZone.UTC))
+                    when (duration.standardDays) {
+                        in 0..7 -> {
+                            header = headerThisWeek
+                        }
+                        in 8..14 -> {
+                            header = headerPreviousWeek
+                        }
+                        else -> {
+                            header = headerLongTimeAgo
+                        }
                     }
                     UserInvitationListItem(invitation, header, lm)
                 }.toMutableList()
+
         val adapter = mAdapter as? UserInvitationListFlexibleAdapter
         if (adapter != null) {
             adapter.updateDataSet(invitationList, animate)
