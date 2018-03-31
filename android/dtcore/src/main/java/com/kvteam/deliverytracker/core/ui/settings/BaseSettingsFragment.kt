@@ -2,18 +2,18 @@ package com.kvteam.deliverytracker.core.ui.settings
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.view.*
-import com.amulyakhare.textdrawable.TextDrawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_settings.*
@@ -44,27 +44,32 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbarController.setToolbarTitle("Profile")
+        toolbarController.setToolbarTitle(lm.getString(R.string.Core_ProfileHeader))
     }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val instance = session.instance
         val user = session.user!!
-        tvHeader.text = "${Role.getCaption(user.role, lm)} (${user.code})"
-        tvSurname.text = user.surname
-        tvName.text = user.name
-        tvPatronymic.text = user.patronymic
+        tvSurnameNamePatronymic.text = context?.getString(
+                R.string.Core_SurnameNamePatronymic,
+                user.surname?.trim() ?: EMPTY_STRING,
+                user.name?.trim() ?: EMPTY_STRING,
+                user.patronymic?.trim() ?: EMPTY_STRING)
+
+        if(instance != null) {
+            tvInstance.text = instance.name
+        }
+
+        tvCode.text = user.code
         tvPhoneNumber.text = user.phoneNumber
+        ivUserAvatar.setImageDrawable(materialDefaultAvatar(user))
 
-        val surname = user.surname
-        val name = user.name
-        val materialAvatarDefault = TextDrawable.builder()
-                .buildRound((name?.get(0)?.toString() ?: EMPTY_STRING) + (surname?.get(0)?.toString() ?: EMPTY_STRING), Color.LTGRAY)
-        ivUserAvatar.setImageDrawable(materialAvatarDefault)
+        tvEditSettings.setOnClickListener { onEditSettingsClicked() }
 
-        bttnLogout.setOnClickListener { launchUI {
+        tvLogout.setOnClickListener { launchUI {
                 session.logoutAsync()
                 val loginActivity =
                         (activity?.application as DeliveryTrackerApplication).loginActivityType as Class<*>
@@ -74,17 +79,4 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
             }
         }
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_edit -> onEditSettingsClicked()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.edit_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
 }

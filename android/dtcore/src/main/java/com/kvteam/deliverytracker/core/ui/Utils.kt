@@ -1,12 +1,14 @@
 package com.kvteam.deliverytracker.core.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
-import android.text.Editable
 import android.util.Log
 import android.widget.EditText
+import com.amulyakhare.textdrawable.TextDrawable
+import com.kvteam.deliverytracker.core.models.User
 
 @SuppressLint("RestrictedApi")
 fun removeShiftMode(view: BottomNavigationView): Boolean {
@@ -37,4 +39,19 @@ fun EditText.setNullableText(str: String?) {
     } else {
         this.text.clear()
     }
+}
+
+fun materialDefaultAvatar(user: User?) : TextDrawable{
+    val text = StringBuilder(4)
+    if(user?.name?.isNotBlank() == true) {
+        text.append(user.name!![0].toString())
+    }
+    if(user?.surname?.isNotBlank() == true) {
+        text.append(user.surname!![0].toString())
+    }
+
+    val materialAvatarDefault = TextDrawable.builder()
+            .buildRound(text.toString(), Color.LTGRAY)
+
+    return materialAvatarDefault
 }

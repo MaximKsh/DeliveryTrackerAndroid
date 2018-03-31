@@ -12,12 +12,15 @@ import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.Device
+import com.kvteam.deliverytracker.core.models.Instance
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
 import com.kvteam.deliverytracker.core.webservice.*
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
+import com.kvteam.deliverytracker.core.webservice.viewmodels.InstanceResponse
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
@@ -36,9 +39,12 @@ class Session (
     private val baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
 
     private val userAR = AtomicReference<Lazy<User?>>( lazy { getUserFromAccount() })
+    private val instanceAR = AtomicReference<Lazy<Instance?>> (lazy { getInstanceFromAccount() })
 
     override val user
         get() = userAR.get().value
+    override val instance
+        get() = instanceAR.get().value
 
 
     override fun getToken(): String? {
@@ -75,6 +81,11 @@ class Session (
             user: User) : LoginResult {
         try{
             createAccount(username, password, token, user)
+            runBlocking {
+                async {
+                    tryRefreshInstanceInfo()
+                }.await()
+            }
         } catch (e: Exception) {
             val result = LoginResult(LoginResultType.Error)
             result.fetched = false
@@ -172,6 +183,7 @@ class Session (
             return@async LoginResult.error(response, accountResponse)
         }
 
+        tryRefreshInstanceInfo()
         updateDeviceAsync()
 
         val resultType =
@@ -197,6 +209,7 @@ class Session (
         }
         val userInfo = accountResponse.user
         setUserToAccount(userInfo)
+        tryRefreshInstanceInfo()
 
         return@async NetworkResult.create(response,accountResponse)
     }.await()
@@ -224,6 +237,7 @@ class Session (
         }
         val newUserInfo = accountResponse.user
         setUserToAccount(newUserInfo)
+        tryRefreshInstanceInfo()
 
         return@async NetworkResult.create(response,accountResponse)
     }.await()
@@ -280,43 +294,77 @@ class Session (
 
     }.await()
 
+    private suspend fun tryRefreshInstanceInfo() = async {
+        val response = doubleTimeRequest(this@Session, true) {
+            httpManager.get(
+                    baseUrl + "/api/instance/get",
+                    it)
+        }
+        if(!response.success) {
+            return@async
+        }
+
+        val accountResponse = try {
+            gson.fromJson<InstanceResponse>(response.entity, InstanceResponse::class.java)
+        } catch (e: JsonSyntaxException) {
+            return@async
+        }
+        val info = accountResponse.instance
+        setInstanceToAccount(info)
+    }.await()
+
+    private fun getInstanceFromAccount(): Instance? {
+        val instance = Instance(
+                id = getDataUuidOrNull(INSTANCE_ID_KEY),
+                name = getDataOrNull(INSTANCE_NAME_KEY),
+                creatorId = getDataUuidOrNull(INSTANCE_CREATOR_ID_KEY)
+        )
+        return instance
+    }
 
     private fun getUserFromAccount(): User? {
         val user = User(
-                code = getUserDataOrNull(CODE_KEY),
-                surname = getUserDataOrNull(SURNAME_KEY),
-                name = getUserDataOrNull(NAME_KEY),
-                patronymic = getUserDataOrNull(PATRONYMIC_KEY),
-                phoneNumber = getUserDataOrNull(PHONE_NUMBER_KEY),
-                role = getUserDataUuidOrNull(ROLE_KEY))
-        user.id = getUserDataUuidOrNull(ID_KEY)
-        user.instanceId = getUserDataUuidOrNull(INSTANCE_ID_KEY)
+                code = getDataOrNull(CODE_KEY),
+                surname = getDataOrNull(SURNAME_KEY),
+                name = getDataOrNull(NAME_KEY),
+                patronymic = getDataOrNull(PATRONYMIC_KEY),
+                phoneNumber = getDataOrNull(PHONE_NUMBER_KEY),
+                role = getDataUuidOrNull(ROLE_KEY))
+        user.id = getDataUuidOrNull(ID_KEY)
+        user.instanceId = getDataUuidOrNull(INSTANCE_ID_KEY)
         return user
     }
 
     private fun setUserToAccount(user: User?) {
-        setUserDataOrNull(ID_KEY, user?.id)
-        setUserDataOrNull(INSTANCE_ID_KEY, user?.instanceId)
-        setUserDataOrNull(CODE_KEY, user?.code)
-        setUserDataOrNull(SURNAME_KEY, user?.surname)
-        setUserDataOrNull(NAME_KEY, user?.name)
-        setUserDataOrNull(PATRONYMIC_KEY, user?.patronymic)
-        setUserDataOrNull(ROLE_KEY, user?.role)
+        setDataOrNull(ID_KEY, user?.id)
+        setDataOrNull(INSTANCE_ID_KEY, user?.instanceId)
+        setDataOrNull(CODE_KEY, user?.code)
+        setDataOrNull(SURNAME_KEY, user?.surname)
+        setDataOrNull(NAME_KEY, user?.name)
+        setDataOrNull(PATRONYMIC_KEY, user?.patronymic)
+        setDataOrNull(PHONE_NUMBER_KEY, user?.phoneNumber)
+        setDataOrNull(ROLE_KEY, user?.role)
         userAR.set( lazy { getUserFromAccount() } )
     }
 
+    private fun setInstanceToAccount(instance: Instance?) {
+        setDataOrNull(INSTANCE_ID_KEY, instance?.id)
+        setDataOrNull(INSTANCE_NAME_KEY, instance?.name)
+        setDataOrNull(INSTANCE_CREATOR_ID_KEY, instance?.creatorId)
+        instanceAR.set( lazy { getInstanceFromAccount() } )
+    }
 
-    private fun getUserDataOrNull(key: String): String? {
+    private fun getDataOrNull(key: String): String? {
         val account = getFirstAccount() ?: return null
         return accountManager.getUserData(account, key)
     }
 
-    private fun getUserDataUuidOrNull(key: String): UUID? {
-        val idOrNull = getUserDataOrNull(key) ?: return null
+    private fun getDataUuidOrNull(key: String): UUID? {
+        val idOrNull = getDataOrNull(key) ?: return null
         return UUID.fromString(idOrNull)
     }
 
-    private fun setUserDataOrNull(key: String, value: Any?) {
+    private fun setDataOrNull(key: String, value: Any?) {
         val account = getFirstAccount()
         if(account != null) {
             accountManager.setUserData(account, key, value?.toString() ?: EMPTY_STRING)

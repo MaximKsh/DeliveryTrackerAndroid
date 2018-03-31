@@ -1,7 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-    <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.79:5000</string>
+     <string name="Core_WebserviceUrl" translatable="false">http://192.168.1.122:5000</string>
 
 
     <string name="Core_UnknownError">Sorry. Something went wrong</string>
@@ -9,6 +9,16 @@
     <string name="Core_PageNotFound">Internal error. Unknown endpoint.</string>
     <string name="Core_NoInternet">No internet connection</string>
     <string name="Core_InvalidCredentials">Wrong login/password pair</string>
+
+
+    <string name="Core_ProfileHeader">Profile</string>
+    <string name="Core_AvatarDesc">Avatar</string>
+    <string name="Core_SurnameNamePatronymic">%s %s %s</string>
+    <string name="Core_Instance">Instance: </string>
+    <string name="Core_YourPhone">Phone: </string>
+    <string name="Core_YourCode">Code: </string>
+    <string name="Core_EditSettings">Edit settings</string>
+    <string name="Core_Logout">Logout</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_EnterCodeHint">Invitation code</string>

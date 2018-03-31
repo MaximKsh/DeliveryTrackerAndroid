@@ -10,3 +10,6 @@ internal const val NAME_KEY = "_name"
 internal const val PATRONYMIC_KEY = "_patronymic"
 internal const val PHONE_NUMBER_KEY = "_phoneNumber"
 internal const val ROLE_KEY = "_role"
+
+internal const val INSTANCE_NAME_KEY = "_instanceName"
+internal const val INSTANCE_CREATOR_ID_KEY = "_instanceCreatorId"

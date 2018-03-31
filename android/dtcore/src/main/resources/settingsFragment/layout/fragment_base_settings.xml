@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     tools:context="com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment">
 
     <ScrollView
@@ -16,61 +17,167 @@
 
                 <ImageView
                     android:id="@+id/ivUserAvatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
                     android:layout_margin="15dp"
                     android:layout_marginTop="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:contentDescription=""/>
+                    android:layout_centerHorizontal="true"
+                    android:contentDescription="@string/Core_AvatarDesc"/>
 
                 <TextView
-                    android:id="@+id/tvHeader"
+                    android:id="@+id/tvSurnameNamePatronymic"
                     android:textAlignment="center"
                     android:textSize="22sp"
-                    android:layout_toEndOf="@id/ivUserAvatar"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@id/ivUserAvatar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:id="@+id/tvSurname"
-                    android:textSize="18sp"
-                    android:layout_below="@id/tvHeader"
-                    android:layout_toEndOf="@id/ivUserAvatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
 
-                <TextView
-                    android:id="@+id/tvName"
-                    android:textSize="18sp"
-                    android:layout_toEndOf="@id/ivUserAvatar"
-                    android:layout_below="@id/tvSurname"
+                <FrameLayout
+                    android:id="@+id/flInstance"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="@dimen/settings_item_height"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_below="@id/tvSurnameNamePatronymic">
+                    <!-- парент дает эффект выделения -->
+                    <LinearLayout
+                        android:id="@+id/llInstance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:background="@drawable/shape_bottom_border"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:text="@string/Core_Instance"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/colorGray"/>
+                        <TextView
+                            android:id="@+id/tvInstance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                </FrameLayout>
 
-                <TextView
-                    android:id="@+id/tvPatronymic"
-                    android:textSize="18sp"
-                    android:layout_toEndOf="@id/ivUserAvatar"
-                    android:layout_below="@id/tvName"
+                <FrameLayout
+                    android:id="@+id/flPhoneNumber"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="@dimen/settings_item_height"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_below="@id/flInstance">
+                    <!-- парент дает эффект выделения -->
+                    <LinearLayout
+                        android:id="@+id/llPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:background="@drawable/shape_bottom_border"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:text="@string/Core_YourPhone"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/colorGray"/>
+                        <TextView
+                            android:id="@+id/tvPhoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                </FrameLayout>
 
-                <TextView
-                    android:id="@+id/tvPhoneNumber"
-                    android:textSize="18sp"
-                    android:layout_toEndOf="@id/ivUserAvatar"
-                    android:layout_below="@id/tvPatronymic"
+                <FrameLayout
+                    android:id="@+id/flCode"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="@dimen/settings_item_height"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_below="@id/flPhoneNumber">
 
+                    <!-- парент дает эффект выделения -->
+                    <LinearLayout
+                        android:id="@+id/llCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:background="@drawable/shape_bottom_border"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:text="@string/Core_YourCode"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="5dp"
+                            android:textColor="@color/colorGray"/>
+                        <TextView
+                            android:id="@+id/tvCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/flEditSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:background="@drawable/shape_bottom_border"
+                    android:layout_below="@id/flCode">
+                    <TextView
+                        android:id="@+id/tvEditSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/Core_EditSettings"
+                        android:gravity="center_vertical"
+                        android:background="?selectableItemBackground"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="18sp"/>
+                </FrameLayout>
+
+
+
+                <FrameLayout
+                    android:id="@+id/flLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:background="@drawable/shape_bottom_border"
+                    android:layout_below="@id/flEditSettings">
+                <TextView
+                    android:id="@+id/tvLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/Core_Logout"
+                    android:gravity="center_vertical"
+                    android:background="?selectableItemBackground"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textSize="18sp"/>
+            </FrameLayout>
             </RelativeLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/bttnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="logout" />
 </LinearLayout>
