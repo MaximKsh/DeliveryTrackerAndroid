@@ -16,19 +16,13 @@
             android:id="@+id/mainContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/llBottom"/>
+            android:layout_above="@id/navigation"/>
 
-        <LinearLayout
-            android:id="@+id/llBottom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_above="@id/navigation"
             android:id="@+id/placeSnackBar">
 
             <android.support.design.widget.FloatingActionButton
@@ -52,14 +46,11 @@
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:background="?android:attr/windowBackground"
             app:itemIconTint="@drawable/bnv_item_color_selector"
             app:itemTextColor="@drawable/bnv_item_color_selector"
             app:menu="@menu/navigation" />
-
-        </LinearLayout>
-
-
     </RelativeLayout>
 
     <include layout="@layout/toolbar" />

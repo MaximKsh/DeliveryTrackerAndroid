@@ -299,9 +299,10 @@ abstract class BaseListFragment :
                 }
             }
         } catch (e: NetworkException) {
+            eh.handle(e.result)
             handleErrorNetworkResult(e.result)
         } catch (e: CacheException) {
-            // TODO: обработка
+            eh.handleNoInternetWarn(DataProviderGetOrigin.CACHE)
         }
     }
 
