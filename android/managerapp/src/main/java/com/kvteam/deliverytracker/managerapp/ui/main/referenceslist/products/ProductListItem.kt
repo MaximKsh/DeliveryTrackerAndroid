@@ -1,12 +1,14 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.graphics.Color
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.BaseListItem
+import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -17,7 +19,8 @@ import kotlinx.android.synthetic.main.product_list_item.view.*
 class ProductListItem(
         val product: Product,
         header: BaseListHeader?,
-        private val lm: ILocalizationManager)
+        private val lm: ILocalizationManager,
+        private val activity: FragmentActivity)
     : BaseListItem<Product, ProductListItem.ProductsListViewHolder>(product, header) {
 
     override val key: String
@@ -35,7 +38,7 @@ class ProductListItem(
 //            holder!!.tvName.text = product.name
 //        }
         holder!!.tvName.text = product.name
-        holder.tvCost.text = product.cost.toString()
+        holder.tvCost.text = activity.resources.getString(com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template, product.cost!!.toString())
         holder.tvVendorCode.text = product.vendorCode
     }
 

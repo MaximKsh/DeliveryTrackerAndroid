@@ -42,7 +42,7 @@ open class FilterProductsFragment : BaseListFragment() {
     }
 
     override fun handleProducts(products: List<Product>, animate: Boolean) {
-        val productsList = products.map { ProductListItem(it, null, lm)}.toMutableList()
+        val productsList = products.map { ProductListItem(it, null, lm, activity!!)}.toMutableList()
         (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
     }
 
