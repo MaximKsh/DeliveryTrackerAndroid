@@ -23,6 +23,7 @@
             android:layout_height="60dp"
             android:ems="10"
             android:background="@android:color/transparent"
+            android:hint="@string/Core_SearchHint"
             android:inputType="textFilter"
             android:paddingStart="50dp"
             android:paddingEnd="5dp"
