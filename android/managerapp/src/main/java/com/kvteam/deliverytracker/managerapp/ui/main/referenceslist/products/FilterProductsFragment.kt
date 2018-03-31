@@ -38,14 +38,17 @@ open class FilterProductsFragment : BaseFilterFragment() {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
 
         override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
-            val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
+            val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
             task.taskProducts.add(TaskProduct(item.product.id, 1))
             navigationController.closeCurrentFragment()
         }
     }
 
     override fun handleProducts(products: List<Product>, animate: Boolean) {
-        val productsList = products.map { ProductListItem(it, null, lm, activity!!)}.toMutableList()
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        val productsList = products
+                .filter { p -> p.id !in task.taskProducts.map { tp -> tp.productId }  }
+                .map { ProductListItem(it, null, lm, activity!!)}.toMutableList()
         (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
     }
 

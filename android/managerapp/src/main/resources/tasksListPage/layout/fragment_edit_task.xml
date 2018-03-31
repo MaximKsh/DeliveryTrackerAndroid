@@ -146,16 +146,15 @@
             android:textSize="20sp" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/llSelectedProduct"
+            android:orientation="vertical"
             android:layout_below="@id/tvTaskProductsInfo"
+            android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:paddingBottom="10dp"
-            android:background="@drawable/shape_bottom_border_ltgray"
             android:layout_height="wrap_content" >
 
             <TextView
-                android:text="Select products"
+                android:text="Select product"
                 android:id="@+id/tvSelectProduct"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
@@ -163,15 +162,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <include layout="@layout/selected_product_item" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tvTotalProductsPriceLabel"
+            android:gravity="end"
+            android:layout_below="@+id/llSelectedProduct"
+            android:layout_toStartOf="@id/tvTotalProductsPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:textSize="18sp"
+            android:background="@color/colorWhite"
+            android:textColor="@color/colorBlack"
+            android:text="Total cost:"/>
+
+        <TextView
+            android:id="@+id/tvTotalProductsPrice"
+            android:gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/llSelectedProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="18sp"
+            android:background="@color/colorWhite"
+            android:textColor="@color/colorBlack"
+            android:text="0"/>
+
+        <View
+            android:id="@+id/vBottomBorder"
+            android:layout_below="@id/tvTotalProductsPrice"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/shape_bottom_border_ltgray" />
 
         <TextView
             android:id="@+id/tvTaskClientInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/llSelectedProduct"
+            android:layout_below="@id/vBottomBorder"
             android:padding="10dp"
             android:text="Client info"
             android:textSize="20sp" />

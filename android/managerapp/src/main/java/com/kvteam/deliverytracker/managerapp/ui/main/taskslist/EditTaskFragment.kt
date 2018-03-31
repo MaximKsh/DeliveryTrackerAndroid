@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
+import android.animation.ValueAnimator
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.DialogFragment
@@ -7,7 +8,6 @@ import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
 import android.widget.DatePicker
 import android.widget.TimePicker
 import android.widget.Toast
@@ -20,6 +20,7 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
+import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
 import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
@@ -35,10 +36,9 @@ import kotlinx.android.synthetic.main.fragment_edit_task.*
 import kotlinx.android.synthetic.main.fragment_edit_task.view.*
 import kotlinx.android.synthetic.main.selected_performer_item.*
 import kotlinx.android.synthetic.main.selected_performer_item.view.*
-import kotlinx.android.synthetic.main.selected_product_item.*
 import kotlinx.android.synthetic.main.selected_product_item.view.*
-import kotlinx.coroutines.experimental.runBlocking
 import org.joda.time.DateTime
+import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
@@ -435,17 +435,6 @@ class EditTaskFragment : DeliveryTrackerFragment(){
             navigationController.navigateToFilterProducts(taskId)
         }
 
-        if (task.taskProducts.size != 0) {
-            val firstProduct = dp.products.getAsync(task.taskProducts[0].productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
-
-            rlSelectedProduct.tvName.text = firstProduct.name
-            rlSelectedProduct.tvCost.text = firstProduct.cost.toString()
-            rlSelectedProduct.tvVendorCode.text = firstProduct.vendorCode.toString()
-            rlSelectedProduct.visibility = View.VISIBLE
-        } else {
-            rlSelectedProduct.visibility = View.GONE
-        }
-
         if (task.performerId != null) {
             val performer = dp.users.getAsync(task.performerId as UUID, DataProviderGetMode.FORCE_CACHE).entry
 
@@ -486,8 +475,73 @@ class EditTaskFragment : DeliveryTrackerFragment(){
         )
     }
 
+    private fun updateProductView (view: View, taskProductInfo: TaskProduct?, container: View? = this.view) {
+        if (taskProductInfo == null) {
+            val anim = ValueAnimator.ofInt(view.height, 0)
+            anim.addUpdateListener { valueAnimator ->
+                val value = valueAnimator.animatedValue as Int
+                val layoutParams = view.layoutParams
+                layoutParams.height = value
+                view.layoutParams = layoutParams
+            }
+            anim.duration = 100L
+            anim.start()
+        } else {
+            val product = dp.products.get(taskProductInfo.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+
+            view.tvProductQuantity.text = taskProductInfo.quantity.toString()
+            view.tvName.text = product.name
+            view.tvCost.text = activity!!.resources.getString(com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template, product.cost.toString())
+            view.tvVendorCode.text = product.vendorCode.toString()
+        }
+
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        var newTotalCost = BigDecimal(0)
+        task.taskProducts.forEach { taskProduct ->
+            val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+            newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
+        }
+        container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
+                com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
+                newTotalCost.toString()
+        )
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_edit_task, container, false)
+
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
+        task.taskProducts.forEach { taskProductInfo ->
+            val productItemView = inflater.inflate(R.layout.selected_product_item, view.llSelectedProduct, false)
+
+            updateProductView(productItemView, taskProductInfo, view)
+
+
+            productItemView.ivIconIncreaseQuantity.setOnClickListener { _ ->
+                taskProductInfo.quantity = taskProductInfo.quantity!! + 1
+                updateProductView(productItemView, taskProductInfo)
+            }
+
+            productItemView.ivIconDecreaseQuantity.setOnClickListener { _ ->
+                if (taskProductInfo.quantity!! > 1) {
+                    taskProductInfo.quantity = taskProductInfo.quantity!! - 1
+                    updateProductView(productItemView, taskProductInfo)
+                }
+            }
+
+            productItemView.ivIconDelete.setOnClickListener { _ ->
+                task.taskProducts.remove(taskProductInfo)
+                updateProductView(productItemView, null)
+            }
+
+            productItemView.ivIconInfo.setOnClickListener { _ ->
+                navigationController.navigateToProductDetails(taskProductInfo.productId as UUID)
+            }
+
+            view.llSelectedProduct.addView(productItemView)
+        }
+
         dateTypesDropdownSelect = DropdownSelect<DeliveryDateTypeItem>(
                 "Delivery date",
                 deliveryDateTypes,
@@ -534,7 +588,7 @@ class EditTaskFragment : DeliveryTrackerFragment(){
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
-            R.id.action_add -> {
+            R.id.action_done -> {
                 val (task, _) = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY)
                 task.taskNumber = etTaskNumber.text.toString()
                 try {
@@ -550,7 +604,7 @@ class EditTaskFragment : DeliveryTrackerFragment(){
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_edit_task_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

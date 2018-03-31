@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 
@@ -22,6 +24,33 @@ abstract class DeliveryTrackerFragment: Fragment() {
 
     init {
         arguments = Bundle()
+    }
+
+    // TODO: is it working?
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        var animation: Animation? = super.onCreateAnimation(transit, enter, nextAnim)
+
+        if (animation == null && nextAnim != 0) {
+            animation = AnimationUtils.loadAnimation(activity, nextAnim)
+        }
+
+        if (animation != null) {
+            view!!.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(p0: Animation?) {
+                }
+
+                override fun onAnimationStart(p0: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation) {
+                    view?.setLayerType(View.LAYER_TYPE_NONE, null)
+                }
+            })
+        }
+
+        return animation
     }
 
     protected open fun configureToolbar(toolbar: ToolbarController) {
