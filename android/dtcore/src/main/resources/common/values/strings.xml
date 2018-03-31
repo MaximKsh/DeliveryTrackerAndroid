@@ -60,6 +60,7 @@
     <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
 
 
+    <string name="NoTaskPerformer">No performer</string>
     <string name="Core_Product_Name">Product name</string>
     <string name="Core_Product_Vendor_Code">Vendor Code</string>
     <string name="Core_Product_Cost">Cost</string>
@@ -70,6 +71,7 @@
     <string name="Core_EnterSurnameHint">Surname</string>
     <string name="Core_EnterPatronymicHint">Patronymic</string>
     <string name="Core_EnterPhoneNumberHint">Phone number</string>
+    <string name="Core_SearchHint">Search</string>
     <string name="Core_CodeHintIcon" translatable="false">Code hint icon</string>
 
     <string name="Core_Done">Done</string>

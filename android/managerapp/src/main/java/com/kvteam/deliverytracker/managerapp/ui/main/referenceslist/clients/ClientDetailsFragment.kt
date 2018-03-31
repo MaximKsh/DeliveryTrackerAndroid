@@ -76,7 +76,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
+        super.configureToolbar(toolbar)
         try {
             val client = dp.clients.get(clientId, DataProviderGetMode.FORCE_CACHE)
             toolbar.setToolbarTitle(client.entry.surname ?: "Client")

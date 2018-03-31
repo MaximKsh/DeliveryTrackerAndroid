@@ -19,12 +19,18 @@ class TaskListItem(
     override val key: String
         get() = task.id!!.toString()
 
-    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): TasksListViewHolder {
-        return TasksListViewHolder(view!!, adapter);
+    override fun createViewHolder(
+            view: View,
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): TasksListViewHolder {
+        return TasksListViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: TasksListViewHolder?, position: Int, payloads: MutableList<Any>?) {
-        holder!!.tvTaskCaption.text = lm.getString(task.taskStateCaption!!)
+    override fun bindViewHolder(
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?,
+            holder: TasksListViewHolder,
+            position: Int,
+            payloads: MutableList<Any>?) {
+        holder.tvTaskCaption.text = lm.getString(task.taskStateCaption!!)
         holder.tvTaskNumber.text = task.taskNumber
     }
 

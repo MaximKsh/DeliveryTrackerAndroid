@@ -58,7 +58,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
+        super.configureToolbar(toolbar)
         toolbar.setToolbarTitle("Warehouse")
     }
 

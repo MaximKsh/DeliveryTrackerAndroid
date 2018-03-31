@@ -14,6 +14,7 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_settings.*
 import javax.inject.Inject
@@ -41,11 +42,14 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_base_settings, container, false)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        super.configureToolbar(toolbar)
+        toolbarController.setToolbarTitle("Profile")
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        toolbarController.disableDropDown()
-        toolbarController.setToolbarTitle("Profile")
 
         val user = session.user!!
         tvHeader.text = "${Role.getCaption(user.role, lm)} (${user.code})"

@@ -3,13 +3,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
-import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.ui.BaseFilterFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.managerapp.R
@@ -18,7 +16,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import java.util.*
 import javax.inject.Inject
 
-open class FilterUsersFragment : BaseListFragment() {
+open class FilterUsersFragment : BaseFilterFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -26,6 +24,10 @@ open class FilterUsersFragment : BaseListFragment() {
         get() = navigationController.fragmentTracer
 
     override val viewGroup: String = "UserViewGroup"
+
+    override val viewName = "PerformersView"
+
+    override val type = "User"
 
     private val taskIdKey = "task_id_key"
     private var taskId
@@ -71,45 +73,19 @@ open class FilterUsersFragment : BaseListFragment() {
         (mAdapter as UserListFlexibleAdapter).updateDataSet(userList, animate)
     }
 
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("search" to value)
+    }
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        mAdapter = UserListFlexibleAdapter(mutableListOf(), userActions)
+        (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
+        super.onActivityCreated(savedInstanceState)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         toolbarController.disableSearchMode()
-    }
-
-    private suspend fun updateDataList (argument: Map<String, Any>? = null) : MutableList<User> {
-        val (result, origin) = dp.userViews.getViewResultAsync(
-                viewGroup,
-                "PerformersView",
-                argument,
-                DataProviderGetMode.FORCE_WEB)
-        val entities = mutableListOf<User>()
-        for(id in result) {
-            try{
-                val (e, _) = dp.users.getAsync(id, DataProviderGetMode.FORCE_CACHE)
-                entities.add(e)
-            } catch (e: CacheException) {}
-        }
-        return entities
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-        dropdownTop.lastSelectedIndex.set(1)
-        mAdapter = UserListFlexibleAdapter(mutableListOf(), userActions)
-        (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
-
-        val entities = updateDataList()
-
-        handleUsers(entities, false)
-
-        toolbarController.enableSearchMode({text ->
-            val filteredEntities = updateDataList(mapOf(
-                    "search" to text
-            ))
-
-            handleUsers(filteredEntities, true)
-
-        })
-        super.onActivityCreated(savedInstanceState)
     }
 }

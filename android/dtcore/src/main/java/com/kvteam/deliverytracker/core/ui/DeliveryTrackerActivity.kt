@@ -99,10 +99,13 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
 
     override fun onSupportNavigateUp(): Boolean {
         if (toolbarController.isSearchEnabled) {
+            if (toolbarController.isSearchFragmentWide) {
+                supportFragmentManager.popBackStack()
+            }
             toolbarController.disableSearchMode()
-            return true
+        } else {
+            supportFragmentManager.popBackStack()
         }
-        supportFragmentManager.popBackStack()
         return true
     }
 

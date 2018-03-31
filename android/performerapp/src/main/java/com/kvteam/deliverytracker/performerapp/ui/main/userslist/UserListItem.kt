@@ -19,16 +19,22 @@ class UserListItem(val user: User, header: BaseListHeader)
     override val key: String
         get() = user.code!!
 
-    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): UserListViewHolder {
-        return UserListViewHolder(view!!, adapter)
+    override fun createViewHolder(
+            view: View,
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): UserListViewHolder {
+        return UserListViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: UserListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?,
+            holder: UserListViewHolder,
+            position: Int,
+            payloads: MutableList<Any>?) {
         val text = StringBuilder(4)
-        if(user.name?.isNotBlank() == true) {
+        if (user.name?.isNotBlank() == true) {
             text.append(user.name!![0].toString())
         }
-        if(user.surname?.isNotBlank() == true) {
+        if (user.surname?.isNotBlank() == true) {
             text.append(user.surname!![0].toString())
         }
 
