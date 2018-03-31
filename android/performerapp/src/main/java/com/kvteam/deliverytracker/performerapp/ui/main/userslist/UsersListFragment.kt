@@ -74,7 +74,6 @@ open class UsersListFragment : BaseListFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbarController.enableDropdown()
-        useSearchInToolbar(toolbar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

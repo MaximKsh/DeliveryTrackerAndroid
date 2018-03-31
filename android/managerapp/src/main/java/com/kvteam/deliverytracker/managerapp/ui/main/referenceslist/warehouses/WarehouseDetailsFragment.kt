@@ -9,7 +9,6 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
-import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -51,9 +50,6 @@ class WarehouseDetailsFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)

@@ -186,15 +186,15 @@ abstract class BaseListFragment :
 
     protected fun search() {
         val item = dropdownTop.getSelectedItem()
-        toolbarController.disableDropDown()
         toolbarController.enableSearchMode({
-            updateList(
-                    item.viewName,
-                    item.entityType,
-                    dropdownTop.lastSelectedIndex.get(),
-                    getViewFilterArguments(item.viewName, item.entityType, dropdownTop.lastSelectedIndex.get(), it),
-                    DataProviderGetMode.FORCE_WEB)
-        })
+                    updateList(
+                            item.viewName,
+                            item.entityType,
+                            dropdownTop.lastSelectedIndex.get(),
+                            getViewFilterArguments(item.viewName, item.entityType, dropdownTop.lastSelectedIndex.get(), it),
+                            DataProviderGetMode.FORCE_WEB)
+                },
+                focus = true)
     }
 
     protected open fun handleUsers(users: List<User>, animate: Boolean) {}

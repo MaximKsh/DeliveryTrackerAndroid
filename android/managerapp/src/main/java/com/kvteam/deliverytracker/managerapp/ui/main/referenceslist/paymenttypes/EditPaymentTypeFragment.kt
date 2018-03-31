@@ -58,7 +58,7 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
+        super.configureToolbar(toolbar)
         toolbar.setToolbarTitle("Payment Type")
     }
 

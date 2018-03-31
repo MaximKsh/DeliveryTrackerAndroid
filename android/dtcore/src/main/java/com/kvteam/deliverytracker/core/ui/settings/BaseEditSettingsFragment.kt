@@ -16,8 +16,7 @@ import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
-import com.kvteam.deliverytracker.core.webservice.NetworkResult
-import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_edit_settings.*
 import javax.inject.Inject
@@ -32,10 +31,6 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
     private data class ModifyUserContext(
             val modifiedUser: User?,
             val correct: Boolean)
-
-    private data class RequestResult (
-            val editResult: NetworkResult<AccountResponse>?,
-            val changePasswordResult: NetworkResult<AccountResponse>?)
 
     private val userKey = "USER"
 
@@ -62,11 +57,13 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_base_edit_settings, container, false)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        super.configureToolbar(toolbar)
+        toolbarController.setToolbarTitle("Profile")
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbarController.disableDropDown()
-        toolbarController.setToolbarTitle("Profile")
 
         val args = arguments
         val user = if(args?.containsKey(userKey) == true) {

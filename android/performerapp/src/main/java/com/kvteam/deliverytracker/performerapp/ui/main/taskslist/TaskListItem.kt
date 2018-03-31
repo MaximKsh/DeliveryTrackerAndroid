@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.taskslist
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -18,11 +19,17 @@ class TaskListItem(
     override val key: String
         get() = task.id!!.toString()
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<out IFlexible<*>>?) : TasksListViewHolder {
-        return TasksListViewHolder(view, adapter);
+    override fun createViewHolder(
+            view: View,
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): TasksListViewHolder {
+        return TasksListViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<out IFlexible<*>>?, holder: TasksListViewHolder, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(
+            adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?,
+            holder: TasksListViewHolder,
+            position: Int,
+            payloads: MutableList<Any>?) {
         holder.tvTaskCaption.text = lm.getString(task.taskStateCaption!!)
         holder.tvTaskNumber.text = task.taskNumber
     }

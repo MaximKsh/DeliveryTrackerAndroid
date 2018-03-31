@@ -66,7 +66,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
+        super.configureToolbar(toolbar)
         toolbar.setToolbarTitle("Edit client")
     }
 

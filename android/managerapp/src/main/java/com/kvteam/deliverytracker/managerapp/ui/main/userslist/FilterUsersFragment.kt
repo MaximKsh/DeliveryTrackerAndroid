@@ -5,7 +5,6 @@ import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
@@ -108,8 +107,7 @@ open class FilterUsersFragment : BaseListFragment() {
             ))
 
             handleUsers(filteredEntities, true)
-
-        })
+        }, fragmentWide = true)
         super.onActivityCreated(savedInstanceState)
     }
 }

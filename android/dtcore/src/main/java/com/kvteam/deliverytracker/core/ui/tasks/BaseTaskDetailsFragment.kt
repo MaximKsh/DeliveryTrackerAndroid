@@ -81,8 +81,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
-        toolbar.disableDropDown()
-        toolbar.showBackButton()
+        super.configureToolbar(toolbar)
 
         val taskResult = try {
             dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE)
