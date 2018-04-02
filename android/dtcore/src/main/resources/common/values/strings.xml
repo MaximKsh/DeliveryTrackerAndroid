@@ -11,14 +11,24 @@
     <string name="Core_InvalidCredentials">Wrong login/password pair</string>
 
 
-    <string name="Core_ProfileHeader">Profile</string>
+    <string name="Core_ProfileTooltipHeader">Profile</string>
+    <string name="Core_ChangePasswordTooltipHeader">Change password</string>
     <string name="Core_AvatarDesc">Avatar</string>
     <string name="Core_SurnameNamePatronymic">%s %s %s</string>
+    <string name="Core_InfoGroup">Info</string>
     <string name="Core_Instance">Instance: </string>
     <string name="Core_YourPhone">Phone: </string>
     <string name="Core_YourCode">Code: </string>
-    <string name="Core_EditSettings">Edit settings</string>
+    <string name="Core_SettingsGroup">Settings</string>
+    <string name="Core_EditProfile">Edit profile</string>
+    <string name="Core_ChangePassword">Change password</string>
     <string name="Core_Logout">Logout</string>
+    <string name="Core_OldPassword">Old password:</string>
+    <string name="Core_NewPassword">New password:</string>
+    <string name="Core_ConfirmNewPassword">Confirm new password:</string>
+    <string name="Core_EnterOldPasswordValidationError">Enter old password</string>
+    <string name="Core_EnterNewPasswordValidationError">New password incorrect</string>
+    <string name="Core_ConfirmPasswordValidationError">Enter new password again</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_EnterCodeHint">Invitation code</string>
