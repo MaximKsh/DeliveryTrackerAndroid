@@ -12,4 +12,8 @@ class SettingsFragment : BaseSettingsFragment() {
         navigationController.navigateToEditSettings()
     }
 
+    override fun onChangePasswordClicked() {
+        navigationController.navigateToChangePassword()
+    }
+
 }

@@ -11,6 +11,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -129,6 +130,12 @@ interface SettingsFragmentSubcomponent : AndroidInjector<SettingsFragment> {
 interface EditSettingsFragmentSubcomponent : AndroidInjector<EditSettingsFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditSettingsFragment>()
+}
+
+@Subcomponent
+interface ChangePasswordFragmentSubcomponent : AndroidInjector<ChangePasswordFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<ChangePasswordFragment>()
 }
 
 @Subcomponent

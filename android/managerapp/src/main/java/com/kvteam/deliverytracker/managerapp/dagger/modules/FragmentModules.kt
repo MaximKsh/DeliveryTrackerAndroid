@@ -15,6 +15,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -195,6 +196,15 @@ abstract class EditSettingsFragmentModule {
     @IntoMap
     @FragmentKey(EditSettingsFragment::class)
     internal abstract fun editSettingsFragmentInjector(builder: EditSettingsFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(ChangePasswordFragmentSubcomponent::class))
+abstract class ChangePasswordFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(ChangePasswordFragment::class)
+    internal abstract fun injector(builder: ChangePasswordFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

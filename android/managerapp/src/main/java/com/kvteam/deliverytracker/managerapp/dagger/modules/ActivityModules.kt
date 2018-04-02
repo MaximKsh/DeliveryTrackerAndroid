@@ -30,6 +30,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -194,6 +195,11 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditSettingsFragmentModule::class))
     internal abstract fun editSettingsFragment(): EditSettingsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(ChangePasswordFragmentModule::class))
+    internal abstract fun changePasswordFragment(): ChangePasswordFragment
+
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskDetailsFragmentModule::class))
