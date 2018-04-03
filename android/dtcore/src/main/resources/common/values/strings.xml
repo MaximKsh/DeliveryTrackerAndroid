@@ -1,7 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-     <string name="Core_WebserviceUrl" translatable="false">http://192.168.1.122:5000</string>
+     <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.79:5000</string>
 
 
     <string name="Core_UnknownError">Sorry. Something went wrong</string>
@@ -13,6 +13,7 @@
 
     <string name="Core_ProfileTooltipHeader">Profile</string>
     <string name="Core_ChangePasswordTooltipHeader">Change password</string>
+    <string name="Core_EdirProfileHeader">Edit profile</string>
     <string name="Core_AvatarDesc">Avatar</string>
     <string name="Core_SurnameNamePatronymic">%s %s %s</string>
     <string name="Core_InfoGroup">Info</string>
@@ -25,10 +26,16 @@
     <string name="Core_Logout">Logout</string>
     <string name="Core_OldPassword">Old password:</string>
     <string name="Core_NewPassword">New password:</string>
+    <string name="Core_Surname">Surname:</string>
+    <string name="Core_Name">Name:</string>
+    <string name="Core_Patronymic">Patronymic:</string>
     <string name="Core_ConfirmNewPassword">Confirm new password:</string>
-    <string name="Core_EnterOldPasswordValidationError">Enter old password</string>
+    <string name="Core_EnterOldPasswordValidationError">Old password is required</string>
     <string name="Core_EnterNewPasswordValidationError">New password incorrect</string>
     <string name="Core_ConfirmPasswordValidationError">Enter new password again</string>
+    <string name="Core_SurnameValidationError">Surname is required</string>
+    <string name="Core_NameValidationError">Name is required</string>
+    <string name="Core_PhoneValidationError">Phone number is required</string>
 
     <string name="PerformerApp_AppName">DTCore</string>
     <string name="Core_EnterCodeHint">Invitation code</string>

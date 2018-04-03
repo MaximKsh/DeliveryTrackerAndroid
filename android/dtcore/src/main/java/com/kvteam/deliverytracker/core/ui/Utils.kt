@@ -41,6 +41,18 @@ fun EditText.setNullableText(str: String?) {
     }
 }
 
+fun EditText.setPhoneNumber(str: String?) {
+    if(str?.isNotBlank() == true) {
+        if(str.startsWith("+7(")) {
+            this.setText(str.substring(3))
+        } else {
+            this.setText(str)
+        }
+    } else {
+        this.text.clear()
+    }
+}
+
 fun materialDefaultAvatar(user: User?) : TextDrawable{
     val text = StringBuilder(4)
     if(user?.name?.isNotBlank() == true) {

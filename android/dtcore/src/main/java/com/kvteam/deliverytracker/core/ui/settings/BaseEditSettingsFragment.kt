@@ -1,38 +1,28 @@
 package com.kvteam.deliverytracker.core.ui.settings
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
-import android.widget.Toast
-import com.amulyakhare.textdrawable.TextDrawable
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.User
-import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.core.ui.setPhoneNumber
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_edit_settings.*
+import kotlinx.android.synthetic.main.fragment_base_settings.*
 import javax.inject.Inject
 
 abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
-    private data class PasswordChangeContext(
-            val oldPassword: String,
-            val newPassword: String,
-            val needChangePassword: Boolean,
-            val correct: Boolean)
+    private val scrollPosKey = "scrollPosKey"
 
-    private data class ModifyUserContext(
-            val modifiedUser: User?,
-            val correct: Boolean)
-
-    private val userKey = "USER"
 
     @Inject
     lateinit var session: ISession
@@ -42,6 +32,8 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var eh: IErrorHandler
+
+    lateinit var validation: AwesomeValidation
 
     protected abstract fun afterSuccessfulEdit()
 
@@ -59,25 +51,38 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbarController.setToolbarTitle("Profile")
+        toolbarController.setToolbarTitle(lm.getString(R.string.Core_EditProfile))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        val args = arguments
-        val user = if(args?.containsKey(userKey) == true) {
-            args.getSerializable(userKey) as User
-        } else {
-            val user = session.user!!
-            val bundle = Bundle()
-            bundle.putSerializable(userKey, user)
-            arguments = bundle
-            user
+        val position = savedInstanceState?.getInt(scrollPosKey)
+        if (position != null) {
+            svMainScrollView.scrollY = position
         }
 
+        val user = session.user!!
         initControls(user)
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etSurname, RegexTemplate.NOT_EMPTY, getString(R.string.Core_SurnameValidationError))
+        validation.addValidation(
+                etName, RegexTemplate.NOT_EMPTY, getString(R.string.Core_NameValidationError))
+        validation.addValidation(
+                etPhoneNumber,
+                {
+                    it.length == 16
+                },
+                getString(R.string.Core_PhoneValidationError))
+        validation.setContext(this.dtActivity)
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(scrollPosKey, svMainScrollView.scrollY)
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
@@ -93,36 +98,25 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
     }
 
     private suspend fun editSettings() {
-        val (modifiedUser, modifiedUserCorrect) =
-                prepareModifiedUser()
-        val (oldPassword, newPassword, needChangePassword, passwordCorrect) =
-                preparePasswordChange()
-
-        if(modifiedUser == null
-                && modifiedUserCorrect
-                && !needChangePassword
-                && passwordCorrect) {
-            afterSuccessfulEdit()
+        if(!validation.validate()) {
             return
         }
 
-        if(!modifiedUserCorrect || !passwordCorrect) {
-            return
-        }
+        val modifiedUser = User()
+        val originalUser = session.user!!
 
+        modifiedUser.id = originalUser.id
+        modifiedUser.instanceId = originalUser.instanceId
 
-        if(modifiedUser != null) {
+        var cnt = 0
+        cnt += appendIfChanged(etSurname, originalUser.name, { modifiedUser.name = it })
+        cnt += appendIfChanged(etName, originalUser.surname, { modifiedUser.surname = it })
+        cnt += appendIfChanged(etPatronymic, originalUser.patronymic, { modifiedUser.patronymic = it })
+        cnt += appendIfChanged(etPhoneNumber, originalUser.phoneNumber, { modifiedUser.phoneNumber = it })
+
+        if(cnt != 0){
             val editResult = session.editUserInfoAsync(modifiedUser)
             if(eh.handle(editResult)) {
-                return
-            }
-        }
-
-        if(needChangePassword) {
-            val changePasswordResult = session.changePasswordAsync(
-                    CodePassword(password = oldPassword),
-                    CodePassword(password = newPassword))
-            if(eh.handle(changePasswordResult)) {
                 return
             }
         }
@@ -131,58 +125,10 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
     }
 
     private fun initControls(user: User) {
-        tvHeader.text = "${Role.getCaption(user.role, lm)} (${user.code})"
-        etNameField.setText(user.name)
-        etSurnameField.setText(user.surname)
-        etPatronymicField.setText(user.patronymic)
-        etPhoneNumberField.setText(user.phoneNumber)
-
-        val surname = user.surname
-        val name = user.name
-        val materialAvatarDefault = TextDrawable.builder()
-                .buildRound((name?.get(0)?.toString() ?: EMPTY_STRING) + (surname?.get(0)?.toString() ?: EMPTY_STRING), Color.LTGRAY)
-        ivUserAvatar.setImageDrawable(materialAvatarDefault)
-    }
-
-    private fun prepareModifiedUser() : ModifyUserContext {
-        val args = arguments ?: return ModifyUserContext(null, true)
-        val modifiedUser = User()
-        val originalUser = args.getSerializable(userKey) as User
-
-        modifiedUser.id = originalUser.id
-        modifiedUser.instanceId = originalUser.instanceId
-
-        var cnt = 0
-        cnt += appendIfChanged(etNameField, originalUser.name, { modifiedUser.name = it })
-        cnt += appendIfChanged(etSurnameField, originalUser.surname, { modifiedUser.surname = it })
-        cnt += appendIfChanged(etPatronymicField, originalUser.patronymic, { modifiedUser.patronymic = it })
-        cnt += appendIfChanged(etPhoneNumberField, originalUser.phoneNumber, { modifiedUser.phoneNumber = it })
-
-        return if(cnt != 0) ModifyUserContext(modifiedUser, true)
-            else ModifyUserContext(null, true)
-    }
-
-    private fun preparePasswordChange() : PasswordChangeContext {
-        if(etPasswordField.text.isBlank()) {
-            return PasswordChangeContext(
-                    EMPTY_STRING, EMPTY_STRING, false, true)
-        }
-        if(etPasswordField.text.toString() != etConfirmPasswordField.text.toString()) {
-            showToast("Password and confirm password is differ.")
-            return PasswordChangeContext(
-                    EMPTY_STRING, EMPTY_STRING, true, false)
-        }
-        if(etOldPasswordField.text.isBlank()) {
-            showToast("Old password is empty.")
-            return PasswordChangeContext(
-                    EMPTY_STRING, EMPTY_STRING, true, false)
-        }
-
-        return PasswordChangeContext(
-                etOldPasswordField.text.toString(),
-                etPasswordField.text.toString(),
-                true,
-                true)
+        etSurname.setText(user.surname)
+        etName.setText(user.name)
+        etPatronymic.setText(user.patronymic)
+        etPhoneNumber.setPhoneNumber(user.phoneNumber)
     }
 
     private fun appendIfChanged(et: EditText, originalText: String?, appendFunc: (String) -> Unit) : Int {
@@ -199,11 +145,4 @@ abstract class BaseEditSettingsFragment : DeliveryTrackerFragment() {
         }
         return 0
     }
-
-    private fun showToast(text: String) {
-        Toast
-                .makeText(activity, text, Toast.LENGTH_LONG)
-                .show()
-    }
-
 }
