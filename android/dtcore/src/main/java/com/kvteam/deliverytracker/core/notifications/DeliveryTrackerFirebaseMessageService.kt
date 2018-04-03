@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.notifications
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -42,7 +43,7 @@ class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                     notificationChannel,
                     notificationChannel,
-                    NotificationManager.IMPORTANCE_DEFAULT)
+                    NotificationManager.IMPORTANCE_HIGH)
             notificationService
                     .createNotificationChannel(channel)
         }
@@ -58,6 +59,8 @@ class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
                 .setContentTitle(lm.getString(title))
                 .setContentText(lm.getString(message))
                 .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE)
+                .setChannelId(notificationChannel)
 
         val contentIntent = Intent(app, app.mainActivityType as Class<*>)
         contentIntent.action = PUSH_ACTION

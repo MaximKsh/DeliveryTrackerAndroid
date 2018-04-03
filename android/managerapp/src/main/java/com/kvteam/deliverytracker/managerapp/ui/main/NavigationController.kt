@@ -35,10 +35,14 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     val fragmentTracer = FragmentTracer()
 
-    fun closeCurrentFragment() {
+    fun closeCurrentFragment(ifEmptyFunc: () -> Unit = {}) {
         fragmentManager.popBackStack()
-        val frag = fragmentManager.findFragmentById(containerId)
-        fragmentTracer.next(frag)
+        if(fragmentManager.backStackEntryCount == 0) {
+            ifEmptyFunc()
+        } else {
+            val frag = fragmentManager.findFragmentById(containerId)
+            fragmentTracer.next(frag)
+        }
     }
 
     fun navigateToStaff() {
