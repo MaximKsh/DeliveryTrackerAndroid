@@ -82,6 +82,10 @@ open class TasksListFragment : BaseListFragment() {
         }
     }
 
+    override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
+        return mapOf("search" to value)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
         (mAdapter as TasksListFlexibleAdapter).hideDeleteButton = true

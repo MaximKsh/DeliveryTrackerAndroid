@@ -62,6 +62,10 @@ class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
                 .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE)
                 .setChannelId(notificationChannel)
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            builder.priority = Notification.PRIORITY_HIGH
+        }
+
         val contentIntent = Intent(app, app.mainActivityType as Class<*>)
         contentIntent.action = PUSH_ACTION
         contentIntent.putExtra(PUSH_ACTION_KEY, action)

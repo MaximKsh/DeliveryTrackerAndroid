@@ -9,7 +9,7 @@ class TaskDetailsFragment : BaseTaskDetailsFragment() {
     lateinit var navigationController: NavigationController
 
     override fun closeFragment() {
-        navigationController.closeCurrentFragment({ navigationController.navigateToTasks() })
+        navigationController.closeCurrentFragment()
     }
 
 }

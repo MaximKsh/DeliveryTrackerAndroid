@@ -93,6 +93,8 @@ class MainActivity : DeliveryTrackerActivity() {
         when(action) {
             PUSH_OPEN_TASK -> {
                 val tInfo = gson.fromJson<TaskInfo>(dataSerialized, TaskInfo::class.java)
+                menuItemMapper[R.id.navigation_tasks]?.invoke()
+                navigation.selectedItemId = R.id.navigation_tasks
                 navigationController.navigateToTaskDetails(tInfo.id!!)
             }
         }

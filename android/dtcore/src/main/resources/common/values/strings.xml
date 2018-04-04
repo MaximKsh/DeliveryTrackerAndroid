@@ -41,37 +41,6 @@
     <string name="Core_EnterCodeHint">Invitation code</string>
     <string name="Core_EnterPasswordHint">Password</string>
     <string name="Core_LoginButton">Sign in</string>
-    <string name="Core_TaskState_NewUndistributed">New undistributed</string>
-    <string name="Core_TaskState_New">New</string>
-    <string name="Core_TaskState_InWork">In work</string>
-    <string name="Core_TaskState_Performed">Performed</string>
-    <string name="Core_TaskState_Cancelled">Cancelled</string>
-    <string name="Core_TaskState_CancelledByManager">CancelledByManager</string>
-    <string name="ServerMessage_Error_InvalidInputParameter">Invalid input parameter</string>
-    <string name="ServerMessage_Error_UserNotFound">User not found</string>
-    <string name="ServerMessage_Error_UserWithoutRole">User without role</string>
-    <string name="ServerMessage_Error_UserNotInRole">User hasn\'t required role</string>
-    <string name="ServerMessage_Error_IdentityError">Identity error</string>
-    <string name="ServerMessage_Error_InvitationDoesnotExist">Invitation doesn\' exist</string>
-    <string name="ServerMessage_Error_InvitationExpired">Invitation expired</string>
-    <string name="ServerMessage_Error_GroupAlreadyHasCreator">Group already has creator</string>
-    <string name="ServerMessage_Error_PerformerInAnotherGroup">Performer not found</string>
-    <string name="ServerMessage_Error_TaskNotFound">Task not found</string>
-    <string name="ServerMessage_Error_IncorrectTaskState">Incorrect task state</string>
-    <string name="ServerMessage_Error_IncorrectTaskStateTransition">Incorrect task state transition</string>
-    <string name="ServerMessage_Error_TaskIsForbidden">Task is forbidden</string>
-    <string name="ServerMessage_Error_DisplayableNameIsRequired">DisplayableName is required</string>
-    <string name="ServerMessage_Error_InvitationCodeIsRequired">InstanceName is required</string>
-    <string name="ServerMessage_Error_LongitudeIsRequired">Longitude is required</string>
-    <string name="ServerMessage_Error_LatitudeIsRequired">Latitude is required</string>
-    <string name="ServerMessage_Error_AccessDenied">Access denied</string>
-    <string name="ServerMessage_Error_UserDeleted">User was deleted</string>
-    <string name="ServerMessage_Error_RoleRange">Specify correct role</string>
-    <string name="ServerMessage_PushMessage_AddTask">You have new task</string>
-    <string name="ServerMessage_Roles_CreatorRole">Creator</string>
-    <string name="ServerMessage_Roles_ManagerRole">Manager</string>
-    <string name="ServerMessage_Roles_PerformerRole">Performer</string>
-    <string name="Core_ThreeDots" translatable="false">...</string>
     <string name="Core_NotificationHeader">Notification</string>
     <string name="Core_Error_NetworkError">Network error</string>
     <string name="Core_Error_InvalidJson">Invalid JSON</string>
@@ -82,15 +51,6 @@
     <string name="Core_Session_Error_RefreshUserInfo">Refresh user info error</string>
     <string name="Core_Session_Error_EditUserInfo">Edit user info error</string>
     <string name="Core_Session_Error_Unauthorized">Unauthorized</string>
-
-    <string name="ServerMessage_StateTransitionButton_ManagerUnconfirmedNew">Confirm</string>
-    <string name="ServerMessage_StateTransitionButton_ManagerInProgressCancelled">Cancel</string>
-    <string name="ServerMessage_StateTransitionButton_CreatorUnconfirmedNew">Confirm</string>
-    <string name="ServerMessage_StateTransitionButton_CreatorInProgressCancelled">Cancel</string>
-    <string name="ServerMessage_StateTransitionButton_PerformerNewInProgress">Take into work</string>
-    <string name="ServerMessage_StateTransitionButton_PerformerInProgressComplete">Complete</string>
-    <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
-
 
     <string name="NoTaskPerformer">No performer</string>
     <string name="Core_Product_Name">Product name</string>
@@ -111,12 +71,35 @@
     <string name="Core_Search">Search</string>
     <string name="Core_Send">Done</string>
 
+
+    <string name="ServerMessage_Roles_CreatorRole">Creator</string>
+    <string name="ServerMessage_Roles_ManagerRole">Manager</string>
+    <string name="ServerMessage_Roles_PerformerRole">Performer</string>
+    <string name="Core_ThreeDots" translatable="false">...</string>
+
     <string name="ServerMessage_Views_ManagersView">Managers</string>
     <string name="ServerMessage_Views_PerformersView">Performers</string>
     <string name="ServerMessage_Views_TasksManagersView">Tasks</string>
     <string name="ServerMessage_Views_TasksPerformerView">Tasks</string>
     <string name="ServerMessage_Views_InvitationsView">Invitations</string>
-    <string name="ServerMessage_TaskStates_Unconfirmed">Unconfirmed</string>
+    <string name="ServerMessage_Views_ActualTasksPerformerView">Current tasks</string>
+    <string name="ServerMessage_Views_ActualTasksManagerView">Current tasks</string>
+    <string name="ServerMessage_Views_CompletedTasksManagerView">Completed</string>
+    <string name="ServerMessage_Views_MyTasksManagerView">My tasks</string>
+    <string name="ServerMessage_Views_PreparingTasksManagerView">Preparing</string>
+    <string name="ServerMessage_Views_QueueTasksManagerView">In queue</string>
+    <string name="ServerMessage_Views_RevokedTasksManagerView">Revoked</string>
+    <string name="ServerMessage_Views_QueueTasksPerformerView">In queue</string>
+    <string name="ServerMessage_Views_DeliveredTasksPerformerView">Delivered</string>
+    <string name="ServerMessage_Views_CompletedTasksPerformerView">Completed</string>
+    <string name="ServerMessage_Views_RevokedTasksPerformerView">Revoked</string>
+
+    <string name="ServerMessage_PushMessage_TaskHeader">Delivery Bear task</string>
+    <string name="ServerMessage_PushMessage_TaskPlannedToYou">You are appointed as a performer</string>
+    <string name="ServerMessage_PushMessage_TaskWaits">New actual task</string>
+    <string name="ServerMessage_PushMessage_TaskRevoked">Task revoked</string>
+    <string name="ServerMessage_PushMessage_TaskReturnToPreparing">Task returned to preparing</string>
+    <string name="ServerMessage_PushMessage_TaskDelivered">Delivered!</string>
 
     <string name="ServerMessage_TaskStates_Preparing">Preparing</string>
     <string name="ServerMessage_TaskStates_Queue">In queue</string>
@@ -126,6 +109,67 @@
     <string name="ServerMessage_TaskStates_Complete">Completed</string>
     <string name="ServerMessage_TaskStates_Revoked">Revoked</string>
 
+
+    <string name="ServerMessage_StateTransitionButton_ManagerUnconfirmedNew">Confirm</string>
+    <string name="ServerMessage_StateTransitionButton_ManagerInProgressCancelled">Cancel</string>
+    <string name="ServerMessage_StateTransitionButton_CreatorUnconfirmedNew">Confirm</string>
+    <string name="ServerMessage_StateTransitionButton_CreatorInProgressCancelled">Cancel</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerNewInProgress">Take into work</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerInProgressComplete">Complete</string>
+    <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
+
+    <string name="ServerMessage_Error_AccessDenied">Access denied</string>
+    <string name="ServerMessage_Error_IncorrectPassword">Invalid password</string>
+    <string name="ServerMessage_Error_IncorrectTaskState">Incorrect task state</string>
+    <string name="ServerMessage_Error_IncorrectTaskStateTransition">Incorrect transition</string>
+    <string name="ServerMessage_Error_InstanceNotFound">Company not found</string>
+    <string name="ServerMessage_Error_InvitationCreationError">Invitaiton error</string>
+    <string name="ServerMessage_Error_InvitationExpired">Invitaion expired</string>
+    <string name="ServerMessage_Error_InvitationNotFound">Invitation not found</string>
+    <string name="ServerMessage_Error_ReferenceCreationError">Reference creation error</string>
+    <string name="ServerMessage_Error_ReferenceEditError">Reference edit error</string>
+    <string name="ServerMessage_Error_ReferenceEntryNotFound">Reference entry not found</string>
+    <string name="ServerMessage_Error_ReferenceTypeNotFound">Reference type not found</string>
+    <string name="ServerMessage_Error_RoleNotFound">Role not found</string>
+    <string name="ServerMessage_Error_ServerError">Unknown server error</string>
+    <string name="ServerMessage_Error_TaskCreationError">Task creation error</string>
+    <string name="ServerMessage_Error_TaskEditError">Task edit error</string>
+    <string name="ServerMessage_Error_TaskNotFound">Task not found</string>
+    <string name="ServerMessage_Error_UserCreationError">Create user error</string>
+    <string name="ServerMessage_Error_UserDeleted">User deleted</string>
+    <string name="ServerMessage_Error_UserEditError">User edit error</string>
+    <string name="ServerMessage_Error_UserNotFound">User not found</string>
+    <string name="ServerMessage_Error_ValidationError">Incorrect input data</string>
+    <string name="ServerMessage_Error_ViewGroupNotFound">View group not found</string>
+    <string name="ServerMessage_Error_ViewNotFound">View not found</string>
+    <string name="ServerMessage_Error_ViewResultTypeError">View result has different object type</string>
+
+    <string name="Core_Revoke">Revoke</string>
+    <string name="ServerMessage_TransitionButton_CreatorPreparingQueue">Add to queue</string>
+    <string name="ServerMessage_TransitionButton_CreatorQueuePreparing">Return to preparing</string>
+    <string name="ServerMessage_TransitionButton_CreatorQueueWaiting">Send to performing</string>
+    <string name="ServerMessage_TransitionButton_CreatorWaitingQueue">Return to queue</string>
+    <string name="ServerMessage_TransitionButton_CreatorWaitingPreparing">Return to preparing</string>
+    <string name="ServerMessage_TransitionButton_CreatorDeliveredComplete">Confirm delivery</string>
+    <string name="ServerMessage_TransitionButton_CreatorDeliveredPreparing">Return to preparing</string>
+    <string name="ServerMessage_TransitionButton_CreatorPreparingRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_CreatorQueueRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_CreatorWaitingRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_CreatorIntoWorkRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_ManagerPreparingQueue">@string/ServerMessage_TransitionButton_CreatorPreparingQueue</string>
+    <string name="ServerMessage_TransitionButton_ManagerQueuePreparing">@string/ServerMessage_TransitionButton_CreatorQueuePreparing</string>
+    <string name="ServerMessage_TransitionButton_ManagerQueueWaiting">@string/ServerMessage_TransitionButton_CreatorQueueWaiting</string>
+    <string name="ServerMessage_TransitionButton_ManagerWaitingQueue">@string/ServerMessage_TransitionButton_CreatorWaitingQueue</string>
+    <string name="ServerMessage_TransitionButton_ManagerWaitingPreparing">@string/ServerMessage_TransitionButton_CreatorWaitingPreparing</string>
+    <string name="ServerMessage_TransitionButton_ManagerDeliveredComplete">@string/ServerMessage_TransitionButton_CreatorDeliveredComplete</string>
+    <string name="ServerMessage_TransitionButton_ManagerDeliveredPreparing">@string/ServerMessage_TransitionButton_CreatorDeliveredPreparing</string>
+    <string name="ServerMessage_TransitionButton_ManagerPreparingRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_ManagerQueueRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_ManagerWaitingRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_ManagerIntoWorkRevoked">@string/Core_Revoke</string>
+    <string name="ServerMessage_TransitionButton_PerformerWaitingIntoWork">Into work</string>
+    <string name="ServerMessage_TransitionButton_PerformerIntoWorkWaiting">Return</string>
+    <string name="ServerMessage_TransitionButton_PerformerIntoWorkDelivered">Delivered</string>
 
     <string name="Core_Dropdown_Top_Quantity"> (%d)</string>
 
