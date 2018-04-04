@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TaskDetailsFragment
@@ -62,6 +63,16 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
+
+    fun navigateToChangePassword() {
+        val fragment = ChangePasswordFragment()
+        fragmentTracer.next(fragment)
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
 
     fun navigateToTaskDetails(id: UUID) {
         val taskDetailsFragment = TaskDetailsFragment()

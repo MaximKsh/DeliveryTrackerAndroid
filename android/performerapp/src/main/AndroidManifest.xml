@@ -14,10 +14,11 @@
     <application
         android:name=".PerformerApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/main_app_logo"
         tools:replace="android:label"
         android:label="@string/PerformerApp_AppName"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/main_app_logo"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.login.LoginActivity"

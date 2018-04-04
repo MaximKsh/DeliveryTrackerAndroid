@@ -1,21 +1,8 @@
 <resources>
-    <string name="PerformerApp_AppName">Delivery Tracker</string>
+    <string name="PerformerApp_AppName">Delivery Bear Performing</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="PerformerApp_MainActivity_Tasks">Tasks</string>
     <string name="PerformerApp_MainActivity_Staff">Staff</string>
     <string name="PerformerApp_MainActivity_Settings">Settings</string>
 
-    <string name="PerformerApp_TaskFragment_ReserveButton">Reserve</string>
-    <string name="PerformerApp_LoginActivity_SignInButton">Sign in</string>
-    <string name="PerformerApp_LoginActivity_LoginLabel">Login</string>
-    <string name="PerformerApp_LoginActivity_PasswordLabel">Password</string>
-    <string name="PerformerApp_ConfirmDataActivity_ConfirmButton">Confirm</string>
-    <string name="PerformerApp_ConfirmDataActivity_Surname">Surname</string>
-    <string name="PerformerApp_ConfirmDataActivity_Name">Name</string>
-    <string name="PerformerApp_ConfirmDataActivity_PhoneNumber">Phone number</string>
-    <string name="PerformerApp_UsersListFragment_CallUserContentDescription">Call</string>
-    <string name="PerformerApp_UsersListFragment_FullnameFormat" translatable="false">%s %s</string>
-
-    <string name="PerformerApp_TaskRepository_Error_ErrorTitle">Task action</string>
 </resources>

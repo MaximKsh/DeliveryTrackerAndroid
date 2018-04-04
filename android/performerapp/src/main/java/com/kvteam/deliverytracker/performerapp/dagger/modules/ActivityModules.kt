@@ -7,6 +7,7 @@ import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.core.ui.UIState
 import com.kvteam.deliverytracker.core.ui.errorhandling.ErrorHandler
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.dagger.components.ConfirmDataActivitySubcomponent
 import com.kvteam.deliverytracker.performerapp.dagger.components.LoginActivitySubcomponent
 import com.kvteam.deliverytracker.performerapp.dagger.components.MainActivitySubcomponent
@@ -14,6 +15,7 @@ import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TaskDetailsFragment
@@ -98,6 +100,10 @@ abstract class MainActivityModule {
     internal abstract fun editSettingsFragment(): EditSettingsFragment
 
     @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(ChangePasswordSettingsFragmentModule::class))
+    internal abstract fun changePasswordFragment(): ChangePasswordFragment
+
+    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskDetailsFragmentModule::class))
     internal abstract fun taskDetailsFragment(): TaskDetailsFragment
 
@@ -114,7 +120,7 @@ abstract class MainActivityModule {
         fun errorHandler(activity: MainActivity, lm: ILocalizationManager): IErrorHandler {
             return ErrorHandler(
                     activity,
-                    0,
+                    R.id.placeSnackBar,
                     lm)
         }
 
