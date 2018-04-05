@@ -1,38 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    android:orientation="vertical"
-    android:padding="30dp">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
-
-        <EditText
-            android:id="@+id/etNameField"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:hint="@string/Core_EnterNameHint"
-            android:inputType="textPersonName"
-            android:paddingEnd="45dp"
-            android:paddingStart="30dp"
-            android:theme="@style/EditTextTheme" />
-
-
-        <ImageView
-            android:id="@+id/ivNameHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:gravity="center_vertical"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_attach_money_black_24dp" />
-
-    </RelativeLayout>
-</LinearLayout>
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_PaymentType"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etNameField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etNameField"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+</ScrollView>

@@ -1,125 +1,146 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/svMainScrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/flName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvNameField"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentTop="true">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:hint="@string/Core_Product_Name"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_ProductTitle"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivNameHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flVendorCode"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvVendorCodeField"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_below="@id/flName">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:ems="10"
-                android:hint="@string/Core_Product_Vendor_Code"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_ProductVendorCode"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvVendorCodeField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivVendorCodeHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flCost"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvCostField"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_below="@id/flVendorCode">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:ems="10"
-                android:hint="@string/Core_Product_Cost"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_ProductCost"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvCostField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivCostHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flDescription"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvDescriptionField"
+            android:layout_height="wrap_content"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_below="@id/flCost">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/Core_Product_Description"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
-
-
-            <ImageView
-                android:id="@+id/ivPhoneNumberHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_phone_black_24dp" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_ProductDescription"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvDescriptionField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
 </ScrollView>

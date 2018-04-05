@@ -81,7 +81,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:id="@+id/flPhoneNumber"
+                    android:id="@+id/flAddress"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_item_height"
                     android:foreground="?selectableItemBackground"
@@ -121,7 +121,7 @@
                     android:foreground="?selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:layout_below="@id/flPhoneNumber">
+                    android:layout_below="@id/flAddress">
 
                     <!-- парент дает эффект выделения -->
                     <LinearLayout

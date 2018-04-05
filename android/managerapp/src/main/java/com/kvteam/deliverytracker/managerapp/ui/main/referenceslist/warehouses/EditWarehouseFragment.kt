@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
@@ -45,6 +48,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
 
+    private lateinit var validation: AwesomeValidation
 
     fun setWarehouse (id: UUID?) {
         this.warehouseId = id ?: UUID.randomUUID()
@@ -59,7 +63,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("Warehouse")
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_WarehouseHeader))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -72,6 +76,13 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
 
         etNameField.setText(warehouse.name)
         etAddressField.setText(warehouse.rawAddress)
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etNameField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_WarehouseTitleValidationError))
+        validation.addValidation(
+                etAddressField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_WarehouseAddressValidationError))
+        validation.setContext(this@EditWarehouseFragment.dtActivity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -90,6 +101,10 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val warehouse = dp.warehouses.getAsync(warehouseId, DataProviderGetMode.DIRTY).entry
                 warehouse.name = etNameField.text.toString()
                 warehouse.rawAddress = etAddressField.text.toString()

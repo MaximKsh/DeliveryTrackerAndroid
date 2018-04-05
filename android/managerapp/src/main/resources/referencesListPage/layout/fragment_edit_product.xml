@@ -1,124 +1,119 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_marginTop="20dp">
 
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:id="@+id/llName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_ProductTitle"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etNameField"
+                android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etNameField"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/Core_Product_Name"
                 android:inputType="textPersonName"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
-
-            <ImageView
-                android:id="@+id/ivNameHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:id="@+id/llVendorCode"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llName"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_ProductVendorCode"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etVendorCodeField"
+                android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etVendorCodeField"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/Core_Product_Vendor_Code"
                 android:inputType="textPersonName"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
-
-            <ImageView
-                android:id="@+id/ivVendorCodeHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:id="@+id/llCost"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llVendorCode"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_ProductCost"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etCostField"
+                android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etCostField"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/Core_Product_Cost"
-                android:inputType="textPersonName"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
-
-            <ImageView
-                android:id="@+id/ivCostHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llCost"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_ProductDescription"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etDescriptionField"
+                android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etDescriptionField"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/Core_Product_Description"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
-
-
-            <ImageView
-                android:id="@+id/ivPhoneNumberHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_phone_black_24dp" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:minLines="4"
+                android:gravity="top"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </RelativeLayout>
 </ScrollView>

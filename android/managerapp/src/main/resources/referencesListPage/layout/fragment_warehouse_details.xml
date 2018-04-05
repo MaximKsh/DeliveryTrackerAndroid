@@ -1,64 +1,80 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/svMainScrollView"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/tvNameField"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/flName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:hint="@string/Core_EnterNameHint"
-            android:gravity="center_vertical"
-            android:paddingEnd="45dp"
-            android:paddingStart="45dp"
-            android:theme="@style/EditTextTheme" />
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentTop="true">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_WarehouseTitle"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-        <ImageView
-            android:id="@+id/ivNameFieldHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/tvAddressField"
+        <FrameLayout
+            android:id="@+id/flAddress"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:hint="@string/ManagerApp_AddTaskFragment_Address"
-            android:paddingEnd="45dp"
-            android:paddingStart="45dp"
-            android:gravity="center_vertical"
-            android:theme="@style/EditTextTheme" />
-
-
-        <ImageView
-            android:id="@+id/ivAddressFieldHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_location_on_black_24dp" />
-
+            android:layout_height="wrap_content"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_below="@id/flName">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_WarehouseAddress"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvAddressField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
     </RelativeLayout>
-
-</LinearLayout>
+</ScrollView>

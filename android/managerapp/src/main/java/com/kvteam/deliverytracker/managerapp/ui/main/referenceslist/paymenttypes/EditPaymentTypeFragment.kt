@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
@@ -46,6 +49,7 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
 
+    private lateinit var validation: AwesomeValidation
 
     fun setPaymentType (id: UUID?) {
         this.paymentTypeId = id ?: UUID.randomUUID()
@@ -59,7 +63,7 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
     }
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("Payment Type")
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_ProductHeader))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -74,6 +78,11 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         etNameField.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etNameField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_PaymentTypeValidationError))
+        validation.setContext(this@EditPaymentTypeFragment.dtActivity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -83,10 +92,13 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val paymentType = dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.DIRTY).entry
                 paymentType.name = etNameField.text.toString()
                 dp.paymentTypes.upsertAsync(paymentType)
-
                 navigationController.closeCurrentFragment()
             }
         }

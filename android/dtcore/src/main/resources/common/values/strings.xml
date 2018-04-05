@@ -1,7 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-     <string name="Core_WebserviceUrl" translatable="false">http://192.168.1.122:5000</string>
+     <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.79:5000</string>
 
     <string name="Core_ConfirmUserData">Confirm profile</string>
     <string name="Core_MainAppLogo">Delivery Bear</string>
@@ -19,6 +19,11 @@
     <string name="Core_InvalidCredentials">Wrong login/password pair</string>
 
 
+    <string name="Core_PaymentTypeHeader">Payment type</string>
+    <string name="Core_WarehouseHeader">Warehouse</string>
+    <string name="Core_ProductHeader">Product</string>
+    <string name="Core_ClientHeader">Client</string>
+    <string name="Core_ClientAddressHeader">Client address</string>
     <string name="Core_ProfileTooltipHeader">Profile</string>
     <string name="Core_ChangePasswordTooltipHeader">Change password</string>
     <string name="Core_EditProfileHeader">Edit profile</string>
@@ -42,6 +47,17 @@
     <string name="Core_Patronymic">Patronymic:</string>
     <string name="Core_ConfirmNewPassword">Confirm new password:</string>
     <string name="Core_CompanyName">Company:</string>
+    <string name="Core_PaymentType">Payment type:</string>
+    <string name="Core_WarehouseTitle">Warehouse title:</string>
+    <string name="Core_WarehouseAddress">Warehouse address:</string>
+    <string name="Core_ProductTitle">Product title:</string>
+    <string name="Core_ProductVendorCode">Vendor code:</string>
+    <string name="Core_ProductCost">Cost:</string>
+    <string name="Core_ProductDescription">Description:</string>
+    <string name="Core_ClientAddress">Address:</string>
+    <string name="Core_Addresses">Addresses</string>
+    <string name="Core_AddAddress">Add address</string>
+    <string name="Core_ClientInfoHeader">Client info</string>
     <string name="Core_EnterOldPasswordValidationError">Old password is required</string>
     <string name="Core_EnterNewPasswordValidationError">New password incorrect</string>
     <string name="Core_ConfirmPasswordValidationError">Enter new password again</string>
@@ -50,6 +66,13 @@
     <string name="Core_NameValidationError">Name is required</string>
     <string name="Core_PhoneValidationError">Phone number is required</string>
     <string name="Core_CompanyNameValidationError">Company name is required</string>
+    <string name="Core_PaymentTypeValidationError">Payment type is required</string>
+    <string name="Core_WarehouseTitleValidationError">Warehouse title is required</string>
+    <string name="Core_WarehouseAddressValidationError">Warehouse address is required</string>
+    <string name="Core_ProductTitleValidationError">Product title is required</string>
+    <string name="Core_ProductVendorCodeValidationError">Vendor code is required</string>
+    <string name="Core_ProductCostValidationError">Cost is required</string>
+    <string name="Core_ClientAddressValidationError">Address is required</string>
 
     <string name="Core_EnterCodeHint">Invitation code</string>
     <string name="Core_EnterPasswordHint">Password</string>

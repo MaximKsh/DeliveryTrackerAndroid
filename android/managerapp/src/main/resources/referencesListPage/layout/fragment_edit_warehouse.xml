@@ -1,61 +1,65 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/etNameField"
+        <LinearLayout
+            android:id="@+id/llName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:hint="@string/Core_EnterNameHint"
-            android:paddingEnd="45dp"
-            android:paddingStart="45dp"
-            android:theme="@style/EditTextTheme" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_WarehouseTitle"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etNameField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etNameField"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
-
-        <ImageView
-            android:id="@+id/ivNameFieldHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
-
-        <EditText
-            android:id="@+id/etAddressField"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:hint="@string/ManagerApp_AddTaskFragment_Address"
-            android:paddingEnd="45dp"
-            android:paddingStart="45dp"
-            android:theme="@style/EditTextTheme" />
-
-
-        <ImageView
-            android:id="@+id/ivAddressFieldHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_location_on_black_24dp" />
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llName"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_WarehouseAddress"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etAddressField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etAddressField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="4"
+                android:gravity="top"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
     </RelativeLayout>
-
-</LinearLayout>
+</ScrollView>
