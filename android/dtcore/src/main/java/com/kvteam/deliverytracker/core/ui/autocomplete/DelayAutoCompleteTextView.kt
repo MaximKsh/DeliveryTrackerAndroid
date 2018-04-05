@@ -1,6 +1,8 @@
 package com.kvteam.deliverytracker.core.ui.autocomplete
 
 import android.content.Context
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
@@ -8,6 +10,9 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.AutoCompleteTextView
 import java.lang.ref.WeakReference
+import android.os.Build
+import android.annotation.TargetApi
+import android.widget.AdapterView
 
 
 class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCompleteTextView(context, attrs) {
@@ -26,6 +31,12 @@ class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCom
                 view.performFilteringSuper(msg.obj as CharSequence, msg.arg1)
             }
         }
+    }
+
+    override fun dismissDropDown() {}
+
+    fun hideDropdown () {
+        super.dismissDropDown()
     }
 
     private val handler = FilterMessageHandler(this)

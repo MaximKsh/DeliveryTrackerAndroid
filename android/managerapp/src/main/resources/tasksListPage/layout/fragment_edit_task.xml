@@ -1,218 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/svEditTask"
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+       <TextView
+           android:id="@+id/tvStepsInstruction"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="10dp"
+           android:textSize="16sp"
+           android:textColor="@color/colorGray"
+           android:text="Seven steps to create your task"/>
 
-        <TextView
-            android:id="@+id/tvTaskInfo"
+        <github.chenupt.springindicator.SpringIndicator
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:siTextSize="16sp"
+            app:siIndicatorColors="@array/indicator_colors"
+            app:siTextColor="@color/colorGray"
+            app:siSelectedTextColor="@android:color/white"
+            android:layout_below="@+id/tvStepsInstruction"
+            app:siIndicatorColor="@color/colorPrimary"
+            android:id="@+id/indicator"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:padding="10dp"
-            android:text="General info"
-            android:background="@drawable/shape_bottom_border"
-            android:textSize="20sp" />
+            app:siRadiusMax="20dp"
+            android:layout_height="44dp"/>
 
-        <RelativeLayout
-            android:id="@+id/rlTaskInfo"
+        <View
+            android:id="@+id/vBottomBorder"
+            android:layout_below="@+id/indicator"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTaskInfo"
+            android:layout_height="1dp"
+            android:background="@drawable/shape_bottom_border_ltgray" />
+
+        <android.support.v4.view.ViewPager
+            android:layout_below="@+id/vBottomBorder"
+            android:id="@+id/pager"
             android:background="@color/colorWhite"
-            android:padding="10dp">
-
-            <RelativeLayout
-                android:id="@+id/rlTaskNumber"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etTaskNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="@string/ManagerApp_AddTaskFragment_Number"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivTaskNumberHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-
-            <FrameLayout
-                android:id="@+id/llDeliveryDateContainer"
-                android:layout_below="@id/rlTaskNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <FrameLayout
-                android:id="@+id/llDeliveryTimeContainer"
-                android:layout_below="@id/llDeliveryDateContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray" />
-
-            <FrameLayout
-                android:id="@+id/llReceiptAtContainer"
-                android:layout_below="@id/llDeliveryTimeContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray"/>
-
-            <FrameLayout
-                android:id="@+id/llPaymentTypesContainer"
-                android:layout_below="@id/llReceiptAtContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray" />
-
-            <FrameLayout
-                android:id="@+id/llPerformerSelectionContainer"
-                android:layout_below="@id/llPaymentTypesContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <FrameLayout
-                android:id="@+id/llSelectedPerformer"
-                android:layout_below="@id/llPerformerSelectionContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray">
-                <include layout="@layout/selected_performer_item" />
-            </FrameLayout>
-
-            <RelativeLayout
-                android:id="@+id/rlTaskComment"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@id/llSelectedPerformer"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shape_bottom_border_ltgray"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etTaskComment"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="Task comment"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivTaskCommentHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tvTaskProductsInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlTaskInfo"
-            android:padding="10dp"
-            android:text="Products info"
-            android:background="@drawable/shape_bottom_border"
-            android:textSize="20sp" />
+            android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/llSelectedProduct"
-            android:layout_below="@id/tvTaskProductsInfo"
-            android:layout_width="match_parent"
-            android:paddingBottom="10dp"
-            android:background="@drawable/shape_bottom_border_ltgray"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:text="Select products"
-                android:id="@+id/tvSelectProduct"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <include layout="@layout/selected_product_item" />
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tvTaskClientInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llSelectedProduct"
-            android:padding="10dp"
-            android:text="Client info"
-            android:textSize="20sp" />
-
-        <RelativeLayout
-            android:id="@+id/rlTaskClientInfo"
-            android:background="@color/colorWhite"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTaskClientInfo">
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlTaskClient"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etTaskClient"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:hint="AUTOCOMPLITE CLIENT AND CREATION"
-                    android:paddingEnd="45dp"
-                    android:paddingStart="45dp"
-                    android:theme="@style/EditTextTheme" />
-
-
-                <ImageView
-                    android:id="@+id/ivTaskClientHintIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="13dp"
-                    android:alpha="0.3"
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:src="@drawable/ic_tasks_black_24dp" />
-
-            </RelativeLayout>
-        </RelativeLayout>
-
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>
