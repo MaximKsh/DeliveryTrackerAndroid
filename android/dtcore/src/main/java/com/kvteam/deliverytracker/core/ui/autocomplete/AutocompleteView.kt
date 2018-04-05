@@ -28,11 +28,9 @@ class AutocompleteView : RelativeLayout {
     lateinit var autoCompleteTextView: DelayAutoCompleteTextView
         private set
 
-    lateinit var progressBar: ProgressBar
-        private set
+    private lateinit var progressBar: ProgressBar
 
-    lateinit var listSelectionButton: ImageView
-        private set
+    private lateinit var listSelectionButton: ImageView
 
     override fun onFinishInflate() {
         super.onFinishInflate()

@@ -33,9 +33,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.W
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
@@ -147,6 +145,30 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(EditTaskFragmentModule::class))
     internal abstract fun editTaskFragment(): EditTaskFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskPaymentTypeFragmentModule::class))
+    internal abstract fun taskPaymentTypeFragment(): TaskPaymentTypeFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskPerformerFragmentModule::class))
+    internal abstract fun taskPerformerFragment(): TaskPerformerFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskProductsFragmentModule::class))
+    internal abstract fun taskProductsFragment(): TaskProductsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskDeliveryDateFragmentModule::class))
+    internal abstract fun taskDeliveryDateFragment(): TaskDeliveryDateFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskReceiptAtFragmentModule::class))
+    internal abstract fun taskReceiptAtFragment(): TaskReceiptAtFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskClientFragmentModule::class))
+    internal abstract fun taskClientFragment(): TaskClientFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(FilterProductsFragmentModule::class))

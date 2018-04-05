@@ -18,9 +18,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.W
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
@@ -79,6 +77,60 @@ abstract class EditTaskFragmentModule {
     internal abstract fun editTaskFragmentInjector(builder: EditTaskSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 
+}
+
+@Module(subcomponents = arrayOf(TaskPaymentTypeSubcomponent::class))
+abstract class TaskPaymentTypeFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskPaymentTypeFragment::class)
+    internal abstract fun taskPaymentTypeFragmentInjector(builder: TaskPaymentTypeSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(TaskPerformerSubcomponent::class))
+abstract class TaskPerformerFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskPerformerFragment::class)
+    internal abstract fun taskPerformerFragmentInjector(builder: TaskPerformerSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(TaskProductsSubcomponent::class))
+abstract class TaskProductsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskProductsFragment::class)
+    internal abstract fun taskProductsFragmentInjector(builder: TaskProductsSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(TaskClientSubcomponent::class))
+abstract class TaskClientFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskClientFragment::class)
+    internal abstract fun taskClientFragmentInjector(builder: TaskClientSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(TaskDeliveryDateSubcomponent::class))
+abstract class TaskDeliveryDateFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskDeliveryDateFragment::class)
+    internal abstract fun taskDeliveryDateFragmentInjector(builder: TaskDeliveryDateSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(TaskReceiptAtSubcomponent::class))
+abstract class TaskReceiptAtFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(TaskReceiptAtFragment::class)
+    internal abstract fun taskReceiptAtFragmentInjector(builder: TaskReceiptAtSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
 }
 
 @Module(subcomponents = arrayOf(AddPaymentTypeSubcomponent::class))

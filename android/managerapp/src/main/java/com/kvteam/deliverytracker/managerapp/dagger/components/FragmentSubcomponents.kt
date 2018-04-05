@@ -14,9 +14,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.W
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
@@ -46,6 +44,42 @@ interface EditProductSubcomponent : AndroidInjector<EditProductFragment> {
 interface EditTaskSubcomponent : AndroidInjector<EditTaskFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditTaskFragment>()
+}
+
+@Subcomponent
+interface TaskPaymentTypeSubcomponent : AndroidInjector<TaskPaymentTypeFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskPaymentTypeFragment>()
+}
+
+@Subcomponent
+interface TaskPerformerSubcomponent : AndroidInjector<TaskPerformerFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskPerformerFragment>()
+}
+
+@Subcomponent
+interface TaskProductsSubcomponent : AndroidInjector<TaskProductsFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskProductsFragment>()
+}
+
+@Subcomponent
+interface TaskClientSubcomponent : AndroidInjector<TaskClientFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskClientFragment>()
+}
+
+@Subcomponent
+interface TaskReceiptAtSubcomponent : AndroidInjector<TaskReceiptAtFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskReceiptAtFragment>()
+}
+
+@Subcomponent
+interface TaskDeliveryDateSubcomponent : AndroidInjector<TaskDeliveryDateFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<TaskDeliveryDateFragment>()
 }
 
 @Subcomponent

@@ -21,7 +21,6 @@ open class AutocompleteListAdapter <T : ModelBase> (
         private val mainLineCaptionFunc: (T) -> String = { EMPTY_STRING },
         private val limit: Int = 5)
     : BaseAdapter(), Filterable {
-
     class AutocompleteFilter<out T : ModelBase>(
             adapter: AutocompleteListAdapter<T>) : Filter() {
         private val adapterRef = WeakReference(adapter)
@@ -36,9 +35,8 @@ open class AutocompleteListAdapter <T : ModelBase> (
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             val adapter = adapterRef.get() ?: return
-            val values = results?.values
-            if (results != null
-                    && values is MutableList<*>) {
+            val values = results?.values as MutableList<*>
+            if (values.size > 0) {
                 adapter.list.clear()
                 for (item in values) {
                     @Suppress("UNCHECKED_CAST")

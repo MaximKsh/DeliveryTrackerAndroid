@@ -1,8 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-     <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.79:5000</string>
-
+    <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.4:5000</string>
     <string name="Core_ConfirmUserData">Confirm profile</string>
     <string name="Core_MainAppLogo">Delivery Bear</string>
     <string name="Core_LoginActivity_ForgotPassword">Forgot password</string>
