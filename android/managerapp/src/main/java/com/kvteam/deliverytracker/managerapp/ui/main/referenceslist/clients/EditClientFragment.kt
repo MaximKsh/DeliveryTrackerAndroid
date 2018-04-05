@@ -2,6 +2,9 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 
 import android.os.Bundle
 import android.view.*
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
@@ -10,6 +13,7 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.core.ui.setPhoneNumber
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
@@ -53,6 +57,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
 
+    private lateinit var validation: AwesomeValidation
 
     fun setClient (id: UUID?) {
         this.clientId = id ?: UUID.randomUUID()
@@ -92,7 +97,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
         etNameField.setText(client.name)
         etSurnameField.setText(client.surname)
         etPatronymicField.setText(client.patronymic)
-        etPhoneNumberField.setText(client.phoneNumber)
+        etPhoneNumberField.setPhoneNumber(client.phoneNumber)
 
         client.clientAddresses.forEach { clientAddress ->
             val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
@@ -115,6 +120,19 @@ class EditClientFragment : DeliveryTrackerFragment() {
             viewBinderHelper.bind(view.swipeRevealLayout, clientAddress.id.toString())
             llAddressesContainer.addView(view)
         }
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etSurnameField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_SurnameValidationError))
+        validation.addValidation(
+                etNameField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_NameValidationError))
+        validation.addValidation(
+                etPhoneNumberField,
+                {
+                    it.length == 16
+                },
+                getString(com.kvteam.deliverytracker.core.R.string.Core_PhoneValidationError))
+        validation.setContext(this@EditClientFragment.dtActivity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -124,6 +142,10 @@ class EditClientFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 client.name = etNameField.text.toString()
                 client.surname = etSurnameField.text.toString()

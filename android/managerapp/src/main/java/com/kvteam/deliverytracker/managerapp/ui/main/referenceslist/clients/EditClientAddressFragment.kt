@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_UUID
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
@@ -44,6 +47,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         get() = arguments?.getSerializable(addressIdKey)!! as UUID
         set(value) = arguments?.putSerializable(addressIdKey, value)!!
 
+    private lateinit var validation: AwesomeValidation
 
     fun setAddress (clientId: UUID, addressId: UUID?) {
         this.clientId = clientId
@@ -59,7 +63,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("Client Address")
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_ClientAddressHeader))
     }
 
 
@@ -73,6 +77,11 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         etAddress.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etAddress, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_ClientAddressValidationError))
+        validation.setContext(this@EditClientAddressFragment.dtActivity)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,6 +91,10 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
                 var address = client.clientAddresses.firstOrNull { it.id == addressId }
                 if(address == null) {
@@ -104,18 +117,5 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    companion object {
-        fun create(type: CollectionEntityAction, address: ClientAddress?): EditClientAddressFragment {
-            val fragment = EditClientAddressFragment()
-            val args = Bundle()
-            args.putSerializable(fragment.TYPE_KEY, type)
-            if (address != null) {
-                args.putSerializable(fragment.ADDRESS_KEY, address.rawAddress)
-            }
-            fragment.arguments = args
-            return fragment
-        }
     }
 }

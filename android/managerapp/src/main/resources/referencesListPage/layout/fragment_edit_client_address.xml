@@ -1,33 +1,26 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="8dp"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
-
-        <EditText
-            android:id="@+id/etAddress"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ems="10"
-            android:hint="@string/ManagerApp_AddTaskFragment_Address"
-            android:paddingEnd="45dp"
-            android:paddingStart="45dp"
-            android:theme="@style/EditTextTheme" />
-
-
-        <ImageView
-            android:id="@+id/ivAddressHintIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="13dp"
-            android:alpha="0.3"
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:src="@drawable/ic_location_on_black_24dp" />
-
-    </RelativeLayout>
-
-</RelativeLayout>
+        android:text="@string/Core_ClientAddress"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:labelFor="@id/etAddress"
+        android:textColor="@color/colorGray"/>
+    <EditText
+        android:id="@+id/etAddress"
+        android:inputType="textPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/selector_edit_text"
+        android:theme="@style/EditTextTheme"
+        android:textSize="18sp"/>
+</LinearLayout>

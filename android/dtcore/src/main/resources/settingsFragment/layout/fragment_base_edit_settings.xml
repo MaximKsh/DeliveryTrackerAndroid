@@ -1,99 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mask="http://schemas.android.com/apk/res-auto">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/llSurname"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/ivUserAvatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="45dp"
-                android:layout_alignParentStart="true"
-                android:contentDescription=""/>
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/tvHeader"
-                android:textAlignment="center"
-                android:textSize="22sp"
-                android:layout_toEndOf="@id/ivUserAvatar"
-                android:layout_alignParentTop="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
+                android:text="@string/Core_Surname"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etSurname"
+                android:textColor="@color/colorGray"/>
             <EditText
-                android:id="@+id/etSurnameField"
+                android:id="@+id/etSurname"
+                android:inputType="textPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llSurname"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_Name"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etName"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etName"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPatronymic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llName"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_Patronymic"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etPatronymic"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etPatronymic"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llPatronymic"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_YourPhone"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etPhoneNumber"
+                android:textColor="@color/colorGray"/>
+
+            <br.com.sapereaude.maskedEditText.MaskedEditText
+                android:id="@+id/etPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:typeface="monospace"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
                 android:textSize="18sp"
-                android:layout_below="@id/tvHeader"
-                android:layout_toEndOf="@id/ivUserAvatar"
-                android:ems="10"
-                android:inputType="textPersonName" />
+                mask:allowed_chars="1234567890"
+                mask:mask="+7(###)###-##-##" />
+        </LinearLayout>
 
-            <EditText
-                android:id="@+id/etNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_toEndOf="@id/ivUserAvatar"
-                android:layout_below="@id/etSurnameField"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/etPatronymicField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_toEndOf="@id/ivUserAvatar"
-                android:layout_below="@id/etNameField"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/etPhoneNumberField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/ivUserAvatar"
-                android:layout_below="@id/etPatronymicField"
-                android:ems="10"
-                android:inputType="phone" />
-
-            <EditText
-                android:id="@+id/etOldPasswordField"
-                android:hint="Old password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etPhoneNumberField"
-                android:ems="10"
-                android:inputType="textPassword" />
-
-            <EditText
-                android:id="@+id/etPasswordField"
-                android:hint="New password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etOldPasswordField"
-                android:ems="10"
-                android:inputType="textPassword" />
-
-            <EditText
-                android:id="@+id/etConfirmPasswordField"
-                android:hint="Confirm password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etPasswordField"
-                android:ems="10"
-                android:inputType="textPassword" />
-
-
-        </RelativeLayout>
-
+    </RelativeLayout>
 </ScrollView>

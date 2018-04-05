@@ -1,10 +1,9 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
-import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.ReferenceListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.EditClientAddressFragment
@@ -16,6 +15,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.Fil
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products.ProductDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.EditWarehouseFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses.WarehouseDetailsFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.EditTaskFragment
@@ -35,10 +35,14 @@ class NavigationController (private val mainActivity: MainActivity) {
 
     val fragmentTracer = FragmentTracer()
 
-    fun closeCurrentFragment() {
+    fun closeCurrentFragment(ifEmptyFunc: () -> Unit = {}) {
         fragmentManager.popBackStack()
-        val frag = fragmentManager.findFragmentById(containerId)
-        fragmentTracer.next(frag)
+        if(fragmentManager.backStackEntryCount == 0) {
+            ifEmptyFunc()
+        } else {
+            val frag = fragmentManager.findFragmentById(containerId)
+            fragmentTracer.next(frag)
+        }
     }
 
     fun navigateToStaff() {
@@ -91,6 +95,22 @@ class NavigationController (private val mainActivity: MainActivity) {
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }
+
+    fun navigateToChangePassword() {
+        val fragment = ChangePasswordFragment()
+        fragmentTracer.next(fragment)
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
 
     fun navigateToAddUser(role: Role) {
         val fragment = AddUserFragment.create(role)

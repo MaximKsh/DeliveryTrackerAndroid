@@ -1,130 +1,167 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/flSurname"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvNameField"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentTop="true">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_Surname"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvSurnameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivNameHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvSurnameField"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentTop="true">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp" />
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_Name"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivSurnameHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flPatronymic"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvPatronymicField"
-                android:gravity="center_vertical"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/flName">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_Patronymic"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvPatronymicField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
-
-            <ImageView
-                android:id="@+id/ivPatronymicHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <FrameLayout
+            android:id="@+id/flPhoneNumber"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvPhoneNumberField"
-                android:gravity="center_vertical"
+            android:layout_height="@dimen/settings_item_height"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/flPatronymic">
+            <!-- парент дает эффект выделения -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp" />
-
-            <ImageView
-                android:id="@+id/ivPhoneNumberHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_phone_black_24dp" />
-
-        </RelativeLayout>
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/Core_YourPhone"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"/>
+                <TextView
+                    android:id="@+id/tvPhoneNumberField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/tvAddressesHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/flPhoneNumber"
+            android:textColor="@color/colorPrimary"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:textSize="18sp"
-            android:text="Addresses" />
+            android:text="@string/Core_Addresses" />
 
         <LinearLayout
             android:id="@+id/llAddressesContainer"
             android:orientation="vertical"
+            android:layout_below="@id/tvAddressesHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
+
 </ScrollView>

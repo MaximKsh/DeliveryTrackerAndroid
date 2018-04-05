@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 
 abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
+    private val scrollPosKey = "scrollPosition"
 
     @Inject
     lateinit var session: ISession
@@ -29,6 +30,8 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
     lateinit var lm: ILocalizationManager
 
     protected abstract fun onEditSettingsClicked()
+
+    protected abstract fun onChangePasswordClicked()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -44,12 +47,16 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbarController.setToolbarTitle(lm.getString(R.string.Core_ProfileHeader))
+        toolbarController.setToolbarTitle(lm.getString(R.string.Core_ProfileTooltipHeader))
     }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val position = savedInstanceState?.getInt(scrollPosKey)
+        if (position != null) {
+            svMainScrollView.scrollY = position
+        }
 
         val instance = session.instance
         val user = session.user!!
@@ -68,7 +75,7 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
         ivUserAvatar.setImageDrawable(materialDefaultAvatar(user))
 
         tvEditSettings.setOnClickListener { onEditSettingsClicked() }
-
+        tvChangePassword.setOnClickListener { onChangePasswordClicked() }
         tvLogout.setOnClickListener { launchUI {
                 session.logoutAsync()
                 val loginActivity =
@@ -78,5 +85,10 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
                 activity?.finish()
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(scrollPosKey, svMainScrollView.scrollY)
     }
 }

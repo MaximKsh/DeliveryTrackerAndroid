@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.performerapp.dagger.components.*
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TaskDetailsFragment
@@ -53,6 +54,14 @@ abstract class EditSettingsFragmentModule {
             AndroidInjector.Factory<out Fragment>
 }
 
+@Module(subcomponents = arrayOf(ChangePasswordFragmentSubcomponent::class))
+abstract class ChangePasswordSettingsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(ChangePasswordFragment::class)
+    internal abstract fun injector(builder: ChangePasswordFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
 
 @Module(subcomponents = arrayOf(TaskDetailsFragmentSubcomponent::class))
 abstract class TaskDetailsFragmentModule {

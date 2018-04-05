@@ -9,6 +9,7 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -50,6 +51,10 @@ class WarehouseDetailsFragment : DeliveryTrackerFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        super.configureToolbar(toolbar)
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_WarehouseHeader))
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
@@ -64,10 +69,6 @@ class WarehouseDetailsFragment : DeliveryTrackerFragment() {
         val name = warehouse.name
         tvNameField.text = name
         tvAddressField.text = warehouse.rawAddress
-
-        if(name?.isNotBlank() == true) {
-            toolbarController.setToolbarTitle(name)
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

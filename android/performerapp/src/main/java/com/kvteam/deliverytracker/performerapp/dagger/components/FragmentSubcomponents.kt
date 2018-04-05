@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.performerapp.dagger.components
 
+import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.taskslist.TaskDetailsFragment
@@ -31,6 +32,13 @@ interface SettingsFragmentSubcomponent : AndroidInjector<SettingsFragment> {
 interface EditSettingsFragmentSubcomponent : AndroidInjector<EditSettingsFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<EditSettingsFragment>()
+}
+
+
+@Subcomponent
+interface ChangePasswordFragmentSubcomponent : AndroidInjector<ChangePasswordFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<ChangePasswordFragment>()
 }
 
 @Subcomponent

@@ -22,6 +22,9 @@ open class UsersListFragment : BaseListFragment() {
     override val tracer
             get() = navigationController.fragmentTracer
 
+    override val defaultHeader: String
+        get() = lm.getString(R.string.ServerMessage_Views_ManagersView)
+
     @Inject
     lateinit var navigationController: NavigationController
 

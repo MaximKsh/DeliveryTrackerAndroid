@@ -1,11 +1,12 @@
-package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
+package com.kvteam.deliverytracker.core.ui.tasks
+
 
 import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.amulyakhare.textdrawable.TextDrawable
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
@@ -15,7 +16,7 @@ import com.kvteam.deliverytracker.core.tasks.getTaskState
 import com.kvteam.deliverytracker.core.tasks.getTaskStateCaption
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.BaseListItem
-import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.fragment_task_list_item.view.*
@@ -31,7 +32,7 @@ class TaskListItem(
         get() = task.id!!.toString()
 
     override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?): TasksListViewHolder {
-        return TasksListViewHolder(view!!, adapter);
+        return TasksListViewHolder(view!!, adapter)
     }
 
     override fun bindViewHolder(
@@ -49,22 +50,11 @@ class TaskListItem(
 
         if (task.performerId != null) {
             val performer = dp.users.getAsync(task.performerId!!, DataProviderGetMode.PREFER_CACHE).entry
-            val text = StringBuilder(4)
-            if (performer.name?.isNotBlank() == true) {
-                text.append(performer.name!![0].toString())
-            }
-            if (performer.surname?.isNotBlank() == true) {
-                text.append(performer.surname!![0].toString())
-            }
-
-            val materialAvatarDefault = TextDrawable.builder()
-                    .buildRound(text.toString(), Color.LTGRAY)
-
-            holder!!.ivUserAvatar.setImageDrawable(materialAvatarDefault)
+            holder.ivUserAvatar.setImageDrawable(materialDefaultAvatar(performer))
             holder.tvName.text = performer.name
             holder.tvSurname.text = performer.surname
         } else {
-            holder!!.ivUserAvatar.visibility = View.GONE
+            holder.ivUserAvatar.visibility = View.GONE
             holder.tvName.text = activityContext.getString(R.string.NoTaskPerformer)
         }
     }

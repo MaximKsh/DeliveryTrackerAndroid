@@ -1,8 +1,12 @@
 package com.kvteam.deliverytracker.managerapp.ui.createinstance
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.Instance
@@ -35,6 +39,8 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
 
     override val layoutId = R.layout.activity_create_instance
 
+    private lateinit var validation: AwesomeValidation
+
     override fun getToolbarConfiguration(): ToolbarConfiguration {
         return ToolbarConfiguration(true, false)
     }
@@ -45,12 +51,38 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
         toolbar.setToolbarTitle(resources.getString(R.string.ManagerApp_CreateInstanceActivity_CompanyRegistration))
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etCompanyName, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_CompanyNameValidationError))
+        validation.addValidation(
+                etSurname, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_SurnameValidationError))
+        validation.addValidation(
+                etName, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_NameValidationError))
+        validation.addValidation(
+                etPhoneNumber,
+                {
+                    it.length == 16
+                },
+                getString(com.kvteam.deliverytracker.core.R.string.Core_PhoneValidationError))
+        validation.addValidation(
+                etPassword,
+                { it?.length ?: 0 > 3 },
+                getString(com.kvteam.deliverytracker.core.R.string.Core_EnterPassword))
+        validation.setContext(this)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
             }
             R.id.action_done -> {
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val result = createInstanceAsync()
                 if (errorHandler.handle(result)) {
                     return@launchUI
@@ -59,7 +91,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
                 val token = entity.token!!
                 val user = entity.creator!!
                 val code = user.code!!
-                val password = etPasswordField.text.toString()
+                val password = etPassword.text.toString()
                 session.setAccountExplicitly(code, password, token, user)
                 session.updateDeviceAsync()
                 navigateToMainActivity()
@@ -70,23 +102,23 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.toolbar_confirm_data_menu, menu)
+        menuInflater.inflate(R.menu.done_menu, menu)
         return true
     }
 
     private suspend fun createInstanceAsync() : NetworkResult<InstanceResponse> {
         val instance = Instance()
-        instance.name = etCompanyNameField.text.toString()
+        instance.name = etCompanyName.text.toString()
         val user = User()
-        user.surname = etSurnameField.text.toString()
-        user.name = etNameField.text.toString()
-        user.patronymic = etPatronymicField.text.toString()
-        user.phoneNumber = etPhoneNumberField.text.toString()
+        user.surname = etSurname.text.toString()
+        user.name = etName.text.toString()
+        user.patronymic = etPatronymic.text.toString()
+        user.phoneNumber = etPhoneNumber.text.toString()
         user.role = Role.Creator.id
         return instanceWebservice.createAsync(
                 instance,
                 user,
-                CodePassword(password = etPasswordField.text.toString()))
+                CodePassword(password = etPassword.text.toString()))
     }
 
 

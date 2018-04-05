@@ -77,13 +77,7 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        try {
-            val client = dp.clients.get(clientId, DataProviderGetMode.FORCE_CACHE)
-            toolbar.setToolbarTitle(client.entry.surname ?: "Client")
-
-        } catch (e: CacheException) {
-            toolbar.setToolbarTitle("Client")
-        }
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_ClientHeader))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
