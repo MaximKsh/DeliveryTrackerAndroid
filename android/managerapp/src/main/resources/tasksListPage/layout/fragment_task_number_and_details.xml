@@ -7,77 +7,60 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
-        <TextView
-            android:id="@+id/tvInfoPartName"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="General info"/>
-
-        <RelativeLayout
-            android:id="@+id/rlTaskNumber"
+        <LinearLayout
+            android:id="@+id/llTaskNumber"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_below="@+id/tvInfoPartName"
-            android:background="@drawable/shape_bottom_border_ltgray"
-            android:paddingBottom="15dp">
-
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_TaskNumber"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etTaskNumber"
+                android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etTaskNumber"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="@string/ManagerApp_AddTaskFragment_Number"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
 
-
-            <ImageView
-                android:id="@+id/ivTaskNumberHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_tasks_black_24dp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlTaskComment"
+        <LinearLayout
+            android:id="@+id/llName"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@id/rlTaskNumber"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_bottom_border_ltgray"
-            android:paddingBottom="15dp">
-
-            <EditText
-                android:id="@+id/etTaskComment"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llTaskNumber"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:ems="10"
-                android:hint="Task comment"
-                android:paddingEnd="45dp"
-                android:paddingStart="45dp"
-                android:theme="@style/EditTextTheme" />
-
-
-            <ImageView
-                android:id="@+id/ivTaskCommentHintIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="13dp"
-                android:alpha="0.3"
-                android:contentDescription="@string/Core_CodeHintIcon"
-                android:src="@drawable/ic_tasks_black_24dp" />
-
-        </RelativeLayout>
-
+                android:text="@string/Core_TaskDescription"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etDescriptionField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etDescriptionField"
+                android:inputType="textPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
     </RelativeLayout>
 </ScrollView>

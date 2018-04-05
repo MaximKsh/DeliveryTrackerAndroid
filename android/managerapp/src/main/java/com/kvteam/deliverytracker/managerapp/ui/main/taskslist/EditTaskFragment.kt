@@ -1,50 +1,28 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
-import android.animation.ValueAnimator
-import android.app.*
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.view.*
-import android.view.inputmethod.InputMethodManager
-import android.widget.*
-import com.amulyakhare.textdrawable.TextDrawable
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
-import com.kvteam.deliverytracker.core.models.PaymentType
-import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteListAdapter
-import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
-import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
-import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.client_info.*
 import kotlinx.android.synthetic.main.fragment_edit_task.*
-import kotlinx.android.synthetic.main.fragment_edit_task.view.*
-import kotlinx.android.synthetic.main.selected_performer_item.*
-import kotlinx.android.synthetic.main.selected_performer_item.view.*
-import kotlinx.android.synthetic.main.selected_product_item.*
-import kotlinx.android.synthetic.main.selected_product_item.view.*
-import kotlinx.coroutines.experimental.runBlocking
-import org.joda.time.DateTime
+import kotlinx.android.synthetic.main.fragment_task_number_and_details.*
 import java.util.*
 import javax.inject.Inject
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
 
 class EditTaskFragment : DeliveryTrackerFragment() {
     @Inject
@@ -67,6 +45,8 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     private val NUM_PAGES = 7
 
     private lateinit var mPagerAdapter: PagerAdapter
+
+    private lateinit var validation: AwesomeValidation
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         override fun getPageTitle(position: Int): CharSequence? {
@@ -162,6 +142,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 //
 //        })
         indicator.setViewPager(pager)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -171,9 +152,21 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({
         when (item.itemId) {
-            R.id.action_add -> {
+            R.id.action_done -> {
+                val validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+                validation.addValidation(
+                        this@EditTaskFragment.dtActivity,
+                        R.id.etTaskNumber,
+                        {it.isNotBlank()},
+                        com.kvteam.deliverytracker.core.R.string.Core_TaskNumberValidationError)
+                validation.setContext(this@EditTaskFragment.dtActivity)
+                if(!validation.validate()) {
+                    return@launchUI
+                }
+
                 val (task, _) = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY)
-//                task.taskNumber = etTaskNumber.text.toString()
+                task.taskNumber = etTaskNumber.text.toString()
+                task.comment = etDescriptionField.text.toString()
                 try {
                     if (task.clientId != null) {
                         dp.clients.upsertAsync(dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry)
@@ -190,7 +183,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     })
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_edit_task_menu, menu)
+        inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 }

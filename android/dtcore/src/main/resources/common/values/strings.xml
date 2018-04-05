@@ -1,7 +1,7 @@
 <resources>
     <string name="Core_EmptyString" translatable="false" />
     <!--<string name="Core_WebserviceUrl" translatable="false">http://10.0.2.2:5000</string>-->
-    <string name="Core_WebserviceUrl" translatable="false">http://192.168.43.4:5000</string>
+    <string name="Core_WebserviceUrl" translatable="false">http://167.99.203.217</string>
     <string name="Core_ConfirmUserData">Confirm profile</string>
     <string name="Core_MainAppLogo">Delivery Bear</string>
     <string name="Core_LoginActivity_ForgotPassword">Forgot password</string>
@@ -54,6 +54,8 @@
     <string name="Core_ProductCost">Cost:</string>
     <string name="Core_ProductDescription">Description:</string>
     <string name="Core_ClientAddress">Address:</string>
+    <string name="Core_TaskNumber">Task number:</string>
+    <string name="Core_TaskDescription">Description:</string>
     <string name="Core_Addresses">Addresses</string>
     <string name="Core_AddAddress">Add address</string>
     <string name="Core_ClientInfoHeader">Client info</string>
@@ -72,6 +74,7 @@
     <string name="Core_ProductVendorCodeValidationError">Vendor code is required</string>
     <string name="Core_ProductCostValidationError">Cost is required</string>
     <string name="Core_ClientAddressValidationError">Address is required</string>
+    <string name="Core_TaskNumberValidationError">Task number is required</string>
 
     <string name="Core_EnterCodeHint">Invitation code</string>
     <string name="Core_EnterPasswordHint">Password</string>

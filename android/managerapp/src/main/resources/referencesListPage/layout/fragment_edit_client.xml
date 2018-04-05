@@ -23,7 +23,7 @@
             />
 
         <LinearLayout
-            android:id="@+id/llSurname"
+            android:id="@+id/llTaskNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvClientInfoHeader"
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_below="@id/llSurname"
+            android:layout_below="@id/llTaskNumber"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:paddingBottom="8dp"
