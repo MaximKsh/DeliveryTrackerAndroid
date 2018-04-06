@@ -27,21 +27,12 @@ data class PerformerTypeItem(
         var performerId: UUID? = null
 )
 
-class TaskPerformerFragment : DeliveryTrackerFragment() {
+class TaskPerformerFragment : PageFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
     @Inject
     lateinit var dp: DataProvider
-
-    private val taskIdKey = "task"
-    private var taskId
-        get() = arguments?.getSerializable(taskIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(taskIdKey, value)!!
-
-    fun setTask(id: UUID?) {
-        this.taskId = id ?: UUID.randomUUID()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_performer, container, false) as ViewGroup

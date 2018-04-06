@@ -159,6 +159,10 @@ abstract class MainActivityModule {
     internal abstract fun taskProductsFragment(): TaskProductsFragment
 
     @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(TaskNumberAndDetailsFragmentModule::class))
+    internal abstract fun taskNumberAndDetailsFragment(): TaskNumberAndDetailsFragment
+
+    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskDeliveryDateFragmentModule::class))
     internal abstract fun taskDeliveryDateFragment(): TaskDeliveryDateFragment
 

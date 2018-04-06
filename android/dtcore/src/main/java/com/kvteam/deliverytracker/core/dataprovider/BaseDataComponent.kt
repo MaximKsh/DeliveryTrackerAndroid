@@ -20,7 +20,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     protected abstract fun transformRequestToEntry(result: NetworkResult<R>): T
     protected abstract fun entryFactory() : T
 
-    override suspend fun upsertAsync(entity: T): Unit = async {
+    override suspend fun upsertAsync(entity: T): T = async {
         val origin = dataContainer.getEntry(entity.id!!)
         val result =  if (origin != null) {
             val diff = origin.getDifference(entity, ::entryFactory)
@@ -33,7 +33,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         dataContainer.putEntry(newEntity)
         dataContainer.removeDirty(entity.id!!)
         dataContainer.clearViews()
-        return@async
+        return@async newEntity
     }.await()
 
     override fun get(id: UUID, mode: DataProviderGetMode): DataProviderGetResult<T> {

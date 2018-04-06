@@ -17,16 +17,18 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.ModelTextWatcher
 import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.client_info.*
+import kotlinx.android.synthetic.main.client_info.view.*
 import kotlinx.coroutines.experimental.runBlocking
 import java.util.*
 import javax.inject.Inject
 
-class TaskClientFragment : DeliveryTrackerFragment() {
+class TaskClientFragment : PageFragment() {
     @Inject
     lateinit var dp: DataProvider
 
@@ -38,36 +40,18 @@ class TaskClientFragment : DeliveryTrackerFragment() {
         get() = arguments?.getBoolean(ignoreWatcherKey) ?: false
         set(value) = arguments?.putBoolean(ignoreWatcherKey, value)!!
 
-    private val taskIdKey = "task"
-    private var taskId
-        get() = arguments?.getSerializable(taskIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(taskIdKey, value)!!
-
-    fun setTask(id: UUID?) {
-        this.taskId = id ?: UUID.randomUUID()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_client, container, false) as ViewGroup
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        if (task.clientId != null) {
+            rootView.rlClientInfoContainer.layoutParams.height = 700
+        }
         return rootView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onPause() {
-        updateClient()
-        super.onPause()
-    }
-
-    private fun updateClient () {
-        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
-        val client = dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
-        client.name = etName.text.toString()
-        client.surname = etSurname.text.toString()
-        client.phoneNumber = etPhoneNumberField.text.toString()
     }
 
     private fun showClientDetails(mode: DataProviderGetMode) = launchUI {
@@ -93,6 +77,9 @@ class TaskClientFragment : DeliveryTrackerFragment() {
             dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
         }
 
+        if (client.phoneNumber == null) {
+            client.phoneNumber = etPhoneNumberField.text.toString()
+        }
         etName.setText(client.name)
         etSurname.setText(client.surname)
 
@@ -156,6 +143,33 @@ class TaskClientFragment : DeliveryTrackerFragment() {
         }
 
         val autocomplete = acClient.autoCompleteTextView
+
+        val etNameWatcher = TaskTextWatcher<Client>(
+                dp.clients,
+                { model, text -> model.name = text },
+                taskId,
+                dp.taskInfos
+        )
+
+        val etSurnameWatcher = TaskTextWatcher<Client>(
+                dp.clients,
+                { model, text -> model.surname = text },
+                taskId,
+                dp.taskInfos
+        )
+
+        val etPhoneNumberWatcher = TaskTextWatcher<Client>(
+                dp.clients,
+                { model, text -> model.phoneNumber = text },
+                taskId,
+                dp.taskInfos
+        )
+
+        etName.addTextChangedListener(etNameWatcher)
+
+        etSurname.addTextChangedListener(etSurnameWatcher)
+
+        etPhoneNumberField.addTextChangedListener(etPhoneNumberWatcher)
 
         etPhoneNumberField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {

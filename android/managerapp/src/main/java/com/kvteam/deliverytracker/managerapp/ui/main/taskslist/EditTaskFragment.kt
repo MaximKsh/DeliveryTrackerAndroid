@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.*
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
@@ -24,6 +25,17 @@ import kotlinx.android.synthetic.main.fragment_task_number_and_details.*
 import java.util.*
 import javax.inject.Inject
 
+abstract class PageFragment : DeliveryTrackerFragment() {
+    private val taskIdKey = "task"
+    protected var taskId
+        get() = arguments?.getSerializable(taskIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(taskIdKey, value)!!
+
+    fun setTask(id: UUID?) {
+        this.taskId = id ?: UUID.randomUUID()
+    }
+}
+
 class EditTaskFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var navigationController: NavigationController
@@ -37,16 +49,21 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var dp: DataProvider
 
-    private val pageIndexKey = "pageIndex"
-    private var pageIndex
-        get() = arguments?.getInt(pageIndexKey)!!
-        set(value) = arguments?.putInt(pageIndexKey, value)!!
-
     private val NUM_PAGES = 7
 
     private lateinit var mPagerAdapter: PagerAdapter
 
     private lateinit var validation: AwesomeValidation
+
+    val fragments = listOf<PageFragment>(
+            TaskNumberAndDetailsFragment(),
+            TaskDeliveryDateFragment(),
+            TaskReceiptAtFragment(),
+            TaskPaymentTypeFragment(),
+            TaskPerformerFragment(),
+            TaskProductsFragment(),
+            TaskClientFragment()
+    )
 
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         override fun getPageTitle(position: Int): CharSequence? {
@@ -54,43 +71,9 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         }
 
         override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> {
-                    val fragment = TaskNumberAndDetailsFragment()
-                    fragment
-                }
-                1 -> {
-                    val fragment = TaskDeliveryDateFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                2 -> {
-                    val fragment = TaskReceiptAtFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                3 -> {
-                    val fragment = TaskPaymentTypeFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                4 -> {
-                    val fragment = TaskPerformerFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                5 -> {
-                    val fragment = TaskProductsFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                6 -> {
-                    val fragment = TaskClientFragment()
-                    fragment.setTask(taskId)
-                    fragment
-                }
-                else -> TaskNumberAndDetailsFragment()
-            }
+            val fragment = fragments[position]
+            fragment.setTask(taskId)
+            return fragment
         }
 
         override fun getCount(): Int {
@@ -130,19 +113,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
-//        pager.currentItem = pageIndex
-//        pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
-//            override fun onPageScrollStateChanged(state: Int) {}
-//
-//            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
-//
-//            override fun onPageSelected(position: Int) {
-//                pageIndex = position
-//            }
-//
-//        })
         indicator.setViewPager(pager)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -165,11 +136,14 @@ class EditTaskFragment : DeliveryTrackerFragment() {
                 }
 
                 val (task, _) = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY)
-                task.taskNumber = etTaskNumber.text.toString()
-                task.comment = etDescriptionField.text.toString()
                 try {
                     if (task.clientId != null) {
-                        dp.clients.upsertAsync(dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry)
+                        val oldClient = dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
+                        val selectedAddress = oldClient.clientAddresses.find{ it.id == task.clientAddressId}
+                        val newClient = dp.clients.upsertAsync(dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry)
+                        task.clientId = newClient.id
+                        val newAddress = newClient.clientAddresses.find { it.rawAddress == selectedAddress?.rawAddress }
+                        task.clientAddressId = newAddress?.id
                     }
                     dp.taskInfos.upsertAsync(task)
                 } catch (e: NetworkException) {

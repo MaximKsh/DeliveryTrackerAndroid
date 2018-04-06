@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.DialogFragment
 import android.app.TimePickerDialog
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,18 +37,9 @@ data class DeliveryTimeTypeItem(
         var toTime: DateTime?
 )
 
-class TaskDeliveryDateFragment : DeliveryTrackerFragment() {
+class TaskDeliveryDateFragment : PageFragment() {
     @Inject
     lateinit var dp: DataProvider
-
-    private val taskIdKey = "task"
-    private var taskId
-        get() = arguments?.getSerializable(taskIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(taskIdKey, value)!!
-
-    fun setTask(id: UUID?) {
-        this.taskId = id ?: UUID.randomUUID()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_delivery_date, container, false) as ViewGroup
