@@ -1,10 +1,10 @@
 package com.kvteam.deliverytracker.core.webservice
 
-import android.content.Context
 import android.text.TextUtils
 import com.google.gson.JsonSyntaxException
-import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.Configuration
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.common.webserviceURL
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 import kotlinx.coroutines.experimental.async
@@ -12,13 +12,13 @@ import java.lang.reflect.Type
 
 class Webservice(
                  gsonProvider: IDeliveryTrackerGsonProvider,
-                 context: Context,
+                 configuration: Configuration,
                  private val session: ISession,
                  private val httpManager: IHttpManager) : IWebservice {
     // gson is thread-safe
     private val gson = gsonProvider.gson
 
-    private var baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
+    private var baseUrl: String = configuration.webserviceURL
 
     override suspend fun getAsync(
             url: String,

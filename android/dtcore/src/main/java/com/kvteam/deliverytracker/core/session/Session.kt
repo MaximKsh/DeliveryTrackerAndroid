@@ -7,9 +7,10 @@ import android.content.pm.PackageManager
 import android.os.Build
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonSyntaxException
-import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.Configuration
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.common.webserviceURL
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.Instance
@@ -27,6 +28,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 class Session (
         gsonProvider: IDeliveryTrackerGsonProvider,
+        configuration: Configuration,
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
         private val context: Context) : ISession {
@@ -36,7 +38,7 @@ class Session (
     val gson = gsonProvider.gson
 
     private val accountManager = AccountManager.get(context)
-    private val baseUrl: String = context.getString(R.string.Core_WebserviceUrl)
+    private val baseUrl: String = configuration.webserviceURL
 
     private val userAR = AtomicReference<Lazy<User?>>( lazy { getUserFromAccount() })
     private val instanceAR = AtomicReference<Lazy<Instance?>> (lazy { getInstanceFromAccount() })

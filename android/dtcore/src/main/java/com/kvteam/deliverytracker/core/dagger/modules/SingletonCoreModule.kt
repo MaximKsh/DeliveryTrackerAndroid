@@ -24,6 +24,14 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
+    fun configuration(
+            gson: IDeliveryTrackerGsonProvider,
+            app: T): Configuration {
+        return Configuration(gson, app)
+    }
+
+    @Provides
+    @Singleton
     fun httpManager(): IHttpManager {
         return HttpManager()
     }
@@ -32,11 +40,13 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Singleton
     fun session(
             gson: IDeliveryTrackerGsonProvider,
+            configuration: Configuration,
             httpManager: IHttpManager,
             app: T,
             sessionInfo: ISessionInfo): ISession {
         return Session(
                 gson,
+                configuration,
                 httpManager,
                 sessionInfo,
                 app.applicationContext)
@@ -46,10 +56,10 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
     @Singleton
     fun webservice(
             gson: IDeliveryTrackerGsonProvider,
-            app: T,
+            conf: Configuration,
             session: ISession,
             httpManager: IHttpManager): IWebservice {
-        return Webservice(gson, app.applicationContext, session, httpManager)
+        return Webservice(gson, conf, session, httpManager)
     }
 
     @Provides

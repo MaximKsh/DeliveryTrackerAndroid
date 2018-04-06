@@ -10,9 +10,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.R
+import com.kvteam.deliverytracker.core.common.Configuration
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.common.webserviceURL
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.webservice.CREATED_HTTP_STATUS
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
@@ -22,12 +23,13 @@ import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 
 class AccountAuthenticator(
         gsonProvider: IDeliveryTrackerGsonProvider,
+        configuration: Configuration,
         private val application: DeliveryTrackerApplication,
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo): AbstractAccountAuthenticator(application) {
 
     private val gson = gsonProvider.gson
-    private val baseUrl: String = application.getString(R.string.Core_WebserviceUrl)
+    private val baseUrl: String = configuration.webserviceURL
 
     override fun addAccount(
             response: AccountAuthenticatorResponse?,

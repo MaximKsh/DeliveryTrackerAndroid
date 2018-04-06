@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.DeliveryTrackerService
+import com.kvteam.deliverytracker.core.common.Configuration
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
 import dagger.android.AndroidInjection
@@ -16,6 +17,8 @@ class SessionService: DeliveryTrackerService() {
     lateinit var sessionInfo: ISessionInfo
     @Inject
     lateinit var gsonProvider: IDeliveryTrackerGsonProvider
+    @Inject
+    lateinit var configuration: Configuration
 
     private lateinit var accountAuthenticator: AccountAuthenticator
 
@@ -24,6 +27,7 @@ class SessionService: DeliveryTrackerService() {
         super.onCreate()
         accountAuthenticator = AccountAuthenticator(
                 gsonProvider,
+                configuration,
                 application as DeliveryTrackerApplication,
                 httpManager,
                 sessionInfo)
