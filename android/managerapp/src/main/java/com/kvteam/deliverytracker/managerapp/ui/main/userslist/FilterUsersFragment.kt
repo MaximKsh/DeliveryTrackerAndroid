@@ -79,7 +79,7 @@ open class FilterUsersFragment : BaseFilterFragment() {
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        mAdapter = UserListFlexibleAdapter(mutableListOf(), userActions)
+        mAdapter = UserListFlexibleAdapter(userActions)
         (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
     }

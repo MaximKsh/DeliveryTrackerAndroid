@@ -26,6 +26,7 @@ import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.base_list.*
 import kotlinx.android.synthetic.main.base_list.view.*
 import java.util.*
@@ -344,6 +345,20 @@ abstract class BaseListFragment :
             }
         } else {
             handle(entities, origin == DataProviderGetOrigin.WEB)
+        }
+    }
+
+    protected inline fun <reified T : IFlexible<out RecyclerView.ViewHolder>,
+            reified A: FlexibleAdapter<T>> updateDataSet(list: MutableList<T>,
+                                                         adapterFactory: (MutableList<T>) -> A,
+                                                         animate: Boolean) {
+        val currentAdapter = mAdapter as? A
+        if (currentAdapter != null) {
+            currentAdapter.updateDataSet(list, false)
+        } else {
+            val newAdapter = adapterFactory(list)
+            newAdapter.updateDataSet(list, false)
+            mAdapter = newAdapter
         }
     }
 

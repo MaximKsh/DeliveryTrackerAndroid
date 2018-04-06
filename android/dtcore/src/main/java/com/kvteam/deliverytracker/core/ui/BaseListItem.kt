@@ -4,7 +4,6 @@ import android.view.View
 import com.kvteam.deliverytracker.core.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem
-import eu.davidea.flexibleadapter.items.IFilterable
 import eu.davidea.flexibleadapter.items.IFlexible
 
 
@@ -31,5 +30,5 @@ abstract class BaseListItem <out T, VH : BaseListItem.BaseListViewHolder>(
     }
 
     abstract class BaseListViewHolder(val view: View, val adapter: FlexibleAdapter<out IFlexible<*>>?)
-        : BaseListFlexibleAdapter.BaseListHolder(view, adapter) {}
+        : BaseListFlexibleAdapter.BaseListHolder(view, adapter)
 }

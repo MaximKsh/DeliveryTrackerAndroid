@@ -5,7 +5,6 @@ import com.kvteam.deliverytracker.core.ui.BaseListFlexibleAdapter
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 
 
-class UserInvitationListFlexibleAdapter(noHeaderItems: MutableList<UserInvitationListItem>,
-                                        invitationActions: IBaseListItemActions<UserInvitationListItem>)
-    : BaseListFlexibleAdapter<Invitation, UserInvitationListItem, UserInvitationListItem.InvitationListViewHolder>(noHeaderItems, invitationActions) {}
+class UserInvitationListFlexibleAdapter(invitationActions: IBaseListItemActions<UserInvitationListItem>)
+    : BaseListFlexibleAdapter<Invitation, UserInvitationListItem, UserInvitationListItem.InvitationListViewHolder>(invitationActions)
 

@@ -43,16 +43,6 @@ open class ReferenceListFragment : BaseListFragment() {
 
     override val viewGroup: String = "ReferenceViewGroup"
 
-    private val PRODUCTS_MENU_ITEM = 1
-    private val PAYMENT_TYPES_MENU_ITEM = PRODUCTS_MENU_ITEM shl 1
-    private val CLIENTS_MENU_ITEM = PAYMENT_TYPES_MENU_ITEM shl 1
-    private val WAREHOUSES_MENU_ITEM = CLIENTS_MENU_ITEM shl 1
-
-    private val PRODUCTS_MENU_MASK = PRODUCTS_MENU_ITEM
-    private val PAYMENT_TYPES__MENU_MASK = PAYMENT_TYPES_MENU_ITEM
-    private val CLIENTS_MENU_MASK = CLIENTS_MENU_ITEM
-    private val WAREHOUSES_MENU_MASK = WAREHOUSES_MENU_ITEM
-
     private val paymentTypesActions = object : IBaseListItemActions<PaymentTypeListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {
             if (adapter !is PaymentTypesListFlexibleAdapter) {
@@ -139,24 +129,14 @@ open class ReferenceListFragment : BaseListFragment() {
         val referencesList = paymentTypes
                 .map { PaymentTypeListItem(it, null, lm) }
                 .toMutableList()
-        val adapter = mAdapter as? PaymentTypesListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(referencesList, animate)
-        } else {
-            mAdapter = PaymentTypesListFlexibleAdapter(referencesList, paymentTypesActions)
-        }
+        updateDataSet(referencesList, { PaymentTypesListFlexibleAdapter(paymentTypesActions) }, animate)
     }
 
     override fun handleProducts(products: List<Product>, animate: Boolean) {
         val referencesList = products
                 .map { ProductListItem(it, null, lm, activity!!) }
                 .toMutableList()
-        val adapter = mAdapter as? ProductsListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(referencesList, animate)
-        } else {
-            mAdapter = ProductsListFlexibleAdapter(referencesList, productsActions)
-        }
+        updateDataSet(referencesList, { ProductsListFlexibleAdapter(productsActions) }, animate)
     }
 
     override fun handleClients(clients: List<Client>, animate: Boolean) {
@@ -173,24 +153,14 @@ open class ReferenceListFragment : BaseListFragment() {
                     }
                     ClientListItem(client, header, lm)
                 }.toMutableList()
-        val adapter = mAdapter as? ClientsListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(referencesList, animate)
-        } else {
-            mAdapter = ClientsListFlexibleAdapter(referencesList, clientsActions)
-        }
+        updateDataSet(referencesList, { ClientsListFlexibleAdapter(clientsActions) }, animate)
     }
 
     override fun handleWarehouses(warehouses: List<Warehouse>, animate: Boolean) {
         val referencesList = warehouses
                 .map { WarehouseListItem(it, null, lm) }
                 .toMutableList()
-        val adapter = mAdapter as? WarehousesListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(referencesList, animate)
-        } else {
-            mAdapter = WarehousesListFlexibleAdapter(referencesList, warehousesActions)
-        }
+        updateDataSet(referencesList, { WarehousesListFlexibleAdapter(warehousesActions) }, animate)
     }
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
@@ -220,7 +190,7 @@ open class ReferenceListFragment : BaseListFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productsActions)
+        mAdapter = ProductsListFlexibleAdapter(productsActions)
         super.onActivityCreated(savedInstanceState)
     }
 

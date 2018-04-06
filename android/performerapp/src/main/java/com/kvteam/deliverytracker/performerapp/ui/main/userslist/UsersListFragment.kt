@@ -63,12 +63,7 @@ open class UsersListFragment : BaseListFragment() {
                         UserListItem(user, header)
                     }
                 }.toMutableList()
-        val adapter = mAdapter as? UserListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(userList, animate)
-        } else {
-            mAdapter = UserListFlexibleAdapter(userList, userActions)
-        }
+        updateDataSet(userList, { UserListFlexibleAdapter(userActions) }, animate)
     }
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
@@ -80,7 +75,7 @@ open class UsersListFragment : BaseListFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
+        mAdapter = UserListFlexibleAdapter(userActions)
         super.onActivityCreated(savedInstanceState)
         (mAdapter as UserListFlexibleAdapter).hideDeleteButton = true
     }

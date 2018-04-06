@@ -4,6 +4,5 @@ import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.ui.BaseListFlexibleAdapter
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 
-class PaymentTypesListFlexibleAdapter(noHeaderItems: MutableList<PaymentTypeListItem>,
-                                      referenceActions: IBaseListItemActions<PaymentTypeListItem>)
-    : BaseListFlexibleAdapter<PaymentType, PaymentTypeListItem, PaymentTypeListItem.PaymentTypesListViewHolder>(noHeaderItems, referenceActions) {}
+class PaymentTypesListFlexibleAdapter(referenceActions: IBaseListItemActions<PaymentTypeListItem>)
+    : BaseListFlexibleAdapter<PaymentType, PaymentTypeListItem, PaymentTypeListItem.PaymentTypesListViewHolder>(referenceActions) {}

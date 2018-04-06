@@ -5,6 +5,5 @@ import com.kvteam.deliverytracker.core.ui.BaseListFlexibleAdapter
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 
 
-class UserListFlexibleAdapter(noHeaderItems: MutableList<UserListItem>,
-                              userActions: IBaseListItemActions<UserListItem>)
-    : BaseListFlexibleAdapter<User, UserListItem, UserListItem.UserListViewHolder>(noHeaderItems, userActions) {}
+class UserListFlexibleAdapter( userActions: IBaseListItemActions<UserListItem>)
+    : BaseListFlexibleAdapter<User, UserListItem, UserListItem.UserListViewHolder>(userActions)

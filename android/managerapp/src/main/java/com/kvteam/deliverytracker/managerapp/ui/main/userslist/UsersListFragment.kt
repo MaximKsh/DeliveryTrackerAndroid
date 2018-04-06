@@ -23,8 +23,7 @@ import org.joda.time.DateTimeZone
 import org.joda.time.Duration
 import javax.inject.Inject
 
-// TODO: rename managersList xml to userslist
-open class UsersListFragment : BaseListFragment() {
+class UsersListFragment : BaseListFragment() {
 
     override var viewGroup = "UserViewGroup"
 
@@ -102,12 +101,7 @@ open class UsersListFragment : BaseListFragment() {
                         UserListItem(user, header)
                     }
                 }.toMutableList()
-        val adapter = mAdapter as? UserListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(userList, animate)
-        } else {
-            mAdapter = UserListFlexibleAdapter(userList, userActions)
-        }
+        updateDataSet(userList, { UserListFlexibleAdapter(userActions) }, animate)
     }
 
     override fun handleInvitations(invitations: List<Invitation>, animate: Boolean) {
@@ -122,26 +116,21 @@ open class UsersListFragment : BaseListFragment() {
                     val header: BaseListHeader
                     val dateValue = invitation.created!!
                     val duration = Duration(dateValue, DateTime.now(DateTimeZone.UTC))
-                    when (duration.standardDays) {
+                    header = when (duration.standardDays) {
                         in 0..7 -> {
-                            header = headerThisWeek
+                            headerThisWeek
                         }
                         in 8..14 -> {
-                            header = headerPreviousWeek
+                            headerPreviousWeek
                         }
                         else -> {
-                            header = headerLongTimeAgo
+                            headerLongTimeAgo
                         }
                     }
                     UserInvitationListItem(invitation, header, lm)
                 }.toMutableList()
 
-        val adapter = mAdapter as? UserInvitationListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(invitationList, animate)
-        } else {
-            mAdapter = UserInvitationListFlexibleAdapter(invitationList, invitationActions)
-        }
+        updateDataSet(invitationList, {UserInvitationListFlexibleAdapter(invitationActions)}, animate)
     }
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
@@ -165,7 +154,7 @@ open class UsersListFragment : BaseListFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        mAdapter = UserListFlexibleAdapter(mutableListOf(),userActions)
+        mAdapter = UserListFlexibleAdapter(userActions)
         super.onActivityCreated(savedInstanceState)
     }
 

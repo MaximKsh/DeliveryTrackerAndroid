@@ -16,11 +16,12 @@ import java.lang.ref.WeakReference
 
 
 abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : BaseListItem.BaseListViewHolder >(
-        private var noHeaderItems: MutableList<T2>,
-        itemActions: IBaseListItemActions<T2>) : FlexibleAdapter<T2>(noHeaderItems) {
+        itemActions: IBaseListItemActions<T2>) : FlexibleAdapter<T2>(listOf()) {
     private val viewBinderHelper = ViewBinderHelper()
 
     private var itemActionsWeak: WeakReference<IBaseListItemActions<T2>>
+
+    private var noHeaderItems: MutableList<T2> = mutableListOf()
 
     var hideDeleteButton = false
 
@@ -50,8 +51,18 @@ abstract class BaseListFlexibleAdapter <out T1, T2 : BaseListItem<T1, VH>, VH : 
 
             container.removeAllViews()
             val inflater = LayoutInflater.from(container.context)
+            // Ничего не течет, т.к. layoutID просто переопределяется на константы.
+            @Suppress("LeakingThis")
             val view = inflater.inflate(layoutID, container, false)
             container.addView(view)
+
+            container.measure(
+                    View.MeasureSpec.makeMeasureSpec(swipeRevealLayout.width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+
+            val params = itemView.flDeleteItem.layoutParams
+            params.height = container.measuredHeight
+            itemView.flDeleteItem.layoutParams = params
         }
     }
 

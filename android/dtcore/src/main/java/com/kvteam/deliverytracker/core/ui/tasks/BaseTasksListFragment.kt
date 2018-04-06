@@ -30,25 +30,20 @@ abstract class BaseTasksListFragment : BaseListFragment() {
                     val header: BaseListHeader
                     val dateValue = task.created!!
                     val duration = Duration(dateValue, DateTime.now(DateTimeZone.UTC))
-                    when (duration.standardDays) {
+                    header = when (duration.standardDays) {
                         in 0..7 -> {
-                            header = headerThisWeek
+                            headerThisWeek
                         }
                         in 8..14 -> {
-                            header = headerPreviousWeek
+                            headerPreviousWeek
                         }
                         else -> {
-                            header = headerLongTimeAgo
+                            headerLongTimeAgo
                         }
                     }
                     TaskListItem(task, header, lm, dp, context!!)
                 }.toMutableList()
-        val adapter = mAdapter as? TasksListFlexibleAdapter
-        if (adapter != null) {
-            adapter.updateDataSet(list, animate)
-        } else {
-            mAdapter = TasksListFlexibleAdapter(list, tasksActions)
-        }
+        updateDataSet(list, { TasksListFlexibleAdapter(tasksActions) }, animate)
     }
 
     override fun getViewFilterArguments(viewName: String, type: String?, groupIndex: Int, value: String): Map<String, Any>? {
@@ -56,7 +51,7 @@ abstract class BaseTasksListFragment : BaseListFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        mAdapter = TasksListFlexibleAdapter(mutableListOf(), tasksActions)
+        mAdapter = TasksListFlexibleAdapter(tasksActions)
         (mAdapter as TasksListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
     }

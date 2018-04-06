@@ -55,7 +55,7 @@ open class FilterProductsFragment : BaseFilterFragment() {
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        mAdapter = ProductsListFlexibleAdapter(mutableListOf(), productActions)
+        mAdapter = ProductsListFlexibleAdapter(productActions)
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
     }
