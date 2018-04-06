@@ -8,6 +8,8 @@ android {
     buildToolsVersion '27.0.2'
     lintOptions {
         disable 'RestrictedApi'
+        checkReleaseBuilds false
+        abortOnError false
     }
     defaultConfig {
         multiDexEnabled true
