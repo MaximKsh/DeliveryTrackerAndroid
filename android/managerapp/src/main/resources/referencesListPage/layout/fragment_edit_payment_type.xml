@@ -20,7 +20,7 @@
                 android:textColor="@color/colorGray"/>
             <EditText
                 android:id="@+id/etNameField"
-                android:inputType="textPersonName"
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/selector_edit_text"

@@ -56,6 +56,7 @@
     <string name="Core_Addresses">Addresses</string>
     <string name="Core_AddAddress">Add address</string>
     <string name="Core_ClientInfoHeader">Client info</string>
+    <string name="Core_PreliminaryUserHeader">Preliminary user info</string>
     <string name="Core_EnterOldPasswordValidationError">Old password is required</string>
     <string name="Core_EnterNewPasswordValidationError">New password incorrect</string>
     <string name="Core_ConfirmPasswordValidationError">Enter new password again</string>

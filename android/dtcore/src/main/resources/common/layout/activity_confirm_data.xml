@@ -40,7 +40,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etSurname"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -67,7 +67,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etName"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -94,7 +94,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etPatronymic"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"

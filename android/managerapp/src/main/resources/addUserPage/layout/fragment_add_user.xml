@@ -1,134 +1,144 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:mask="http://schemas.android.com/apk/res-auto"
+    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorWhite"
-    android:padding="30dp"
-    tools:context="com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/tvPreliminaryInfo"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/Core_PreliminaryUserHeader"
+            android:gravity="bottom"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/llName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvPreliminaryInfo"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="4dp"
             android:orientation="vertical">
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                >
-
-                <EditText
-                    android:id="@+id/etNameField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:theme="@style/EditTextTheme"
-                    android:hint="@string/Core_EnterNameHint" />
-
-
-                <ImageView
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:id="@+id/ivNameHintIcon"
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                >
-
-                <EditText
-                    android:id="@+id/etSurnameField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:theme="@style/EditTextTheme"
-                    android:hint="@string/Core_EnterSurnameHint" />
-
-
-                <ImageView
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:id="@+id/ivSurnameHintIcon"
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_assignment_ind_black_24dp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                >
-
-                <br.com.sapereaude.maskedEditText.MaskedEditText
-                    android:id="@+id/etPhoneNumberField"
-                    android:layout_width="match_parent"
-                    android:paddingStart="45dp"
-                    android:paddingEnd="45dp"
-                    android:layout_height="60dp"
-                    android:inputType="phone"
-                    android:typeface="monospace"
-                    mask:allowed_chars="1234567890"
-                    mask:mask="+7(###)###-##-##" />
-
-
-                <ImageView
-                    android:contentDescription="@string/Core_CodeHintIcon"
-                    android:id="@+id/ivPhoneNumberHintIcon"
-                    android:alpha="0.3"
-                    android:layout_marginTop="13dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_phone_black_24dp" />
-
-            </RelativeLayout>
-
-            <Spinner
-                android:layout_marginTop="15dp"
-                android:layout_gravity="end"
-                android:id="@+id/sUserRole"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <TextView
-                android:gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:visibility="invisible"
-                android:text="@string/ManagerApp_AddUserFragment_ShareCode"
-                android:id="@+id/tvInvitationCodeInfo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:textStyle="bold"
-                android:textSize="25sp"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:id="@+id/tvInvitationCode"
+                android:text="@string/Core_Name"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etNameField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etNameField"
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llName"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="4dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_Surname"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etSurnameField"
+                android:textColor="@color/colorGray"/>
+            <EditText
+                android:id="@+id/etSurnameField"
+                android:inputType="textCapSentences"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_below="@id/llSurname"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/Core_YourPhone"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:labelFor="@id/etPhoneNumber"
+                android:textColor="@color/colorGray"/>
+
+            <br.com.sapereaude.maskedEditText.MaskedEditText
+                android:id="@+id/etPhoneNumberField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:typeface="monospace"
+                android:backgroundTint="@color/selector_edit_text"
+                android:theme="@style/EditTextTheme"
+                android:textSize="18sp"
+                mask:allowed_chars="1234567890"
+                mask:mask="+7(###)###-##-##" />
+        </LinearLayout>
+
+        <Spinner
+            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/sUserRole"
+            android:layout_below="@id/llPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            android:text="@string/ManagerApp_AddUserFragment_ShareCode"
+            android:layout_below="@id/sUserRole"
+            android:id="@+id/tvInvitationCodeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:id="@+id/tvInvitationCode"
+            android:layout_below="@id/tvInvitationCodeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</ScrollView>

@@ -67,7 +67,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etCompanyName"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -115,7 +115,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etSurname"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -141,7 +141,7 @@
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etName"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -160,14 +160,14 @@
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
-                    android:text="@string/Core_Patronymic"
                     android:layout_height="wrap_content"
+                    android:text="@string/Core_Patronymic"
                     android:textSize="14sp"
                     android:labelFor="@id/etPatronymic"
                     android:textColor="@color/colorGray"/>
                 <EditText
                     android:id="@+id/etPatronymic"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
@@ -233,55 +233,3 @@
     </ScrollView>
 
 </LinearLayout>
-    <!--<LinearLayout--><!--android:orientation="vertical"--><!--android:layout_height="match_parent"--><!--android:layout_width="match_parent"--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--tools:contecom.kvteam.deliverytracker.managerapp.ui.login.addcompany.AddCompanyActivityvity"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--&gt;-->
-
-    <!--<android.support.design.widget.AppBarLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">--><!--<android.support.v7.widget.Toolbar--><!--android:id="@+id/toolbar_top"--><!--android:layout_height="wrap_content"--><!--android:layout_width="match_parent"--><!--android:theme="@style/ToolbarColoredBackArrow"--><!--android:background="@color/colorPrimary">-->
-
-    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:text="@string/company_addition"--><!--android:gravity = "center"--><!--android:textSize="18sp"--><!--android:textColor="@color/colorWhite"--><!--android:id="@+id/toolbar_title" />--><!--</android.support.v7.widget.Toolbar>--><!--</android.support.design.widget.AppBarLayout>-->
-
-    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical"--><!--android:background="@color/colorWhite"--><!--android:padding="30dp"--><!--android:gravity="center_horizontal">-->
-
-    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
-
-    <!--<EditText--><!--android:id="@+id/etCompanyNameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_company_name_hint" />-->
-
-
-    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivBusinessHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_business_black_24dp" />-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
-
-    <!--<EditText--><!--android:id="@+id/etNameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_name_hint" />-->
-
-
-    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivNameHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
-
-    <!--<EditText--><!--android:id="@+id/etSurnameField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPersonName"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_surname_hint" />-->
-
-
-    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivSurnameHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_assignment_ind_black_24dp" />-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
-
-    <!--<EditText--><!--android:id="@+id/etPhoneNumberField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="phone"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_phone_number_hint" />-->
-
-
-    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivPhoneNumberHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_local_phone_black_24dp" />-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<RelativeLayout--><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="60dp"--><!--android:layout_gravity="center"--><!--&gt;-->
-
-    <!--<EditText--><!--android:id="@+id/etPasswordField"--><!--android:layout_width="match_parent"--><!--android:paddingStart="45dp"--><!--android:paddingEnd="45dp"--><!--android:layout_height="60dp"--><!--android:ems="10"--><!--android:inputType="textPassword"--><!--android:theme="@style/EditTextTheme"--><!--android:hint="@string/enter_password_hint" />-->
-
-
-    <!--<ImageView--><!--android:contentDescription="@string/code_hint_icon"--><!--android:id="@+id/ivPasswordHintIcon"--><!--android:alpha="0.3"--><!--android:layout_marginTop="13dp"--><!--android:layout_width="wrap_content"--><!--android:layout_height="30dp"--><!--android:src="@drawable/ic_lock_black_24dp" />-->
-
-    <!--</RelativeLayout>--><!--</LinearLayout>--><!--</LinearLayout>-->
