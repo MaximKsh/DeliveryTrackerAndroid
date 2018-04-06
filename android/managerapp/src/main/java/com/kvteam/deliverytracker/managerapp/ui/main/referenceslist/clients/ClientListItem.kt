@@ -30,6 +30,10 @@ class ClientListItem(
         holder!!.tvName.text = client.name
         holder.tvSurname.text = client.surname
         holder.tvPhoneNumber.text = client.phoneNumber
+        holder.tvAddress.text = if (client.clientAddresses.size > 0)
+            client.clientAddresses[0].rawAddress
+        else
+            "No address"
     }
 
 
@@ -40,6 +44,7 @@ class ClientListItem(
         val tvName = view.tvName!!
         val tvSurname = view.tvSurname!!
         val tvPhoneNumber = view.tvPhoneNumber!!
+        val tvAddress = view.tvAddress!!
     }
 }
 

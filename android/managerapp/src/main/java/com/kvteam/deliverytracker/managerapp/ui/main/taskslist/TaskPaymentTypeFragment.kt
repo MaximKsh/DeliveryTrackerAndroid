@@ -24,21 +24,12 @@ data class PaymentTypeItem(
         var paymentType: PaymentType? = null
 )
 
-class TaskPaymentTypeFragment : DeliveryTrackerFragment() {
+class TaskPaymentTypeFragment : PageFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
     @Inject
     lateinit var dp: DataProvider
-
-    private val taskIdKey = "task"
-    private var taskId
-        get() = arguments?.getSerializable(taskIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(taskIdKey, value)!!
-
-    fun setTask(id: UUID?) {
-        this.taskId = id ?: UUID.randomUUID()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_payment_type, container, false) as ViewGroup
