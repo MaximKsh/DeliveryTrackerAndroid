@@ -1,38 +1,37 @@
 package com.kvteam.deliverytracker.core.common
 
 import com.kvteam.deliverytracker.core.models.ModelBase
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.jvm.javaField
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
 
+@Target(AnnotationTarget.PROPERTY)
 annotation class MoveAlways
 
-annotation class DiffMember
+@Target(AnnotationTarget.PROPERTY)
+annotation class MoveIfDiffer
 
 fun <T : ModelBase> T.getDifference(new: T, factory: () -> T) : T {
-    val annotatedProperties = this::class
-            .declaredMemberProperties
-            .filter { it.findAnnotation<DiffMember>() != null }
     val diff = factory()
 
-    for(prop in annotatedProperties) {
-        val field = prop.javaField!!
-        val oldVal = field.get(this)
-        val newVal = field.get(new)
-        if(oldVal != newVal) {
-            field.set(diff, newVal)
+    for(prop in this::class.memberProperties) {
+        if(prop !is KMutableProperty<*>) {
+            continue
+        }
+        for (annotation in prop.annotations) {
+            if (annotation.annotationClass ==  MoveIfDiffer::class) {
+                val oldVal = prop.getter.call(this)
+                val newVal = prop.getter.call(new)
+                if (oldVal != newVal) {
+                    prop.setter.call(diff, newVal)
+                }
+                break
+            } else if (annotation.annotationClass ==  MoveAlways::class) {
+                val newVal = prop.getter.call(new)
+                prop.setter.call(diff, newVal)
+                break
+            }
         }
     }
 
-    val mustHaveProperties = this::class
-            .declaredMemberProperties
-            .filter { it.findAnnotation<MoveAlways>() != null }
-
-    for(prop in mustHaveProperties) {
-        val field = prop.javaField!!
-        val value = field.get(this)
-        field.set(diff, value)
-    }
-    // TODO: Дифы с учетом вложенных коллекций
-    return new
+    return diff
 }

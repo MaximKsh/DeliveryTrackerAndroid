@@ -1,19 +1,26 @@
 package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.annotations.SerializedName
+import com.kvteam.deliverytracker.core.common.MoveAlways
+import com.kvteam.deliverytracker.core.common.MoveIfDiffer
 import java.io.Serializable
 
 
 data class Client(
     @SerializedName("Surname", alternate = ["surname"])
+    @MoveIfDiffer
     var surname: String? = null,
     @SerializedName("Name", alternate = ["name"])
+    @MoveIfDiffer
     var name: String? = null,
     @SerializedName("Patronymic", alternate = ["patronymic"])
+    @MoveIfDiffer
     var patronymic: String? = null,
     @SerializedName("PhoneNumber", alternate = ["phoneNumber"])
+    @MoveIfDiffer
     var phoneNumber: String? = null,
     @SerializedName("Addresses", alternate = ["addresses"])
+    @MoveAlways
     var clientAddresses: MutableList<ClientAddress> = mutableListOf()
 ): ModelBase(), Serializable {
 
