@@ -147,14 +147,6 @@ abstract class MainActivityModule {
     internal abstract fun editTaskFragment(): EditTaskFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(TaskPaymentTypeFragmentModule::class))
-    internal abstract fun taskPaymentTypeFragment(): TaskPaymentTypeFragment
-
-    @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(TaskPerformerFragmentModule::class))
-    internal abstract fun taskPerformerFragment(): TaskPerformerFragment
-
-    @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TaskProductsFragmentModule::class))
     internal abstract fun taskProductsFragment(): TaskProductsFragment
 

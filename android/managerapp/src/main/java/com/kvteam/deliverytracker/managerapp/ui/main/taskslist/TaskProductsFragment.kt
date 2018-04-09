@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,16 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_products.*
+import kotlinx.android.synthetic.main.fragment_task_products.view.*
 import kotlinx.android.synthetic.main.selected_product_item.*
 import kotlinx.android.synthetic.main.selected_product_item.view.*
+import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
@@ -25,27 +29,45 @@ class TaskProductsFragment : PageFragment() {
     lateinit var dp: DataProvider
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_task_products, container, false) as ViewGroup
-        return rootView
+        val view = inflater.inflate(R.layout.fragment_task_products, container, false) as ViewGroup
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
+        task.taskProducts.forEach { taskProductInfo ->
+            val productItemView = inflater.inflate(R.layout.selected_product_item, view.llSelectedProduct, false)
+
+            updateProductView(productItemView, taskProductInfo, view)
+
+
+            productItemView.ivIconIncreaseQuantity.setOnClickListener { _ ->
+                taskProductInfo.quantity = taskProductInfo.quantity!! + 1
+                updateProductView(productItemView, taskProductInfo)
+            }
+
+            productItemView.ivIconDecreaseQuantity.setOnClickListener { _ ->
+                if (taskProductInfo.quantity!! > 1) {
+                    taskProductInfo.quantity = taskProductInfo.quantity!! - 1
+                    updateProductView(productItemView, taskProductInfo)
+                }
+            }
+
+            productItemView.ivIconDelete.setOnClickListener { _ ->
+                task.taskProducts.remove(taskProductInfo)
+                updateProductView(productItemView, null)
+            }
+
+            productItemView.ivIconInfo.setOnClickListener { _ ->
+                navigationController.navigateToProductDetails(taskProductInfo.productId as UUID)
+            }
+
+            view.llSelectedProduct.addView(productItemView)
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
-
         tvSelectProduct.setOnClickListener { _ ->
             navigationController.navigateToFilterProducts(taskId)
-        }
-
-        if (task.taskProducts.size != 0) {
-            val firstProduct = dp.products.getAsync(task.taskProducts[0].productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
-
-            rlSelectedProduct.tvName.text = firstProduct.name
-            rlSelectedProduct.tvCost.text = firstProduct.cost.toString()
-            rlSelectedProduct.tvVendorCode.text = firstProduct.vendorCode.toString()
-            rlSelectedProduct.visibility = View.VISIBLE
-        } else {
-            rlSelectedProduct.visibility = View.GONE
         }
     }
 
@@ -53,6 +75,38 @@ class TaskProductsFragment : PageFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+    }
+
+    private fun updateProductView (view: View, taskProductInfo: TaskProduct?, container: View? = this.view) {
+        if (taskProductInfo == null) {
+            val anim = ValueAnimator.ofInt(view.height, 0)
+            anim.addUpdateListener { valueAnimator ->
+                val value = valueAnimator.animatedValue as Int
+                val layoutParams = view.layoutParams
+                layoutParams.height = value
+                view.layoutParams = layoutParams
+            }
+            anim.duration = 100L
+            anim.start()
+        } else {
+            val product = dp.products.get(taskProductInfo.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+
+            view.tvProductQuantity.text = taskProductInfo.quantity.toString()
+            view.tvName.text = product.name
+            view.tvCost.text = activity!!.resources.getString(com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template, product.cost.toString())
+            view.tvVendorCode.text = product.vendorCode.toString()
+        }
+
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        var newTotalCost = BigDecimal(0)
+        task.taskProducts.forEach { taskProduct ->
+            val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+            newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
+        }
+        container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
+                com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
+                newTotalCost.toString()
+        )
     }
 }
 

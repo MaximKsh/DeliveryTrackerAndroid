@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.TextView
 import android.widget.TimePicker
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
@@ -23,6 +24,9 @@ import kotlinx.android.synthetic.main.fragment_task_delivery_date.*
 import kotlinx.android.synthetic.main.fragment_task_delivery_date.view.*
 import kotlinx.android.synthetic.main.fragment_task_receipt_at.view.*
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.Duration
+import org.joda.time.Interval
 import java.util.*
 import javax.inject.Inject
 
@@ -44,9 +48,11 @@ class TaskDeliveryDateFragment : PageFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_delivery_date, container, false) as ViewGroup
 
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
         view.tvCustomDate.setOnClickListener { _ ->
             val datePickerFragment = DatePickerFragment()
-            datePickerFragment.setOnDateSelectCallback({ date: DateTime -> updateCustomDateView(date, 2) })
+            datePickerFragment.setOnDateSelectCallback({ date: DateTime -> updateCustomDateView(date) })
             val selectedDate = deliveryDateTypes[2].selectedDateTime
             datePickerFragment.setStartDate(selectedDate)
             datePickerFragment.show(activity!!.fragmentManager, "datePicker")
@@ -54,7 +60,7 @@ class TaskDeliveryDateFragment : PageFragment() {
 
         view.tvCustomTime.setOnClickListener { _ ->
             val timePickerFragment = TimePickerFragment()
-            timePickerFragment.setOnTimeSelectCallback({ date: DateTime -> updateCustomTimeView(date, 3) })
+            timePickerFragment.setOnTimeSelectCallback({ date: DateTime -> updateCustomTimeView(date) })
             val selectedTime = deliveryTimeTypes[3].fromTime
             timePickerFragment.setStartTime(selectedTime)
             timePickerFragment.show(activity!!.fragmentManager, "timePicker")
@@ -67,7 +73,7 @@ class TaskDeliveryDateFragment : PageFragment() {
             if ((oldSelectedDateTypeIndex == i && i == deliveryDateTypes.size - 1) || deliveryDateTypes[i].selectedDateTime == null) {
                 oldSelectedDateTypeIndex = i
                 val datePickerFragment = DatePickerFragment()
-                datePickerFragment.setOnDateSelectCallback({ date: DateTime -> updateCustomDateView(date, i) })
+                datePickerFragment.setOnDateSelectCallback({ date: DateTime -> updateCustomDateView(date) })
                 val selectedDate = deliveryDateTypes[i].selectedDateTime
                 datePickerFragment.setStartDate(selectedDate)
                 datePickerFragment.show(activity!!.fragmentManager, "datePicker")
@@ -75,8 +81,6 @@ class TaskDeliveryDateFragment : PageFragment() {
                 hideDateChip()
                 setTaskDate(deliveryDateTypes[i].selectedDateTime!!)
             }
-
-            selectedDeliveryDateTypeIndex = i
         }
 
         val stringTimes = deliveryTimeTypes.map { it.name }
@@ -86,7 +90,7 @@ class TaskDeliveryDateFragment : PageFragment() {
             if ((oldSelectedTimeTypeIndex == i && i == deliveryTimeTypes.size - 1) || deliveryTimeTypes[i].fromTime == null) {
                 oldSelectedTimeTypeIndex = i
                 val timePickerFragment = TimePickerFragment()
-                timePickerFragment.setOnTimeSelectCallback({ date: DateTime -> updateCustomTimeView(date, i) })
+                timePickerFragment.setOnTimeSelectCallback({ date: DateTime -> updateCustomTimeView(date) })
                 val selectedTime = deliveryTimeTypes[i].fromTime
                 timePickerFragment.setStartTime(selectedTime)
                 timePickerFragment.show(activity!!.fragmentManager, "timePicker")
@@ -94,10 +98,49 @@ class TaskDeliveryDateFragment : PageFragment() {
                 hideTimeChip()
                 setTaskTime(deliveryTimeTypes[i].fromTime!!, deliveryTimeTypes[i].toTime!!)
             }
-
-            selectedDeliveryTimeTypeIndex = i
         }
+
+        if (task.deliveryFrom != null) {
+            val selectedDateIndex = getDateIndex(task.deliveryFrom!!)
+            view.spinnerDeliveryDate.selectedIndex = selectedDateIndex
+            if (selectedDateIndex == 2) {
+                showDateChip((task.deliveryFrom as DateTime).toString("dd.MM"), view)
+            }
+
+            val selectedTimeIndex = getTimeIntervalIndex(task.deliveryFrom!!, task.deliveryTo!!)
+            view.spinnerDeliveryTime.selectedIndex = selectedTimeIndex
+            if (selectedTimeIndex == deliveryTimeTypes.size - 1) {
+                showTimeChip(task.deliveryFrom!!.toString("HH:mm"), view)
+            }
+        } else {
+            setTaskDate(deliveryDateTypes[0].selectedDateTime!!)
+            setTaskTime(deliveryTimeTypes[0].fromTime!!, deliveryTimeTypes[0].toTime!!)
+        }
+
+        view.spinnerDeliveryDate.setPadding(15, 10, 0, 10)
+        view.spinnerDeliveryTime.setPadding(15, 10, 0, 10)
+
         return view
+    }
+
+    private fun getDateIndex (date: DateTime): Int {
+        val duration = Duration(DateTime.now(DateTimeZone.UTC), date)
+        return if (duration.standardDays.toInt() < 2) duration.standardDays.toInt() else 2
+    }
+
+    private fun getTimeIntervalIndex (dateFrom: DateTime, dateTo: DateTime): Int {
+        val dateFromNormalized = dateFrom.withDate(DateTime.now().toLocalDate())
+        val dateToNormalized = dateTo.withDate(DateTime.now().toLocalDate())
+        if (dateFrom.isEqual(dateTo)) {
+            return deliveryTimeTypes.size - 1
+        }
+        for (i in 0 until deliveryTimeTypes.size) {
+            val interval  = Interval(deliveryTimeTypes[i].fromTime, deliveryTimeTypes[i].toTime)
+            if (interval.contains(dateFromNormalized) && interval.contains(dateToNormalized)) {
+                return i
+            }
+        }
+        return deliveryTimeTypes.size - 1
     }
 
     // SECTION: DatePicker --START--
@@ -129,11 +172,6 @@ class TaskDeliveryDateFragment : PageFragment() {
     private val DATE_TOMORROW = "Tomorrow"
     private val DATE_CUSTOM = "Custom date"
 
-    private val selectedDeliveryDateTypeKey = "delivery_date_type"
-    private var selectedDeliveryDateTypeIndex: Int?
-        get() = arguments?.get(selectedDeliveryDateTypeKey) as Int?
-        set(value) = arguments?.putInt(selectedDeliveryDateTypeKey, value!!)!!
-
     private val deliveryDateTypes = arrayListOf<DeliveryDateTypeItem>(
             DeliveryDateTypeItem(DATE_TODAY, DateTime.now()),
             DeliveryDateTypeItem(DATE_TOMORROW, DateTime.now().plusDays(1)),
@@ -147,17 +185,14 @@ class TaskDeliveryDateFragment : PageFragment() {
         task.deliveryTo = dateReal.withDate(date.toLocalDate())
     }
 
-    private fun updateCustomDateView(date: DateTime, index: Int) {
-        val customDateItem = deliveryDateTypes[index]
-        customDateItem.name = date.toString("dd.MM")
-        customDateItem.selectedDateTime = date
+    private fun updateCustomDateView(date: DateTime) {
         setTaskDate(date)
-        showDateChip(customDateItem.name)
+        showDateChip(date.toString("dd.MM"))
     }
 
-    private fun showDateChip(dateString: String) {
-        tvCustomDate.visibility = View.VISIBLE
-        tvCustomDate.text = dateString
+    private fun showDateChip(dateString: String, view: View = this.view!!) {
+        view.tvCustomDate.visibility = View.VISIBLE
+        view.tvCustomDate.text = dateString
     }
 
     private fun hideDateChip() {
@@ -173,10 +208,6 @@ class TaskDeliveryDateFragment : PageFragment() {
     private val TIME_EVENING = "18:00 - 22:00"
     private val TIME_CUSTOM = "Exact time"
 
-    private val selectedDeliveryTimeTypeKey = "delivery_time_type"
-    private var selectedDeliveryTimeTypeIndex: Int?
-        get() = arguments?.get(selectedDeliveryTimeTypeKey) as Int?
-        set(value) = arguments?.putInt(selectedDeliveryTimeTypeKey, value!!)!!
 
     private val deliveryTimeTypes = arrayListOf<DeliveryTimeTypeItem>(
                     DeliveryTimeTypeItem(
@@ -227,18 +258,14 @@ class TaskDeliveryDateFragment : PageFragment() {
         task.deliveryTo = timeToReal.withTime(toTime.toLocalTime())
     }
 
-    private fun updateCustomTimeView(date: DateTime, index: Int) {
-        val customTimeItem = deliveryTimeTypes[index]
-        customTimeItem.name = date.toString("HH:mm")
-        customTimeItem.fromTime = date
-        customTimeItem.toTime = date
+    private fun updateCustomTimeView(date: DateTime) {
         setTaskTime(date, date)
-        showTimeChip(customTimeItem.name)
+        showTimeChip(date.toString("HH:mm"))
     }
 
-    private fun showTimeChip(timeString: String) {
-        tvCustomTime.visibility = View.VISIBLE
-        tvCustomTime.text = timeString
+    private fun showTimeChip(timeString: String, view: View = this.view!!) {
+        view.tvCustomTime.visibility = View.VISIBLE
+        view.tvCustomTime.text = timeString
     }
 
     private fun hideTimeChip() {

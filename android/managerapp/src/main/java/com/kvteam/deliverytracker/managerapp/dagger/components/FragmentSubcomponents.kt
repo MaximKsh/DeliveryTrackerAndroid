@@ -47,21 +47,9 @@ interface EditTaskSubcomponent : AndroidInjector<EditTaskFragment> {
 }
 
 @Subcomponent
-interface TaskPaymentTypeSubcomponent : AndroidInjector<TaskPaymentTypeFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<TaskPaymentTypeFragment>()
-}
-
-@Subcomponent
 interface TaskNumberAndDetailsSubcomponent : AndroidInjector<TaskNumberAndDetailsFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<TaskNumberAndDetailsFragment>()
-}
-
-@Subcomponent
-interface TaskPerformerSubcomponent : AndroidInjector<TaskPerformerFragment> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<TaskPerformerFragment>()
 }
 
 @Subcomponent

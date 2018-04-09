@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
-    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvInfoPartName"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="General info"/>
 
         <LinearLayout
             android:id="@+id/llTaskNumber"
+            android:layout_below="@+id/tvInfoPartName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_alignParentTop="true"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
+            android:layout_marginTop="15dp"
             android:paddingBottom="8dp"
             android:orientation="vertical">
             <TextView
@@ -42,8 +49,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:layout_below="@id/llTaskNumber"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
             android:paddingBottom="8dp"
             android:orientation="vertical">
             <TextView
@@ -62,5 +67,24 @@
                 android:theme="@style/EditTextTheme"
                 android:textSize="18sp"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPaymentTypeLabel"
+            android:layout_below="@+id/llName"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment type"/>
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/spinnerPaymentType"
+            android:layout_below="@+id/tvPaymentTypeLabel"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            app:textTint="@color/colorGray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 </ScrollView>

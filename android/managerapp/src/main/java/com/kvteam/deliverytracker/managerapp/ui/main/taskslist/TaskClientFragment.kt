@@ -46,6 +46,7 @@ class TaskClientFragment : PageFragment() {
         if (task.clientId != null) {
             rootView.rlClientInfoContainer.layoutParams.height = 700
         }
+        rootView.spinnerAddress.setPadding(15, 10, 0, 10)
         return rootView
     }
 
@@ -96,7 +97,6 @@ class TaskClientFragment : PageFragment() {
             } else {
                 task.clientAddressId = client.clientAddresses[0].id
             }
-
         } else {
             spinnerAddress.visibility = View.GONE
         }

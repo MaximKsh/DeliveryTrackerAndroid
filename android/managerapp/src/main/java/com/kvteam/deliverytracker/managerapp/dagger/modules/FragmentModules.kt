@@ -79,30 +79,12 @@ abstract class EditTaskFragmentModule {
 
 }
 
-@Module(subcomponents = arrayOf(TaskPaymentTypeSubcomponent::class))
-abstract class TaskPaymentTypeFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(TaskPaymentTypeFragment::class)
-    internal abstract fun taskPaymentTypeFragmentInjector(builder: TaskPaymentTypeSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
 @Module(subcomponents = arrayOf(TaskNumberAndDetailsSubcomponent::class))
 abstract class TaskNumberAndDetailsFragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(TaskNumberAndDetailsFragment::class)
     internal abstract fun taskNumberAndDetailsFragmentInjector(builder: TaskNumberAndDetailsSubcomponent.Builder):
-            AndroidInjector.Factory<out Fragment>
-}
-
-@Module(subcomponents = arrayOf(TaskPerformerSubcomponent::class))
-abstract class TaskPerformerFragmentModule {
-    @Binds
-    @IntoMap
-    @FragmentKey(TaskPerformerFragment::class)
-    internal abstract fun taskPerformerFragmentInjector(builder: TaskPerformerSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 

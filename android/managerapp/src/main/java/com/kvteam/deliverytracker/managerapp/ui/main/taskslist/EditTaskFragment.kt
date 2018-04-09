@@ -49,7 +49,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var dp: DataProvider
 
-    private val NUM_PAGES = 7
+    private val NUM_PAGES = 5
 
     private lateinit var mPagerAdapter: PagerAdapter
 
@@ -59,8 +59,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
             TaskNumberAndDetailsFragment(),
             TaskDeliveryDateFragment(),
             TaskReceiptAtFragment(),
-            TaskPaymentTypeFragment(),
-            TaskPerformerFragment(),
             TaskProductsFragment(),
             TaskClientFragment()
     )

@@ -59,7 +59,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
     private val taskIdKey = "taskIdKey"
-    private var taskId
+    protected var taskId
         get() = arguments?.getSerializable(taskIdKey)!! as UUID
         set(value) = arguments?.putSerializable(taskIdKey, value)!!
 
