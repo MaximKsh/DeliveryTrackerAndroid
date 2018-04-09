@@ -81,6 +81,11 @@ class TaskClientFragment : PageFragment() {
         if (client.phoneNumber == null) {
             client.phoneNumber = etPhoneNumberField.text.toString()
         }
+
+        if (mode == DataProviderGetMode.DIRTY) {
+            etPhoneNumberField.setText(client.phoneNumber!!)
+        }
+
         etName.setText(client.name)
         etSurname.setText(client.surname)
 
@@ -172,11 +177,9 @@ class TaskClientFragment : PageFragment() {
         etPhoneNumberField.addTextChangedListener(etPhoneNumberWatcher)
 
         etPhoneNumberField.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
+            override fun afterTextChanged(p0: Editable?) {}
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 hideClientDetails()

@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
 import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_task_receipt_at.*
 import kotlinx.android.synthetic.main.fragment_task_receipt_at.view.*
 import kotlinx.android.synthetic.main.selected_performer_item.*
 import kotlinx.android.synthetic.main.selected_performer_item.view.*
@@ -66,6 +69,8 @@ class TaskReceiptAtFragment : PageFragment() {
         }
 
         view.spinnerPerformerType.setPadding(15, 10, 0, 10)
+
+        view.spinnerWarehouse.setPadding(15, 10, 0, 10)
 
         return view
     }
@@ -143,6 +148,41 @@ class TaskReceiptAtFragment : PageFragment() {
                 navigationController.navigateToFilterUsers(taskId)
             }
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        super.onActivityCreated(savedInstanceState)
+        val warehousesIds = dp.warehousesViews
+                .getViewResultAsync("ReferenceViewGroup", "WarehousesView").viewResult
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
+        val strings = arrayListOf<String>()
+        val warehouses = arrayListOf<Warehouse>()
+        if (warehousesIds.isNotEmpty()) {
+            for (id in warehousesIds) {
+                try {
+                    val (e, _) = dp.warehouses.get(id, DataProviderGetMode.FORCE_CACHE)
+                    warehouses.add(e)
+                    strings.add(e.name!!)
+                } catch (e: CacheException) {
+                }
+            }
+            spinnerWarehouse.attachDataSource(strings)
+            spinnerWarehouse.addOnItemClickListener { adapterView, view, i, l ->
+                setTaskWarehouse(warehouses[i])
+            }
+
+            if (task.warehouseId == null) {
+                setTaskWarehouse(warehouses[0])
+            }
+            val selected = warehouses.indexOfFirst { it.id == task.warehouseId }
+            spinnerWarehouse.selectedIndex = selected
+        }
+    }
+
+    private fun setTaskWarehouse (warehouse: Warehouse) {
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        task.warehouseId = warehouse.id
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

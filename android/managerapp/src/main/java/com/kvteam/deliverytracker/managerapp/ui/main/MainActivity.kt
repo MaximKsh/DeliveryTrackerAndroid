@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
+import android.app.Service
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
@@ -23,8 +24,8 @@ import android.view.Window
 import android.view.ViewGroup
 import java.util.*
 import android.os.CountDownTimer
-
-
+import android.view.inputmethod.InputMethodManager
+import com.kvteam.deliverytracker.core.ui.SoftKeyboard
 
 
 class MainActivity : DeliveryTrackerActivity() {
@@ -41,52 +42,44 @@ class MainActivity : DeliveryTrackerActivity() {
 
     override val layoutId = R.layout.activity_main
 
-    private val keyboardLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-        val heightDiff = rlMainActivityContainer.rootView.height - rlMainActivityContainer.height
-        val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).height
+    private val keyboardShowListeners = arrayListOf<() -> Unit>()
 
-        val broadcastManager = LocalBroadcastManager.getInstance(this@MainActivity)
-
-        if (heightDiff <= contentViewTop) {
-            onHideKeyboard()
-
-            val intent = Intent("KeyboardWillHide")
-            broadcastManager.sendBroadcast(intent)
-        } else {
-            val keyboardHeight = heightDiff - contentViewTop
-            onShowKeyboard(keyboardHeight)
-
-            val intent = Intent("KeyboardWillShow")
-            intent.putExtra("KeyboardHeight", keyboardHeight)
-            broadcastManager.sendBroadcast(intent)
-        }
-    }
-
-    private var keyboardListenersAttached = false
-
-    private fun attachKeyboardListeners() {
-        if (keyboardListenersAttached) {
-            return
-        }
-
-        rlMainActivityContainer.viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
-
-        keyboardListenersAttached = true
-    }
+    private val keyboardHideListeners = arrayListOf<() -> Unit>()
 
     override fun onDestroy() {
         super.onDestroy()
 
-        if (keyboardListenersAttached) {
-            rlMainActivityContainer.viewTreeObserver.removeOnGlobalLayoutListener(keyboardLayoutListener)
-        }
+        removeKeyboardListener(::showBottomNavigation)
+
+        removeKeyboardListener(::hideBottomNavigation)
     }
 
-    private fun onShowKeyboard(keyboardHeight: Int) {
+    private fun triggerOnKeyboardShowListeners () {
+        keyboardShowListeners.forEach { it() }
+    }
+
+    private fun triggerOnKeyboardHideListeners () {
+        keyboardHideListeners.forEach { it() }
+    }
+
+    fun addOnKeyboardShowListener (cb: () -> Unit) {
+        keyboardShowListeners.add(cb)
+    }
+
+    fun addOnKeyboardHideListener (cb: () -> Unit) {
+        keyboardHideListeners.add(cb)
+    }
+
+    fun removeKeyboardListener (cb: () -> Unit) {
+        keyboardHideListeners.remove(cb)
+        keyboardShowListeners.remove(cb)
+    }
+
+    private fun hideBottomNavigation() {
         navigation.visibility = View.GONE
     }
 
-    private fun onHideKeyboard() {
+    private fun showBottomNavigation() {
         object : CountDownTimer(100, 100) {
             override fun onTick(millisUntilFinished: Long) {}
 
@@ -133,6 +126,8 @@ class MainActivity : DeliveryTrackerActivity() {
         return ToolbarConfiguration(true, true)
     }
 
+    lateinit var softKeyboard: SoftKeyboard
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -158,10 +153,28 @@ class MainActivity : DeliveryTrackerActivity() {
 
         removeShiftMode(navigation)
 
-        attachKeyboardListeners()
+        softKeyboard = SoftKeyboard(
+                rlMainActivityContainer,
+                getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager)
+
+        softKeyboard.setSoftKeyboardCallback(object: SoftKeyboard.SoftKeyboardChanged {
+            override fun onSoftKeyboardHide() {
+                triggerOnKeyboardHideListeners()
+            }
+
+            override fun onSoftKeyboardShow() {
+                triggerOnKeyboardShowListeners()
+            }
+
+        })
+
+        addOnKeyboardHideListener(::showBottomNavigation)
+
+        addOnKeyboardShowListener(::hideBottomNavigation)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)

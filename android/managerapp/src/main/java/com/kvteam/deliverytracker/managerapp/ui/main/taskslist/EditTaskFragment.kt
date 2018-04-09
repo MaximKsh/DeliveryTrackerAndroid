@@ -1,12 +1,18 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
+import android.animation.Animator
+import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.*
+import android.widget.RelativeLayout
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -18,12 +24,15 @@ import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.managerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_edit_task.*
 import kotlinx.android.synthetic.main.fragment_task_number_and_details.*
 import java.util.*
 import javax.inject.Inject
+
+const val stepperHeight = 195
 
 abstract class PageFragment : DeliveryTrackerFragment() {
     private val taskIdKey = "task"
@@ -84,10 +93,19 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         get() = arguments?.getSerializable(taskIdKey)!! as UUID
         set(value) = arguments?.putSerializable(taskIdKey, value)!!
 
+    private val modeKey = "task"
+    private var displayMode
+        get() = arguments?.getString(modeKey)!!
+        set(value) = arguments?.putString(modeKey, value)!!
+
     private val tryPrefetchKey = "tryPrefetch"
     private var tryPrefetch: Boolean
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
+
+    fun setMode (mode: String) {
+        displayMode = mode
+    }
 
     fun setTask(id: UUID?) {
         this.taskId = id ?: UUID.randomUUID()
@@ -106,12 +124,126 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         toolbar.showBackButton()
     }
 
+    private var offsetScroll = 0
+
+    private fun showStepper () {
+        if (rlStepperContainer.height == 0) {
+            val anim = ValueAnimator.ofInt(0, 195)
+            anim.addUpdateListener { valueAnimator ->
+                val value = valueAnimator.animatedValue as Int
+                val layoutParams = rlStepperContainer.layoutParams
+                layoutParams.height = value
+                rlStepperContainer.layoutParams = layoutParams
+            }
+            anim.duration = 75L
+            anim.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {}
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    object : CountDownTimer(100, 100) {
+                        override fun onTick(millisUntilFinished: Long) {}
+
+                        override fun onFinish() {
+//                            (activity as MainActivity).addGlobalLayoutListener()
+                        }
+                    }.start()
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {}
+
+                override fun onAnimationStart(p0: Animator?) {
+//                    (activity as MainActivity).removeGlobalLayoutListener()
+                }
+            })
+            anim.start()
+            val currentFragmentScrollView = fragments[pager.currentItem].view
+            currentFragmentScrollView!!.scrollY = currentFragmentScrollView.scrollY - offsetScroll
+        }
+    }
+
+    override fun onDestroyView() {
+        (activity as MainActivity).removeKeyboardListener(::showStepper)
+
+        (activity as MainActivity).removeKeyboardListener(::hideStepper)
+        super.onDestroyView()
+    }
+
+    private fun hideStepper () {
+        val anim = ValueAnimator.ofInt(rlStepperContainer.height, 0)
+        anim.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = rlStepperContainer.layoutParams
+            layoutParams.height = value
+            rlStepperContainer.layoutParams = layoutParams
+        }
+        anim.duration = 75L
+        anim.addListener(object: Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {}
+
+            override fun onAnimationEnd(p0: Animator?) {
+                object : CountDownTimer(100, 100) {
+                    override fun onTick(millisUntilFinished: Long) {}
+
+                    override fun onFinish() {
+//                        (activity as MainActivity).addGlobalLayoutListener()
+                    }
+                }.start()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {}
+
+            override fun onAnimationStart(p0: Animator?) {
+//                (activity as MainActivity).removeGlobalLayoutListener()
+            }
+        })
+        anim.start()
+        offsetScroll = stepperHeight
+        val currentFragmentScrollView = fragments[pager.currentItem].view
+        currentFragmentScrollView!!.scrollY = currentFragmentScrollView.scrollY + offsetScroll
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+
+        (activity as MainActivity).addOnKeyboardShowListener(::hideStepper)
+
+        (activity as MainActivity).addOnKeyboardHideListener(::showStepper)
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
         indicator.setViewPager(pager)
+
+        tvPrev.setTextColor(Color.LTGRAY)
+
+        pager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                (activity as MainActivity).softKeyboard.initEditTexts(fragments[position].view as ViewGroup)
+                when (position) {
+                    0 -> tvPrev.setTextColor(Color.LTGRAY)
+                    NUM_PAGES - 1 -> tvNext.setTextColor(Color.LTGRAY)
+                    else -> {
+                        tvPrev.setTextColor(Color.GRAY)
+                        tvNext.setTextColor(ContextCompat.getColor(activity!!.baseContext, R.color.colorPrimary))
+                    }
+                }
+            }
+
+        })
+
+        tvPrev.setOnClickListener { _ ->
+            if (pager.currentItem > 0) {
+                pager.currentItem = pager.currentItem - 1
+            }
+        }
+        tvNext.setOnClickListener { _ ->
+            if (pager.currentItem <= NUM_PAGES) {
+                pager.currentItem = pager.currentItem + 1
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -133,7 +265,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
                     return@launchUI
                 }
 
-                val (task, _) = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY)
+                val (task, _) = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY)
                 try {
                     if (task.clientId != null) {
                         val oldClient = dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
