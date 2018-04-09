@@ -18,14 +18,52 @@
             android:layout_height="wrap_content"
             android:text="Receipt info"/>
 
+        <TextView
+            android:id="@+id/tvReceiptAtLabel"
+            android:layout_below="@+id/tvInfoPartName"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Receipt at"/>
+
         <org.angmarch.views.NiceSpinner
             android:id="@+id/spinnerReceiptAt"
-            android:layout_below="@+id/tvInfoPartName"
+            android:layout_below="@+id/tvReceiptAtLabel"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             app:textTint="@color/colorGray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvPerformerTypeLabel"
+            android:layout_below="@+id/spinnerReceiptAt"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Performer type"/>
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/spinnerPerformerType"
+            android:layout_below="@+id/tvPerformerTypeLabel"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            app:textTint="@color/colorGray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/llSelectedPerformer"
+            android:layout_below="@id/spinnerPerformerType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp">
+            <include layout="@layout/selected_performer_item" />
+        </FrameLayout>
 
     </RelativeLayout>
 

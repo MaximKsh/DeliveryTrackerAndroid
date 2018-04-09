@@ -18,9 +18,19 @@
             android:layout_height="wrap_content"
             android:text="Delivery info"/>
 
+        <TextView
+            android:id="@+id/tvDateLabel"
+            android:layout_below="@+id/tvInfoPartName"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"/>
+
         <org.angmarch.views.NiceSpinner
             android:id="@+id/spinnerDeliveryDate"
-            android:layout_below="@+id/tvInfoPartName"
+            android:layout_below="@+id/tvDateLabel"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             app:textTint="@color/colorGray"
@@ -38,13 +48,22 @@
             android:paddingBottom="3.5dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:layout_marginStart="23dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/tvTimeLabel"
+            android:layout_below="@+id/tvCustomDate"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/colorGray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time interval"/>
+
         <org.angmarch.views.NiceSpinner
             android:id="@+id/spinnerDeliveryTime"
-            android:layout_below="@+id/tvCustomDate"
+            android:layout_below="@+id/tvTimeLabel"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             app:textTint="@color/colorGray"
@@ -62,7 +81,6 @@
             android:paddingBottom="3.5dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:layout_marginStart="23dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
