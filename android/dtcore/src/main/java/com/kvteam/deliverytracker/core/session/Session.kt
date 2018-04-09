@@ -16,6 +16,7 @@ import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.Instance
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.storage.IStorage
 import com.kvteam.deliverytracker.core.webservice.*
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
@@ -31,7 +32,8 @@ class Session (
         configuration: Configuration,
         private val httpManager: IHttpManager,
         private val sessionInfo: ISessionInfo,
-        private val context: Context) : ISession {
+        private val context: Context,
+        private val storage: IStorage) : ISession {
 
     private val deviceType = "ANDROID"
 
@@ -275,6 +277,11 @@ class Session (
     }.await()
 
     override suspend fun logoutAsync() = async {
+        val user = this@Session.user
+        if (user?.code != null) {
+            storage.set(LAST_CODE_KEY, user.code!!)
+        }
+
         val headers =  getAuthorizationHeaders(this@Session)
         if (headers != null) {
             httpManager.post(

@@ -23,4 +23,9 @@
     <color name="colorBlueGray">#607D8B</color>
     <color name="colorYellow">#FFC107</color>
     <color name="colorBlue">#03A9F4</color>
+    
+      <color name="underline_default_color">#CCCCCC</color>
+  <color name="underline_selected_color">#000</color>
+  <color name="hintColor">#CCCCCC</color>
+  <color name="textColor">#000</color>
 </resources>

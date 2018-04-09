@@ -9,10 +9,8 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.session.ISession
-import com.kvteam.deliverytracker.core.session.LoginResult
-import com.kvteam.deliverytracker.core.session.LoginResultType
-import com.kvteam.deliverytracker.core.session.SETTINGS_CONTEXT
+import com.kvteam.deliverytracker.core.session.*
+import com.kvteam.deliverytracker.core.storage.IStorage
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
@@ -27,6 +25,9 @@ abstract class BaseLoginActivity : DeliveryTrackerActivity() {
 
     @Inject
     lateinit var errorHandler: IErrorHandler
+
+    @Inject
+    lateinit var storage: IStorage
 
     protected lateinit var validation: AwesomeValidation
 
@@ -43,6 +44,11 @@ abstract class BaseLoginActivity : DeliveryTrackerActivity() {
         this.tvForgotPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         if(savedInstanceState != null){
             etPasswordField.setText(savedInstanceState.getString(passwordKey, EMPTY_STRING))
+        } else {
+            val lastCode = storage.getString(LAST_CODE_KEY)
+            if (lastCode.length == 6) {
+                etLoginField.setCode(lastCode)
+            }
         }
 
         validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
@@ -51,6 +57,7 @@ abstract class BaseLoginActivity : DeliveryTrackerActivity() {
                 RegexTemplate.NOT_EMPTY,
                 getString(R.string.Core_EnterPasswordValidationError))
         validation.setContext(this)
+
 
         btnLogin.setOnClickListener { onLoginClick() }
         btnAddCompany.setOnClickListener { onCreateInstanceClick() }

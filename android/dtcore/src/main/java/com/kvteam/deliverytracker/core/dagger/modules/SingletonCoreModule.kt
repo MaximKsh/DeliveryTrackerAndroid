@@ -43,13 +43,15 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
             configuration: Configuration,
             httpManager: IHttpManager,
             app: T,
-            sessionInfo: ISessionInfo): ISession {
+            sessionInfo: ISessionInfo,
+            storage: IStorage): ISession {
         return Session(
                 gson,
                 configuration,
                 httpManager,
                 sessionInfo,
-                app.applicationContext)
+                app.applicationContext,
+                storage)
     }
 
     @Provides
