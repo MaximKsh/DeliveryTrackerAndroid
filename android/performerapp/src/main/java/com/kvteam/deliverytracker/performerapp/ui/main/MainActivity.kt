@@ -1,6 +1,8 @@
 package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -37,10 +39,21 @@ class MainActivity : DeliveryTrackerActivity() {
 
     override val layoutId = R.layout.activity_main
 
+    override val rootView: ViewGroup?
+        get() = rlMainActivityContainer
+
+
     override fun getToolbarConfiguration(): ToolbarConfiguration {
         return ToolbarConfiguration(true, true)
     }
 
+    private fun hideBottomNavigation() {
+        navigation.visibility = View.GONE
+    }
+
+    private fun showBottomNavigation() {
+        navigation.visibility = View.VISIBLE
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -73,6 +86,10 @@ class MainActivity : DeliveryTrackerActivity() {
             }
             true
         }
+
+        softKeyboard.initEditTexts()
+        addOnKeyboardHideListener (::showBottomNavigation)
+        addOnKeyboardShowListener (::hideBottomNavigation)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

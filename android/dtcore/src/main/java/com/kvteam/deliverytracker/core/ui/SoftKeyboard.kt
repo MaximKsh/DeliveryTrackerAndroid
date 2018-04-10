@@ -1,16 +1,18 @@
 package com.kvteam.deliverytracker.core.ui
 
-import java.util.ArrayList
-import java.util.concurrent.atomic.AtomicBoolean
-
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
-class SoftKeyboard(private val layout: ViewGroup, private val im: InputMethodManager) : View.OnFocusChangeListener {
+class SoftKeyboard(
+        private val layout: ViewGroup,
+        private val im: InputMethodManager) : View.OnFocusChangeListener {
     private var layoutBottom: Int = 0
     private val coords: IntArray
     private var isKeyboardShow: Boolean = false
@@ -39,7 +41,6 @@ class SoftKeyboard(private val layout: ViewGroup, private val im: InputMethodMan
 
     init {
         keyboardHideByDefault()
-        initEditTexts(layout)
         this.coords = IntArray(2)
         this.isKeyboardShow = false
         this.softKeyboardThread = SoftKeyboardChangesThread()
@@ -85,16 +86,25 @@ class SoftKeyboard(private val layout: ViewGroup, private val im: InputMethodMan
 	 * InitEditTexts now handles EditTexts in nested views
 	 * Thanks to Francesco Verheye (verheye.francesco@gmail.com)
 	 */
-    fun initEditTexts(viewgroup: ViewGroup) {
-        if (editTextList == null)
+    fun initEditTexts() {
+        if (editTextList == null) {
             editTextList = ArrayList()
+        } else {
+            editTextList?.forEach { it.onFocusChangeListener = null }
+            editTextList?.clear()
+        }
 
-        val childCount = viewgroup.childCount
-        for (i in 0..childCount - 1) {
-            val v = viewgroup.getChildAt(i)
+        initEditTextsInternal(layout)
+
+    }
+
+    private fun initEditTextsInternal(view: ViewGroup) {
+        val childCount = view.childCount
+        for (i in 0 until childCount) {
+            val v = view.getChildAt(i)
 
             if (v is ViewGroup) {
-                initEditTexts(v)
+                initEditTextsInternal(v)
             }
 
             if (v is EditText) {
@@ -151,8 +161,11 @@ class SoftKeyboard(private val layout: ViewGroup, private val im: InputMethodMan
                     currentBottomLocation = layoutCoordinates
                 }
 
-                if (started.get())
-                    mCallback!!.onSoftKeyboardShow()
+                if (started.get()) {
+                    Handler(Looper.getMainLooper()).post {
+                        mCallback!!.onSoftKeyboardShow()
+                    }
+                }
 
                 // When keyboard is opened from EditText, initial bottom location is greater than layoutBottom
                 // and at some moment equals layoutBottom.
@@ -175,8 +188,11 @@ class SoftKeyboard(private val layout: ViewGroup, private val im: InputMethodMan
                     currentBottomLocation = layoutCoordinates
                 }
 
-                if (started.get())
-                    mCallback!!.onSoftKeyboardHide()
+                if (started.get()) {
+                    Handler(Looper.getMainLooper()).post{
+                        mCallback!!.onSoftKeyboardHide()
+                    }
+                }
 
                 // if keyboard has been opened clicking and EditText.
                 if (isKeyboardShow && started.get())

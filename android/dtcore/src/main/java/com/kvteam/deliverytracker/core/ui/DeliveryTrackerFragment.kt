@@ -47,6 +47,11 @@ abstract class DeliveryTrackerFragment: Fragment() {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dtActivity.softKeyboard.initEditTexts()
+    }
+
     override fun onPause() {
         super.onPause()
         val view =  activity!!.currentFocus

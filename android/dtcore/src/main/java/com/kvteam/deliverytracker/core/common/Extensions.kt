@@ -18,3 +18,18 @@ fun <K, V, T> Map<K, V>.getVal(key: K) : T{
     @Suppress("UNCHECKED_CAST")
     return this[key] as T
 }
+
+fun Any.notify() {
+    @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+    (this as java.lang.Object).notify()
+}
+
+
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+fun Any.wait(ms: Long? = null) {
+    if (ms != null) {
+        (this as java.lang.Object).wait(ms)
+    } else {
+        (this as java.lang.Object).wait()
+    }
+}

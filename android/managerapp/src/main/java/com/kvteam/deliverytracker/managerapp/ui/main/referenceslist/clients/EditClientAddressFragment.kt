@@ -69,6 +69,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+        dtActivity.softKeyboard.openSoftKeyboard()
 
         val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
         val address = client.clientAddresses.firstOrNull { it.id == addressId }
