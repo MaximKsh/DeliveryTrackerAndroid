@@ -6,14 +6,8 @@
     android:background="?selectableItemBackground"
     android:gravity="center_vertical">
 
-    <ImageView
-        android:id="@+id/ivCategoryIcon"
-        android:layout_width="45dp"
-        android:layout_height="30dp"
-        android:alpha="0.3"
-    />
-
     <TextView
+        android:layout_marginStart="10dp"
         android:id="@+id/tvCategoryName"
         android:layout_width="wrap_content"
         android:layout_height="20dp"

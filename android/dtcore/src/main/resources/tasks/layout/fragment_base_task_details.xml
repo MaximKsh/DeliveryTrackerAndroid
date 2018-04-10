@@ -1,186 +1,473 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="68dp"
+    sothree:umanoShadowHeight="4dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/rlChangeState">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
         <RelativeLayout
             android:id="@+id/rlTaskInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/llDatesAndAvatar"
+
+            <RelativeLayout
+                android:id="@+id/rlTaskHeader"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvTaskStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preparing"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvTaskNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTaskStatus"
+                    android:text="Deliver Iphone 6s"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/ivPaymentType"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_below="@+id/tvTaskStatus"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toEndOf="@id/tvTaskNumber"
+                    android:alpha="0.8"
+                    android:src="@drawable/cash_icon" />
+
+                <TextView
+                    android:id="@+id/tvAuthorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTaskNumber"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvAuthorSurname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTaskNumber"
+                    android:layout_marginTop="6dp"
+                    android:layout_toEndOf="@id/tvAuthorName"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
-                    android:layout_weight="3"
+                    android:id="@+id/rlPerformerContainer"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_width="0dp">
-                    <TextView
-                        android:id="@+id/tvCreationLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Creation date"/>
-                    <EditText
-                        android:enabled="false"
-                        android:layout_below="@id/tvCreationLabel"
-                        android:id="@+id/tvCreateDate"
-                        android:layout_alignParentStart="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="3dp">
 
-                    <TextView
-                        android:id="@+id/tvReceiptLabel"
-                        android:layout_width="match_parent"
-                        android:layout_below="@id/tvCreateDate"
-                        android:layout_height="match_parent"
-                        android:text="Receipt"/>
-                    <EditText
-                        android:enabled="false"
-                        android:id="@+id/tvReceiptDate"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@id/tvReceiptLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/tvDeliveryLabel"
-                        android:layout_width="match_parent"
-                        android:layout_below="@id/tvReceiptDate"
-                        android:layout_height="match_parent"
-                        android:text="Delivery"/>
-
-                    <EditText
-                        android:enabled="false"
-                        android:id="@+id/ivDeliveryDate"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@id/tvDeliveryLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp">
                     <ImageView
-                        android:id="@+id/ivPerformerAvatar"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_margin="5dp"
-                        android:layout_centerInParent="true"
-                        android:contentDescription=""/>
+                        android:id="@+id/ivPerformerImage"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:layout_centerHorizontal="true" />
 
                     <TextView
-                        android:id="@+id/ivPerformerName"
-                        android:layout_below="@id/ivPerformerAvatar"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15dp"
+                        android:id="@+id/tvPerformerName"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivPerformerImage"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="6dp"
+                        android:text="No"
+                        android:textColor="@color/colorGray"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvPerformerSurname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivPerformerImage"
+                        android:layout_marginTop="6dp"
+                        android:layout_toEndOf="@+id/tvPerformerName"
+                        android:text="Performer"
+                        android:textColor="@color/colorGray"
+                        android:textSize="16sp" />
                 </RelativeLayout>
+            </RelativeLayout>
 
-            </LinearLayout>
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/tvPaymentType"
-                android:layout_below="@id/llDatesAndAvatar"
+            <RelativeLayout
+                android:id="@+id/rlTaskReceipt"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlTaskHeader"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvTaskReceiptAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No receipt date"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivWarehouseMapPlaceIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toStartOf="@+id/tvWarehouseName"
+                    android:src="@drawable/ic_place_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvWarehouseName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="2dp"
+                    android:text="No warehouse"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+            </RelativeLayout>
 
             <TextView
-                android:visibility="gone"
-                android:id="@+id/tvClientName"
-                android:layout_below="@id/tvPaymentType"
+                android:id="@+id/tvTaskDescription"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlTaskReceipt"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp"
+                android:text="No description" />
 
-            <TextView
-                android:id="@+id/tvClientPhone"
-                android:layout_below="@id/tvClientName"
+            <View
+                android:id="@+id/vSeparator"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="10dp"
+                android:layout_below="@id/tvTaskDescription"
+                android:background="@color/colorLightGray" />
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/tvClientAddress"
-                android:layout_below="@id/tvClientPhone"
+            <View
+                android:id="@+id/vBorderBottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="1dp"
+                android:layout_below="@id/vSeparator"
+                android:background="@drawable/shape_bottom_border_ltgray" />
 
             <TextView
-                android:visibility="gone"
-                android:id="@+id/tvCost"
-                android:layout_below="@id/tvClientAddress"
-                android:layout_toStartOf="@id/tvDeliveryCost"
+                android:id="@+id/tvDeliveryInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vBorderBottom"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:text="Delivery info"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/rlDeliveryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDeliveryInfo"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvDeliveryDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date and time"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/tvDeliveryDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="2dp"
+                    android:text="Not assigned"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlDeliveryAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlDeliveryDate"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvClientAddressLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivClientAddressMapPlaceIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toStartOf="@+id/tvClientAddress"
+                    android:src="@drawable/ic_place_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvClientAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="2dp"
+                    android:text="Not assigned"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlDeliveryAddress"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvClientNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Client name"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvClientName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/tvClientSurname"
+                    android:text="Not assigned"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvClientSurname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="5dp"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlClientPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlClientName"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvClientPhoneNumberLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Client phone number"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivClientPhoneNumberIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toStartOf="@+id/tvClientPhoneNumber"
+                    android:src="@drawable/ic_phone_black_24dp"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvClientPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="2dp"
+                    android:text="Not assigned"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/vSeparator2"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/rlClientPhoneNumber"
+                android:background="@color/colorLightGray" />
+
+            <View
+                android:id="@+id/vBorderBottom2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/vSeparator2"
+                android:background="@drawable/shape_bottom_border_ltgray" />
 
             <TextView
-                android:visibility="gone"
-                android:id="@+id/tvDeliveryCost"
-                android:layout_below="@id/tvClientAddress"
+                android:id="@+id/tvProductsInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vBorderBottom2"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:text="Products info"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/rlProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvProductsInfo"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <LinearLayout
+                    android:id="@+id/llProductsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:id="@+id/tvNoProducts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llProductsContainer"
+                    android:text="No products here"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <RelativeLayout
+                    android:id="@+id/rlTotalCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvNoProducts"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvTotalCostLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total cost"
+                        android:textColor="@color/colorGray"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/vSeparator3"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/rlProducts"
+                android:background="@color/colorLightGray" />
+
+            <View
+                android:id="@+id/vBorderBottom3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/vSeparator3"
+                android:background="@drawable/shape_bottom_border_ltgray" />
 
             <TextView
-                android:id="@+id/tvProductsHeader"
-                android:text="Products"
-                android:layout_below="@id/tvCost"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:id="@+id/tvAdditionalInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vBorderBottom3"
+                android:paddingBottom="5dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:text="Additional info"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
 
-            <LinearLayout
-                android:id="@+id/llProducts"
-                android:layout_below="@id/tvProductsHeader"
-                android:orientation="vertical"
+            <RelativeLayout
+                android:id="@+id/rCreated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvAdditionalInfo"
+                android:padding="15dp">
 
+                <TextView
+                    android:id="@+id/tvCreateDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Created"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvCreateDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/llTransitionButtons"
-        android:layout_above="@id/rlChangeState"
-        android:background="@drawable/shape_border"
-        android:padding="2dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical"/>
 
     <RelativeLayout
         android:id="@+id/rlChangeState"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-        
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/llTransitionButtons"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
         <TextView
             android:id="@+id/tvTaskState"
-            android:layout_alignParentStart="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/llTransitionButtons" />
+
         <ImageView
             android:id="@+id/ivTaskStateExpandIcon"
-            android:layout_alignParentEnd="true"
             android:layout_width="32dp"
-            android:layout_height="32dp" />
-        
-        
-    </RelativeLayout>
+            android:layout_height="32dp"
+            android:padding="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/llTransitionButtons" />
 
-</RelativeLayout>
+
+    </RelativeLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

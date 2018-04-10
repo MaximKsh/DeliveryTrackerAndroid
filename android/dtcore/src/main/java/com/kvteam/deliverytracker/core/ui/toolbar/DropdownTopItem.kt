@@ -38,7 +38,6 @@ class DropdownTopItem (
 
     init {
         layout.tvCategoryName.text = name
-        layout.ivCategoryIcon.setImageResource(R.drawable.ic_group_black_24dp)
         layout.tvCategoryQuantity.text = activity.resources.getString(R.string.Core_Dropdown_Top_Quantity, quantity)
         layout.ivSelectedIcon.visibility = if (isSelected) View.VISIBLE else View.GONE
         layout.setOnClickListener{ _ -> handleSelectionInner() }
