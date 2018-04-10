@@ -89,6 +89,7 @@ dependencies {
     // Using JCenter
     compile 'eu.davidea:flexible-adapter:5.0.3'
     compile 'eu.davidea:flexible-adapter-ui:1.0.0-b3'
+    compile 'com.sothree.slidinguppanel:library:3.4.0'
 
     // Using MavenSnapshots repository for continuous updates from my development
     compile 'eu.davidea:flexible-adapter:5.0.0-SNAPSHOT'

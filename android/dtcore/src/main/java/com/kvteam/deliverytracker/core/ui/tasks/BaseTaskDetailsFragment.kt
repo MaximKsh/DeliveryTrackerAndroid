@@ -1,8 +1,6 @@
 package com.kvteam.deliverytracker.core.ui.tasks
 
-import android.animation.ValueAnimator
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -21,11 +18,13 @@ import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
+import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_task_details.*
-import kotlinx.android.synthetic.main.task_product_view.view.*
+import kotlinx.android.synthetic.main.task_product_item.view.*
+import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -105,66 +104,82 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         }
         val task = taskResult.entry
 
-        if(task.taskNumber?.isNotBlank() == true) {
-            toolbarController.setToolbarTitle(task.taskNumber!!)
-        } else {
-            toolbarController.setToolbarTitle("Task details")
-        }
+        tvTaskStatus.text = lm.getString(task.taskStateCaption!!)
+        tvTaskNumber.text = task.taskNumber
 
-        tvCreateDate.setText (task.created?.toString("dd/MM HH:mm") )
-        tvReceiptDate.setText( task.receipt?.toString("dd/MM HH:mm") )
-        if(task.deliveryFrom != null && task.deliveryTo != null) {
-            ivDeliveryDate.setText ( task.deliveryFrom?.toString("dd/MM HH:mm") + " - " + task.deliveryTo?.toString("dd/MM HH:mm") )
-        } else if( task.deliveryFrom != null ) {
-            ivDeliveryDate.setText ( "After ${task.deliveryFrom?.toString("dd/MM HH:mm")}")
-
-        } else if (task.deliveryTo != null) {
-            ivDeliveryDate.setText ( "Before ${task.deliveryTo?.toString("dd/MM HH:mm")}")
-
+        if (task.authorId != null) {
+            val author = dp.users.get(task.authorId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+            tvAuthorName.text = "by ${author.name}"
+            tvAuthorSurname.text = author.surname
         }
 
         if (task.performerId != null) {
-            val user = dp.users.getAsync(task.performerId!!, DataProviderGetMode.FORCE_CACHE).entry
-            val surname = user.surname
-            val name = user.name
-            val materialAvatarDefault = TextDrawable.builder()
-                    .buildRound((name?.get(0)?.toString() ?: EMPTY_STRING) + (surname?.get(0)?.toString() ?: EMPTY_STRING), Color.LTGRAY)
-            ivPerformerAvatar.setImageDrawable(materialAvatarDefault)
-            ivPerformerName.text = "$surname $name"
+            val user = dp.users.get(task.performerId!!, DataProviderGetMode.FORCE_CACHE).entry
+            val materialAvatarDefault = materialDefaultAvatar(user)
+            ivPerformerImage.setImageDrawable(materialAvatarDefault)
+            tvPerformerName.text = user.name
+            tvPerformerSurname.text = user.surname
         } else {
-            val materialAvatarDefault = TextDrawable.builder()
-                    .buildRound(EMPTY_STRING, Color.LTGRAY)
-            ivPerformerAvatar.setImageDrawable(materialAvatarDefault)
-            ivPerformerName.text = "No performer"
+            val materialAvatarDefault = materialDefaultAvatar(null)
+            ivPerformerImage.setImageDrawable(materialAvatarDefault)
         }
 
-        if(task.paymentTypeId != null) {
-            val pt = dp.paymentTypes.getAsync(task.paymentTypeId!!, DataProviderGetMode.FORCE_CACHE).entry
-            tvPaymentType.text = pt.name
+        if (task.receipt != null) {
+            tvTaskReceiptAt.text = (task.receipt as DateTime).toString("dd/MM HH:mm")
         }
 
-        if(task.clientId != null) {
-            val client = dp.clients.getAsync(task.clientId!!, DataProviderGetMode.FORCE_CACHE).entry
-            tvClientName.text = "${client.surname} ${client.name}"
-            tvClientPhone.text = client.phoneNumber
-            if(task.clientAddressId != null) {
-                val addr = client.clientAddresses.firstOrNull { it.id == task.clientAddressId }
-                if(addr != null) {
-                    tvClientAddress.text = addr.rawAddress
-                }
+        if (task.warehouseId != null) {
+            val warehouse = dp.warehouses.get(task.warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+            tvWarehouseName.text = warehouse.name
+        }
+
+        if (task.comment != null) {
+            tvTaskDescription.text = task.comment
+        }
+
+        if (task.deliveryFrom != null) {
+            tvDeliveryDate.text = "${(task.deliveryFrom as DateTime).toString("dd.MM")}, " +
+                    "${(task.deliveryFrom as DateTime).toString("HH:mm")}-" +
+                    "${(task.deliveryTo as DateTime).toString("HH:mm")}"
+        }
+
+        if (task.clientId != null) {
+            val client = dp.clients.get(task.clientId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+            if (task.clientAddressId != null) {
+                tvClientAddress.text = client.clientAddresses.first{ it.id == task.clientAddressId }.rawAddress
+            }
+            if (client.name != null) {
+                tvClientName.text = client.name
+            }
+            if (client.surname != null) {
+                tvClientSurname.text = client.surname
+            }
+            if (client.phoneNumber != null) {
+                tvClientPhoneNumber.text = client.phoneNumber
             }
         }
 
-        for(tp in task.taskProducts) {
-            val product = dp.products.getAsync(tp.productId!!, DataProviderGetMode.FORCE_CACHE)
-            val layout = activity!!.layoutInflater.inflate(
-                    R.layout.task_product_view,
-                    llProducts,
-                    false)
-            layout.tvProductName.text = product.entry.name
-            layout.tvQuantity.text = tp.quantity.toString()
-            llProducts.addView(layout)
+        if (task.taskProducts.size > 0) {
+            tvNoProducts.visibility = View.GONE
+            task.taskProducts.forEach { productInfo ->
+                val product = dp.products.get(productInfo.productId!!, DataProviderGetMode.FORCE_CACHE).entry
+                val inflatedProductView = layoutInflater.inflate(R.layout.task_product_item, llProductsContainer, false)
+                inflatedProductView.tvProductQuantity.text = productInfo.quantity.toString()
+                inflatedProductView.tvName.text = product.name
+                inflatedProductView.tvCost.text = activity!!.resources.getString(com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template, product.cost.toString())
+                inflatedProductView.tvVendorCode.text = product.vendorCode.toString()
+                llProductsContainer.addView(inflatedProductView)
+            }
+
+            rlTotalCost.visibility = View.VISIBLE
+            tvTotalCost.text = activity!!.resources.getString(
+                    com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
+                    task.cost.toString())
         }
+
+        tvCreateDate.text = "${task.created!!.toString("dd.MM")}, ${task.created!!.toString("HH:mm")}"
+
+        toolbarController.setToolbarTitle("Task details")
 
         llTransitionButtons.removeAllViews()
         transitionsCount = task.taskStateTransitions.size
@@ -175,16 +190,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             llTransitionButtons.addView(view)
         }
 
-        tvTaskState.text = lm.getString(task.taskStateCaption!!)
         ivTaskStateExpandIcon.setImageDrawable(toggleIconResized)
-
-        rlTaskInfo.setOnClickListener {
-            collapseTransitions()
-        }
-
-        rlChangeState.setOnClickListener {
-            animateTransitions()
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -198,48 +204,6 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             return@launchUI
         }
         closeFragment()
-    }
-
-    private fun collapseTransitions() {
-        if(llTransitionButtons.visibility == View.VISIBLE) {
-            animateTransitions()
-        }
-    }
-
-    private fun expandTransitions() {
-        if(llTransitionButtons.visibility == View.GONE) {
-            animateTransitions()
-        }
-    }
-
-    private fun animateTransitions() {
-        val expanding = llTransitionButtons.visibility == View.GONE
-        val animator = if(expanding) {
-            ValueAnimator.ofFloat(0.0f, 1.0f)
-        } else {
-            ValueAnimator.ofFloat(1.0f, 0.0f)
-        }
-        val minSize = 0
-        val maxSize = transitionsCount * activity?.resources?.getDimension(R.dimen.state_transition_item_height)!!
-
-        animator.addUpdateListener {
-            val value = animator.animatedValue as Float
-            val layoutParams = llTransitionButtons.layoutParams
-            layoutParams.height = (minSize + maxSize * value).toInt()
-            llTransitionButtons.layoutParams = layoutParams
-
-            if(value == 0.0f) {
-                if(expanding) {
-                    llTransitionButtons.visibility = View.VISIBLE
-                    ivTaskStateExpandIcon.setImageDrawable(rotatedToggleIcon)
-                } else {
-                    llTransitionButtons.visibility = View.GONE
-                    ivTaskStateExpandIcon.setImageDrawable(toggleIconResized)
-                }
-            }
-        }
-        animator.duration = 300L
-        animator.start()
     }
 
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {

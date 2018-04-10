@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlSelectedProduct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_bottom_border_ltgray"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/ivProductPicture"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_groceries"
+        android:layout_centerVertical="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:id="@+id/tvVendorCode"
+        android:layout_toEndOf="@id/ivProductPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorGray"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_toEndOf="@+id/ivProductPicture"
+        android:layout_below="@+id/tvVendorCode"
+        android:layout_marginStart="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/ivProductPicture"
+        android:layout_below="@+id/tvName"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvProductQuantity"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp" />
+
+    <View
+        android:id="@+id/vBottomBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvCost"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape_bottom_border_ltgray" />
+
+
+</RelativeLayout>
