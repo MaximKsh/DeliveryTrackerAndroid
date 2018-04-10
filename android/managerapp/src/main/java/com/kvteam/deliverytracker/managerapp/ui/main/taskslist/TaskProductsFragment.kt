@@ -9,13 +9,11 @@ import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.TaskProduct
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_products.*
 import kotlinx.android.synthetic.main.fragment_task_products.view.*
-import kotlinx.android.synthetic.main.selected_product_item.*
 import kotlinx.android.synthetic.main.selected_product_item.view.*
 import java.math.BigDecimal
 import java.util.*
@@ -103,6 +101,7 @@ class TaskProductsFragment : PageFragment() {
             val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
             newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
         }
+        task.cost = newTotalCost
         container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
                 com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
                 newTotalCost.toString()

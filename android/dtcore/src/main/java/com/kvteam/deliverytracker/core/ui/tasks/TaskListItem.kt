@@ -45,7 +45,7 @@ class TaskListItem(
         holder.tvTaskState.setTextColor(Color.WHITE)
         holder.tvTaskState.setBackgroundColor(ContextCompat.getColor(activityContext, task.getTaskState()!!.color))
         holder.tvDeliveryDate.text = task.deliveryFrom?.toString("dd.MM")
-        holder.tvTaskAddress.text = "Bolshaya Pochtovaya st. 18/20, 30"
+        holder.tvTaskAddress.text = "Address is currently visible in details"
         holder.tvTaskState.text = task.getTaskStateCaption(lm)
 
         if (task.performerId != null) {

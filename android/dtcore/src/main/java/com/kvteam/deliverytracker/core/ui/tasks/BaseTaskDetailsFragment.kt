@@ -1,8 +1,6 @@
 package com.kvteam.deliverytracker.core.ui.tasks
 
-import android.animation.ValueAnimator
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -26,8 +23,7 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_base_task_details.*
-import kotlinx.android.synthetic.main.selected_product_item.view.*
-import kotlinx.android.synthetic.main.task_product_view.view.*
+import kotlinx.android.synthetic.main.task_product_item.view.*
 import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
@@ -167,7 +163,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             tvNoProducts.visibility = View.GONE
             task.taskProducts.forEach { productInfo ->
                 val product = dp.products.get(productInfo.productId!!, DataProviderGetMode.FORCE_CACHE).entry
-                val inflatedProductView = layoutInflater.inflate(R.layout.selected_product_item, llProductsContainer, false)
+                val inflatedProductView = layoutInflater.inflate(R.layout.task_product_item, llProductsContainer, false)
                 inflatedProductView.tvProductQuantity.text = productInfo.quantity.toString()
                 inflatedProductView.tvName.text = product.name
                 inflatedProductView.tvCost.text = activity!!.resources.getString(com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template, product.cost.toString())
@@ -194,7 +190,6 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             llTransitionButtons.addView(view)
         }
 
-        tvTaskState.text = lm.getString(task.taskStateCaption!!)
         ivTaskStateExpandIcon.setImageDrawable(toggleIconResized)
     }
 
@@ -209,48 +204,6 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             return@launchUI
         }
         closeFragment()
-    }
-
-    private fun collapseTransitions() {
-        if(llTransitionButtons.visibility == View.VISIBLE) {
-            animateTransitions()
-        }
-    }
-
-    private fun expandTransitions() {
-        if(llTransitionButtons.visibility == View.GONE) {
-            animateTransitions()
-        }
-    }
-
-    private fun animateTransitions() {
-        val expanding = llTransitionButtons.visibility == View.GONE
-        val animator = if(expanding) {
-            ValueAnimator.ofFloat(0.0f, 1.0f)
-        } else {
-            ValueAnimator.ofFloat(1.0f, 0.0f)
-        }
-        val minSize = 0
-        val maxSize = transitionsCount * activity?.resources?.getDimension(R.dimen.state_transition_item_height)!!
-
-        animator.addUpdateListener {
-            val value = animator.animatedValue as Float
-            val layoutParams = llTransitionButtons.layoutParams
-            layoutParams.height = (minSize + maxSize * value).toInt()
-            llTransitionButtons.layoutParams = layoutParams
-
-            if(value == 0.0f) {
-                if(expanding) {
-                    llTransitionButtons.visibility = View.VISIBLE
-                    ivTaskStateExpandIcon.setImageDrawable(rotatedToggleIcon)
-                } else {
-                    llTransitionButtons.visibility = View.GONE
-                    ivTaskStateExpandIcon.setImageDrawable(toggleIconResized)
-                }
-            }
-        }
-        animator.duration = 300L
-        animator.start()
     }
 
     private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {

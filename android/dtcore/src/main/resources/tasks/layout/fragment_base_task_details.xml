@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="68dp"
+    sothree:umanoPanelHeight="50dp"
     sothree:umanoShadowHeight="4dp">
 
     <ScrollView
@@ -368,6 +368,7 @@
                     android:id="@+id/rlTotalCost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:layout_below="@+id/tvNoProducts"
                     android:visibility="gone">
 
@@ -443,31 +444,31 @@
     <RelativeLayout
         android:id="@+id/rlChangeState"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/llTransitionButtons"
-            android:padding="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+        android:background="@color/colorWhite"
+        android:padding="15dp"
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tvTaskState"
+            android:id="@+id/tvTaskChangeState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:textSize="16sp"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/llTransitionButtons" />
+            android:text="Change status"/>
 
         <ImageView
             android:id="@+id/ivTaskStateExpandIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="15dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/llTransitionButtons" />
+            android:layout_width="24dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true" />
 
+        <LinearLayout
+            android:id="@+id/llTransitionButtons"
+            android:layout_marginTop="25dp"
+            android:layout_below="@id/tvTaskState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
     </RelativeLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
