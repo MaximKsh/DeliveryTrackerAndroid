@@ -1,44 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content">
 
-       <TextView
-           android:id="@+id/tvStepsInstruction"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:padding="10dp"
-           android:textSize="16sp"
-           android:textColor="@color/colorGray"
-           android:text="Seven steps to create your task"/>
+    <RelativeLayout
+        android:id="@+id/rlStepperContainer"
+        android:layout_width="match_parent"
+        android:layout_height="95dp">
 
-        <github.chenupt.springindicator.SpringIndicator
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:siTextSize="16sp"
-            app:siIndicatorColors="@array/indicator_colors"
-            app:siTextColor="@color/colorGray"
-            app:siSelectedTextColor="@android:color/white"
-            android:layout_below="@+id/tvStepsInstruction"
-            app:siIndicatorColor="@color/colorPrimary"
+        <TextView
+            android:id="@+id/tvStepsInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Seven steps to create your task"
+            android:textColor="@color/colorGray"
+            android:textSize="16sp" />
+
+        <github.chenupt.springindicator.SpringIndicator xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/indicator"
             android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_below="@+id/tvStepsInstruction"
+            app:siIndicatorColor="@color/colorPrimary"
+            app:siIndicatorColors="@array/indicator_colors"
             app:siRadiusMax="20dp"
-            android:layout_height="44dp"/>
+            app:siSelectedTextColor="@android:color/white"
+            app:siTextColor="@color/colorGray"
+            app:siTextSize="16sp" />
 
         <View
             android:id="@+id/vBottomBorder"
-            android:layout_below="@+id/indicator"
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_below="@+id/indicator"
+            android:layout_marginTop="5dp"
             android:background="@drawable/shape_bottom_border_ltgray" />
+    </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-            android:layout_below="@+id/vBottomBorder"
-            android:id="@+id/pager"
-            android:background="@color/colorWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tester"
+        android:layout_below="@+id/rlStepperContainer"
+        android:background="@drawable/shape_bottom_border_ltgray" />
+
+    <RelativeLayout
+        android:id="@+id/tester"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/tvPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:paddingBottom="15dp"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp"
+            android:paddingTop="15dp"
+            android:text="PREV"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingBottom="15dp"
+            android:paddingEnd="25dp"
+            android:paddingStart="25dp"
+            android:paddingTop="15dp"
+            android:text="NEXT"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

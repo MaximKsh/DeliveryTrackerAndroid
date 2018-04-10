@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.paymenttypes
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -73,11 +71,10 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
             tryPrefetch = false
         }
         val paymentType = dp.paymentTypes.getAsync(paymentTypeId, DataProviderGetMode.DIRTY).entry
+        dtActivity.softKeyboard.openSoftKeyboard()
 
         etNameField.setText(paymentType.name)
         etNameField.requestFocus()
-        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
         validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
         validation.addValidation(

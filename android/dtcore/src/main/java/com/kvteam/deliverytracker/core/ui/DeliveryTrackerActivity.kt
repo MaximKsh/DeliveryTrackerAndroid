@@ -1,9 +1,12 @@
 package com.kvteam.deliverytracker.core.ui
 
+import android.app.Service
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.session.CheckSessionResult
@@ -32,8 +35,13 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
     open val fabButton: FloatingActionButton?
         get() = null
 
+    protected open val rootView: ViewGroup?
+        get() = null
+
     lateinit var toolbarController: ToolbarController
         private set
+
+    lateinit var softKeyboard: SoftKeyboard
 
     protected open fun getToolbarConfiguration(): ToolbarConfiguration {
         return ToolbarConfiguration()
@@ -41,6 +49,32 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
 
     protected open fun configureToolbar(toolbar: ToolbarController) {
 
+    }
+
+    private val keyboardShowListeners = mutableListOf<() -> Unit>()
+
+    private val keyboardHideListeners = mutableListOf<() -> Unit>()
+
+
+    private fun triggerOnKeyboardShowListeners () {
+        keyboardShowListeners.forEach { it() }
+    }
+
+    private fun triggerOnKeyboardHideListeners () {
+        keyboardHideListeners.forEach { it() }
+    }
+
+    fun addOnKeyboardShowListener (cb: () -> Unit) {
+        keyboardShowListeners.add(cb)
+    }
+
+    fun addOnKeyboardHideListener (cb: () -> Unit) {
+        keyboardHideListeners.add(cb)
+    }
+
+    fun removeKeyboardListener (cb: () -> Unit) {
+        keyboardHideListeners.remove(cb)
+        keyboardShowListeners.remove(cb)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +99,31 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
             supportFragmentManager.addOnBackStackChangedListener(this)
             updateHomeUpButton()
         }
+
+        val rv = rootView
+        if (rv != null) {
+            softKeyboard = SoftKeyboard(
+                    rv,
+                    getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager)
+        } else {
+
+            softKeyboard = SoftKeyboard(
+                    window.decorView.rootView as ViewGroup,
+                    getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager)
+        }
+
+
+
+        softKeyboard.setSoftKeyboardCallback(object: SoftKeyboard.SoftKeyboardChanged {
+            override fun onSoftKeyboardHide() {
+                triggerOnKeyboardHideListeners()
+            }
+
+            override fun onSoftKeyboardShow() {
+                triggerOnKeyboardShowListeners()
+            }
+
+        })
     }
 
 
@@ -91,6 +150,13 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        keyboardHideListeners.clear()
+        keyboardShowListeners.clear()
+        softKeyboard.unRegisterSoftKeyboardCallback()
+        super.onStop()
     }
 
     override fun onBackStackChanged() {

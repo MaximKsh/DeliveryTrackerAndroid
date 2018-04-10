@@ -3,6 +3,8 @@ package com.kvteam.deliverytracker.managerapp.ui.main
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
+import android.view.View
+import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -13,18 +15,6 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarConfiguration
 import com.kvteam.deliverytracker.managerapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
-import android.view.Window.ID_ANDROID_CONTENT
-import android.opengl.ETC1.getHeight
-import android.view.View
-import android.view.ViewTreeObserver
-import android.view.Window
-import android.view.ViewGroup
-import java.util.*
-import android.os.CountDownTimer
-
-
 
 
 class MainActivity : DeliveryTrackerActivity() {
@@ -41,59 +31,15 @@ class MainActivity : DeliveryTrackerActivity() {
 
     override val layoutId = R.layout.activity_main
 
-    private val keyboardLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-        val heightDiff = rlMainActivityContainer.rootView.height - rlMainActivityContainer.height
-        val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).height
+    override val rootView: ViewGroup?
+        get() = rlMainActivityContainer
 
-        val broadcastManager = LocalBroadcastManager.getInstance(this@MainActivity)
-
-        if (heightDiff <= contentViewTop) {
-            onHideKeyboard()
-
-            val intent = Intent("KeyboardWillHide")
-            broadcastManager.sendBroadcast(intent)
-        } else {
-            val keyboardHeight = heightDiff - contentViewTop
-            onShowKeyboard(keyboardHeight)
-
-            val intent = Intent("KeyboardWillShow")
-            intent.putExtra("KeyboardHeight", keyboardHeight)
-            broadcastManager.sendBroadcast(intent)
-        }
-    }
-
-    private var keyboardListenersAttached = false
-
-    private fun attachKeyboardListeners() {
-        if (keyboardListenersAttached) {
-            return
-        }
-
-        rlMainActivityContainer.viewTreeObserver.addOnGlobalLayoutListener(keyboardLayoutListener)
-
-        keyboardListenersAttached = true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        if (keyboardListenersAttached) {
-            rlMainActivityContainer.viewTreeObserver.removeOnGlobalLayoutListener(keyboardLayoutListener)
-        }
-    }
-
-    private fun onShowKeyboard(keyboardHeight: Int) {
+    private fun hideBottomNavigation() {
         navigation.visibility = View.GONE
     }
 
-    private fun onHideKeyboard() {
-        object : CountDownTimer(100, 100) {
-            override fun onTick(millisUntilFinished: Long) {}
-
-            override fun onFinish() {
-                navigation.visibility = View.VISIBLE
-            }
-        }.start()
+    private fun showBottomNavigation() {
+        navigation.visibility = View.VISIBLE
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -158,7 +104,9 @@ class MainActivity : DeliveryTrackerActivity() {
 
         removeShiftMode(navigation)
 
-        attachKeyboardListeners()
+        softKeyboard.initEditTexts()
+        addOnKeyboardHideListener (::showBottomNavigation)
+        addOnKeyboardShowListener (::hideBottomNavigation)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
