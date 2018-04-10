@@ -83,14 +83,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-
-        val taskResult = try {
-            dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE)
-        } catch (e: CacheException) {
-            return
-        }
-        val task = taskResult.entry
-        toolbar.setToolbarTitle(task.taskNumber ?: EMPTY_STRING)
+        toolbar.setToolbarTitle("Task details")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -178,8 +171,6 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         }
 
         tvCreateDate.text = "${task.created!!.toString("dd.MM")}, ${task.created!!.toString("HH:mm")}"
-
-        toolbarController.setToolbarTitle("Task details")
 
         llTransitionButtons.removeAllViews()
         transitionsCount = task.taskStateTransitions.size
