@@ -47,10 +47,10 @@ class TasksListFragment : BaseTasksListFragment() {
         dtActivity.addOnKeyboardShowListener (::hideFab)
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         dtActivity.removeOnKeyboardHideListener (::showFab)
         dtActivity.removeOnKeyboardShowListener (::hideFab)
-        super.onStop()
+        super.onDestroyView()
     }
 
 }

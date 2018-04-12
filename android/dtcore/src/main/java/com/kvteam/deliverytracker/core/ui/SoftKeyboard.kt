@@ -2,50 +2,45 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.kvteam.deliverytracker.core.common.notify
+import com.kvteam.deliverytracker.core.common.wait
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class SoftKeyboard(
         private val layout: ViewGroup,
         private val im: InputMethodManager) : View.OnFocusChangeListener {
+
+    interface SoftKeyboardChanged {
+        fun onSoftKeyboardHide()
+        fun onSoftKeyboardShow()
+    }
+
+    private val coordinates = IntArray(2)
+    private val softKeyboardThread = SoftKeyboardChangesThread()
     private var layoutBottom: Int = 0
-    private val coords: IntArray
     private var isKeyboardShow: Boolean = false
-    private val softKeyboardThread: SoftKeyboardChangesThread
     private var editTextList: MutableList<EditText>? = null
 
-    private var tempView: View? = null // reference to a focused EditText
+    // reference to a focused EditText
+    private var tempView: View? = null
+
+    init {
+        layout.isFocusable = true
+        layout.isFocusableInTouchMode = true
+        this.softKeyboardThread.start()
+    }
 
     private val layoutCoordinates: Int
         get() {
-            layout.getLocationOnScreen(coords)
-            return coords[1] + layout.height
+            layout.getLocationOnScreen(coordinates)
+            return coordinates[1] + layout.height
         }
-
-    // This handler will clear focus of selected EditText
-    private val mHandler = object : Handler() {
-        override fun handleMessage(m: Message) {
-            when (m.what) {
-                CLEAR_FOCUS -> if (tempView != null) {
-                    tempView!!.clearFocus()
-                    tempView = null
-                }
-            }
-        }
-    }
-
-    init {
-        keyboardHideByDefault()
-        this.coords = IntArray(2)
-        this.isKeyboardShow = false
-        this.softKeyboardThread = SoftKeyboardChangesThread()
-        this.softKeyboardThread.start()
-    }
 
 
     fun openSoftKeyboard() {
@@ -70,16 +65,6 @@ class SoftKeyboard(
 
     fun unRegisterSoftKeyboardCallback() {
         softKeyboardThread.stopThread()
-    }
-
-    interface SoftKeyboardChanged {
-        fun onSoftKeyboardHide()
-        fun onSoftKeyboardShow()
-    }
-
-    private fun keyboardHideByDefault() {
-        layout.isFocusable = true
-        layout.isFocusableInTouchMode = true
     }
 
     /*
@@ -131,12 +116,8 @@ class SoftKeyboard(
     }
 
     private inner class SoftKeyboardChangesThread : Thread() {
-        private val started: AtomicBoolean
+        private val started = AtomicBoolean(true)
         private var mCallback: SoftKeyboardChanged? = null
-
-        init {
-            started = AtomicBoolean(true)
-        }
 
         fun setCallback(mCallback: SoftKeyboardChanged) {
             this.mCallback = mCallback
@@ -147,7 +128,7 @@ class SoftKeyboard(
                 // Wait until keyboard is requested to open
                 synchronized(this) {
                     try {
-                        (this as java.lang.Object).wait()
+                        wait()
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
@@ -178,10 +159,9 @@ class SoftKeyboard(
                 while (currentBottomLocation != layoutBottom && started.get()) {
                     synchronized(this) {
                         try {
-                            (this as java.lang.Object).wait(500)
+                            wait(500)
                         } catch (e: InterruptedException) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace()
+                            Log.e("SoftKeyboard", e.message, e)
                         }
 
                     }
@@ -195,31 +175,34 @@ class SoftKeyboard(
                 }
 
                 // if keyboard has been opened clicking and EditText.
-                if (isKeyboardShow && started.get())
+                if (isKeyboardShow && started.get()) {
                     isKeyboardShow = false
+                }
 
                 // if an EditText is focused, remove its focus (on UI thread)
-                if (started.get())
-                    mHandler.obtainMessage(CLEAR_FOCUS).sendToTarget()
+                if (started.get()) {
+                    Handler(Looper.getMainLooper()).post {
+                        if (tempView != null) {
+                            tempView!!.clearFocus()
+                            tempView = null
+                        }
+                    }
+                }
             }
         }
 
         fun keyboardOpened() {
             synchronized(this) {
-                (this as java.lang.Object).notify()
+                notify()
             }
         }
 
         fun stopThread() {
             synchronized(this) {
                 started.set(false)
-                (this as java.lang.Object).notify()
+                notify()
             }
         }
 
-    }
-
-    companion object {
-        private val CLEAR_FOCUS = 0
     }
 }

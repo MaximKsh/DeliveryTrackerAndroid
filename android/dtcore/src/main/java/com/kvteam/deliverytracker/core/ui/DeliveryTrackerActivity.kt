@@ -155,11 +155,11 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         }
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         keyboardHideListeners.clear()
         keyboardShowListeners.clear()
         softKeyboard.unRegisterSoftKeyboardCallback()
-        super.onStop()
+        super.onDestroy()
     }
 
     override fun onBackStackChanged() {
