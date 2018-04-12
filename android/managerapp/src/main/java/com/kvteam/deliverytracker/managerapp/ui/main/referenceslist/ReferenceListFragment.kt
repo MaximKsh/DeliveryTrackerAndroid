@@ -192,6 +192,15 @@ open class ReferenceListFragment : BaseListFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = ProductsListFlexibleAdapter(productsActions)
         super.onActivityCreated(savedInstanceState)
+
+        dtActivity.addOnKeyboardHideListener (::showFab)
+        dtActivity.addOnKeyboardShowListener (::hideFab)
+    }
+
+    override fun onStop() {
+        dtActivity.removeOnKeyboardHideListener (::showFab)
+        dtActivity.removeOnKeyboardShowListener (::hideFab)
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -205,4 +214,6 @@ open class ReferenceListFragment : BaseListFragment() {
         inflater.inflate(R.menu.search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+
 }

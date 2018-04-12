@@ -1,23 +1,17 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.dataprovider.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ModelTextWatcher
 import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -191,11 +185,7 @@ class TaskClientFragment : PageFragment() {
                     autocomplete.hideDropdown()
                     if (!ignoreWatcher) {
                         showClientDetails(DataProviderGetMode.PREFER_WEB)
-                        val focusedView = activity!!.currentFocus
-                        if (focusedView != null) {
-                            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
-                        }
+                        dtActivity.softKeyboard.closeSoftKeyboard()
                     }
                     ignoreWatcher = true
                 } else {

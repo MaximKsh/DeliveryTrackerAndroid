@@ -72,8 +72,11 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         keyboardHideListeners.add(cb)
     }
 
-    fun removeKeyboardListener (cb: () -> Unit) {
+    fun removeOnKeyboardHideListener (cb: () -> Unit) {
         keyboardHideListeners.remove(cb)
+    }
+
+    fun removeOnKeyboardShowListener (cb: () -> Unit) {
         keyboardShowListeners.remove(cb)
     }
 

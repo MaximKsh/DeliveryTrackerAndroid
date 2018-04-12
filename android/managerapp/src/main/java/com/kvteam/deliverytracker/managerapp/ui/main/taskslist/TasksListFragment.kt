@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 
+import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.view.View
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
@@ -38,6 +39,18 @@ class TasksListFragment : BaseTasksListFragment() {
         button.setOnClickListener {
             navigationController.navigateToEditTask()
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dtActivity.addOnKeyboardHideListener (::showFab)
+        dtActivity.addOnKeyboardShowListener (::hideFab)
+    }
+
+    override fun onStop() {
+        dtActivity.removeOnKeyboardHideListener (::showFab)
+        dtActivity.removeOnKeyboardShowListener (::hideFab)
+        super.onStop()
     }
 
 }
