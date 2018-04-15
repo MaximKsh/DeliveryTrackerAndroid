@@ -32,7 +32,6 @@ class TasksListFragment : BaseTasksListFragment() {
         }
     }
 
-
     override fun configureFloatingActionButton(button: FloatingActionButton) {
         button.visibility = View.VISIBLE
         button.setImageResource(R.drawable.ic_add_black_24dp)

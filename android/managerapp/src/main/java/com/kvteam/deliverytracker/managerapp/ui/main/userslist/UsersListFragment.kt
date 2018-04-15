@@ -51,6 +51,7 @@ class UsersListFragment : BaseListFragment() {
         }
 
         override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<UserListItem>, item: UserListItem) {
+            navigationController.navigateToUserDetails(item.user.id!!)
         }
     }
 
