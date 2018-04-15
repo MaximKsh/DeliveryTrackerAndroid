@@ -72,8 +72,11 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         keyboardHideListeners.add(cb)
     }
 
-    fun removeKeyboardListener (cb: () -> Unit) {
+    fun removeOnKeyboardHideListener (cb: () -> Unit) {
         keyboardHideListeners.remove(cb)
+    }
+
+    fun removeOnKeyboardShowListener (cb: () -> Unit) {
         keyboardShowListeners.remove(cb)
     }
 
@@ -152,11 +155,11 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         }
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         keyboardHideListeners.clear()
         keyboardShowListeners.clear()
         softKeyboard.unRegisterSoftKeyboardCallback()
-        super.onStop()
+        super.onDestroy()
     }
 
     override fun onBackStackChanged() {
