@@ -33,6 +33,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             createRequestAsync(entity)
         }
 
+        invalidate(entity.id!!)
         val newEntity = transformRequestToEntry(result)
         dataContainer.putEntry(newEntity)
         dataContainer.removeDirty(entity.id!!)

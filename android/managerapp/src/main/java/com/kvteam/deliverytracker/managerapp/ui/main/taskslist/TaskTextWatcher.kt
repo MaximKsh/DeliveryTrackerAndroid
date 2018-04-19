@@ -16,6 +16,6 @@ class TaskTextWatcher<T: ModelBase>(
 ) : ModelTextWatcher<T>(dataComponent, EMPTY_UUID, updateFunc) {
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         val task = taskComponent.get(taskId, DataProviderGetMode.DIRTY).entry
-        id = task.clientId!!
+        id = if (task.clientId != null)  task.clientId!! else EMPTY_UUID
     }
 }

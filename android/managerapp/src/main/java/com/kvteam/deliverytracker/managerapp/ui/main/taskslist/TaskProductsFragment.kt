@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -37,12 +38,19 @@ class TaskProductsFragment : PageFragment() {
 
 
             productItemView.ivIconIncreaseQuantity.setOnClickListener { _ ->
+                if (taskProductInfo.action == CollectionEntityAction.None) {
+                    taskProductInfo.action = CollectionEntityAction.Edit
+                }
                 taskProductInfo.quantity = taskProductInfo.quantity!! + 1
                 updateProductView(productItemView, taskProductInfo)
             }
 
             productItemView.ivIconDecreaseQuantity.setOnClickListener { _ ->
                 if (taskProductInfo.quantity!! > 1) {
+                    if (taskProductInfo.action == CollectionEntityAction.None) {
+                        taskProductInfo.action = CollectionEntityAction.Edit
+                    }
+
                     taskProductInfo.quantity = taskProductInfo.quantity!! - 1
                     updateProductView(productItemView, taskProductInfo)
                 }
@@ -96,18 +104,25 @@ class TaskProductsFragment : PageFragment() {
         }
 
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
+        task.cost = recalcCost()
+        container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
+                com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
+                task.cost.toString()
+        )
+    }
+
+    private fun recalcCost(): BigDecimal {
         var newTotalCost = BigDecimal(0)
         val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
 
-        taskProducts.forEach { taskProduct ->
-            val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
-            newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
-        }
-        task.cost = newTotalCost
-        container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
-                com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
-                newTotalCost.toString()
-        )
+        taskProducts
+                .filter { it.action != CollectionEntityAction.Delete }
+                .forEach { taskProduct ->
+                    val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+                    newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
+                }
+        return newTotalCost
     }
 }
 

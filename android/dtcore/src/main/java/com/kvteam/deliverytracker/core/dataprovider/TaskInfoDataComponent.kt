@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
-import com.kvteam.deliverytracker.core.common.getDifference
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IDataContainer
@@ -35,6 +34,17 @@ class TaskInfoDataComponent (
     override suspend fun createRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
         val taskPackage = TaskPackage()
         taskPackage.taskInfo.add(entity)
+
+        taskPackage.taskProducts.addAll(
+                taskProductDataContainer.getDirtiesByParent(entity.id!!)
+                        .filter { it.action != CollectionEntityAction.None })
+        return taskWebservice.createAsync(taskPackage)
+    }
+
+    override suspend fun editRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
+        val pack = TaskPackage()
+        pack.taskInfo.add(entity)
+
         val dirties = taskProductDataContainer.getDirtiesByParent(entity.id!!)
         val toPackage = mutableListOf<TaskProduct>()
         for (dirty in dirties) {
@@ -44,34 +54,16 @@ class TaskInfoDataComponent (
                     toPackage.add(dirty)
                 }
                 CollectionEntityAction.Edit -> {
-                    val clean = taskProductDataContainer.getEntry(dirty.id!!)
-                    val diff = clean?.getDifference(dirty, { TaskProduct() })
-                    if (diff != null) {
-                        toPackage.add(diff)
-                    }
+                    toPackage.add(dirty)
                 }
                 CollectionEntityAction.Delete -> {
-                    val diff = ClientAddress()
-                    diff.id = dirty.id
-                    diff.instanceId = dirty.instanceId
-                    diff.parentId = dirty.parentId
-                    diff.action = CollectionEntityAction.Delete
+                    dirty.quantity = 0
+                    toPackage.add(dirty)
                 }
             }
         }
 
-        taskPackage.taskProducts.addAll(toPackage)
-
-        return taskWebservice.createAsync(taskPackage)
-    }
-
-    override suspend fun editRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
-
-        val pack = TaskPackage()
-        pack.taskInfo.add(entity)
-        pack.taskProducts.addAll(
-                taskProductDataContainer.getDirtiesByParent(entity.id!!)
-                        .filter { it.action != CollectionEntityAction.None })
+        pack.taskProducts.addAll(toPackage)
 
         return taskWebservice.editAsync(pack)
     }

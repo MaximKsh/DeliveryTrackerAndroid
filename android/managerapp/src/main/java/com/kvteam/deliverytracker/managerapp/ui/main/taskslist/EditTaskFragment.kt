@@ -163,7 +163,9 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         anim.start()
         offsetScroll = stepperHeight
         val currentFragmentScrollView = fragments[pager.currentItem].view
-        currentFragmentScrollView!!.scrollY = currentFragmentScrollView.scrollY + offsetScroll
+        if (currentFragmentScrollView != null) {
+            currentFragmentScrollView.scrollY = currentFragmentScrollView.scrollY + offsetScroll
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -216,6 +218,12 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         return view
     }
 
+
+    override fun onStop() {
+        dp.taskInfos.invalidate(taskId)
+        super.onStop()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({
         when (item.itemId) {
             R.id.action_done -> {
@@ -234,15 +242,11 @@ class EditTaskFragment : DeliveryTrackerFragment() {
                 task.instanceId = session.instance?.id
 
                 try {
-                    // TODO address
-                    /*if (task.clientId != null) {
-                        val oldClient = dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
-                        val selectedAddress = oldClient.clientAddresses.find{ it.id == task.clientAddressId}
-                        val newClient = dp.clients.upsertAsync(dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry)
-                        task.clientId = newClient.id
-                        val newAddress = newClient.clientAddresses.find { it.rawAddress == selectedAddress?.rawAddress }
-                        task.clientAddressId = newAddress?.id
-                    }*/
+                    val clientId = task.clientId
+                    if (clientId != null) {
+                        val oldClient = dp.clients.get(clientId, DataProviderGetMode.DIRTY).entry
+                        dp.clients.upsertAsync(oldClient)
+                    }
 
                     dp.taskInfos.upsertAsync(task)
                 } catch (e: NetworkException) {

@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.text.Editable
 import android.text.TextWatcher
+import com.kvteam.deliverytracker.core.common.EMPTY_UUID
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.base.IDataComponent
 import com.kvteam.deliverytracker.core.models.ModelBase
@@ -13,6 +14,10 @@ open class ModelTextWatcher<T: ModelBase>(
         private val updateFunc: (T, String) -> Unit
 ) : TextWatcher {
     override fun afterTextChanged(text: Editable?) {
+        if (id == EMPTY_UUID) {
+            return
+        }
+
         val model = dataComponent.get(id, DataProviderGetMode.DIRTY).entry
         updateFunc(model, text.toString())
     }

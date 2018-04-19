@@ -15,6 +15,7 @@ import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
+import com.kvteam.deliverytracker.core.ui.setPhoneNumber
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
@@ -53,13 +54,14 @@ class TaskClientFragment : PageFragment() {
 
     private fun showClientDetails(mode: DataProviderGetMode) = launchUI {
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
-        val viewResult = dp.clientsViews.getViewResultAsync(
+
+        if (mode != DataProviderGetMode.DIRTY) {
+            val viewResult = dp.clientsViews.getViewResultAsync(
                 "ReferenceViewGroup",
                 "ClientsView",
                 mapOf("search" to etPhoneNumberField.text.substring(1)),
                 DataProviderGetMode.PREFER_CACHE).viewResult
 
-        if (mode != DataProviderGetMode.DIRTY) {
             if (viewResult.isEmpty()) {
                 dp.clients.invalidate()
                 task.clientId = UUID.randomUUID()
@@ -67,11 +69,12 @@ class TaskClientFragment : PageFragment() {
                 task.clientId = viewResult[0]
             }
         }
+        val clientId = task.clientId ?: return@launchUI
 
         val client = try {
-            dp.clients.getAsync(task.clientId as UUID, mode).entry
+            dp.clients.getAsync(clientId, mode).entry
         } catch (e: CacheException) {
-            dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
+            dp.clients.get(clientId, DataProviderGetMode.DIRTY).entry
         }
 
         if (client.phoneNumber == null) {
@@ -79,44 +82,57 @@ class TaskClientFragment : PageFragment() {
         }
 
         if (mode == DataProviderGetMode.DIRTY) {
-            etPhoneNumberField.setText(client.phoneNumber!!)
+            etPhoneNumberField.setPhoneNumber(client.phoneNumber!!)
         }
 
         etName.setText(client.name)
         etSurname.setText(client.surname)
 
-        // TODO: add addresses
-        /*if (client.clientAddresses.size > 0) {
+        val clientAddresses = dp.clientAddresses.getByParent(clientId, DataProviderGetMode.DIRTY)
+        if (clientAddresses.isNotEmpty()) {
             spinnerAddress.visibility = View.VISIBLE
-            val strings = client.clientAddresses.map { it.rawAddress }
+            val strings = clientAddresses.map { it.rawAddress }
             spinnerAddress.attachDataSource(strings)
-            spinnerAddress.addOnItemClickListener { adapterView, view, i, l ->
-                task.clientAddressId = client.clientAddresses[i].id
+            spinnerAddress.addOnItemClickListener { _, _, i, _ ->
+                task.clientAddressId = clientAddresses[i].id
             }
             if (task.clientAddressId != null) {
                 spinnerAddress.selectedIndex =
-                        client.clientAddresses.indexOfFirst { clientAddress -> clientAddress.id == task.clientAddressId }
+                        clientAddresses.indexOfFirst { clientAddress -> clientAddress.id == task.clientAddressId }
             } else {
-                task.clientAddressId = client.clientAddresses[0].id
+                task.clientAddressId = clientAddresses[0].id
             }
         } else {
             spinnerAddress.visibility = View.GONE
-        }*/
-
+        }
         tvAddAddress.setOnClickListener { _ ->
             navigationController.navigateToEditClientAddress(task.clientId!!)
         }
 
         if (rlClientInfoContainer.height == 0) {
-            val anim = ValueAnimator.ofInt(0, 700)
+            rlClientInfoContainer.measure(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT)
+            val height = rlClientInfoContainer.measuredHeight
+
+            val anim = ValueAnimator.ofInt(0, height)
             anim.addUpdateListener { valueAnimator ->
                 val value = valueAnimator.animatedValue as Int
                 val layoutParams = rlClientInfoContainer.layoutParams
                 layoutParams.height = value
                 rlClientInfoContainer.layoutParams = layoutParams
+
             }
             anim.duration = 75L
             anim.start()
+        } else {
+            rlClientInfoContainer.measure(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT)
+            val height = rlClientInfoContainer.measuredHeight
+            val layoutParams = rlClientInfoContainer.layoutParams
+            layoutParams.height = height
+            rlClientInfoContainer.layoutParams = layoutParams
         }
     }
 
@@ -140,27 +156,25 @@ class TaskClientFragment : PageFragment() {
 
         if (task.clientId != null) {
             showClientDetails(DataProviderGetMode.DIRTY)
-        } else {
-            task.clientId = UUID.randomUUID()
         }
 
         val autocomplete = acClient.autoCompleteTextView
 
-        val etNameWatcher = TaskTextWatcher<Client>(
+        val etNameWatcher = TaskTextWatcher(
                 dp.clients,
                 { model, text -> model.name = text },
                 taskId,
                 dp.taskInfos
         )
 
-        val etSurnameWatcher = TaskTextWatcher<Client>(
+        val etSurnameWatcher = TaskTextWatcher(
                 dp.clients,
                 { model, text -> model.surname = text },
                 taskId,
                 dp.taskInfos
         )
 
-        val etPhoneNumberWatcher = TaskTextWatcher<Client>(
+        val etPhoneNumberWatcher = TaskTextWatcher(
                 dp.clients,
                 { model, text -> model.phoneNumber = text },
                 taskId,
@@ -179,7 +193,6 @@ class TaskClientFragment : PageFragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                hideClientDetails()
                 if (text != null && text.length > 7) {
                     autocomplete.setText(text.toString().substring(1))
                     autocomplete.showDropDown()
@@ -195,7 +208,7 @@ class TaskClientFragment : PageFragment() {
                         }
                     }
                     ignoreWatcher = true
-                } else {
+                } else if (ignoreWatcher) {
                     ignoreWatcher = false
                     hideClientDetails()
                 }

@@ -27,6 +27,14 @@ class ClientDataComponent (
 
     override suspend fun createRequestAsync(entity: Client): NetworkResult<ReferenceResponse> {
         val pack = RequestReferencePackage(entity)
+        pack.collections.addAll(
+                clientAddressDataContainer.getDirtiesByParent(entity.id!!)
+                        .filter { it.action != CollectionEntityAction.None })
+        return referenceWebservice.createAsync(CLIENT, pack)
+    }
+
+    override suspend fun editRequestAsync(entity: Client): NetworkResult<ReferenceResponse> {
+        val pack = RequestReferencePackage(entity)
         val dirties = clientAddressDataContainer.getDirtiesByParent(entity.id!!)
         val toPackage = mutableListOf<CollectionModelBase>()
         for (dirty in dirties) {
@@ -48,20 +56,12 @@ class ClientDataComponent (
                     diff.instanceId = dirty.instanceId
                     diff.parentId = dirty.parentId
                     diff.action = CollectionEntityAction.Delete
+                    toPackage.add(diff)
                 }
             }
         }
 
         pack.collections.addAll(toPackage)
-        return referenceWebservice.createAsync(CLIENT, pack)
-    }
-
-    override suspend fun editRequestAsync(entity: Client): NetworkResult<ReferenceResponse> {
-        val pack = RequestReferencePackage(entity)
-        pack.collections.addAll(
-                clientAddressDataContainer.getDirtiesByParent(entity.id!!)
-                        .filter { it.action != CollectionEntityAction.None })
-
         return referenceWebservice.editAsync(CLIENT, pack)
     }
 
