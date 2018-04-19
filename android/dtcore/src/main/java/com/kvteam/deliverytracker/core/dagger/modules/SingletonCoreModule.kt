@@ -343,8 +343,25 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun taskInfoViewComponent(viewWebservice: IViewWebservice, container: TaskInfoDataContainer) : TaskInfoViewComponent {
-        return TaskInfoViewComponent(viewWebservice, container)
+    fun taskInfoViewComponent(viewWebservice: IViewWebservice,
+                              container: TaskInfoDataContainer,
+                              productsDataContainer: ProductDataContainer,
+                              paymentTypeDataContainer: PaymentTypeDataContainer,
+                              warehouseDataContainer: WarehouseDataContainer,
+                              clientDataContainer: ClientDataContainer,
+                              clientAddressDataContainer: ClientAddressDataContainer,
+                              userDataContainer: UserDataContainer,
+                              taskProductDataContainer: TaskProductDataContainer) : TaskInfoViewComponent {
+        return TaskInfoViewComponent(
+                viewWebservice,
+                container,
+                userDataContainer,
+                paymentTypeDataContainer,
+                warehouseDataContainer,
+                clientAddressDataContainer,
+                clientDataContainer,
+                productsDataContainer,
+                taskProductDataContainer)
     }
 
     @Provides

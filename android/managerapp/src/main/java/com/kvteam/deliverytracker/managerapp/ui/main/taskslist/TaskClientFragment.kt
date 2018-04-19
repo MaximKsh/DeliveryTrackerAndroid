@@ -211,6 +211,8 @@ class TaskClientFragment : PageFragment() {
                 } else if (ignoreWatcher) {
                     ignoreWatcher = false
                     hideClientDetails()
+                    task.clientId = null
+                    task.clientAddressId = null
                 }
             }
 
