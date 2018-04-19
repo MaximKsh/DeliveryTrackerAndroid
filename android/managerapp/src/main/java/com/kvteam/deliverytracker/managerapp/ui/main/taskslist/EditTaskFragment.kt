@@ -14,9 +14,10 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.NetworkException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
+import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
@@ -42,6 +43,9 @@ abstract class PageFragment : DeliveryTrackerFragment() {
 }
 
 class EditTaskFragment : DeliveryTrackerFragment() {
+    @Inject
+    lateinit var session: ISession
+
     @Inject
     lateinit var navigationController: NavigationController
 
@@ -227,15 +231,19 @@ class EditTaskFragment : DeliveryTrackerFragment() {
                 }
 
                 val (task, _) = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY)
+                task.instanceId = session.instance?.id
+
                 try {
-                    if (task.clientId != null) {
+                    // TODO address
+                    /*if (task.clientId != null) {
                         val oldClient = dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry
                         val selectedAddress = oldClient.clientAddresses.find{ it.id == task.clientAddressId}
                         val newClient = dp.clients.upsertAsync(dp.clients.get(task.clientId as UUID, DataProviderGetMode.DIRTY).entry)
                         task.clientId = newClient.id
                         val newAddress = newClient.clientAddresses.find { it.rawAddress == selectedAddress?.rawAddress }
                         task.clientAddressId = newAddress?.id
-                    }
+                    }*/
+
                     dp.taskInfos.upsertAsync(task)
                 } catch (e: NetworkException) {
                     eh.handle(e.result)

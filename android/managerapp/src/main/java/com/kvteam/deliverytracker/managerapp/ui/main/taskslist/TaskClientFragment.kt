@@ -9,15 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.NetworkException
+import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Client
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.ModelTextWatcher
 import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -89,7 +85,8 @@ class TaskClientFragment : PageFragment() {
         etName.setText(client.name)
         etSurname.setText(client.surname)
 
-        if (client.clientAddresses.size > 0) {
+        // TODO: add addresses
+        /*if (client.clientAddresses.size > 0) {
             spinnerAddress.visibility = View.VISIBLE
             val strings = client.clientAddresses.map { it.rawAddress }
             spinnerAddress.attachDataSource(strings)
@@ -104,7 +101,7 @@ class TaskClientFragment : PageFragment() {
             }
         } else {
             spinnerAddress.visibility = View.GONE
-        }
+        }*/
 
         tvAddAddress.setOnClickListener { _ ->
             navigationController.navigateToEditClientAddress(task.clientId!!)

@@ -1,22 +1,20 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
-import android.view.ViewGroup
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.TaskInfo
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.ModelTextWatcher
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_number_and_details.*
 import kotlinx.android.synthetic.main.fragment_task_number_and_details.view.*
-import java.util.*
 import javax.inject.Inject
 
 

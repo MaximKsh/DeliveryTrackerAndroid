@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
 import kotlinx.coroutines.experimental.async
@@ -44,12 +44,16 @@ class ViewDigestComponent (
         }
         val digest = result.entity?.digest!!
         container.putViewDigest(viewGroup, digest)
-        return DataProviderViewDigestResult(digest, DataProviderGetOrigin.WEB)
+        return DataProviderViewDigestResult(
+                digest,
+                DataProviderGetOrigin.WEB)
     }
 
     private fun getForceCache(viewGroup: String) : DataProviderViewDigestResult {
         val digest = container.getViewDigest(viewGroup) ?: throw CacheException()
-        return DataProviderViewDigestResult(digest, DataProviderGetOrigin.CACHE)
+        return DataProviderViewDigestResult(
+                digest,
+                DataProviderGetOrigin.CACHE)
     }
 
     private suspend fun getPreferWebAsync(viewGroup: String) : DataProviderViewDigestResult {

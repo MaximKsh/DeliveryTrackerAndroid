@@ -1,7 +1,7 @@
 package com.kvteam.deliverytracker.core.webservice
 
 import com.google.gson.reflect.TypeToken
-import com.kvteam.deliverytracker.core.models.ModelBase
+import com.kvteam.deliverytracker.core.models.RequestReferencePackage
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ReferenceResponse
 import java.util.*
@@ -18,7 +18,7 @@ class ReferenceWebservice (private val webservice: IWebservice) : IReferenceWebs
         return result
     }
 
-    override suspend fun createAsync(type: String, entity: ModelBase)
+    override suspend fun createAsync(type: String, entity: RequestReferencePackage)
             : NetworkResult<ReferenceResponse> {
         val request = ReferenceRequest()
         request.entity = entity
@@ -39,10 +39,9 @@ class ReferenceWebservice (private val webservice: IWebservice) : IReferenceWebs
         return result
     }
 
-    override suspend fun editAsync(type: String, id: UUID, newData: ModelBase):
+    override suspend fun editAsync(type: String, newData: RequestReferencePackage):
             NetworkResult<ReferenceResponse> {
         val request = ReferenceRequest()
-        newData.id = id
         request.entity = newData
         val result = webservice.postAsync<ReferenceResponse>(
                 "$referenceBaseUrl/$type/edit",

@@ -8,12 +8,11 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.common.EMPTY_UUID
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.models.ClientAddress
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
+import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.managerapp.R
@@ -25,8 +24,8 @@ import javax.inject.Inject
 
 
 class EditClientAddressFragment : DeliveryTrackerFragment() {
-    private val TYPE_KEY = "TYPE"
-    private val ADDRESS_KEY = "ADDRESS"
+    @Inject
+    lateinit var session: ISession
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -47,11 +46,17 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         get() = arguments?.getSerializable(addressIdKey)!! as UUID
         set(value) = arguments?.putSerializable(addressIdKey, value)!!
 
+    private val newKey = "new"
+    private var newFlag
+        get() = arguments?.getSerializable(newKey)!! as? Boolean ?: false
+        set(value) = arguments?.putSerializable(newKey, value)!!
+
     private lateinit var validation: AwesomeValidation
 
     fun setAddress (clientId: UUID, addressId: UUID?) {
         this.clientId = clientId
-        this.addressId = addressId ?: EMPTY_UUID
+        this.addressId = addressId ?: UUID.randomUUID()
+        this.newFlag = addressId == null
     }
 
 
@@ -71,9 +76,8 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         super.onActivityCreated(savedInstanceState)
         dtActivity.softKeyboard.openSoftKeyboard()
 
-        val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
-        val address = client.clientAddresses.firstOrNull { it.id == addressId }
-        etAddress.setText(address?.rawAddress)
+        val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.DIRTY)
+        etAddress.setText(address.rawAddress)
 
         etAddress.requestFocus()
         val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -83,6 +87,16 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         validation.addValidation(
                 etAddress, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_ClientAddressValidationError))
         validation.setContext(this@EditClientAddressFragment.dtActivity)
+    }
+
+    override fun onStop() {
+        val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.DIRTY)
+        if (address.action == CollectionEntityAction.None
+            && newFlag) {
+            dp.clientAddresses.forgetChanges(addressId)
+        }
+
+        super.onStop()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -96,17 +110,11 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
                     return@launchUI
                 }
 
-                val client = dp.clients.getAsync(clientId, DataProviderGetMode.DIRTY).entry
-                var address = client.clientAddresses.firstOrNull { it.id == addressId }
-                if(address == null) {
-                    address = ClientAddress()
-                    address.id = UUID.randomUUID()
-                    address.action = CollectionEntityAction.Create
-                    client.clientAddresses.add(address)
-                } else {
-                    address.action = CollectionEntityAction.Edit
-                }
+                val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.DIRTY)
                 address.rawAddress = etAddress.text.toString()
+                address.instanceId = session.user!!.instanceId
+                dp.clientAddresses.saveChanges(address)
+
                 navigationController.closeCurrentFragment()
             }
         }

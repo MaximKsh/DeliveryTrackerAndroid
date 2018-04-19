@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.annotations.SerializedName
-import com.kvteam.deliverytracker.core.common.MoveAlways
 import com.kvteam.deliverytracker.core.common.MoveIfDiffer
 import java.io.Serializable
 
@@ -18,10 +17,7 @@ data class Client(
     var patronymic: String? = null,
     @SerializedName("PhoneNumber", alternate = ["phoneNumber"])
     @MoveIfDiffer
-    var phoneNumber: String? = null,
-    @SerializedName("Addresses", alternate = ["addresses"])
-    @MoveAlways
-    var clientAddresses: MutableList<ClientAddress> = mutableListOf()
+    var phoneNumber: String? = null
 ): ModelBase(), Serializable {
 
     override fun fromMap(map: Map<*, *>) {
@@ -30,7 +26,6 @@ data class Client(
         name = map["Name"] as? String
         patronymic = map["Patronymic"] as? String
         phoneNumber = map["PhoneNumber"] as? String
-        clientAddresses = deserializeListObjectsFromMap("Addresses", map, { ClientAddress() })
 
     }
 }

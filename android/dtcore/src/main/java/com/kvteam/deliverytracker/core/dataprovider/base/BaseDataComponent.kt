@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.common.deepCopy
 import com.kvteam.deliverytracker.core.common.getDifference
@@ -19,6 +19,10 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
 
     protected abstract fun transformRequestToEntry(result: NetworkResult<R>): T
     protected abstract fun entryFactory() : T
+
+    protected open fun clearCollectionEntries(id: UUID? = null) {
+
+    }
 
     override suspend fun upsertAsync(entity: T): T = async {
         val origin = dataContainer.getEntry(entity.id!!)
@@ -70,9 +74,11 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if(id == null) {
             dataContainer.clearEntries()
             dataContainer.clearDirties()
+            clearCollectionEntries()
         } else {
             dataContainer.removeEntry(id)
             dataContainer.removeDirty(id)
+            clearCollectionEntries(id)
         }
     }
 
@@ -81,7 +87,9 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if(result.success) {
             val entry = transformRequestToEntry(result)
             dataContainer.putEntry(entry)
-            return@async DataProviderGetResult(entry.deepCopy(), DataProviderGetOrigin.WEB)
+            return@async DataProviderGetResult(
+                    entry.deepCopy(),
+                    DataProviderGetOrigin.WEB)
         }
         throw NetworkException(result)
     }.await()
@@ -89,7 +97,9 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     private fun getForceCache(id: UUID) : DataProviderGetResult<T> {
         val cleanEntity = dataContainer.getEntry(id)
         if(cleanEntity != null) {
-            return DataProviderGetResult(cleanEntity.deepCopy(), DataProviderGetOrigin.CACHE)
+            return DataProviderGetResult(
+                    cleanEntity.deepCopy(),
+                    DataProviderGetOrigin.CACHE)
         }
         throw CacheException()
     }
@@ -121,10 +131,10 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             return DataProviderGetResult(copy, DataProviderGetOrigin.DIRTY)
         }
 
-        val client = entryFactory()
-        client.id = id
-        dataContainer.putDirty(client)
-        return DataProviderGetResult(client, DataProviderGetOrigin.DIRTY)
+        val entry = entryFactory()
+        entry.id = id
+        dataContainer.putDirty(entry)
+        return DataProviderGetResult(entry, DataProviderGetOrigin.DIRTY)
     }
 
 }

@@ -5,4 +5,5 @@ enum class CollectionEntityAction {
     Create,
     Edit,
     Delete,
+    Get,
 }

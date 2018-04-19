@@ -1,6 +1,6 @@
 package com.kvteam.deliverytracker.core.ui
 
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 
 abstract class BaseFilterFragment : BaseListFragment() {

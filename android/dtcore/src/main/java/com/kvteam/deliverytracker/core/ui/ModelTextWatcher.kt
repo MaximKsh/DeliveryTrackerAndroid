@@ -2,8 +2,8 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.text.Editable
 import android.text.TextWatcher
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.IDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.IDataComponent
 import com.kvteam.deliverytracker.core.models.ModelBase
 import java.util.*
 

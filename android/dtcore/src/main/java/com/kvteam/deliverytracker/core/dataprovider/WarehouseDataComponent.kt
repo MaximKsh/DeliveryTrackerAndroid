@@ -1,5 +1,8 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
+import com.kvteam.deliverytracker.core.models.RequestReferencePackage
+import com.kvteam.deliverytracker.core.models.ResponseReferencePackage
 import com.kvteam.deliverytracker.core.models.Warehouse
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -8,15 +11,15 @@ import java.util.*
 class WarehouseDataComponent(
         private val referenceWebservice: IReferenceWebservice,
         dataContainer: WarehouseDataContainer
-) : BaseDataComponent<Warehouse, ReferenceResponse> (dataContainer) {
+) : BaseDataComponent<Warehouse, ReferenceResponse>(dataContainer) {
     private val WAREHOUSE = Warehouse::class.java.simpleName
 
     override suspend fun createRequestAsync(entity: Warehouse): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.createAsync(WAREHOUSE, entity)
+        return referenceWebservice.createAsync(WAREHOUSE, RequestReferencePackage(entity))
     }
 
     override suspend fun editRequestAsync(entity: Warehouse): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.editAsync(WAREHOUSE, entity.id!!, entity)
+        return referenceWebservice.editAsync(WAREHOUSE, RequestReferencePackage( entity ))
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {
@@ -28,8 +31,11 @@ class WarehouseDataComponent(
     }
 
     override fun transformRequestToEntry(result: NetworkResult<ReferenceResponse>): Warehouse {
+        val pack = ResponseReferencePackage()
+        pack.fromMap(result.entity?.entity!!)
+
         val pt = entryFactory()
-        pt.fromMap(result.entity?.entity!!)
+        pt.fromMap(pack.entry)
         return pt
     }
 

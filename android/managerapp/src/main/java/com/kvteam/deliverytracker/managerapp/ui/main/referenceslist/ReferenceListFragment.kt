@@ -7,7 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.dataprovider.NetworkException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.Product
@@ -151,7 +152,9 @@ open class ReferenceListFragment : BaseListFragment() {
                         letter = firstLetter
                         header = BaseListHeader(letter?.toString() ?: EMPTY_STRING)
                     }
-                    ClientListItem(client, header, lm)
+                    val addresses = dp.clientAddresses.getByParent(client.id!!, DataProviderGetMode.FORCE_CACHE)
+
+                    ClientListItem(client, addresses.firstOrNull(), header, lm)
                 }.toMutableList()
         updateDataSet(referencesList, { ClientsListFlexibleAdapter(clientsActions) }, animate)
     }

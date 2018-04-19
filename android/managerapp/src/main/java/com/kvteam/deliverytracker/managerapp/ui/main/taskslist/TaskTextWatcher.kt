@@ -1,8 +1,8 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import com.kvteam.deliverytracker.core.common.EMPTY_UUID
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.IDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.IDataComponent
 import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.ModelTextWatcher

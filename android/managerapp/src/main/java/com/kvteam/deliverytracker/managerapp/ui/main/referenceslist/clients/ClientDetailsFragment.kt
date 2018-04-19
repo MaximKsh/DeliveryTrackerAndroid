@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.*
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
@@ -61,7 +61,8 @@ class ClientDetailsFragment : DeliveryTrackerFragment() {
         tvPatronymicField.text = client.patronymic
         tvPhoneNumberField.text = client.phoneNumber
 
-        client.clientAddresses.forEach { clientAddress ->
+        val clientAddresses = dp.clientAddresses.getByParent(clientId, DataProviderGetMode.FORCE_CACHE)
+        clientAddresses.forEach { clientAddress ->
             val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
             view.tvClientAddress.text = clientAddress.rawAddress
             view.tvDeleteItem.visibility = View.GONE

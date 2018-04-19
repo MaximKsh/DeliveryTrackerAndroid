@@ -1,7 +1,9 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.webservice.IViewWebservice
+import com.kvteam.deliverytracker.core.webservice.NetworkResult
+import com.kvteam.deliverytracker.core.webservice.viewmodels.ViewResponse
 import kotlinx.coroutines.experimental.async
 
 abstract class BaseViewComponent <out T : ModelBase> (
@@ -10,6 +12,14 @@ abstract class BaseViewComponent <out T : ModelBase> (
 ) : IViewComponent {
 
     protected abstract fun entryFactory() : T
+
+    protected open fun transformViewResultToEntries(viewResult: NetworkResult<ViewResponse>) : List<T> {
+        return viewResult.entity?.viewResult?.map {
+            val entry = entryFactory()
+            entry.fromMap(it)
+            entry
+        }?.toList()!!
+    }
 
     override fun getViewResult(
             viewGroup: String,
@@ -41,7 +51,11 @@ abstract class BaseViewComponent <out T : ModelBase> (
     }
 
     override fun invalidate(viewGroup: String, view: String, arguments: Map<String, Any>?) {
-        dataContainer.removeView(ViewRequestKey(viewGroup, view, arguments))
+        dataContainer.removeView(
+                ViewRequestKey(
+                        viewGroup,
+                        view,
+                        arguments))
     }
 
     private suspend fun getForceWebViewResultAsync(viewGroup: String,
@@ -51,26 +65,33 @@ abstract class BaseViewComponent <out T : ModelBase> (
         if(!viewResult.success) {
             throw NetworkException(viewResult)
         }
-        val entries = viewResult.entity?.viewResult?.map {
-            val entry = entryFactory()
-            entry.fromMap(it)
-            entry
-        }?.toList()!!
+        val entries = transformViewResultToEntries(viewResult)
 
         entries.forEach { dataContainer.putEntry(it) }
 
-        val key =  ViewRequestKey(viewGroup, view, arguments)
+        val key = ViewRequestKey(
+                viewGroup,
+                view,
+                arguments)
         val ids = entries.map { it.id!! }.toList()
         dataContainer.putView(key, ids)
 
-        return DataProviderViewResult(ids, DataProviderGetOrigin.WEB)
+        return DataProviderViewResult(
+                ids,
+                DataProviderGetOrigin.WEB)
     }
 
     private fun getForceCacheViewResult(viewGroup: String,
                                         view: String,
                                         arguments: Map<String, Any>?) : DataProviderViewResult {
-        val result = dataContainer.getView(ViewRequestKey(viewGroup, view, arguments)) ?: throw CacheException()
-        return DataProviderViewResult(result, DataProviderGetOrigin.CACHE)
+        val result = dataContainer.getView(
+                ViewRequestKey(
+                        viewGroup,
+                        view,
+                        arguments)) ?: throw CacheException()
+        return DataProviderViewResult(
+                result,
+                DataProviderGetOrigin.CACHE)
     }
 
     private suspend fun getPreferWebAsync(viewGroup: String,

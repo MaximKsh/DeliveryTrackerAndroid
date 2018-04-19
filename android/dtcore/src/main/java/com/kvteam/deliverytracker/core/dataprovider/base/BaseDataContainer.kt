@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.common.buildDefaultGson
 import com.kvteam.deliverytracker.core.models.ModelBase
@@ -16,6 +16,10 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
 
     protected abstract val storageKey: String
 
+    protected open fun clearCollectionEntries(id: UUID? = null) {
+
+    }
+
     override fun getEntry(id: UUID) : T? {
         val entry = entries[id] ?: return null
         val time = entriesTimes[id]
@@ -26,6 +30,7 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
         if (time.plusSeconds(CACHE_EXPIRATION_SECONDS).isBeforeNow) {
             entriesTimes.remove(id)
             entries.remove(id)
+            clearCollectionEntries(id)
             return null
         }
         return entry
@@ -40,6 +45,7 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
     override fun removeEntry(id: UUID) {
         entriesTimes.remove(id)
         entries.remove(id)
+        clearCollectionEntries(id)
     }
 
     override fun clearEntries() {
@@ -107,6 +113,7 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
         for(entry in overdueEntries) {
             entries.remove(entry)
             entriesTimes.remove(entry)
+            clearCollectionEntries(entry)
         }
 
         val overdueViews = viewsTimes

@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -28,9 +28,9 @@ class TaskProductsFragment : PageFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_products, container, false) as ViewGroup
-        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
 
-        task.taskProducts.forEach { taskProductInfo ->
+        taskProducts.forEach { taskProductInfo ->
             val productItemView = inflater.inflate(R.layout.selected_product_item, view.llSelectedProduct, false)
 
             updateProductView(productItemView, taskProductInfo, view)
@@ -49,7 +49,7 @@ class TaskProductsFragment : PageFragment() {
             }
 
             productItemView.ivIconDelete.setOnClickListener { _ ->
-                task.taskProducts.remove(taskProductInfo)
+                dp.taskProducts.delete(taskProductInfo.id!!)
                 updateProductView(productItemView, null)
             }
 
@@ -97,7 +97,9 @@ class TaskProductsFragment : PageFragment() {
 
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
         var newTotalCost = BigDecimal(0)
-        task.taskProducts.forEach { taskProduct ->
+        val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
+
+        taskProducts.forEach { taskProduct ->
             val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
             newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
         }
