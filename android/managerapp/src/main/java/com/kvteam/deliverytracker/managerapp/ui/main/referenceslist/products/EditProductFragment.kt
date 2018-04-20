@@ -8,8 +8,8 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
@@ -91,6 +91,11 @@ class EditProductFragment : DeliveryTrackerFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_edit_product, container, false)
+    }
+
+    override fun onStop() {
+        dp.products.invalidateDirty(productId)
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({

@@ -15,6 +15,7 @@
     <string name="Core_NoInternet">No internet connection</string>
     <string name="Core_InvalidCredentials">Wrong login/password pair</string>
 
+    <string name="Core_AddressNotSpecified">Address not specified</string>
 
     <string name="Core_PaymentTypeHeader">Payment type</string>
     <string name="Core_WarehouseHeader">Warehouse</string>

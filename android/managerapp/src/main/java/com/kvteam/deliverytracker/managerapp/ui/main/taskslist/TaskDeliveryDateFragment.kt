@@ -4,44 +4,28 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.DialogFragment
 import android.app.TimePickerDialog
-import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.TextView
 import android.widget.TimePicker
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_delivery_date.*
 import kotlinx.android.synthetic.main.fragment_task_delivery_date.view.*
-import kotlinx.android.synthetic.main.fragment_task_receipt_at.view.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.Duration
 import org.joda.time.Interval
-import java.util.*
 import javax.inject.Inject
 
-data class DeliveryDateTypeItem(
-        var name: String,
-        var selectedDateTime: DateTime?
-)
 
-data class DeliveryTimeTypeItem(
-        var name: String,
-        var fromTime: DateTime?,
-        var toTime: DateTime?
-)
 
-class TaskDeliveryDateFragment : PageFragment() {
+class TaskDeliveryDateFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 

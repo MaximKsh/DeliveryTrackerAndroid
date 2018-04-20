@@ -3,7 +3,7 @@ package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole

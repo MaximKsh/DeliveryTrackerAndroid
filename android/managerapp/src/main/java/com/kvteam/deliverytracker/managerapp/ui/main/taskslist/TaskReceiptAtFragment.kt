@@ -8,32 +8,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.amulyakhare.textdrawable.TextDrawable
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Warehouse
-import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelect
-import com.kvteam.deliverytracker.core.ui.dropdownselect.DropdownSelectItem
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_task_receipt_at.*
 import kotlinx.android.synthetic.main.fragment_task_receipt_at.view.*
-import kotlinx.android.synthetic.main.selected_performer_item.*
 import kotlinx.android.synthetic.main.selected_performer_item.view.*
 import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
-import java.util.Arrays.asList
 
 
-data class DeliveryReceiptAtItem(
-        var name: String,
-        var selectedDateTime: DateTime?
-)
 
-class TaskReceiptAtFragment : PageFragment() {
+class TaskReceiptAtFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 

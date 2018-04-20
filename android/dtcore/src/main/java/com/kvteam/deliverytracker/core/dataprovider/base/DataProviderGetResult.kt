@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.models.ModelBase
 

@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 data class ViewRequestKey (
         val viewGroup: String,

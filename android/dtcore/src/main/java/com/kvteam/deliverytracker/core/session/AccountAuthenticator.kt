@@ -51,11 +51,11 @@ class AccountAuthenticator(
     }
 
     override fun editProperties(p0: AccountAuthenticatorResponse?, p1: String?): Bundle {
-        TODO("not implemented")
+        return Bundle()
     }
 
     override fun hasFeatures(p0: AccountAuthenticatorResponse?, p1: Account?, p2: Array<out String>?): Bundle {
-        TODO("not implemented")
+        return Bundle()
     }
 
     override fun getAuthToken(
@@ -85,15 +85,15 @@ class AccountAuthenticator(
     }
 
     override fun updateCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: String?, p3: Bundle?): Bundle {
-        TODO("not implemented")
+        return Bundle()
     }
 
     override fun confirmCredentials(p0: AccountAuthenticatorResponse?, p1: Account?, p2: Bundle?): Bundle {
-        TODO("not implemented")
+        return Bundle()
     }
 
     override fun getAuthTokenLabel(p0: String?): String {
-        TODO("not implemented")
+        return EMPTY_STRING
     }
 
     private fun relogin(codePassword: CodePassword) : String {

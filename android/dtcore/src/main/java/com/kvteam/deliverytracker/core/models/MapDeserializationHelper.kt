@@ -4,7 +4,6 @@ import com.google.gson.internal.LinkedTreeMap
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
 import java.util.*
 
 fun deserializeUUIDFromMap(key: String, map: Map<*, *>) : UUID? {
@@ -75,6 +74,18 @@ fun <T : IMapDeserializable> deserializeListObjectsFromMap(
     return mutableListOf()
 }
 
+fun deserializeListMapFromMap(
+        key: String,
+        map: Map<*, *>) : MutableList<MutableMap<*, *>> {
+    val serializedList = map[key]
+    if(serializedList is List<*>) {
+        return serializedList
+                .filterIsInstance<MutableMap<*, *>>()
+                .toMutableList()
+    }
+    return mutableListOf()
+}
+
 fun deserializeMapFromMap(
         key: String,
         map: Map<*, *>) : MutableMap<String, Map<*, *>> {
@@ -86,6 +97,24 @@ fun deserializeMapFromMap(
             val pairValue = pair.value
             if(pairKey is String
                     && pairValue is Map<*, *>) {
+                typedMap[pairKey] = pairValue
+            }
+        }
+        return typedMap
+    }
+    return mutableMapOf()
+}
+
+fun deserializeAnyMapFromMap(
+        key: String,
+        map: Map<*, *>) : MutableMap<String, Any?> {
+    val serializedMap = map[key]
+    if(serializedMap is Map<*, *>) {
+        val typedMap = mutableMapOf<String, Any?>()
+        for (pair in serializedMap.entries) {
+            val pairKey = pair.key
+            val pairValue = pair.value
+            if(pairKey is String) {
                 typedMap[pairKey] = pairValue
             }
         }

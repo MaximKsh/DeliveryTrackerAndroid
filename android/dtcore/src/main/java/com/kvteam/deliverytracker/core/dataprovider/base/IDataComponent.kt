@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.models.ModelBase
 import java.util.*
@@ -15,4 +15,6 @@ interface IDataComponent <T : ModelBase> {
     fun hasDirty(id: UUID) : Boolean
 
     fun invalidate(id: UUID? = null)
+
+    fun invalidateDirty(id: UUID?)
 }

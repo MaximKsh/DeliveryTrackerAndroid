@@ -12,10 +12,9 @@ import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
-import com.kvteam.deliverytracker.core.dataprovider.NetworkException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
@@ -139,7 +138,8 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         if (task.clientId != null) {
             val client = dp.clients.get(task.clientId as UUID, DataProviderGetMode.FORCE_CACHE).entry
             if (task.clientAddressId != null) {
-                tvClientAddress.text = client.clientAddresses.first{ it.id == task.clientAddressId }.rawAddress
+                val ca = dp.clientAddresses.get(task.clientAddressId!!, task.clientId!!, DataProviderGetMode.FORCE_CACHE)
+                tvClientAddress.text = ca.rawAddress
             }
             if (client.name != null) {
                 tvClientName.text = client.name
@@ -152,9 +152,10 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             }
         }
 
-        if (task.taskProducts.size > 0) {
+        val taskProducts = dp.taskProducts.getByParent(task.id!!, DataProviderGetMode.FORCE_CACHE)
+        if (taskProducts.isNotEmpty()) {
             tvNoProducts.visibility = View.GONE
-            task.taskProducts.forEach { productInfo ->
+            taskProducts.forEach { productInfo ->
                 val product = dp.products.get(productInfo.productId!!, DataProviderGetMode.FORCE_CACHE).entry
                 val inflatedProductView = layoutInflater.inflate(R.layout.task_product_item, llProductsContainer, false)
                 inflatedProductView.tvProductQuantity.text = productInfo.quantity.toString()

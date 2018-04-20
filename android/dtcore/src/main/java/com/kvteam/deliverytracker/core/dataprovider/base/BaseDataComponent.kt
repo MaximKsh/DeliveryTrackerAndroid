@@ -1,4 +1,4 @@
-package com.kvteam.deliverytracker.core.dataprovider
+package com.kvteam.deliverytracker.core.dataprovider.base
 
 import com.kvteam.deliverytracker.core.common.deepCopy
 import com.kvteam.deliverytracker.core.common.getDifference
@@ -9,7 +9,8 @@ import kotlinx.coroutines.experimental.async
 import java.util.*
 
 abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
-    private val dataContainer: IDataContainer<T>
+    private val dataContainer: IDataContainer<T>,
+    private val viewDigestContainer: IViewDigestContainer
 ) : IDataComponent<T> {
 
     protected abstract suspend fun createRequestAsync(entity: T): NetworkResult<R>
@@ -20,6 +21,14 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     protected abstract fun transformRequestToEntry(result: NetworkResult<R>): T
     protected abstract fun entryFactory() : T
 
+    protected open fun clearCollections(id: UUID? = null) {
+
+    }
+
+    protected open fun clearCollectionDirties (id: UUID? = null) {
+
+    }
+
     override suspend fun upsertAsync(entity: T): T = async {
         val origin = dataContainer.getEntry(entity.id!!)
         val result =  if (origin != null) {
@@ -29,10 +38,16 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             createRequestAsync(entity)
         }
 
+        if (!result.success) {
+            throw NetworkException(result)
+        }
+
+        invalidate(entity.id!!)
+        dataContainer.clearViews()
+        viewDigestContainer.clearViewDigests()
+
         val newEntity = transformRequestToEntry(result)
         dataContainer.putEntry(newEntity)
-        dataContainer.removeDirty(entity.id!!)
-        dataContainer.clearViews()
         return@async newEntity
     }.await()
 
@@ -40,7 +55,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         return when(mode) {
             DataProviderGetMode.FORCE_CACHE -> getForceCache(id)
             DataProviderGetMode.DIRTY -> getDirty(id)
-            else ->throw ActionNotSupportedException()
+            else -> throw ActionNotSupportedException()
         }
     }
 
@@ -70,9 +85,21 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if(id == null) {
             dataContainer.clearEntries()
             dataContainer.clearDirties()
+            clearCollections()
         } else {
             dataContainer.removeEntry(id)
             dataContainer.removeDirty(id)
+            clearCollections(id)
+        }
+    }
+
+    override fun invalidateDirty(id: UUID?) {
+        if(id == null) {
+            dataContainer.clearDirties()
+            clearCollectionDirties()
+        } else {
+            dataContainer.removeDirty(id)
+            clearCollectionDirties(id)
         }
     }
 
@@ -81,7 +108,9 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if(result.success) {
             val entry = transformRequestToEntry(result)
             dataContainer.putEntry(entry)
-            return@async DataProviderGetResult(entry.deepCopy(), DataProviderGetOrigin.WEB)
+            return@async DataProviderGetResult(
+                    entry.deepCopy(),
+                    DataProviderGetOrigin.WEB)
         }
         throw NetworkException(result)
     }.await()
@@ -89,7 +118,9 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     private fun getForceCache(id: UUID) : DataProviderGetResult<T> {
         val cleanEntity = dataContainer.getEntry(id)
         if(cleanEntity != null) {
-            return DataProviderGetResult(cleanEntity.deepCopy(), DataProviderGetOrigin.CACHE)
+            return DataProviderGetResult(
+                    cleanEntity.deepCopy(),
+                    DataProviderGetOrigin.CACHE)
         }
         throw CacheException()
     }
@@ -121,10 +152,10 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             return DataProviderGetResult(copy, DataProviderGetOrigin.DIRTY)
         }
 
-        val client = entryFactory()
-        client.id = id
-        dataContainer.putDirty(client)
-        return DataProviderGetResult(client, DataProviderGetOrigin.DIRTY)
+        val entry = entryFactory()
+        entry.id = id
+        dataContainer.putDirty(entry)
+        return DataProviderGetResult(entry, DataProviderGetOrigin.DIRTY)
     }
 
 }

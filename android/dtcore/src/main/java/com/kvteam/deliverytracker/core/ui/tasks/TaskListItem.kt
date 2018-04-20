@@ -9,8 +9,9 @@ import android.view.View
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.tasks.getTaskState
 import com.kvteam.deliverytracker.core.tasks.getTaskStateCaption
@@ -45,7 +46,19 @@ class TaskListItem(
         holder.tvTaskState.setTextColor(Color.WHITE)
         holder.tvTaskState.setBackgroundColor(ContextCompat.getColor(activityContext, task.getTaskState()!!.color))
         holder.tvDeliveryDate.text = task.deliveryFrom?.toString("dd.MM")
-        holder.tvTaskAddress.text = "Address is currently visible in details"
+
+        val clientId = task.clientId
+        val addressId = task.clientAddressId
+        if (clientId != null && addressId != null) {
+            try {
+                val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.FORCE_CACHE)
+                holder.tvTaskAddress.text = address.rawAddress
+            } catch (e: CacheException) {
+                holder.tvTaskAddress.text = lm.getString(R.string.Core_AddressNotSpecified)
+            }
+        } else {
+            holder.tvTaskAddress.text = lm.getString(R.string.Core_AddressNotSpecified)
+        }
         holder.tvTaskState.text = task.getTaskStateCaption(lm)
 
         if (task.performerId != null) {

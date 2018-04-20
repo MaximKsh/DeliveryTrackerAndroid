@@ -17,7 +17,7 @@ import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.common.getInt
 import com.kvteam.deliverytracker.core.common.getVal
-import com.kvteam.deliverytracker.core.dataprovider.*
+import com.kvteam.deliverytracker.core.dataprovider.base.*
 import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.DropdownTopItemInfo
