@@ -5,7 +5,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.2'
 
     lintOptions {
         disable 'RestrictedApi'
@@ -72,9 +71,10 @@ dependencies {
 
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
     compile 'joda-time:joda-time:2.9.9'
-    compile 'com.google.android.gms:play-services-maps:11.8.0'
-    compile 'com.google.firebase:firebase-core:11.8.0'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
+    compile 'com.google.android.gms:play-services-maps:15.0.0'
+    compile 'com.google.android.gms:play-services-places:15.0.0'
+    compile 'com.google.firebase:firebase-core:15.0.0'
+    compile 'com.google.firebase:firebase-messaging:15.0.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
@@ -93,7 +93,6 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.4.0'
 
     // Using MavenSnapshots repository for continuous updates from my development
-    compile 'eu.davidea:flexible-adapter:5.0.0-SNAPSHOT'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
     compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'

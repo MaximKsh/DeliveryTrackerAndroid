@@ -1,12 +1,21 @@
 package com.kvteam.deliverytracker.managerapp.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.places.AutocompleteFilter
+import com.google.android.gms.location.places.Places
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
+import com.kvteam.deliverytracker.core.common.MapsAdapter
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.notifications.*
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
@@ -17,8 +26,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MainActivity : DeliveryTrackerActivity() {
+class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFailedListener {
+    override fun onConnectionFailed(p0: ConnectionResult) {}
+
     private val bnvSelectedItemKey = "bnvSelectedItem"
+
+    lateinit var mMapsAdapter: MapsAdapter
 
     @Inject
     lateinit var gsonProvider: IDeliveryTrackerGsonProvider
@@ -81,6 +94,16 @@ class MainActivity : DeliveryTrackerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val googleApiClient = GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build()
+
+        mMapsAdapter = MapsAdapter(googleApiClient)
+
 
         if(intent.action == PUSH_ACTION) {
             val action = intent.extras[PUSH_ACTION_KEY] as? String ?: EMPTY_STRING

@@ -27,13 +27,13 @@ class TaskNumberAndDetailsFragment : PageFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_number_and_details, container, false) as ViewGroup
 
-        val etTaskNumberWatcher = ModelTextWatcher<TaskInfo>(
+        val etTaskNumberWatcher = ModelTextWatcher(
                 dp.taskInfos,
                 taskId,
                 { model, text -> model.taskNumber = text }
         )
 
-        val etDescriptionWatcher = ModelTextWatcher<TaskInfo>(
+        val etDescriptionWatcher = ModelTextWatcher(
                 dp.taskInfos,
                 taskId,
                 { model, text -> model.comment = text }
