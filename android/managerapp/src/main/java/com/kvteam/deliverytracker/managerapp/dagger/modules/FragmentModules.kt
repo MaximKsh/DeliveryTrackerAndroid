@@ -21,6 +21,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import dagger.Binds
 import dagger.Module
@@ -256,6 +257,24 @@ abstract class TaskDetailsFragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(TaskDetailsFragment::class)
-    internal abstract fun editSettingsFragmentInjector(builder: TaskDetailsFragmentSubcomponent.Builder):
+    internal abstract fun taskDetailsFragmentInjector(builder: TaskDetailsFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(UserDetailsFragmentSubcomponent::class))
+abstract class UserDetailsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(UserDetailsFragment::class)
+    internal abstract fun userDetailsFragmentInjector(builder: UserDetailsFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(UserTasksListFragmentSubcomponent::class))
+abstract class UserTasksListFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(UserTasksListFragment::class)
+    internal abstract fun userTasksListFragmentInjector(builder: UserTasksListFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }

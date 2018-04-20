@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/slidingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoFadeColor="@android:color/transparent"
+    sothree:umanoDragView="@+id/rlGeneralInfo"
+    sothree:umanoParallaxOffset="200dp"
+    sothree:umanoPanelHeight="160dp"
+    sothree:umanoShadowHeight="0dp">
+
+    <RelativeLayout
+        android:id="@+id/rlGeneralInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tvUserRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Manager"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ivUserAvatar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@+id/tvUserRole"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivUserAvatar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Viktor Varlamov"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivOnlineStatus"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_below="@+id/ivUserAvatar"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="19dp"
+            android:layout_toEndOf="@id/tvUserName"
+            android:contentDescription="@string/ManagerApp_UserListFragment_OnlineStatusContentDesc"
+            android:src="@drawable/shape_circle" />
+
+        <TextView
+            android:id="@+id/tvUserPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:text="+7(924)222-33-44"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlAdditionalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlGeneralInfo"
+        android:gravity="fill_horizontal">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tlUserNavigationTabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            android:background="@drawable/shape_bottom_border_ltgray"
+            app:tabGravity="fill"
+            app:tabTextColor="@color/colorGray"
+            sothree:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorGray"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/tester"
+            android:layout_below="@+id/tlUserNavigationTabs" />
+    </RelativeLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

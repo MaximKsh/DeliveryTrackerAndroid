@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.userslist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
@@ -91,9 +89,10 @@ class AddUserFragment : DeliveryTrackerFragment() {
         val adapter = ArrayAdapter.createFromResource(this.activity,
                 R.array.roles_array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        dtActivity.softKeyboard.openSoftKeyboard()
         etNameField.requestFocus()
-        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+
         sUserRole.adapter = adapter
 
         if (savedInstanceState != null) {

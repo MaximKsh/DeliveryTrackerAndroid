@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -75,13 +73,10 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         dtActivity.softKeyboard.openSoftKeyboard()
-
+      
         val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.DIRTY)
         etAddress.setText(address.rawAddress)
-
         etAddress.requestFocus()
-        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 
         validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
         validation.addValidation(

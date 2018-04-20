@@ -23,6 +23,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TaskDetailsFragme
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.TasksListFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserDetailsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -139,6 +140,22 @@ class NavigationController (private val mainActivity: MainActivity) {
                         R.anim.enter_from_left
                 )
                 .replace(containerId, taskDetailsFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToUserDetails(id: UUID) {
+        val userDetailsFragment = UserDetailsFragment()
+        fragmentTracer.next(userDetailsFragment)
+        userDetailsFragment.setUser(id)
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
+                .replace(containerId, userDetailsFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
     }

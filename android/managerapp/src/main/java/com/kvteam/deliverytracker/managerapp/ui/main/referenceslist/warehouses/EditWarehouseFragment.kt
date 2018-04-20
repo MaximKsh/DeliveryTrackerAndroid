@@ -91,7 +91,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
         dp.warehouses.invalidateDirty(warehouseId)
         super.onStop()
     }
-
+  
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
