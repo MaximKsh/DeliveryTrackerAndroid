@@ -215,8 +215,8 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     }
 
     override fun onDestroyView() {
-        dtActivity.removeKeyboardListener(::showStepper)
-        dtActivity.removeKeyboardListener(::hideStepper)
+        dtActivity.removeOnKeyboardHideListener(::showStepper)
+        dtActivity.removeOnKeyboardHideListener(::hideStepper)
         super.onDestroyView()
     }
 
