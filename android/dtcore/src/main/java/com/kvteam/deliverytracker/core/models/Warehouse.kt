@@ -14,8 +14,8 @@ data class Warehouse(
         var rawAddress: String? = null,
         @SerializedName("Geoposition", alternate = ["geoposition"])
         @MoveAlways
-        var geoposition: Geoposition? = null
-): ModelBase(), Serializable {
+        override var geoposition: Geoposition? = null
+): ModelBase(), Serializable, IAddress {
 
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)

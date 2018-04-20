@@ -10,8 +10,8 @@ data class ClientAddress(
         var rawAddress: String? = null,
         @SerializedName("Geoposition", alternate = ["geoposition"])
         @MoveIfDiffer
-        var geoposition: Geoposition? = null
-) : CollectionModelBase(), Serializable {
+        override var geoposition: Geoposition? = null
+) : CollectionModelBase(), Serializable, IAddress {
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)
         rawAddress = map["RawAddress"] as? String
