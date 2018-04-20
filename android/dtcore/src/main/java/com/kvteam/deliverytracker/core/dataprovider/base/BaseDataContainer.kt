@@ -28,9 +28,13 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
             return entry
         }
         if (time.plusSeconds(CACHE_EXPIRATION_SECONDS).isBeforeNow) {
-            entriesTimes.remove(id)
-            entries.remove(id)
-            clearCollectionEntries(id)
+            // Если Entry просрочена, но на нее есть Dirty модель,
+            // то нужно сохранить Entry, но не вовзращать ее, т.к. она просрочена
+            if (!dirties.containsKey(id)) {
+                entriesTimes.remove(id)
+                entries.remove(id)
+                clearCollectionEntries(id)
+            }
             return null
         }
         return entry
@@ -67,7 +71,8 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
     }
 
     override fun clearDirties() {
-        dirties.clear()    }
+        dirties.clear()
+    }
 
     override fun getView(vrk: ViewRequestKey): List<UUID>? {
         val view = views[vrk] ?: return null

@@ -201,8 +201,11 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun clientComponent(referenceWebservice: IReferenceWebservice, clientsContainer: ClientDataContainer, clientAddressDataContainer: ClientAddressDataContainer) :ClientDataComponent {
-        return ClientDataComponent(referenceWebservice, clientsContainer, clientAddressDataContainer)
+    fun clientComponent(referenceWebservice: IReferenceWebservice,
+                        clientsContainer: ClientDataContainer,
+                        clientAddressDataContainer: ClientAddressDataContainer,
+                        digestContainer: ViewDigestContainer) :ClientDataComponent {
+        return ClientDataComponent(referenceWebservice, clientsContainer, digestContainer, clientAddressDataContainer)
     }
 
     @Provides
@@ -231,8 +234,10 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun warehouseComponent(referenceWebservice: IReferenceWebservice, clientsContainer: WarehouseDataContainer): WarehouseDataComponent {
-        return WarehouseDataComponent(referenceWebservice, clientsContainer)
+    fun warehouseComponent(referenceWebservice: IReferenceWebservice,
+                           clientsContainer: WarehouseDataContainer,
+                           digestContainer: ViewDigestContainer): WarehouseDataComponent {
+        return WarehouseDataComponent(referenceWebservice, clientsContainer, digestContainer)
     }
 
     @Provides
@@ -249,8 +254,10 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun productComponent(referenceWebservice: IReferenceWebservice, container: ProductDataContainer): ProductDataComponent {
-        return ProductDataComponent(referenceWebservice, container)
+    fun productComponent(referenceWebservice: IReferenceWebservice,
+                         container: ProductDataContainer,
+                         digestContainer: ViewDigestContainer): ProductDataComponent {
+        return ProductDataComponent(referenceWebservice, container, digestContainer)
     }
 
     @Provides
@@ -267,13 +274,16 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun paymentTypeComponent(referenceWebservice: IReferenceWebservice, container: PaymentTypeDataContainer): PaymentTypeDataComponent {
-        return PaymentTypeDataComponent(referenceWebservice, container)
+    fun paymentTypeComponent(referenceWebservice: IReferenceWebservice,
+                             container: PaymentTypeDataContainer,
+                             digestContainer: ViewDigestContainer): PaymentTypeDataComponent {
+        return PaymentTypeDataComponent(referenceWebservice, container, digestContainer)
     }
 
     @Provides
     @Singleton
-    fun paymentTypeViewComponent(viewWebservice: IViewWebservice, clientsContainer: PaymentTypeDataContainer) : PaymentTypeViewComponent {
+    fun paymentTypeViewComponent(viewWebservice: IViewWebservice,
+                                 clientsContainer: PaymentTypeDataContainer) : PaymentTypeViewComponent {
         return PaymentTypeViewComponent(viewWebservice, clientsContainer)
     }
 
@@ -285,13 +295,16 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun userComponent(userWebservice: IUserWebservice, container: UserDataContainer): UserDataComponent {
-        return UserDataComponent(userWebservice, container)
+    fun userComponent(userWebservice: IUserWebservice,
+                      container: UserDataContainer,
+                      digestContainer: ViewDigestContainer): UserDataComponent {
+        return UserDataComponent(userWebservice, container, digestContainer)
     }
 
     @Provides
     @Singleton
-    fun userViewComponent(viewWebservice: IViewWebservice, container: UserDataContainer) : UserViewComponent {
+    fun userViewComponent(viewWebservice: IViewWebservice,
+                          container: UserDataContainer) : UserViewComponent {
         return UserViewComponent(viewWebservice, container)
     }
 
@@ -303,8 +316,10 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
 
     @Provides
     @Singleton
-    fun invitationComponent(invitationWebservice: IInvitationWebservice, container: InvitationDataContainer): InvitationDataComponent {
-        return InvitationDataComponent(invitationWebservice, container)
+    fun invitationComponent(invitationWebservice: IInvitationWebservice,
+                            container: InvitationDataContainer,
+                            digestContainer: ViewDigestContainer): InvitationDataComponent {
+        return InvitationDataComponent(invitationWebservice, container, digestContainer)
     }
 
     @Provides
@@ -329,7 +344,8 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
                           clientAddressDataContainer: ClientAddressDataContainer,
                           userDataContainer: UserDataContainer,
                           taskProductDataContainer: TaskProductDataContainer,
-                          container: TaskInfoDataContainer): TaskInfoDataComponent {
+                          container: TaskInfoDataContainer,
+                          digestContainer: ViewDigestContainer): TaskInfoDataComponent {
         return TaskInfoDataComponent(webservice,
                 productsDataContainer,
                 paymentTypeDataContainer,
@@ -338,7 +354,8 @@ abstract class SingletonCoreModule<in T : DeliveryTrackerApplication> {
                 clientAddressDataContainer,
                 userDataContainer,
                 taskProductDataContainer,
-                container)
+                container,
+                digestContainer)
     }
 
     @Provides

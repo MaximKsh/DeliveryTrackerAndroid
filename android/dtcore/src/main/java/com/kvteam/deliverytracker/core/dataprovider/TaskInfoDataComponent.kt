@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.core.dataprovider
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IDataContainer
+import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
 import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -18,10 +19,11 @@ class TaskInfoDataComponent (
         private val clientAddressDataContainer: ClientAddressDataContainer,
         private val userDataContainer: UserDataContainer,
         private val taskProductDataContainer: TaskProductDataContainer,
-        dataContainer: TaskInfoDataContainer
-) : BaseDataComponent<TaskInfo, TaskResponse>(dataContainer) {
+        dataContainer: TaskInfoDataContainer,
+        viewDigestContainer: IViewDigestContainer
+) : BaseDataComponent<TaskInfo, TaskResponse>(dataContainer, viewDigestContainer) {
 
-    override fun clearCollectionEntries(id: UUID?) {
+    override fun clearCollections(id: UUID?) {
         if (id != null) {
             taskProductDataContainer.removeEntriesByParent(id)
             taskProductDataContainer.removeDirtiesByParent(id)
@@ -31,13 +33,21 @@ class TaskInfoDataComponent (
         }
     }
 
+    override fun clearCollectionDirties(id: UUID?) {
+        if (id != null) {
+            taskProductDataContainer.removeDirtiesByParent(id)
+        } else {
+            taskProductDataContainer.clearDirties()
+        }
+    }
+
     override suspend fun createRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
         val taskPackage = TaskPackage()
         taskPackage.taskInfo.add(entity)
+        val taskProducts = taskProductDataContainer.getDirtiesByParent(entity.id!!)
+                .filter { it.action != CollectionEntityAction.None }
 
-        taskPackage.taskProducts.addAll(
-                taskProductDataContainer.getDirtiesByParent(entity.id!!)
-                        .filter { it.action != CollectionEntityAction.None })
+        taskPackage.taskProducts.addAll(taskProducts)
         return taskWebservice.createAsync(taskPackage)
     }
 

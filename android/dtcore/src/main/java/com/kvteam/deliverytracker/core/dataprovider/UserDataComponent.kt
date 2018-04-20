@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.dataprovider
 
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.IUserWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -10,8 +11,9 @@ import java.util.*
 
 class UserDataComponent (
         private val userWebservice: IUserWebservice,
-        dataContainer: UserDataContainer
-) : BaseDataComponent<User, UserResponse>(dataContainer) {
+        dataContainer: UserDataContainer,
+        viewDigestContainer: IViewDigestContainer
+) : BaseDataComponent<User, UserResponse>(dataContainer, viewDigestContainer) {
 
     override suspend fun createRequestAsync(entity: User): NetworkResult<UserResponse> {
         throw ActionNotSupportedException()

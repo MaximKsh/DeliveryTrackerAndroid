@@ -101,13 +101,13 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         }
 
         val rv = rootView
-        if (rv != null) {
-            softKeyboard = SoftKeyboard(
+        softKeyboard = if (rv != null) {
+            SoftKeyboard(
                     rv,
                     getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager)
         } else {
 
-            softKeyboard = SoftKeyboard(
+            SoftKeyboard(
                     window.decorView.rootView as ViewGroup,
                     getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager)
         }
@@ -161,6 +161,9 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
 
     override fun onBackStackChanged() {
         updateHomeUpButton()
+        supportFragmentManager
+                .fragments
+                .filterIsInstance<DeliveryTrackerFragment>()
     }
 
     override fun onSupportNavigateUp(): Boolean {

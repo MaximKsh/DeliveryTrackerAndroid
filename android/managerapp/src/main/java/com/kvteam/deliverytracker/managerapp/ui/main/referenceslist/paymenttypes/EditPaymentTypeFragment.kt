@@ -86,6 +86,11 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_payment_type, container, false)
     }
 
+    override fun onStop() {
+        dp.paymentTypes.invalidateDirty(paymentTypeId)
+        super.onStop()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
             R.id.action_done -> {

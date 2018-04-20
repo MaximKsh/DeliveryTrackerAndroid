@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_task_number_and_details.view.*
 import javax.inject.Inject
 
 
-class TaskNumberAndDetailsFragment : PageFragment() {
+class TaskNumberAndDetailsFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 

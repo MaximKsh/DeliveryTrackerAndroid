@@ -163,9 +163,9 @@ class EditClientFragment : DeliveryTrackerFragment() {
         super.onOptionsItemSelected(item)
     })
 
-    override fun onDestroy() {
-        super.onDestroy()
-        dp.clients.invalidate(clientId)
+    override fun onStop() {
+        dp.clients.invalidateDirty(clientId)
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -32,7 +32,6 @@ class AddUserFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var lm: ILocalizationManager
 
-
     @Inject
     lateinit var eh: IErrorHandler
 
@@ -136,11 +135,7 @@ class AddUserFragment : DeliveryTrackerFragment() {
                 if(eh.handle(result)) {
                     return@launchUI
                 }
-                val view =  this@AddUserFragment.activity!!.currentFocus
-                if (view != null) {
-                    val imm = this@AddUserFragment.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(view.windowToken, 0)
-                }
+                dtActivity.softKeyboard.closeSoftKeyboard()
                 this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                 this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
 

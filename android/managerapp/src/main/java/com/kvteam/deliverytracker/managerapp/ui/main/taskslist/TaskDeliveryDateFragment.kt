@@ -23,18 +23,9 @@ import org.joda.time.Duration
 import org.joda.time.Interval
 import javax.inject.Inject
 
-data class DeliveryDateTypeItem(
-        var name: String,
-        var selectedDateTime: DateTime?
-)
 
-data class DeliveryTimeTypeItem(
-        var name: String,
-        var fromTime: DateTime?,
-        var toTime: DateTime?
-)
 
-class TaskDeliveryDateFragment : PageFragment() {
+class TaskDeliveryDateFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 

@@ -93,6 +93,11 @@ class EditProductFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_product, container, false)
     }
 
+    override fun onStop() {
+        dp.products.invalidateDirty(productId)
+        super.onStop()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
         when (item.itemId) {
             R.id.action_done -> {

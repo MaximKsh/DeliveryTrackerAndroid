@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.ClientsView
+import com.kvteam.deliverytracker.core.common.ReferenceViewGroup
 import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
@@ -25,7 +27,42 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.util.*
 import javax.inject.Inject
 
-class TaskClientFragment : PageFragment() {
+class TaskClientFragment : BaseTaskPageFragment() {
+    inner class ClientTextWatcher (fragment: TaskClientFragment) : TextWatcher {
+        private val autocomplete = fragment.acClient.autoCompleteTextView
+
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+        override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+
+            if (text != null && text.length > 7) {
+                autocomplete.setText(text.toString().substring(1))
+                autocomplete.showDropDown()
+            }
+            if (text != null && etPhoneNumberField.rawText.length == 10) {
+                autocomplete.hideDropdown()
+                if (!ignoreWatcher) {
+                    showClientDetails(DataProviderGetMode.PREFER_WEB)
+                    val focusedView = activity!!.currentFocus
+                    if (focusedView != null) {
+                        val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
+                    }
+                }
+                ignoreWatcher = true
+            } else if (ignoreWatcher) {
+                ignoreWatcher = false
+                hideClientDetails()
+                task.clientId = null
+                task.clientAddressId = null
+            }
+        }
+
+    }
+
     @Inject
     lateinit var dp: DataProvider
 
@@ -37,19 +74,70 @@ class TaskClientFragment : PageFragment() {
         get() = arguments?.getBoolean(ignoreWatcherKey) ?: false
         set(value) = arguments?.putBoolean(ignoreWatcherKey, value)!!
 
+    private var etNameWatcher: TaskTextWatcher<Client>? = null
+    private var etSurnameWatcher: TaskTextWatcher<Client>? = null
+    private var clientPhoneTextWatcher: ClientTextWatcher? = null
+
+    private var deleteDirty = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_client, container, false) as ViewGroup
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
         if (task.clientId != null) {
-            rootView.rlClientInfoContainer.layoutParams.height = 700
+            showClientDetails(DataProviderGetMode.DIRTY)
         }
         rootView.spinnerAddress.setPadding(15, 10, 0, 10)
         return rootView
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        super.onActivityCreated(savedInstanceState)
+        val autocomplete = acClient.autoCompleteTextView
+
+        clientPhoneTextWatcher = ClientTextWatcher(this@TaskClientFragment)
+        etPhoneNumberField.addTextChangedListener(clientPhoneTextWatcher)
+
+        autocomplete.setAutoCompleteDelay(200L)
+        autocomplete.threshold = 2
+        autocomplete.dropDownVerticalOffset = 5
+        autocomplete.setAdapter(ClientsAutoCompleteAdapter(
+                activity!!,
+                {
+                    runBlocking {
+                        val viewResult = dp.clientsViews.getViewResultAsync(
+                                ReferenceViewGroup,
+                                ClientsView,
+                                mapOf("search" to it)).viewResult
+                        val result = viewResult
+                                .map { dp.clients.getAsync(it, DataProviderGetMode.FORCE_WEB).entry }
+                                .toMutableList()
+                        result
+                    }
+                }
+        ))
+        autocomplete.setOnItemClickListener { _, _, i, _ ->
+            val client = autocomplete.adapter.getItem(i) as Client
+            etPhoneNumberField.setPhoneNumber(client.phoneNumber)
+        }
+    }
+
+    override fun onStop() {
+        unsubscribeSurnameName()
+        etPhoneNumberField.removeTextChangedListener(clientPhoneTextWatcher)
+        super.onStop()
+    }
+
+    override fun shouldDeleteDirty(): Boolean {
+        if (deleteDirty) {
+            deleteDirty = false
+            return false
+        }
+        return true
     }
 
     private fun showClientDetails(mode: DataProviderGetMode) = launchUI {
@@ -57,10 +145,10 @@ class TaskClientFragment : PageFragment() {
 
         if (mode != DataProviderGetMode.DIRTY) {
             val viewResult = dp.clientsViews.getViewResultAsync(
-                "ReferenceViewGroup",
-                "ClientsView",
-                mapOf("search" to etPhoneNumberField.text.substring(1)),
-                DataProviderGetMode.PREFER_CACHE).viewResult
+                    ReferenceViewGroup,
+                    ClientsView,
+                    mapOf("search" to etPhoneNumberField.text.substring(1)),
+                    DataProviderGetMode.PREFER_CACHE).viewResult
 
             if (viewResult.isEmpty()) {
                 dp.clients.invalidate()
@@ -68,8 +156,10 @@ class TaskClientFragment : PageFragment() {
             } else {
                 task.clientId = viewResult[0]
             }
+        } else if (task.clientId == null) {
+            task.clientId = UUID.randomUUID()
         }
-        val clientId = task.clientId ?: return@launchUI
+        val clientId = task.clientId!!
 
         val client = try {
             dp.clients.getAsync(clientId, mode).entry
@@ -105,7 +195,10 @@ class TaskClientFragment : PageFragment() {
         } else {
             spinnerAddress.visibility = View.GONE
         }
+
+        subscribeSurnameName()
         tvAddAddress.setOnClickListener { _ ->
+            deleteDirty = true
             navigationController.navigateToEditClientAddress(task.clientId!!)
         }
 
@@ -147,98 +240,33 @@ class TaskClientFragment : PageFragment() {
             }
             anim.duration = 75L
             anim.start()
+            tvAddAddress.setOnClickListener(null)
+            unsubscribeSurnameName()
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-        val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
-
-        if (task.clientId != null) {
-            showClientDetails(DataProviderGetMode.DIRTY)
-        }
-
-        val autocomplete = acClient.autoCompleteTextView
-
-        val etNameWatcher = TaskTextWatcher(
+    private fun subscribeSurnameName() {
+        etNameWatcher = TaskTextWatcher(
                 dp.clients,
                 { model, text -> model.name = text },
                 taskId,
-                dp.taskInfos
-        )
-
-        val etSurnameWatcher = TaskTextWatcher(
+                dp.taskInfos)
+        etSurnameWatcher = TaskTextWatcher(
                 dp.clients,
                 { model, text -> model.surname = text },
                 taskId,
-                dp.taskInfos
-        )
-
-        val etPhoneNumberWatcher = TaskTextWatcher(
-                dp.clients,
-                { model, text -> model.phoneNumber = text },
-                taskId,
-                dp.taskInfos
-        )
-
+                dp.taskInfos)
         etName.addTextChangedListener(etNameWatcher)
-
         etSurname.addTextChangedListener(etSurnameWatcher)
+    }
 
-        etPhoneNumberField.addTextChangedListener(etPhoneNumberWatcher)
+    private fun unsubscribeSurnameName() {
+        if (etNameWatcher != null) {
+            etName.removeTextChangedListener(etNameWatcher)
+        }
 
-        etPhoneNumberField.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text != null && text.length > 7) {
-                    autocomplete.setText(text.toString().substring(1))
-                    autocomplete.showDropDown()
-                }
-                if (text != null && etPhoneNumberField.rawText.length == 10) {
-                    autocomplete.hideDropdown()
-                    if (!ignoreWatcher) {
-                        showClientDetails(DataProviderGetMode.PREFER_WEB)
-                        val focusedView = activity!!.currentFocus
-                        if (focusedView != null) {
-                            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
-                        }
-                    }
-                    ignoreWatcher = true
-                } else if (ignoreWatcher) {
-                    ignoreWatcher = false
-                    hideClientDetails()
-                    task.clientId = null
-                    task.clientAddressId = null
-                }
-            }
-
-        })
-
-        autocomplete.setAutoCompleteDelay(200L)
-        autocomplete.threshold = 2
-        autocomplete.dropDownVerticalOffset = 5
-        autocomplete.setAdapter(ClientsAutoCompleteAdapter(
-                activity!!,
-                {
-                    runBlocking {
-                        val viewResult = dp.clientsViews.getViewResultAsync(
-                                "ReferenceViewGroup",
-                                "ClientsView",
-                                mapOf("search" to it)).viewResult
-                        val result = viewResult
-                                .map { dp.clients.getAsync(it, DataProviderGetMode.FORCE_WEB).entry }
-                                .toMutableList()
-                        result
-                    }
-                }
-        ))
-        autocomplete.setOnItemClickListener { adapterView, view, i, l ->
-            val client = autocomplete.adapter.getItem(i) as Client
-            etPhoneNumberField.setText(client.phoneNumber!!.substring(2))
+        if (etSurnameWatcher != null) {
+            etSurname.removeTextChangedListener(etSurnameWatcher)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.dataprovider
 
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
 import com.kvteam.deliverytracker.core.models.Invitation
 import com.kvteam.deliverytracker.core.webservice.IInvitationWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -10,8 +11,9 @@ import java.util.*
 
 class InvitationDataComponent (
         private val invitationWebservice: IInvitationWebservice,
-        dataContainer: InvitationDataContainer
-) : BaseDataComponent<Invitation, InvitationResponse>(dataContainer) {
+        dataContainer: InvitationDataContainer,
+        viewDigestContainer: IViewDigestContainer
+) : BaseDataComponent<Invitation, InvitationResponse>(dataContainer, viewDigestContainer) {
 
     override suspend fun createRequestAsync(entity: Invitation): NetworkResult<InvitationResponse> {
         throw ActionNotSupportedException()

@@ -1,9 +1,7 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -89,13 +87,9 @@ class EditWarehouseFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_warehouse, container, false)
     }
 
-    override fun onPause() {
-        super.onPause()
-        val view =  activity!!.currentFocus
-        if (view != null) {
-            val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+    override fun onStop() {
+        dp.warehouses.invalidateDirty(warehouseId)
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({

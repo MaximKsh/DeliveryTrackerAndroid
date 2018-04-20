@@ -23,12 +23,8 @@ import java.util.*
 import javax.inject.Inject
 
 
-data class DeliveryReceiptAtItem(
-        var name: String,
-        var selectedDateTime: DateTime?
-)
 
-class TaskReceiptAtFragment : PageFragment() {
+class TaskReceiptAtFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 

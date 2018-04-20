@@ -9,7 +9,8 @@ import kotlinx.coroutines.experimental.async
 import java.util.*
 
 abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
-    private val dataContainer: IDataContainer<T>
+    private val dataContainer: IDataContainer<T>,
+    private val viewDigestContainer: IViewDigestContainer
 ) : IDataComponent<T> {
 
     protected abstract suspend fun createRequestAsync(entity: T): NetworkResult<R>
@@ -20,7 +21,11 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     protected abstract fun transformRequestToEntry(result: NetworkResult<R>): T
     protected abstract fun entryFactory() : T
 
-    protected open fun clearCollectionEntries(id: UUID? = null) {
+    protected open fun clearCollections(id: UUID? = null) {
+
+    }
+
+    protected open fun clearCollectionDirties (id: UUID? = null) {
 
     }
 
@@ -33,11 +38,16 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
             createRequestAsync(entity)
         }
 
+        if (!result.success) {
+            throw NetworkException(result)
+        }
+
         invalidate(entity.id!!)
+        dataContainer.clearViews()
+        viewDigestContainer.clearViewDigests()
+
         val newEntity = transformRequestToEntry(result)
         dataContainer.putEntry(newEntity)
-        dataContainer.removeDirty(entity.id!!)
-        dataContainer.clearViews()
         return@async newEntity
     }.await()
 
@@ -45,7 +55,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         return when(mode) {
             DataProviderGetMode.FORCE_CACHE -> getForceCache(id)
             DataProviderGetMode.DIRTY -> getDirty(id)
-            else ->throw ActionNotSupportedException()
+            else -> throw ActionNotSupportedException()
         }
     }
 
@@ -75,11 +85,21 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if(id == null) {
             dataContainer.clearEntries()
             dataContainer.clearDirties()
-            clearCollectionEntries()
+            clearCollections()
         } else {
             dataContainer.removeEntry(id)
             dataContainer.removeDirty(id)
-            clearCollectionEntries(id)
+            clearCollections(id)
+        }
+    }
+
+    override fun invalidateDirty(id: UUID?) {
+        if(id == null) {
+            dataContainer.clearDirties()
+            clearCollectionDirties()
+        } else {
+            dataContainer.removeDirty(id)
+            clearCollectionDirties(id)
         }
     }
 

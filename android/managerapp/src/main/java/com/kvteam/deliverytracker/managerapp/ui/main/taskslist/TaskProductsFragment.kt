@@ -20,7 +20,7 @@ import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
-class TaskProductsFragment : PageFragment() {
+class TaskProductsFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 

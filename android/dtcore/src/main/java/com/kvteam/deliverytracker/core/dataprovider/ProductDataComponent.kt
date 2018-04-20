@@ -1,6 +1,8 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.ProductType
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
 import com.kvteam.deliverytracker.core.models.Product
 import com.kvteam.deliverytracker.core.models.RequestReferencePackage
 import com.kvteam.deliverytracker.core.models.ResponseReferencePackage
@@ -11,24 +13,23 @@ import java.util.*
 
 class ProductDataComponent (
         private val referenceWebservice: IReferenceWebservice,
-        dataContainer: ProductDataContainer
-) : BaseDataComponent<Product, ReferenceResponse>(dataContainer) {
-    private val PRODUCT = Product::class.java.simpleName
-
+        dataContainer: ProductDataContainer,
+        viewDigestContainer: IViewDigestContainer
+) : BaseDataComponent<Product, ReferenceResponse>(dataContainer, viewDigestContainer) {
     override suspend fun createRequestAsync(entity: Product): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.createAsync(PRODUCT, RequestReferencePackage(entity))
+        return referenceWebservice.createAsync(ProductType, RequestReferencePackage(entity))
     }
 
     override suspend fun editRequestAsync(entity: Product): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.editAsync(PRODUCT, RequestReferencePackage(entity))
+        return referenceWebservice.editAsync(ProductType, RequestReferencePackage(entity))
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.getAsync(PRODUCT, id)
+        return referenceWebservice.getAsync(ProductType, id)
     }
 
     override suspend fun deleteRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.deleteAsync(PRODUCT, id)
+        return referenceWebservice.deleteAsync(ProductType, id)
     }
 
     override fun transformRequestToEntry(result: NetworkResult<ReferenceResponse>): Product {
