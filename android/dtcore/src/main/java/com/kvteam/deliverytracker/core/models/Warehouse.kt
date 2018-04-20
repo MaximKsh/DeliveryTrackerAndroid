@@ -11,7 +11,7 @@ data class Warehouse(
         var name: String? = null,
         @SerializedName("RawAddress", alternate = ["rawAddress"])
         @MoveIfDiffer
-        var rawAddress: String? = null,
+        override var rawAddress: String? = null,
         @SerializedName("Geoposition", alternate = ["geoposition"])
         @MoveAlways
         override var geoposition: Geoposition? = null

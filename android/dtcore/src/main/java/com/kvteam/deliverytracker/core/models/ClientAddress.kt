@@ -7,7 +7,7 @@ import java.io.Serializable
 data class ClientAddress(
         @SerializedName("RawAddress", alternate = ["rawAddress"])
         @MoveIfDiffer
-        var rawAddress: String? = null,
+        override var rawAddress: String? = null,
         @SerializedName("Geoposition", alternate = ["geoposition"])
         @MoveIfDiffer
         override var geoposition: Geoposition? = null
