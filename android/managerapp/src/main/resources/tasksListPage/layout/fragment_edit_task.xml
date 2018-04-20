@@ -6,22 +6,15 @@
     <RelativeLayout
         android:id="@+id/rlStepperContainer"
         android:layout_width="match_parent"
-        android:layout_height="95dp">
-
-        <TextView
-            android:id="@+id/tvStepsInstruction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Seven steps to create your task"
-            android:textColor="@color/colorGray"
-            android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:paddingTop="7dp"
+        android:paddingBottom="4dp">
 
         <github.chenupt.springindicator.SpringIndicator xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/indicator"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_below="@+id/tvStepsInstruction"
+            android:layout_alignParentTop="true"
             app:siIndicatorColor="@color/colorPrimary"
             app:siIndicatorColors="@array/indicator_colors"
             app:siRadiusMax="20dp"

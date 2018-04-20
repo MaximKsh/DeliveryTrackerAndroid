@@ -175,18 +175,20 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({
         when (item.itemId) {
             R.id.action_done -> {
-                val validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
-                validation.addValidation(
-                        this@EditTaskFragment.dtActivity,
-                        R.id.etTaskNumber,
-                        {it.isNotBlank()},
-                        com.kvteam.deliverytracker.core.R.string.Core_TaskNumberValidationError)
-                validation.setContext(this@EditTaskFragment.dtActivity)
-                if(!validation.validate()) {
+                val (task, _) = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY)
+                if (task.taskNumber?.isNotBlank() != true) {
+                    pager.currentItem = 0
+                    val validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+                    validation.addValidation(
+                            this@EditTaskFragment.dtActivity,
+                            R.id.etTaskNumber,
+                            {it.isNotBlank()},
+                            com.kvteam.deliverytracker.core.R.string.Core_TaskNumberValidationError)
+                    validation.setContext(this@EditTaskFragment.dtActivity)
+                    validation.validate()
                     return@launchUI
                 }
 
-                val (task, _) = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY)
                 task.instanceId = session.instance?.id
 
                 try {
@@ -220,25 +222,35 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
 
     private fun showStepper () {
-        if (rlStepperContainer.height == 0) {
-            val anim = ValueAnimator.ofInt(0, originalStepperHeight)
-            anim.addUpdateListener { valueAnimator ->
-                val value = valueAnimator.animatedValue as Int
-                val layoutParams = rlStepperContainer.layoutParams
-                layoutParams.height = value
-                rlStepperContainer.layoutParams = layoutParams
-            }
-            anim.duration = 75L
-            anim.start()
-            val currentFragmentScrollView = fragments[pager.currentItem].view
-            if (currentFragmentScrollView != null) {
-                currentFragmentScrollView.scrollY = currentFragmentScrollView.scrollY - offsetScroll
-            }
+        if (rlStepperContainer.height != 0) {
+            return
         }
+        rlStepperContainer.measure(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT)
+        val height = rlStepperContainer.measuredHeight
+        val anim = ValueAnimator.ofInt(0, height)
+        anim.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = rlStepperContainer.layoutParams
+            layoutParams.height = value
+            rlStepperContainer.layoutParams = layoutParams
+        }
+        anim.duration = 75L
+        anim.start()
+        val currentFragmentScrollView = fragments[pager.currentItem].view
+        if (currentFragmentScrollView != null) {
+            currentFragmentScrollView.scrollY = currentFragmentScrollView.scrollY - offsetScroll
+        }
+
     }
 
     private fun hideStepper () {
-        val anim = ValueAnimator.ofInt(originalStepperHeight, 0)
+        if (rlStepperContainer.height == 0) {
+            return
+        }
+
+        val anim = ValueAnimator.ofInt(rlStepperContainer.height, 0)
         anim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
             val layoutParams = rlStepperContainer.layoutParams

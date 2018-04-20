@@ -24,7 +24,7 @@ public class AwesomeValidation {
 
     private Validator mValidator = null;
 
-    private static boolean autoFocusOnFirstFailure = true;
+    private static boolean autoFocusOnFirstFailure = false;
 
     public AwesomeValidation(ValidationStyle style) {
         switch (style) {
