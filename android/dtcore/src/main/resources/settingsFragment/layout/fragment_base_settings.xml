@@ -173,17 +173,24 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     />
+
+                <LinearLayout
+                    android:id="@+id/llSettingsExtension"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvSettingsHeader"
+                    android:orientation="vertical"/>
 
                 <FrameLayout
                     android:id="@+id/flEditSettings"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_item_height"
-                    android:layout_marginTop="15dp"
                     android:background="@drawable/shape_bottom_border_ltgray"
-                    android:layout_below="@id/tvSettingsHeader">
+                    android:layout_below="@id/llSettingsExtension">
                     <TextView
                         android:id="@+id/tvEditSettings"
                         android:layout_width="match_parent"

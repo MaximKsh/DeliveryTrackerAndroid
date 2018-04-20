@@ -14,6 +14,7 @@ import android.util.Log
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.webservice.IWebservice
+import com.kvteam.deliverytracker.core.webservice.viewmodels.GeopositionRequest
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -36,9 +37,10 @@ class GeopositionSender : BroadcastReceiver() {
                             val pos = Geoposition()
                             pos.latitude = location.latitude
                             pos.longitude = location.longitude
+
                             webservice.postAsync(
-                                    "/api/performer/update_position",
-                                    pos,
+                                    "/api/geopositioning/update",
+                                    GeopositionRequest(geoposition = pos),
                                     true)
                         } catch (ex: Exception) {
                             Log.e("Geoposition", ex.message, ex)
