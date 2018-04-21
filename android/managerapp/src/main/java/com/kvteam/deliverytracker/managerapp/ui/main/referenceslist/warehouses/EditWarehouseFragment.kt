@@ -234,6 +234,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         etAddressField.addOnFocusChangeListener(object: View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
                 if (focused) {
+                    ivDeleteTextIcon.visibility = View.VISIBLE
                     if (slidingLayout.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                         toggleWarehouseNameField(false)
                     }
@@ -241,10 +242,15 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
                         slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
                     }
                 } else {
+                    ivDeleteTextIcon.visibility = View.GONE
                     updateAddressesPanelHeight()
                 }
             }
         })
+
+        ivDeleteTextIcon.setOnClickListener {
+            etAddressField.text = null
+        }
 
         slidingLayout.addPanelSlideListener(object: SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {

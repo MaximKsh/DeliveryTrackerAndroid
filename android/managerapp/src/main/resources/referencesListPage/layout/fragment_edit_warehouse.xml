@@ -61,18 +61,17 @@
                     android:theme="@style/EditTextTheme" />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/llWarehouseAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/llName"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
                 android:paddingBottom="8dp"
                 android:paddingEnd="15dp"
                 android:paddingStart="15dp">
 
                 <TextView
+                    android:id="@+id/tvAddressLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:labelFor="@id/etAddressField"
@@ -82,15 +81,27 @@
 
                 <EditText
                     android:id="@+id/etAddressField"
+                    android:layout_below="@id/tvAddressLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/selector_edit_text"
                     android:gravity="top"
+                    android:paddingEnd="30dp"
                     android:inputType="textCapWords"
                     android:minLines="4"
                     android:textSize="15sp"
                     android:theme="@style/EditTextTheme" />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivDeleteTextIcon"
+                    android:visibility="gone"
+                    android:layout_below="@id/tvAddressLabel"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/colorGray"
+                    android:src="@drawable/ic_remove_circle_outline_black_24dp"/>
+            </RelativeLayout>
         </RelativeLayout>
 
     </FrameLayout>
