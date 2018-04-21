@@ -12,89 +12,96 @@
     sothree:umanoScrollableView="@id/rvAddressList"
     sothree:umanoShadowHeight="0dp">
 
-    <RelativeLayout
-        android:id="@+id/rlNameAndAddressContainer"
+    <FrameLayout
+        android:id="@+id/flMainContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:background="@color/colorWhite">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/llName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingBottom="8dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/etNameField"
-                android:text="@string/Core_WarehouseTitle"
-                android:textColor="@color/colorGray"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/etNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/selector_edit_text"
-                android:inputType="textCapSentences"
-                android:textSize="18sp"
-                android:theme="@style/EditTextTheme" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llWarehouseAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llName"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingBottom="8dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:labelFor="@id/etAddressField"
-                android:text="@string/Core_WarehouseAddress"
-                android:textColor="@color/colorGray"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/etAddressField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/selector_edit_text"
-                android:gravity="top"
-                android:inputType="textCapWords"
-                android:minLines="4"
-                android:textSize="18sp"
-                android:theme="@style/EditTextTheme" />
-        </LinearLayout>
-
-        <fragment
+        <FrameLayout
             android:id="@+id/fGoogleMap"
-            android:layout_below="@+id/llWarehouseAddress"
-            class="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rlNameAndAddressContainer"
+            android:layout_width="match_parent"
+            android:paddingTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:elevation="16dp"
+            android:background="@color/colorWhite"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/etNameField"
+                    android:text="@string/Core_WarehouseTitle"
+                    android:textColor="@color/colorGray"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/selector_edit_text"
+                    android:inputType="textCapSentences"
+                    android:textSize="15sp"
+                    android:theme="@style/EditTextTheme" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llWarehouseAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llName"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/etAddressField"
+                    android:text="@string/Core_WarehouseAddress"
+                    android:textColor="@color/colorGray"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etAddressField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/selector_edit_text"
+                    android:gravity="top"
+                    android:inputType="textCapWords"
+                    android:minLines="4"
+                    android:textSize="15sp"
+                    android:theme="@style/EditTextTheme" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/rlSlidingAddressList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/shape_top_border_ltgray"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvAddressList"

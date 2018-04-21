@@ -3,9 +3,11 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses
 import android.animation.ValueAnimator
 import android.app.Service
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
@@ -13,7 +15,9 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -39,17 +43,25 @@ import javax.inject.Inject
 
 class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
     override fun onItemClick(view: View?, position: Int): Boolean {
-        hideKeyboard()
+        val googleMapAddress = mAddressList[position].googleMapAddress
+        etAddressField.setText(googleMapAddress.primaryText)
         etAddressField.clearFocus()
-        etAddressField.setText(mAddressList[position].address.rawAddress)
+        hideKeyboard()
         toggleWarehouseNameField(true)
         slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        mainActivity.mMapsAdapter.setMarker(
+                googleMapAddress.address!!.geoposition!!.toLtnLng(),
+                googleMapAddress.viewPort,
+                true)
         return false
     }
 
     override val useSoftKeyboardFeatures = false
 
     private var mEtNameHeight = 0
+
+    private val mainActivity
+        get() = activity as MainActivity
 
     @Inject
     lateinit var navigationController: NavigationController
@@ -65,6 +77,8 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
 
     @Inject
     lateinit var dp: DataProvider
+
+    private var density = 1f
 
     private val warehouseIdKey = "warehouseId"
     private var warehouseId
@@ -117,10 +131,59 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             val layoutParams = llName.layoutParams
             layoutParams.height = value
             llName.layoutParams = layoutParams
-            slidingLayout.anchorPoint =  1 - rlNameAndAddressContainer.bottom.toFloat() / slidingLayout.height.toFloat()
+            updateAddressesPanelHeight()
         }
         anim.duration = 200L
         anim.start()
+        if (!open) {
+            openPanelAnimations()
+        } else {
+            closePanelAnimations()
+        }
+    }
+
+    private lateinit var mGoogleMap: GoogleMap
+
+    private lateinit var animRlNameAndAddressContainer: ValueAnimator
+
+    private lateinit var animElevation: ValueAnimator
+
+    private fun openPanelAnimations() {
+        animRlNameAndAddressContainer.start()
+        animElevation.start()
+    }
+
+    private fun closePanelAnimations() {
+        animRlNameAndAddressContainer.reverse()
+        animElevation.reverse()
+    }
+
+    private fun interpolatedAnimations(percent: Float) {
+        // Движемся вверх
+        if (percent >= slidingLayout.anchorPoint) {
+            // Нормализуем значения
+            val newElevation = (percent - slidingLayout.anchorPoint) / (1 - slidingLayout.anchorPoint) * 16 * density
+            rlSlidingAddressList.elevation = newElevation
+        }
+
+        // Движемся вниз
+        if (percent <= slidingLayout.anchorPoint) {
+            val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.marginStart = ((1 - percent) * 20 * density).toInt()
+            layoutParams.marginEnd = ((1 - percent) * 20 * density).toInt()
+            rlNameAndAddressContainer.layoutParams = layoutParams
+            rlNameAndAddressContainer.elevation = (1 - percent) * 16 * density
+
+            val llNameLayoutParams = llName.layoutParams
+
+            // Нормализуем значения
+            llNameLayoutParams.height = ((slidingLayout.anchorPoint - percent) / (slidingLayout.anchorPoint) * mEtNameHeight).toInt()
+            llName.layoutParams = llNameLayoutParams
+        }
+    }
+
+    private fun updateAddressesPanelHeight() {
+        slidingLayout.anchorPoint =  1 - llWarehouseAddress.bottom.toFloat() / slidingLayout.height.toFloat()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -133,20 +196,14 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
 
         val warehouse = dp.warehouses.get(warehouseId, DataProviderGetMode.DIRTY).entry
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.fGoogleMap) as MapFragment
-
-        mapFragment.getMapAsync { googleMap ->
-            val sydney = LatLng(55.751244, 37.618423)
-            val cameraPosition = CameraPosition.Builder().target(sydney).zoom(12f).build()
-            googleMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-        }
+        density = activity!!.resources.displayMetrics.density
 
         etNameField.setText(warehouse.name)
         etAddressField.setText(warehouse.rawAddress)
 
         etNameField.addOnFocusChangeListener(object: View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
-                slidingLayout.anchorPoint =  1 - rlNameAndAddressContainer.bottom.toFloat() / slidingLayout.height.toFloat()
+                updateAddressesPanelHeight()
             }
         })
 
@@ -155,32 +212,51 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             override fun onGlobalLayout() {
                 llName.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 mEtNameHeight = llName.measuredHeight
-                slidingLayout.anchorPoint =  1 - rlNameAndAddressContainer.bottom.toFloat() / slidingLayout.height.toFloat()
+                animRlNameAndAddressContainer = ValueAnimator.ofInt((rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart, 0)
+                animRlNameAndAddressContainer.addUpdateListener { valueAnimator ->
+                    val value = valueAnimator.animatedValue as Int
+                    val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.marginStart = value
+                    layoutParams.marginEnd = value
+                    rlNameAndAddressContainer.layoutParams = layoutParams
+                }
+                animRlNameAndAddressContainer.duration = 200L
+                animElevation = ValueAnimator.ofFloat(rlNameAndAddressContainer.elevation, 0f)
+                animElevation.addUpdateListener { valueAnimator ->
+                    val value = valueAnimator.animatedValue as Float
+                    rlNameAndAddressContainer.elevation = value
+                }
+                animElevation.duration = 200L
+                updateAddressesPanelHeight()
             }
         })
 
         etAddressField.addOnFocusChangeListener(object: View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
                 if (focused) {
-                    toggleWarehouseNameField(false)
+                    if (slidingLayout.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                        toggleWarehouseNameField(false)
+                    }
                     if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.ANCHORED) {
                         slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
                     }
                 } else {
-                    slidingLayout.anchorPoint =  1 - rlNameAndAddressContainer.bottom.toFloat() / slidingLayout.height.toFloat()
+                    updateAddressesPanelHeight()
                 }
             }
         })
 
         slidingLayout.addPanelSlideListener(object: SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {}
-
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                if ((previousState != newState) && (newState == SlidingUpPanelLayout.PanelState.COLLAPSED)) {
-                    toggleWarehouseNameField(true)
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    etAddressField.clearFocus()
+                    hideKeyboard()
                 }
             }
 
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+                interpolatedAnimations(slideOffset)
+            }
         })
 
 
@@ -197,7 +273,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
                 if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.ANCHORED) {
                     slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
                 }
-                val addressList = (activity as MainActivity).mMapsAdapter.getAddressList(text.toString())
+                val addressList = mainActivity.mMapsAdapter.getAddressList(text.toString())
                 mAddressList = addressList.map { AddressListItem(it) }
                 mAddressListAdapter.updateDataSet(mAddressList)
             }
@@ -212,7 +288,15 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_edit_warehouse, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_edit_warehouse, container, false)
+        val mapFragment = SupportMapFragment()
+        childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
+        mapFragment.getMapAsync {
+            it.setPadding(0, rlNameAndAddressContainer.height, 0, 0)
+            mainActivity.mMapsAdapter.googleMap = it
+            mainActivity.mMapsAdapter.moveCameraToPosition(LatLng(55.753774, 37.620998), false)
+        }
+        return rootView
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
