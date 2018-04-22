@@ -1,8 +1,13 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.warehouses
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.Service
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -20,10 +25,12 @@ import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.kvteam.deliverytracker.core.R.id.toolbar_top
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.addOnFocusChangeListener
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -36,7 +43,9 @@ import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_warehouse.*
+import kotlinx.android.synthetic.main.fragment_edit_warehouse.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -86,7 +95,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         set(value) = arguments?.putSerializable(warehouseIdKey, value)!!
 
     private val tryPrefetchKey = "tryPrefetch"
-    private var tryPrefetch : Boolean
+    private var tryPrefetch: Boolean
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
 
@@ -96,7 +105,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
 
     private val mAddressListAdapter = FlexibleAdapter(mAddressList)
 
-    fun setWarehouse (id: UUID?) {
+    fun setWarehouse(id: UUID?) {
         this.warehouseId = id ?: UUID.randomUUID()
         this.tryPrefetch = id != null
     }
@@ -111,20 +120,21 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
     override fun onStop() {
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         hideKeyboard()
+        mainActivity.toolbarController.setTransparent(false)
         super.onStop()
     }
 
-    private fun hideKeyboard () {
+    private fun hideKeyboard() {
         val im = activity!!.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
         im.hideSoftInputFromWindow(activity!!.currentFocus.windowToken, 0)
     }
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle(lm.getString(R.string.Core_WarehouseHeader))
+        toolbar.setToolbarTitle("")
     }
 
-    fun toggleWarehouseNameField (open: Boolean) {
+    fun toggleWarehouseNameField(open: Boolean) {
         val anim = if (open) ValueAnimator.ofInt(llName.height, mEtNameHeight) else ValueAnimator.ofInt(llName.height, 0)
         anim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
@@ -133,6 +143,14 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             llName.layoutParams = layoutParams
             updateAddressesPanelHeight()
         }
+
+        anim.addListener(object: AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                updateAddressesPanelHeight()
+            }
+        })
+
         anim.duration = 200L
         anim.start()
         if (!open) {
@@ -148,48 +166,64 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
 
     private lateinit var animElevation: ValueAnimator
 
+    private lateinit var animRlNameAndAddressContainerTop: ValueAnimator
+
     private fun openPanelAnimations() {
         animRlNameAndAddressContainer.start()
         animElevation.start()
+        animRlNameAndAddressContainerTop.start()
     }
 
     private fun closePanelAnimations() {
         animRlNameAndAddressContainer.reverse()
         animElevation.reverse()
+        animRlNameAndAddressContainerTop.reverse()
     }
+
+    private var originalTopMarginOfRl = 0
+
+    private var originalTopPaddingOfRl = 0
 
     private fun interpolatedAnimations(percent: Float) {
         // Движемся вверх
         if (percent >= slidingLayout.anchorPoint) {
             // Нормализуем значения
-            val newElevation = (percent - slidingLayout.anchorPoint) / (1 - slidingLayout.anchorPoint) * 16 * density
+            val normalizedPercent = (percent - slidingLayout.anchorPoint) / (1 - slidingLayout.anchorPoint)
+            val newElevation = normalizedPercent * 16 * density
             rlSlidingAddressList.elevation = newElevation
         }
 
         // Движемся вниз
         if (percent <= slidingLayout.anchorPoint) {
+            val normalizedPercent = (slidingLayout.anchorPoint - percent) / slidingLayout.anchorPoint
+
             val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.marginStart = ((1 - percent) * 20 * density).toInt()
-            layoutParams.marginEnd = ((1 - percent) * 20 * density).toInt()
+            layoutParams.marginStart = (normalizedPercent * 20 * density).toInt()
+            layoutParams.marginEnd = (normalizedPercent * 20 * density).toInt()
+            layoutParams.topMargin = (normalizedPercent * originalTopMarginOfRl).toInt()
             rlNameAndAddressContainer.layoutParams = layoutParams
-            rlNameAndAddressContainer.elevation = (1 - percent) * 16 * density
+            rlNameAndAddressContainer.setPadding(0, ((1 - normalizedPercent) * originalTopMarginOfRl + normalizedPercent * originalTopPaddingOfRl).toInt(), 0, 0)
+
+            rlNameAndAddressContainer.elevation = normalizedPercent * 16 * density
 
             val llNameLayoutParams = llName.layoutParams
 
             // Нормализуем значения
-            llNameLayoutParams.height = ((slidingLayout.anchorPoint - percent) / (slidingLayout.anchorPoint) * mEtNameHeight).toInt()
+            llNameLayoutParams.height = (normalizedPercent * mEtNameHeight).toInt()
             llName.layoutParams = llNameLayoutParams
         }
     }
 
     private fun updateAddressesPanelHeight() {
-        slidingLayout.anchorPoint =  1 - llWarehouseAddress.bottom.toFloat() / slidingLayout.height.toFloat()
+        val topMargin = (rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+        slidingLayout.anchorPoint = 1 - (llWarehouseAddress.bottom.toFloat() + topMargin) / slidingLayout.height
+        val t = 0
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
 
-        if(tryPrefetch) {
+        if (tryPrefetch) {
             dp.warehouses.getAsync(warehouseId, DataProviderGetMode.PREFER_CACHE)
             tryPrefetch = false
         }
@@ -201,7 +235,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         etNameField.setText(warehouse.name)
         etAddressField.setText(warehouse.rawAddress)
 
-        etNameField.addOnFocusChangeListener(object: View.OnFocusChangeListener {
+        etNameField.addOnFocusChangeListener(object : View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
                 updateAddressesPanelHeight()
             }
@@ -221,6 +255,20 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
                     rlNameAndAddressContainer.layoutParams = layoutParams
                 }
                 animRlNameAndAddressContainer.duration = 200L
+
+
+                originalTopPaddingOfRl = rlNameAndAddressContainer.paddingTop
+                originalTopMarginOfRl = (rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+                animRlNameAndAddressContainerTop = ValueAnimator.ofInt(originalTopMarginOfRl, 0)
+                animRlNameAndAddressContainerTop.addUpdateListener { valueAnimator ->
+                    val value = valueAnimator.animatedValue as Int
+                    rlNameAndAddressContainer.setPadding(0, originalTopMarginOfRl - value, 0, 0)
+                    val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.topMargin = value
+                    rlNameAndAddressContainer.layoutParams = layoutParams
+                }
+                animRlNameAndAddressContainerTop.duration = 200L
+
                 animElevation = ValueAnimator.ofFloat(rlNameAndAddressContainer.elevation, 0f)
                 animElevation.addUpdateListener { valueAnimator ->
                     val value = valueAnimator.animatedValue as Float
@@ -231,7 +279,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             }
         })
 
-        etAddressField.addOnFocusChangeListener(object: View.OnFocusChangeListener {
+        etAddressField.addOnFocusChangeListener(object : View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
                 if (focused) {
                     ivDeleteTextIcon.visibility = View.VISIBLE
@@ -252,7 +300,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             etAddressField.text = null
         }
 
-        slidingLayout.addPanelSlideListener(object: SlidingUpPanelLayout.PanelSlideListener {
+        slidingLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
                 if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     etAddressField.clearFocus()
@@ -270,7 +318,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         rvAddressList.layoutManager = LinearLayoutManager(activity)
         rvAddressList.adapter = mAddressListAdapter
 
-        etAddressField.addTextChangedListener(object: TextWatcher {
+        etAddressField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -295,20 +343,38 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_edit_warehouse, container, false)
-        val mapFragment = SupportMapFragment()
-        childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
-        mapFragment.getMapAsync {
-            it.setPadding(0, rlNameAndAddressContainer.height, 0, 0)
-            mainActivity.mMapsAdapter.googleMap = it
-            mainActivity.mMapsAdapter.moveCameraToPosition(LatLng(55.753774, 37.620998), false)
-        }
+
+        (rootView.rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin =
+                (rootView.rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin + dtActivity.statusBarHeight
+        dtActivity.toolbarController.setTransparent(true)
+
+        Handler().postDelayed({
+            if (isAdded) {
+                val warehouse = dp.warehouses.get(warehouseId, DataProviderGetMode.DIRTY).entry
+                val mapFragment = SupportMapFragment()
+                childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
+                mapFragment.getMapAsync {
+                    it.setPadding(0, rlNameAndAddressContainer.height, 0, 0)
+                    mainActivity.mMapsAdapter.googleMap = it
+                    if (warehouse.geoposition != null) {
+                        mainActivity.mMapsAdapter.setMarker(
+                                (warehouse.geoposition as Geoposition).toLtnLng(),
+                                null,
+                                false
+                        )
+                    } else {
+                        mainActivity.mMapsAdapter.moveCameraToPosition(LatLng(55.753774, 37.620998), false)
+                    }
+                }
+            }
+        }, 250)
         return rootView
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({
         when (item.itemId) {
             R.id.action_done -> {
-                if(!validation.validate()) {
+                if (!validation.validate()) {
                     return@launchUI
                 }
                 val warehouse = dp.warehouses.getAsync(warehouseId, DataProviderGetMode.DIRTY).entry

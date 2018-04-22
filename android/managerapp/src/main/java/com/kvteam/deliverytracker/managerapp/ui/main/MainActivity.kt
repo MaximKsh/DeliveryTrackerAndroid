@@ -95,6 +95,8 @@ class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFail
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        toolbarController.mainContainer = mainContainer
+
         val googleApiClient = GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)

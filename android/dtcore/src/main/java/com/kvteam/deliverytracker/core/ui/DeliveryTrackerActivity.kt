@@ -2,10 +2,13 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.app.Service
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
+import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -19,6 +22,8 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.experimental.async
 import javax.inject.Inject
+import android.view.Window.ID_ANDROID_CONTENT
+
 
 abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentManager.OnBackStackChangedListener {
     @Inject
@@ -42,6 +47,8 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         private set
 
     lateinit var softKeyboard: SoftKeyboard
+
+    var statusBarHeight: Int = 0
 
     protected open fun getToolbarConfiguration(): ToolbarConfiguration {
         return ToolbarConfiguration()
@@ -80,9 +87,20 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
         keyboardShowListeners.remove(cb)
     }
 
+    private fun mGetStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId)
+        }
+        return result
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        statusBarHeight = mGetStatusBarHeight()
 
         if(!allowSettingsContext
                 && intent.getBooleanExtra(SETTINGS_CONTEXT, false)) {

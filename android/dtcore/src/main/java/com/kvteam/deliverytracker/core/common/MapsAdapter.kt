@@ -33,22 +33,22 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     private val typeFilter = AutocompleteFilter.Builder()
             .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
             .build()
-    lateinit var googleMap: GoogleMap
+    var googleMap: GoogleMap? = null
 
     fun moveCameraToPosition(position: LatLng, animated: Boolean) {
         if (animated) {
             val cameraPosition = CameraPosition.Builder().target(position).zoom(18f).build()
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            googleMap!!.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         } else {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
         }
     }
 
     private fun moveCameraToViewport(viewPort: LatLngBounds, animated: Boolean) {
         if (animated) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(viewPort, 0))
+            googleMap!!.animateCamera(CameraUpdateFactory.newLatLngBounds(viewPort, 0))
         } else {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(viewPort, 0))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(viewPort, 0))
         }
     }
 
@@ -58,7 +58,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         } else {
             moveCameraToPosition(position, animated)
         }
-        googleMap.addMarker(MarkerOptions()
+        googleMap!!.addMarker(MarkerOptions()
                 .position(position))
     }
 
