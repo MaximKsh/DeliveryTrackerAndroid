@@ -186,6 +186,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             val normalizedPercent = (percent - endPercent) / (1 - endPercent)
             val newElevation = normalizedPercent * 16 * density
             rlSlidingAddressList.elevation = newElevation
+            rlSlidingAddressList.setPadding(0, (normalizedPercent * dtActivity.statusBarHeight).toInt(), 0,0)
         }
 
         // Движемся вниз
