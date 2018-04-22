@@ -164,8 +164,10 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         anim.addListener(object: AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-                etAddressField.requestFocus()
-                openKeyboard()
+                if (!reverse) {
+                    etAddressField.requestFocus()
+                    openKeyboard()
+                }
                 slidingLayout.anchorPoint = endPercent
                 interpolatedAnimations(endPercent, anchor)
             }
