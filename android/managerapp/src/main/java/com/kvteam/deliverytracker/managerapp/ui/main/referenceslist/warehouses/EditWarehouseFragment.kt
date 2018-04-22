@@ -7,6 +7,7 @@ import android.app.Service
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.kvteam.deliverytracker.core.R.id.end
 import com.kvteam.deliverytracker.core.R.id.toolbar_top
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
@@ -129,73 +131,66 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         im.hideSoftInputFromWindow(activity!!.currentFocus.windowToken, 0)
     }
 
+    private fun openKeyboard() {
+        val im = activity!!.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+        im.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT)
+    }
+
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
         toolbar.setToolbarTitle("")
     }
 
     fun toggleWarehouseNameField(open: Boolean) {
-        val anim = if (open) ValueAnimator.ofInt(llName.height, mEtNameHeight) else ValueAnimator.ofInt(llName.height, 0)
+        if (!open) {
+            val endPercent = 1 - (llName.bottom.toFloat() + originalTopMarginOfRl - originalTopPaddingOfRl) / slidingLayout.height
+            slidingLayout.anchorPoint = 0.01f
+            autoAnimateInterpolation(200, slidingLayout.anchorPoint, endPercent)
+        } else {
+            autoAnimateInterpolation(200, slidingLayout.anchorPoint, 0.01f,true)
+        }
+    }
+
+    private fun autoAnimateInterpolation(duration: Long, startPercent: Float, endPercent: Float, reverse: Boolean = false) {
+        val anim = ValueAnimator.ofFloat(startPercent, endPercent)
+        val anchor = if (reverse) startPercent else endPercent
+
         anim.addUpdateListener { valueAnimator ->
-            val value = valueAnimator.animatedValue as Int
-            val layoutParams = llName.layoutParams
-            layoutParams.height = value
-            llName.layoutParams = layoutParams
-            updateAddressesPanelHeight()
+            val value = valueAnimator.animatedValue as Float
+            slidingLayout.anchorPoint = value
+            interpolatedAnimations(value, anchor)
         }
 
         anim.addListener(object: AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
-                updateAddressesPanelHeight()
+                etAddressField.requestFocus()
+                openKeyboard()
+                slidingLayout.anchorPoint = endPercent
+                interpolatedAnimations(endPercent, anchor)
             }
         })
 
-        anim.duration = 200L
+        anim.duration = duration
         anim.start()
-        if (!open) {
-            openPanelAnimations()
-        } else {
-            closePanelAnimations()
-        }
-    }
-
-    private lateinit var mGoogleMap: GoogleMap
-
-    private lateinit var animRlNameAndAddressContainer: ValueAnimator
-
-    private lateinit var animElevation: ValueAnimator
-
-    private lateinit var animRlNameAndAddressContainerTop: ValueAnimator
-
-    private fun openPanelAnimations() {
-        animRlNameAndAddressContainer.start()
-        animElevation.start()
-        animRlNameAndAddressContainerTop.start()
-    }
-
-    private fun closePanelAnimations() {
-        animRlNameAndAddressContainer.reverse()
-        animElevation.reverse()
-        animRlNameAndAddressContainerTop.reverse()
     }
 
     private var originalTopMarginOfRl = 0
 
     private var originalTopPaddingOfRl = 0
 
-    private fun interpolatedAnimations(percent: Float) {
+    private fun interpolatedAnimations(percent: Float, endPercent: Float) {
         // Движемся вверх
-        if (percent >= slidingLayout.anchorPoint) {
+        if (percent >= endPercent) {
             // Нормализуем значения
-            val normalizedPercent = (percent - slidingLayout.anchorPoint) / (1 - slidingLayout.anchorPoint)
+            val normalizedPercent = (percent - endPercent) / (1 - endPercent)
             val newElevation = normalizedPercent * 16 * density
             rlSlidingAddressList.elevation = newElevation
         }
 
         // Движемся вниз
-        if (percent <= slidingLayout.anchorPoint) {
-            val normalizedPercent = (slidingLayout.anchorPoint - percent) / slidingLayout.anchorPoint
+        if (percent <= endPercent) {
+            val normalizedPercent = (endPercent - percent) / endPercent
 
             val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.marginStart = (normalizedPercent * 20 * density).toInt()
@@ -217,7 +212,6 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
     private fun updateAddressesPanelHeight() {
         val topMargin = (rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin
         slidingLayout.anchorPoint = 1 - (llWarehouseAddress.bottom.toFloat() + topMargin) / slidingLayout.height
-        val t = 0
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
@@ -246,46 +240,19 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             override fun onGlobalLayout() {
                 llName.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 mEtNameHeight = llName.measuredHeight
-                animRlNameAndAddressContainer = ValueAnimator.ofInt((rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart, 0)
-                animRlNameAndAddressContainer.addUpdateListener { valueAnimator ->
-                    val value = valueAnimator.animatedValue as Int
-                    val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
-                    layoutParams.marginStart = value
-                    layoutParams.marginEnd = value
-                    rlNameAndAddressContainer.layoutParams = layoutParams
-                }
-                animRlNameAndAddressContainer.duration = 200L
-
-
                 originalTopPaddingOfRl = rlNameAndAddressContainer.paddingTop
                 originalTopMarginOfRl = (rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin
-                animRlNameAndAddressContainerTop = ValueAnimator.ofInt(originalTopMarginOfRl, 0)
-                animRlNameAndAddressContainerTop.addUpdateListener { valueAnimator ->
-                    val value = valueAnimator.animatedValue as Int
-                    rlNameAndAddressContainer.setPadding(0, originalTopMarginOfRl - value, 0, 0)
-                    val layoutParams = rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams
-                    layoutParams.topMargin = value
-                    rlNameAndAddressContainer.layoutParams = layoutParams
-                }
-                animRlNameAndAddressContainerTop.duration = 200L
-
-                animElevation = ValueAnimator.ofFloat(rlNameAndAddressContainer.elevation, 0f)
-                animElevation.addUpdateListener { valueAnimator ->
-                    val value = valueAnimator.animatedValue as Float
-                    rlNameAndAddressContainer.elevation = value
-                }
-                animElevation.duration = 200L
-                updateAddressesPanelHeight()
             }
         })
 
         etAddressField.addOnFocusChangeListener(object : View.OnFocusChangeListener {
             override fun onFocusChange(view: View?, focused: Boolean) {
                 if (focused) {
-                    ivDeleteTextIcon.visibility = View.VISIBLE
                     if (slidingLayout.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                        etAddressField.clearFocus()
                         toggleWarehouseNameField(false)
                     }
+                    ivDeleteTextIcon.visibility = View.VISIBLE
                     if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.ANCHORED) {
                         slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
                     }
@@ -309,7 +276,7 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             }
 
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
-                interpolatedAnimations(slideOffset)
+                interpolatedAnimations(slideOffset, slidingLayout.anchorPoint)
             }
         })
 
