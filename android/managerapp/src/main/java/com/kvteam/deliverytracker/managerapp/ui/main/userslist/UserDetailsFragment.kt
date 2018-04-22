@@ -26,31 +26,6 @@ import java.util.*
 import javax.inject.Inject
 
 class UserDetailsFragment : DeliveryTrackerFragment() {
-    @Inject
-    lateinit var lm: ILocalizationManager
-
-    @Inject
-    lateinit var dp: DataProvider
-
-    private val NUM_PAGES = 3
-
-    private lateinit var mPagerAdapter: PagerAdapter
-
-    val fragments = listOf(
-            UserTasksListFragment(),
-            UserStatsFragment(),
-            UserOnMapFragment()
-    )
-
-    private val userIdKey = "task"
-    private var userId
-        get() = arguments?.getSerializable(userIdKey)!! as UUID
-        set(value) = arguments?.putSerializable(userIdKey, value)!!
-
-    fun setUser(id: UUID) {
-        this.userId = id
-    }
-
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager, val role: Role) : FragmentStatePagerAdapter(fm) {
         val mPageTitles = listOf("Tasks", "Statistics", "On map")
 
@@ -64,9 +39,32 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
         }
 
         override fun getCount(): Int {
-            return if (role.roleName == "ManagerRole" || role.roleName == "CreatorRole") NUM_PAGES else NUM_PAGES - 1
+            return if (role == Role.Creator || role == Role.Manager) NUM_PAGES - 1 else NUM_PAGES
         }
     }
+
+    @Inject
+    lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var dp: DataProvider
+
+    private val NUM_PAGES = 3
+
+    private lateinit var mPagerAdapter: PagerAdapter
+
+    private lateinit var fragments : List<DeliveryTrackerFragment>
+
+    private val userIdKey = "userId"
+    private var userId
+        get() = arguments?.getSerializable(userIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(userIdKey, value)!!
+
+    fun setUser(id: UUID) {
+        this.userId = id
+    }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
@@ -88,6 +86,15 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
                 }
             }
         })
+
+        val userTasksFragment = UserTasksListFragment()
+        userTasksFragment.setUser(user.id!!, user.role?.toRole()!!)
+        fragments = listOf(
+                userTasksFragment,
+                UserStatsFragment(),
+                UserOnMapFragment()
+        )
+
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, user.role!!.toRole()!!)
         pager.adapter = mPagerAdapter
         tlUserNavigationTabs.setupWithViewPager(pager)

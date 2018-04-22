@@ -35,8 +35,8 @@ open class AutocompleteListAdapter <T : ModelBase> (
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             val adapter = adapterRef.get() ?: return
-            val values = results?.values as MutableList<*>
-            if (values.size > 0) {
+            val values = results?.values as? MutableList<*>
+            if (values != null && values.size > 0) {
                 adapter.list.clear()
                 for (item in values) {
                     @Suppress("UNCHECKED_CAST")

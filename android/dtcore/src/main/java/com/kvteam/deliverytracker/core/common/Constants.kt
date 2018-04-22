@@ -13,7 +13,12 @@ const val UserViewGroup = "UserViewGroup"
 const val ManagersView = "ManagersView"
 const val PerformersView = "PerformersView"
 
-const val TasksViewGroup = "TasksViewGroup"
+const val TaskViewGroup = "TaskViewGroup"
+
+
+const val AuxTaskViewGroup = "AuxTaskViewGroup"
+const val UserTasksView = "UserTasksView"
+
 
 
 const val ReferenceViewGroup = "ReferenceViewGroup"
@@ -26,4 +31,5 @@ const val ClientType = "Client"
 const val ProductType = "Product"
 const val WarehouseType = "Warehouse"
 const val PaymentTypeType = "PaymentType"
+const val TaskInfoType = "TaskInfo"
 

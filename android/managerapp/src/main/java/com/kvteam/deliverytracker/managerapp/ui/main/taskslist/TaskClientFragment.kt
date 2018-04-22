@@ -37,7 +37,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
             val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
 
             if (text != null && text.length > 7) {
-                autocomplete.setText(text.toString().substring(1))
+                autocomplete.setText(text.toString())
                 autocomplete.showDropDown()
             }
             if (text != null && etPhoneNumberField.rawText.length == 10) {
@@ -72,7 +72,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
     private var etSurnameWatcher: TaskTextWatcher<Client>? = null
     private var clientPhoneTextWatcher: ClientTextWatcher? = null
 
-    private var deleteDirty = false
+    private var deleteDirty = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -106,9 +106,9 @@ class TaskClientFragment : BaseTaskPageFragment() {
                         val viewResult = dp.clientsViews.getViewResultAsync(
                                 ReferenceViewGroup,
                                 ClientsView,
-                                mapOf("search" to it)).viewResult
+                                mapOf("phone_number" to it)).viewResult
                         val result = viewResult
-                                .map { dp.clients.getAsync(it, DataProviderGetMode.FORCE_WEB).entry }
+                                .map { dp.clients.getAsync(it, DataProviderGetMode.PREFER_CACHE).entry }
                                 .toMutableList()
                         result
                     }
@@ -127,8 +127,8 @@ class TaskClientFragment : BaseTaskPageFragment() {
     }
 
     override fun shouldDeleteDirty(): Boolean {
-        if (deleteDirty) {
-            deleteDirty = false
+        if (!deleteDirty) {
+            deleteDirty = true
             return false
         }
         return true
@@ -141,7 +141,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
             val viewResult = dp.clientsViews.getViewResultAsync(
                     ReferenceViewGroup,
                     ClientsView,
-                    mapOf("search" to etPhoneNumberField.text.substring(1)),
+                    mapOf("phone_number" to etPhoneNumberField.text),
                     DataProviderGetMode.PREFER_CACHE).viewResult
 
             if (viewResult.isEmpty()) {
@@ -192,7 +192,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
 
         subscribeSurnameName()
         tvAddAddress.setOnClickListener { _ ->
-            deleteDirty = true
+            deleteDirty = false
             navigationController.navigateToEditClientAddress(task.clientId!!)
         }
 

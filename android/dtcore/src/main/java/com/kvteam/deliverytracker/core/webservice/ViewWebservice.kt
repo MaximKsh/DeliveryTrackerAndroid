@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.core.webservice
 
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.webservice.viewmodels.ViewResponse
+import java.net.URLEncoder
 
 class ViewWebservice(private val webservice: IWebservice) : IViewWebservice {
 
@@ -35,15 +36,22 @@ class ViewWebservice(private val webservice: IWebservice) : IViewWebservice {
             viewGroup: String,
             view: String,
             arguments: Map<String, Any>?): NetworkResult<ViewResponse> {
+
         val getArguments = arguments
                 ?.asIterable()
-                ?.joinToString(prefix = "?", separator = "&", transform = {"${it.key}=${it.value}"})
-
+                ?.joinToString(
+                        prefix = "?",
+                        separator = "&",
+                        transform = { "${encode(it.key)}=${encode(it.value)}" })
         val result = webservice.getAsync<ViewResponse>(
                 "$viewBaseUrl/$viewGroup/$view${getArguments ?: EMPTY_STRING}",
                 ViewResponse::class.java,
                 true)
         return result
+    }
+
+    private fun encode(str: Any): String{
+        return URLEncoder.encode(str.toString(), "UTF-8")
     }
 
 }

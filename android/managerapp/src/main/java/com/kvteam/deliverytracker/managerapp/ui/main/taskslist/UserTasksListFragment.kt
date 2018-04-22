@@ -1,30 +1,26 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.view.View
+import com.kvteam.deliverytracker.core.common.AuxTaskViewGroup
+import com.kvteam.deliverytracker.core.common.TaskInfoType
+import com.kvteam.deliverytracker.core.common.UserTasksView
 import com.kvteam.deliverytracker.core.models.TaskInfo
-import com.kvteam.deliverytracker.core.ui.BaseListFragment
+import com.kvteam.deliverytracker.core.roles.Role
+import com.kvteam.deliverytracker.core.ui.BaseFilterFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
-import com.kvteam.deliverytracker.core.ui.tasks.BaseTasksListFragment
 import com.kvteam.deliverytracker.core.ui.tasks.TaskListItem
 import com.kvteam.deliverytracker.core.ui.tasks.TasksListFlexibleAdapter
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
-import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.Duration
+import java.util.*
 import javax.inject.Inject
 
-class UserTasksListFragment : BaseListFragment() {
-    @Inject
-    lateinit var navigationController: NavigationController
-
-    override val viewGroup: String = "TaskViewGroup"
-
+class UserTasksListFragment : BaseFilterFragment() {
     private val tasksActions = object : IBaseListItemActions<TaskListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<TaskListItem>, item: TaskListItem) {}
 
@@ -34,6 +30,31 @@ class UserTasksListFragment : BaseListFragment() {
                 navigationController.navigateToTaskDetails(id)
             }
         }
+    }
+
+    @Inject
+    lateinit var navigationController: NavigationController
+
+    override val viewGroup: String = AuxTaskViewGroup
+    override val viewName: String = UserTasksView
+    override val type: String = TaskInfoType
+
+    private val userIdKey = "userId"
+    private var userId
+        get() = arguments?.getSerializable(userIdKey)!! as UUID
+        set(value) = arguments?.putSerializable(userIdKey, value)!!
+
+    private val userRoleKey = "userRole"
+    private var userRole
+        get() = arguments?.getSerializable(userRoleKey)!! as Role
+        set(value) = arguments?.putSerializable(userRoleKey, value)!!
+
+    fun setUser(id: UUID, role: Role) {
+        this.userId = id
+        this.userRole = role
+    }
+
+    override fun configureToolbar(toolbar: ToolbarController) {
     }
 
     override val tracer
@@ -73,5 +94,12 @@ class UserTasksListFragment : BaseListFragment() {
         updateDataSet(list, { TasksListFlexibleAdapter(tasksActions) }, animate)
     }
 
-    override fun configureToolbar(toolbar: ToolbarController) {}
+    override fun getInitialArguments(): Map<String, Any>? {
+        return if (this.userRole == Role.Performer) {
+            mapOf("performer_id" to this.userId)
+        } else {
+            mapOf("author_id" to this.userId)
+        }
+    }
+
 }

@@ -222,7 +222,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
 
     private fun showStepper () {
-        if (rlStepperContainer.height != 0) {
+        if (rlStepperContainer == null || rlStepperContainer.height != 0) {
             return
         }
         rlStepperContainer.measure(
@@ -246,7 +246,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     }
 
     private fun hideStepper () {
-        if (rlStepperContainer.height == 0) {
+        if (rlStepperContainer == null || rlStepperContainer.height == 0) {
             return
         }
 

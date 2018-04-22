@@ -68,9 +68,4 @@ open class FilterProductsFragment : BaseFilterFragment() {
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        toolbarController.disableSearchMode()
-    }
 }
