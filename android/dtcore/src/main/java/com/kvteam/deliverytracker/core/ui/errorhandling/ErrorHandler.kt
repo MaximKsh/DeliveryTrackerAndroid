@@ -5,9 +5,9 @@ import android.support.design.widget.Snackbar
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.common.ErrorListResult
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetOrigin
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetResult
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderViewResult
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetOrigin
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetResult
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderViewResult
 import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.webservice.NetworkResult

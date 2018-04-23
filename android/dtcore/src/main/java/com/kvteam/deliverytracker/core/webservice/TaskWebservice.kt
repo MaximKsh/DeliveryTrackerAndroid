@@ -1,19 +1,17 @@
 package com.kvteam.deliverytracker.core.webservice
 
-import com.kvteam.deliverytracker.core.models.TaskInfo
-import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.models.TaskPackage
 import com.kvteam.deliverytracker.core.webservice.viewmodels.TaskRequest
 import com.kvteam.deliverytracker.core.webservice.viewmodels.TaskResponse
 import java.util.*
 
-class TaskWebservice(private val webservice: IWebservice,
-                     private val session: ISession) : ITaskWebservice {
+class TaskWebservice(private val webservice: IWebservice) : ITaskWebservice {
 
     private val tasksBaseUrl = "/api/tasks"
 
-    override suspend fun createAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
+    override suspend fun createAsync(taskPackage: TaskPackage): NetworkResult<TaskResponse> {
         val request = TaskRequest()
-        request.taskInfo = taskInfo
+        request.taskPackage = taskPackage
 
         val result = webservice.postAsync<TaskResponse>(
                 "$tasksBaseUrl/create",
@@ -31,9 +29,9 @@ class TaskWebservice(private val webservice: IWebservice,
         return result
     }
 
-    override suspend fun editAsync(taskInfo: TaskInfo): NetworkResult<TaskResponse> {
+    override suspend fun editAsync(taskInfo: TaskPackage): NetworkResult<TaskResponse> {
         val request = TaskRequest()
-        request.taskInfo = taskInfo
+        request.taskPackage = taskInfo
 
         val result = webservice.postAsync<TaskResponse>(
                 "$tasksBaseUrl/edit",

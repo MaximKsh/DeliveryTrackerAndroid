@@ -99,9 +99,6 @@ class MainActivity : DeliveryTrackerActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-
-    }
 
     private fun onPushClicked(action: String,
                               dataType: String,

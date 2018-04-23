@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.models.TaskProduct
 import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -19,37 +20,51 @@ import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 
-class TaskProductsFragment : PageFragment() {
+class TaskProductsFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var navigationController: NavigationController
 
     @Inject
     lateinit var dp: DataProvider
 
+    private var deleteDirty = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_products, container, false) as ViewGroup
-        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
 
-        task.taskProducts.forEach { taskProductInfo ->
+        taskProducts.forEach { taskProductInfo ->
             val productItemView = inflater.inflate(R.layout.selected_product_item, view.llSelectedProduct, false)
 
             updateProductView(productItemView, taskProductInfo, view)
 
 
             productItemView.ivIconIncreaseQuantity.setOnClickListener { _ ->
+                if (taskProductInfo.action == CollectionEntityAction.None) {
+                    taskProductInfo.action = CollectionEntityAction.Edit
+                }
                 taskProductInfo.quantity = taskProductInfo.quantity!! + 1
                 updateProductView(productItemView, taskProductInfo)
             }
 
             productItemView.ivIconDecreaseQuantity.setOnClickListener { _ ->
                 if (taskProductInfo.quantity!! > 1) {
+                    if (taskProductInfo.action == CollectionEntityAction.None) {
+                        taskProductInfo.action = CollectionEntityAction.Edit
+                    }
+
                     taskProductInfo.quantity = taskProductInfo.quantity!! - 1
                     updateProductView(productItemView, taskProductInfo)
                 }
             }
 
             productItemView.ivIconDelete.setOnClickListener { _ ->
-                task.taskProducts.remove(taskProductInfo)
+                dp.taskProducts.delete(taskProductInfo.id!!)
                 updateProductView(productItemView, null)
             }
 
@@ -65,14 +80,17 @@ class TaskProductsFragment : PageFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         tvSelectProduct.setOnClickListener { _ ->
+            deleteDirty = false
             navigationController.navigateToFilterProducts(taskId)
         }
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
+    override fun shouldDeleteDirty(): Boolean {
+        if (!deleteDirty) {
+            deleteDirty = true
+            return false
+        }
+        return true
     }
 
     private fun updateProductView (view: View, taskProductInfo: TaskProduct?, container: View? = this.view) {
@@ -96,16 +114,25 @@ class TaskProductsFragment : PageFragment() {
         }
 
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
-        var newTotalCost = BigDecimal(0)
-        task.taskProducts.forEach { taskProduct ->
-            val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
-            newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
-        }
-        task.cost = newTotalCost
+
+        task.cost = recalcCost()
         container!!.tvTotalProductsPrice.text = activity!!.resources.getString(
                 com.kvteam.deliverytracker.core.R.string.Core_Product_Cost_Template,
-                newTotalCost.toString()
+                task.cost.toString()
         )
+    }
+
+    private fun recalcCost(): BigDecimal {
+        var newTotalCost = BigDecimal(0)
+        val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
+
+        taskProducts
+                .filter { it.action != CollectionEntityAction.Delete }
+                .forEach { taskProduct ->
+                    val product = dp.products.get(taskProduct.productId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+                    newTotalCost = newTotalCost.add(product.cost!!.multiply(BigDecimal(taskProduct.quantity!!)))
+                }
+        return newTotalCost
     }
 }
 

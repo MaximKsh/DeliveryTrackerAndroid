@@ -7,11 +7,11 @@ import java.io.Serializable
 data class ClientAddress(
         @SerializedName("RawAddress", alternate = ["rawAddress"])
         @MoveIfDiffer
-        var rawAddress: String? = null,
+        override var rawAddress: String? = null,
         @SerializedName("Geoposition", alternate = ["geoposition"])
         @MoveIfDiffer
-        var geoposition: Geoposition? = null
-) : CollectionModelBase(), Serializable {
+        override var geoposition: Geoposition? = null
+) : CollectionModelBase(), Serializable, IAddress {
     override fun fromMap(map: Map<*, *>) {
         super.fromMap(map)
         rawAddress = map["RawAddress"] as? String

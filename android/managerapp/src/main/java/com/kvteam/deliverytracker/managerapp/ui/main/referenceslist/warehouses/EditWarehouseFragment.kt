@@ -30,9 +30,9 @@ import com.kvteam.deliverytracker.core.R.id.end
 import com.kvteam.deliverytracker.core.R.id.toolbar_top
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Geoposition
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.addOnFocusChangeListener
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -339,6 +339,11 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
             }
         }, 250)
         return rootView
+    }
+  
+    override fun onStop() {
+        dp.warehouses.invalidateDirty(warehouseId)
+        super.onStop()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({

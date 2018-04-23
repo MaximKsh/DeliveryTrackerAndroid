@@ -1,20 +1,20 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients
 
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.models.Client
+import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.BaseListItem
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.flexibleadapter.utils.DrawableUtils
 import kotlinx.android.synthetic.main.client_list_item.view.*
 
 class ClientListItem(
         val client: Client,
+        val displayableAddress: ClientAddress?,
         header: BaseListHeader,
         private val lm: ILocalizationManager)
     : BaseListItem<Client, ClientListItem.ClientsListViewHolder>(client, header) {
@@ -26,14 +26,14 @@ class ClientListItem(
         return ClientsListViewHolder(view!!, adapter);
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?, holder: ClientsListViewHolder?, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?,
+                                holder: ClientsListViewHolder?,
+                                position: Int,
+                                payloads: MutableList<Any>?) {
         holder!!.tvName.text = client.name
         holder.tvSurname.text = client.surname
         holder.tvPhoneNumber.text = client.phoneNumber
-        holder.tvAddress.text = if (client.clientAddresses.size > 0)
-            client.clientAddresses[0].rawAddress
-        else
-            "No address"
+        holder.tvAddress.text = displayableAddress?.rawAddress ?: "No address"
     }
 
 

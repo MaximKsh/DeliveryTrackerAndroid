@@ -1,7 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.annotations.SerializedName
-import com.kvteam.deliverytracker.core.common.MoveAlways
 import com.kvteam.deliverytracker.core.common.MoveIfDiffer
 import org.joda.time.DateTime
 import java.io.Serializable
@@ -60,9 +59,6 @@ data class TaskInfo(
     var cost: BigDecimal? = null,
     @SerializedName("DeliveryCost", alternate = ["deliveryCost"])
     var deliveryCost: BigDecimal? = null,
-    @SerializedName("TaskProducts", alternate = ["taskProducts"])
-    @MoveAlways
-    var taskProducts: MutableList<TaskProduct> = mutableListOf(),
     @SerializedName("TaskStateTransitions", alternate = ["taskStateTransitions"])
     var taskStateTransitions: MutableList<TaskStateTransition> = mutableListOf()
 ) : ModelBase(), Serializable {
@@ -89,7 +85,6 @@ data class TaskInfo(
         clientAddressId = deserializeUUIDFromMap("ClientAddressId", map)
         cost = deserializeBigDecimalFromMap("Cost", map)
         deliveryCost = deserializeBigDecimalFromMap("DeliveryCost", map)
-        taskProducts = deserializeListObjectsFromMap("TaskProducts", map, { TaskProduct() })
         taskStateTransitions = deserializeListObjectsFromMap("TaskStateTransitions", map, { TaskStateTransition() })
     }
 }

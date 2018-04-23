@@ -2,9 +2,9 @@ package com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.products
 
 import android.os.Bundle
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Product
-import com.kvteam.deliverytracker.core.models.TaskProduct
+import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.BaseFilterFragment
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
@@ -15,6 +15,9 @@ import javax.inject.Inject
 open class FilterProductsFragment : BaseFilterFragment() {
     @Inject
     lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var session: ISession
 
     override val tracer
         get() = navigationController.fragmentTracer
@@ -38,16 +41,19 @@ open class FilterProductsFragment : BaseFilterFragment() {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {}
 
         override suspend fun onItemClicked(adapter: FlexibleAdapter<*>, itemList: MutableList<ProductListItem>, item: ProductListItem) {
-            val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
-            task.taskProducts.add(TaskProduct(item.product.id, 1))
+            val taskProduct = dp.taskProducts.get(UUID.randomUUID(), taskId, DataProviderGetMode.DIRTY)
+            taskProduct.instanceId = session.instance?.id!!
+            taskProduct.productId = item.product.id
+            taskProduct.quantity = 1
+            dp.taskProducts.saveChanges(taskProduct)
             navigationController.closeCurrentFragment()
         }
     }
 
     override fun handleProducts(products: List<Product>, animate: Boolean) {
-        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        val taskProducts = dp.taskProducts.getByParent(taskId, DataProviderGetMode.DIRTY)
         val productsList = products
-                .filter { p -> p.id !in task.taskProducts.map { tp -> tp.productId }  }
+                .filter { p -> p.id !in taskProducts.map { tp -> tp.productId }  }
                 .map { ProductListItem(it, null, lm, activity!!)}.toMutableList()
         (mAdapter as ProductsListFlexibleAdapter).updateDataSet(productsList, animate)
     }
@@ -61,10 +67,5 @@ open class FilterProductsFragment : BaseFilterFragment() {
         mAdapter = ProductsListFlexibleAdapter(productActions)
         (mAdapter as ProductsListFlexibleAdapter).hideDeleteButton = true
         super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        toolbarController.disableSearchMode()
     }
 }

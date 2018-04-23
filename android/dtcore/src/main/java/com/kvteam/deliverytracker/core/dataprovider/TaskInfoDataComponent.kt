@@ -1,5 +1,9 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
+import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
+import com.kvteam.deliverytracker.core.dataprovider.base.IDataContainer
+import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
 import com.kvteam.deliverytracker.core.models.*
 import com.kvteam.deliverytracker.core.webservice.ITaskWebservice
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -12,15 +16,66 @@ class TaskInfoDataComponent (
         private val paymentTypeDataContainer: IDataContainer<PaymentType>,
         private val warehouseDataContainer: IDataContainer<Warehouse>,
         private val clientDataContainer: IDataContainer<Client>,
+        private val clientAddressDataContainer: ClientAddressDataContainer,
         private val userDataContainer: UserDataContainer,
-        dataContainer: TaskInfoDataContainer
-) : BaseDataComponent<TaskInfo, TaskResponse>(dataContainer) {
+        private val taskProductDataContainer: TaskProductDataContainer,
+        dataContainer: TaskInfoDataContainer,
+        viewDigestContainer: IViewDigestContainer
+) : BaseDataComponent<TaskInfo, TaskResponse>(dataContainer, viewDigestContainer) {
+
+    override fun clearCollections(id: UUID?) {
+        if (id != null) {
+            taskProductDataContainer.removeEntriesByParent(id)
+            taskProductDataContainer.removeDirtiesByParent(id)
+        } else {
+            taskProductDataContainer.clearEntries()
+            taskProductDataContainer.clearDirties()
+        }
+    }
+
+    override fun clearCollectionDirties(id: UUID?) {
+        if (id != null) {
+            taskProductDataContainer.removeDirtiesByParent(id)
+        } else {
+            taskProductDataContainer.clearDirties()
+        }
+    }
+
     override suspend fun createRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
-        return taskWebservice.createAsync(entity)
+        val taskPackage = TaskPackage()
+        taskPackage.taskInfo.add(entity)
+        val taskProducts = taskProductDataContainer.getDirtiesByParent(entity.id!!)
+                .filter { it.action != CollectionEntityAction.None }
+
+        taskPackage.taskProducts.addAll(taskProducts)
+        return taskWebservice.createAsync(taskPackage)
     }
 
     override suspend fun editRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
-        return taskWebservice.editAsync(entity)
+        val pack = TaskPackage()
+        pack.taskInfo.add(entity)
+
+        val dirties = taskProductDataContainer.getDirtiesByParent(entity.id!!)
+        val toPackage = mutableListOf<TaskProduct>()
+        for (dirty in dirties) {
+            @Suppress("NON_EXHAUSTIVE_WHEN")
+            when(dirty.action) {
+                CollectionEntityAction.Create -> {
+                    toPackage.add(dirty)
+                }
+                CollectionEntityAction.Edit -> {
+                    toPackage.add(dirty)
+                }
+                CollectionEntityAction.Delete -> {
+                    dirty.quantity = 0
+                    toPackage.add(dirty)
+                }
+            }
+        }
+
+        pack.taskProducts.addAll(toPackage)
+
+        return taskWebservice.editAsync(pack)
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<TaskResponse> {
@@ -35,34 +90,49 @@ class TaskInfoDataComponent (
         val taskInfo = result.entity?.taskPackage?.taskInfo?.first()!!
         val references = result.entity?.taskPackage?.linkedReferences!!
         val users = result.entity?.taskPackage?.linkedUsers!!
+        val products = result.entity?.taskPackage?.taskProducts!!
 
         users.forEach { userDataContainer.putEntry(it.value) }
 
-        taskInfo.taskProducts
-                .map { references.filter { p -> UUID.fromString(p.key) == it.productId!!}.values.first() }
-                .map {
-                    val p = Product()
-                    p.fromMap(it)
-                    p
-                }
-                .forEach { productsDataContainer.putEntry(it) }
-
         if(taskInfo.paymentTypeId != null) {
+            val pack = ResponseReferencePackage()
+            pack.fromMap(references[taskInfo.paymentTypeId.toString()]!!)
             val pt = PaymentType()
-            pt.fromMap(references[taskInfo.paymentTypeId.toString()]!!)
+            pt.fromMap(pack.entry)
             paymentTypeDataContainer.putEntry(pt)
         }
 
         if(taskInfo.warehouseId != null) {
+            val pack = ResponseReferencePackage()
+            pack.fromMap(references[taskInfo.warehouseId.toString()]!!)
             val pt = Warehouse()
-            pt.fromMap(references[taskInfo.warehouseId.toString()]!!)
+            pt.fromMap(pack.entry)
             warehouseDataContainer.putEntry(pt)
         }
 
         if(taskInfo.clientId != null) {
-            val pt = Client()
-            pt.fromMap(references[taskInfo.clientId.toString()]!!)
-            clientDataContainer.putEntry(pt)
+            val pack = ResponseReferencePackage()
+            pack.fromMap(references[taskInfo.clientId.toString()]!!)
+
+            val client = Client()
+            client.fromMap(pack.entry)
+
+            for(serialized in pack.collections) {
+                val ca = ClientAddress()
+                ca.fromMap(serialized)
+                clientAddressDataContainer.putEntry(ca)
+            }
+            clientDataContainer.putEntry(client)
+        }
+
+        products.forEach {
+            val pack = ResponseReferencePackage()
+            pack.fromMap(references[it.productId.toString()]!!)
+            val pt = Product()
+            pt.fromMap(pack.entry)
+            productsDataContainer.putEntry(pt)
+
+            taskProductDataContainer.putEntry(it)
         }
 
         return taskInfo

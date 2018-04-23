@@ -8,8 +8,8 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.dataprovider.DataProvider
-import com.kvteam.deliverytracker.core.dataprovider.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.CollectionEntityAction
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -99,7 +99,8 @@ class EditClientFragment : DeliveryTrackerFragment() {
         etPatronymicField.setText(client.patronymic)
         etPhoneNumberField.setPhoneNumber(client.phoneNumber)
 
-        client.clientAddresses.forEach { clientAddress ->
+        val clientAddresses = dp.clientAddresses.getByParent(clientId, DataProviderGetMode.DIRTY)
+        clientAddresses.forEach { clientAddress ->
             val view = layoutInflater.inflate(R.layout.client_address_item, llAddressesContainer, false)
             view.tvClientAddress.text = clientAddress.rawAddress
             view.frListContainer.setOnClickListener { _ ->
@@ -108,7 +109,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
             view.tvDeleteItem.setOnClickListener { _ ->
                 when (clientAddress.action) {
                     CollectionEntityAction.Create -> {
-                        client.clientAddresses.remove(clientAddress)
+                        dp.clientAddresses.delete(clientAddress.id!!)
                         view.visibility = View.GONE
                     }
                     else -> {
@@ -162,9 +163,9 @@ class EditClientFragment : DeliveryTrackerFragment() {
         super.onOptionsItemSelected(item)
     })
 
-    override fun onDestroy() {
-        super.onDestroy()
-        dp.clients.invalidate(clientId)
+    override fun onStop() {
+        dp.clients.invalidateDirty(clientId)
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

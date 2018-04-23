@@ -30,7 +30,6 @@ class AddUserFragment : DeliveryTrackerFragment() {
     @Inject
     lateinit var lm: ILocalizationManager
 
-
     @Inject
     lateinit var eh: IErrorHandler
 
@@ -135,9 +134,7 @@ class AddUserFragment : DeliveryTrackerFragment() {
                 if(eh.handle(result)) {
                     return@launchUI
                 }
-
                 dtActivity.softKeyboard.closeSoftKeyboard()
-
                 this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                 this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
 

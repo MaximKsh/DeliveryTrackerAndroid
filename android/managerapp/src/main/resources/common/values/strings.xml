@@ -27,7 +27,7 @@
     <string name="ManagerApp_Toolbar_Save">Save</string>
     <string name="ManagerApp_Toolbar_Edit">Edit</string>
 
-    <string name="ManagerApp_Toolbar_AddClient">Add client</string>
+    <string name="ManagerApp_Toolbar_AddClient">Add entry</string>
     <string name="ManagerApp_Toolbar_AddPaymentType">Add payment type</string>
     <string name="ManagerApp_Toolbar_AddProduct">Add product</string>
     <string name="ManagerApp_Toolbar_AddWarehouse">Add warehouse</string>
