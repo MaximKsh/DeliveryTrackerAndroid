@@ -1,8 +1,14 @@
 package com.kvteam.deliverytracker.core.ui.toolbar
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
@@ -17,6 +23,8 @@ class ToolbarController(
     var isBackButtonEnabled: Boolean = false
         private set
 
+    lateinit var mainContainer: ViewGroup
+
     var isSearchEnabled: Boolean = false
         private set
 
@@ -28,6 +36,22 @@ class ToolbarController(
     private var _dropdownEnabled = false
     val isDropdownEnabled
         get() = toolbarConfiguration.useDropdown && _dropdownEnabled
+
+    fun setTransparent(on: Boolean) {
+        if (on) {
+            (mainContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin = 0
+            (activity.toolbar_top.layoutParams as ViewGroup.MarginLayoutParams).topMargin = activity.statusBarHeight
+            activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        } else {
+            (mainContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin =
+                    activity.resources.getDimension(R.dimen.toolbar_height).toInt()
+            (activity.toolbar_top.layoutParams as ViewGroup.MarginLayoutParams).topMargin = 0
+            activity.supportActionBar?.setBackgroundDrawable(
+                    activity.getDrawable(R.drawable.shape_bottom_border_ltgray))
+            activity.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
+    }
 
     fun init() {
         if(toolbarConfiguration.useDropdown) {

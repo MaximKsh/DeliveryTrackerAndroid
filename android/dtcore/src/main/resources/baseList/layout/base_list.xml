@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:background="@color/colorWhite"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/base_list_item" />
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>

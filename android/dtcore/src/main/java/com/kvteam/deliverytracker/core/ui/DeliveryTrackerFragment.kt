@@ -18,6 +18,8 @@ abstract class DeliveryTrackerFragment: Fragment() {
 
     val name: String = this.javaClass.simpleName
 
+    open val useSoftKeyboardFeatures = true
+
     init {
         arguments = Bundle()
     }
@@ -47,7 +49,9 @@ abstract class DeliveryTrackerFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dtActivity.softKeyboard.initEditTexts()
+        if (useSoftKeyboardFeatures) {
+            dtActivity.softKeyboard.initEditTexts()
+        }
     }
 
     override fun onPause() {

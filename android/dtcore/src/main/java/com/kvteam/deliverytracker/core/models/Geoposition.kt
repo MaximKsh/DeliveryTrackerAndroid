@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.models
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -9,6 +10,10 @@ data class Geoposition (
         @SerializedName("Latitude", alternate = ["latitude"])
         var latitude: Double = 0.0
 ) : Serializable, IMapDeserializable {
+
+    fun toLtnLng(): LatLng {
+        return LatLng(latitude, longitude)
+    }
 
     override fun fromMap(map: Map<*, *>) {
         longitude = map["Longitude"] as? Double ?: 0.0
