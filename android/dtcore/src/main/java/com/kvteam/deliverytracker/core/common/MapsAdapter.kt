@@ -9,17 +9,14 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
-import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.core.models.Geoposition
 import kotlinx.coroutines.experimental.async
-import android.R.attr.y
-import android.R.attr.x
 
 data class GoogleMapAddress(
         val placeId: String?,
         val primaryText: CharSequence,
         val secondaryText: CharSequence,
-        var address: ClientAddress?,
+        var geoposition: Geoposition?,
         var viewPort: LatLngBounds?
 )
 
@@ -70,7 +67,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
 
         addresses.forEachIndexed { index, address ->
             googleMapAddresses[index].viewPort = address.viewport
-            googleMapAddresses[index].address = ClientAddress(address.address.toString(), address.latLng.toGeoposition())
+            googleMapAddresses[index].geoposition = address.latLng.toGeoposition()
         }
 
         return@async googleMapAddresses

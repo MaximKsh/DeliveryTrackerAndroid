@@ -4,35 +4,24 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.Service
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.os.Handler
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.kvteam.deliverytracker.core.R.id.end
-import com.kvteam.deliverytracker.core.R.id.toolbar_top
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
-import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.models.Geoposition
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.addOnFocusChangeListener
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
@@ -45,7 +34,6 @@ import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_edit_warehouse.*
 import kotlinx.android.synthetic.main.fragment_edit_warehouse.view.*
 import java.util.*
@@ -53,19 +41,7 @@ import javax.inject.Inject
 
 
 class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemClickListener {
-    override fun onItemClick(view: View?, position: Int): Boolean {
-        val googleMapAddress = mAddressList[position].googleMapAddress
-        etAddressField.setText(googleMapAddress.primaryText)
-        etAddressField.clearFocus()
-        hideKeyboard()
-        toggleWarehouseNameField(true)
-        slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-        mainActivity.mMapsAdapter.setMarker(
-                googleMapAddress.address!!.geoposition!!.toLtnLng(),
-                googleMapAddress.viewPort,
-                true)
-        return false
-    }
+
 
     override val useSoftKeyboardFeatures = false
 
@@ -119,11 +95,21 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         super.onCreate(savedInstanceState)
     }
 
-    override fun onStop() {
-        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    override fun onItemClick(view: View?, position: Int): Boolean {
+        val googleMapAddress = mAddressList[position].googleMapAddress
+        etAddressField.setText(googleMapAddress.primaryText)
+        etAddressField.clearFocus()
         hideKeyboard()
-        mainActivity.toolbarController.setTransparent(false)
-        super.onStop()
+        toggleWarehouseNameField(true)
+        slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        mainActivity.mMapsAdapter.setMarker(
+                googleMapAddress.geoposition!!.toLtnLng(),
+                googleMapAddress.viewPort,
+                true)
+        val geoposition = googleMapAddress.geoposition
+        val warehouse = dp.warehouses.get(warehouseId, DataProviderGetMode.DIRTY).entry
+        warehouse.geoposition = geoposition
+        return false
     }
 
     private fun hideKeyboard() {
@@ -311,12 +297,12 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         validation.setContext(this@EditWarehouseFragment.dtActivity)
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_edit_warehouse, container, false)
 
         (rootView.rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin =
                 (rootView.rlNameAndAddressContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin + dtActivity.statusBarHeight
-        dtActivity.toolbarController.setTransparent(true)
 
         Handler().postDelayed({
             if (isAdded) {
@@ -340,8 +326,16 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         }, 250)
         return rootView
     }
-  
+
+    override fun onResume() {
+        super.onResume()
+        dtActivity.toolbarController.setTransparent(true)
+    }
+
     override fun onStop() {
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        hideKeyboard()
+        mainActivity.toolbarController.setTransparent(false)
         dp.warehouses.invalidateDirty(warehouseId)
         super.onStop()
     }

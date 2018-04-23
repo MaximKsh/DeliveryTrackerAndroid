@@ -3,7 +3,6 @@ package com.kvteam.deliverytracker.managerapp.ui.addresslist
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.kvteam.deliverytracker.core.common.GoogleMapAddress
-import com.kvteam.deliverytracker.core.models.ClientAddress
 import com.kvteam.deliverytracker.managerapp.R
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -15,13 +14,13 @@ class AddressListItem(val googleMapAddress: GoogleMapAddress): AbstractFlexibleI
 
     override fun equals(other: Any?): Boolean {
         if (other is AddressListItem) {
-            return googleMapAddress.address!!.equals(other.googleMapAddress.address)
+            return googleMapAddress.geoposition!!.equals(other.googleMapAddress.geoposition)
         }
         return false
     }
 
     override fun hashCode(): Int {
-        return googleMapAddress.address!!.hashCode()
+        return googleMapAddress.geoposition!!.hashCode()
     }
 
     override fun getLayoutRes(): Int {

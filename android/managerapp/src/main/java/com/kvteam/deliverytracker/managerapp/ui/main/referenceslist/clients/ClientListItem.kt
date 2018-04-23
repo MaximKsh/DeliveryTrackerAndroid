@@ -33,7 +33,7 @@ class ClientListItem(
         holder!!.tvName.text = client.name
         holder.tvSurname.text = client.surname
         holder.tvPhoneNumber.text = client.phoneNumber
-        holder.tvAddress.text = displayableAddress?.rawAddress ?: "No address"
+        holder.tvAddress.text = displayableAddress?.rawAddress ?: "No geoposition"
     }
 
 

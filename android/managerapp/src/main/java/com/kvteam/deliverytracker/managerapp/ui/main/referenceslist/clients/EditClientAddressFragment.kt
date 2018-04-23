@@ -39,7 +39,7 @@ class EditClientAddressFragment : DeliveryTrackerFragment() {
         get() = arguments?.getSerializable(clientIdKey)!! as UUID
         set(value) = arguments?.putSerializable(clientIdKey, value)!!
 
-    private val addressIdKey = "address"
+    private val addressIdKey = "geoposition"
     private var addressId
         get() = arguments?.getSerializable(addressIdKey)!! as UUID
         set(value) = arguments?.putSerializable(addressIdKey, value)!!
