@@ -72,8 +72,6 @@ class TaskClientFragment : BaseTaskPageFragment() {
     private var etSurnameWatcher: TaskTextWatcher<Client>? = null
     private var clientPhoneTextWatcher: ClientTextWatcher? = null
 
-    private var deleteDirty = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -124,14 +122,6 @@ class TaskClientFragment : BaseTaskPageFragment() {
         unsubscribeSurnameName()
         etPhoneNumberField.removeTextChangedListener(clientPhoneTextWatcher)
         super.onStop()
-    }
-
-    override fun shouldDeleteDirty(): Boolean {
-        if (!deleteDirty) {
-            deleteDirty = true
-            return false
-        }
-        return true
     }
 
     private fun showClientDetails(mode: DataProviderGetMode) = launchUI {
@@ -192,7 +182,6 @@ class TaskClientFragment : BaseTaskPageFragment() {
 
         subscribeSurnameName()
         tvAddAddress.setOnClickListener { _ ->
-            deleteDirty = false
             navigationController.navigateToEditClientAddress(task.clientId!!)
         }
 

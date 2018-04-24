@@ -336,7 +336,6 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         hideKeyboard()
         mainActivity.toolbarController.setTransparent(false)
-        dp.warehouses.invalidateDirty(warehouseId)
         super.onStop()
     }
 
@@ -361,5 +360,10 @@ class EditWarehouseFragment : DeliveryTrackerFragment(), FlexibleAdapter.OnItemC
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPopFragmentFromBackstack() {
+        dp.warehouses.invalidateDirty(warehouseId)
+        super.onPopFragmentFromBackstack()
     }
 }

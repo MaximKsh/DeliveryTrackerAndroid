@@ -74,6 +74,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if (!result.success) {
             throw NetworkException(result)
         }
+        viewDigestContainer.clearViewDigests()
         invalidate(id)
     }.await()
 

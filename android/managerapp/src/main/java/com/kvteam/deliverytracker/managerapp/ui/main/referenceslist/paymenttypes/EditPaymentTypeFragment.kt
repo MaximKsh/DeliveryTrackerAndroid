@@ -86,11 +86,6 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
         return inflater.inflate(R.layout.fragment_edit_payment_type, container, false)
     }
 
-    override fun onStop() {
-        dp.paymentTypes.invalidateDirty(paymentTypeId)
-        super.onStop()
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =  launchUI ({
         when (item.itemId) {
             R.id.action_done -> {
@@ -111,5 +106,10 @@ class EditPaymentTypeFragment : DeliveryTrackerFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPopFragmentFromBackstack() {
+        dp.paymentTypes.invalidateDirty(paymentTypeId)
+        super.onPopFragmentFromBackstack()
     }
 }

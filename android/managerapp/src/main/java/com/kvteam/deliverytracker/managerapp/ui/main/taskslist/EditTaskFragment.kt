@@ -162,14 +162,14 @@ class EditTaskFragment : DeliveryTrackerFragment() {
     }
 
     override fun onStop() {
-        val selectedItem = pager?.currentItem
-        if (selectedItem != null && selectedItem in 1..NUM_PAGES) {
-            val fragment = fragments[selectedItem]
-            if (fragment.shouldDeleteDirty()) {
-                dp.taskInfos.invalidateDirty(taskId)
-            }
-        }
+        dtActivity.removeOnKeyboardHideListener(::showStepper)
+        dtActivity.removeOnKeyboardHideListener(::hideStepper)
         super.onStop()
+    }
+
+    override fun onPopFragmentFromBackstack() {
+        dp.taskInfos.invalidateDirty(taskId)
+        super.onPopFragmentFromBackstack()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI({
@@ -213,13 +213,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun onDestroyView() {
-        dtActivity.removeOnKeyboardHideListener(::showStepper)
-        dtActivity.removeOnKeyboardHideListener(::hideStepper)
-        super.onDestroyView()
-    }
-
 
     private fun showStepper () {
         if (rlStepperContainer == null || rlStepperContainer.height != 0) {

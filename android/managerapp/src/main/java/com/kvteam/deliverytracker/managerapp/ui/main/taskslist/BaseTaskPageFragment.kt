@@ -12,6 +12,4 @@ abstract class BaseTaskPageFragment : DeliveryTrackerFragment() {
     fun setTask(id: UUID?) {
         this.taskId = id ?: UUID.randomUUID()
     }
-
-    open fun shouldDeleteDirty() = true
 }

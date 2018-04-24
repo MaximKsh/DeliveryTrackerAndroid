@@ -163,13 +163,14 @@ class EditClientFragment : DeliveryTrackerFragment() {
         super.onOptionsItemSelected(item)
     })
 
-    override fun onStop() {
-        dp.clients.invalidateDirty(clientId)
-        super.onStop()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    override fun onPopFragmentFromBackstack() {
+        dp.clients.invalidateDirty(clientId)
+        super.onPopFragmentFromBackstack()
+    }
+
 }

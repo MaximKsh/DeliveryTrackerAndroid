@@ -27,8 +27,6 @@ class TaskProductsFragment : BaseTaskPageFragment() {
     @Inject
     lateinit var dp: DataProvider
 
-    private var deleteDirty = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -80,17 +78,8 @@ class TaskProductsFragment : BaseTaskPageFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         tvSelectProduct.setOnClickListener { _ ->
-            deleteDirty = false
             navigationController.navigateToFilterProducts(taskId)
         }
-    }
-
-    override fun shouldDeleteDirty(): Boolean {
-        if (!deleteDirty) {
-            deleteDirty = true
-            return false
-        }
-        return true
     }
 
     private fun updateProductView (view: View, taskProductInfo: TaskProduct?, container: View? = this.view) {

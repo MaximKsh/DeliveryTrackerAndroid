@@ -2,13 +2,10 @@ package com.kvteam.deliverytracker.core.ui
 
 import android.app.Service
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.FragmentManager
-import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -20,9 +17,7 @@ import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.coroutines.experimental.async
 import javax.inject.Inject
-import android.view.Window.ID_ANDROID_CONTENT
 
 
 abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentManager.OnBackStackChangedListener {
@@ -58,9 +53,9 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
 
     }
 
-    private val keyboardShowListeners = mutableListOf<() -> Unit>()
+    private val keyboardShowListeners = mutableSetOf<() -> Unit>()
 
-    private val keyboardHideListeners = mutableListOf<() -> Unit>()
+    private val keyboardHideListeners = mutableSetOf<() -> Unit>()
 
 
     private fun triggerOnKeyboardShowListeners () {
@@ -159,7 +154,7 @@ abstract class DeliveryTrackerActivity : DaggerAppCompatActivity(), FragmentMana
                 startActivity(intent)
                 finish()
             } else {
-                val result = async { dtSession.checkSessionAsync() }.await()
+                val result = dtSession.checkSessionAsync()
 
                 if(result == CheckSessionResult.Incorrect) {
                     dtSession.logoutAsync()
