@@ -79,18 +79,20 @@ class TaskClientFragment : BaseTaskPageFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_client, container, false) as ViewGroup
-        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
-        if (task.clientId != null) {
-            showClientDetails(DataProviderGetMode.DIRTY)
-        }
+
         rootView.spinnerAddress.setPadding(15, 10, 0, 10)
         return rootView
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
         val autocomplete = acClient.autoCompleteTextView
-
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        ignoreWatcher = true
+        if (task.clientId != null) {
+            showClientDetails(DataProviderGetMode.DIRTY)
+        }
         clientPhoneTextWatcher = ClientTextWatcher(this@TaskClientFragment)
         etPhoneNumberField.addTextChangedListener(clientPhoneTextWatcher)
 
@@ -101,10 +103,12 @@ class TaskClientFragment : BaseTaskPageFragment() {
                 activity!!,
                 {
                     runBlocking {
+                        val phone = it
+
                         val viewResult = dp.clientsViews.getViewResultAsync(
                                 ReferenceViewGroup,
                                 ClientsView,
-                                mapOf("phone_number" to it)).viewResult
+                                mapOf("phone_number" to phone)).viewResult
                         val result = viewResult
                                 .map { dp.clients.getAsync(it, DataProviderGetMode.PREFER_CACHE).entry }
                                 .toMutableList()
@@ -114,7 +118,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
         ))
         autocomplete.setOnItemClickListener { _, _, i, _ ->
             val client = autocomplete.adapter.getItem(i) as Client
-            etPhoneNumberField.setPhoneNumber(client.phoneNumber)
+            etPhoneNumberField.setText(client.phoneNumber)
         }
     }
 
@@ -131,7 +135,7 @@ class TaskClientFragment : BaseTaskPageFragment() {
             val viewResult = dp.clientsViews.getViewResultAsync(
                     ReferenceViewGroup,
                     ClientsView,
-                    mapOf("phone_number" to etPhoneNumberField.text),
+                    mapOf("phone_number" to acClient.autoCompleteTextView.text),
                     DataProviderGetMode.PREFER_CACHE).viewResult
 
             if (viewResult.isEmpty()) {

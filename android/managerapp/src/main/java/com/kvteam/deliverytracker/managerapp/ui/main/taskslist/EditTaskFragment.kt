@@ -193,7 +193,8 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
                 try {
                     val clientId = task.clientId
-                    if (clientId != null) {
+                    if (clientId != null
+                        && dp.clients.hasDirty(clientId)) {
                         val oldClient = dp.clients.get(clientId, DataProviderGetMode.DIRTY).entry
                         dp.clients.upsertAsync(oldClient)
                     }
