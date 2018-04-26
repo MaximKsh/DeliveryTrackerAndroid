@@ -1,123 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/slidingLayout"
+<RelativeLayout
+    android:id="@+id/rlContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:umanoDragView="@+id/rlGeneralInfo"
-    sothree:umanoFadeColor="@android:color/transparent"
-    sothree:umanoPanelHeight="0dp"
-    sothree:umanoParallaxOffset="0dp"
-    sothree:umanoScrollableView="@id/rvAddressList"
-    sothree:umanoShadowHeight="0dp">
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <FrameLayout
-        android:id="@+id/flMainContainer"
+    <LinearLayout
+        android:id="@+id/llName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp">
 
-        <FrameLayout
-            android:id="@+id/fGoogleMap"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:labelFor="@id/etNameField"
+            android:text="@string/Core_WarehouseTitle"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp" />
 
-        <RelativeLayout
-            android:id="@+id/rlNameAndAddressContainer"
+        <EditText
+            android:id="@+id/etNameField"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/toolbar_height"
-            android:paddingTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:elevation="16dp"
-            android:background="@color/colorWhite"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/llName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/etNameField"
-                    android:text="@string/Core_WarehouseTitle"
-                    android:textColor="@color/colorGray"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/etNameField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/selector_edit_text"
-                    android:inputType="textCapSentences"
-                    android:textSize="15sp"
-                    android:theme="@style/EditTextTheme" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/llWarehouseAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/llName"
-                android:paddingBottom="8dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp">
-
-                <TextView
-                    android:id="@+id/tvAddressLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/etAddressField"
-                    android:text="@string/Core_WarehouseAddress"
-                    android:textColor="@color/colorGray"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/etAddressField"
-                    android:layout_below="@id/tvAddressLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/selector_edit_text"
-                    android:gravity="top"
-                    android:paddingEnd="30dp"
-                    android:inputType="textCapWords"
-                    android:minLines="4"
-                    android:textSize="15sp"
-                    android:theme="@style/EditTextTheme" />
-
-                <ImageView
-                    android:id="@+id/ivDeleteTextIcon"
-                    android:visibility="gone"
-                    android:layout_below="@id/tvAddressLabel"
-                    android:layout_alignParentEnd="true"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:alpha="0.2"
-                    android:src="@drawable/ic_clear_black_24dp"/>
-            </RelativeLayout>
-        </RelativeLayout>
-
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/selector_edit_text"
+            android:inputType="textCapSentences"
+            android:textSize="15sp"
+            android:theme="@style/EditTextTheme" />
+    </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/rlSlidingAddressList"
+        android:id="@+id/llWarehouseAddress"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shape_top_border_ltgray">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llName"
+        android:paddingBottom="8dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvAddressList"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
+        <TextView
+            android:id="@+id/tvAddressLabel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:labelFor="@id/etAddressField"
+            android:text="@string/Core_WarehouseAddress"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etAddressField"
+            android:layout_below="@id/tvAddressLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/selector_edit_text"
+            android:gravity="top"
+            android:paddingEnd="30dp"
+            android:inputType="textCapWords"
+            android:minLines="4"
+            android:textSize="15sp"
+            android:theme="@style/EditTextTheme" />
+
+        <ImageView
+            android:id="@+id/ivDeleteTextIcon"
+            android:visibility="gone"
+            android:layout_below="@id/tvAddressLabel"
+            android:layout_alignParentEnd="true"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:alpha="0.2"
+            android:src="@drawable/ic_clear_black_24dp"/>
     </RelativeLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</RelativeLayout>

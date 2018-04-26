@@ -4,6 +4,7 @@ package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.app.Activity
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.common.MapsAdapter
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.core.ui.UIState
@@ -247,6 +248,12 @@ abstract class MainActivityModule {
                     activity,
                     R.id.placeSnackBar,
                     lm)
+        }
+
+        @Provides
+        @ActivityScope
+        fun mapsAdapter(activity: MainActivity): MapsAdapter {
+            return MapsAdapter(activity.googleApiClient)
         }
 
         @Provides

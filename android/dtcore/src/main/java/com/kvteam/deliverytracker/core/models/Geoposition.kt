@@ -15,6 +15,10 @@ data class Geoposition (
         return LatLng(latitude, longitude)
     }
 
+    fun toDirectionsLtnLng(): com.google.maps.model.LatLng {
+        return com.google.maps.model.LatLng(latitude, longitude)
+    }
+
     override fun fromMap(map: Map<*, *>) {
         longitude = map["Longitude"] as? Double ?: 0.0
         latitude = map["Latitude"] as? Double ?: 0.0
