@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/flContainer"
             android:layout_marginTop="@dimen/toolbar_height"
             android:paddingTop="20dp"
@@ -31,7 +31,55 @@
             android:elevation="16dp"
             android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/rlInflateContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:id="@+id/llWarehouseAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlInflateContainer"
+                android:paddingBottom="8dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
+
+                <TextView
+                    android:id="@+id/tvAddressLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/etAddressField"
+                    android:text="@string/Core_WarehouseAddress"
+                    android:textColor="@color/colorGray"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etAddressField"
+                    android:layout_below="@id/tvAddressLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/selector_edit_text"
+                    android:gravity="top"
+                    android:paddingEnd="30dp"
+                    android:inputType="textCapWords"
+                    android:minLines="4"
+                    android:textSize="15sp"
+                    android:theme="@style/EditTextTheme" />
+
+                <ImageView
+                    android:id="@+id/ivDeleteTextIcon"
+                    android:visibility="gone"
+                    android:layout_below="@id/tvAddressLabel"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:alpha="0.2"
+                    android:src="@drawable/ic_clear_black_24dp"/>
+            </RelativeLayout>
+        </RelativeLayout>
     </FrameLayout>
 
     <RelativeLayout

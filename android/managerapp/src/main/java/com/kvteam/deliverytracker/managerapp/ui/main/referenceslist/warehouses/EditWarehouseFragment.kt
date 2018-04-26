@@ -37,8 +37,6 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
         get() = arguments?.getBoolean(tryPrefetchKey) ?: false
         set(value) = arguments?.putBoolean(tryPrefetchKey, value)!!
 
-    private lateinit var validation: AwesomeValidation
-
     fun setWarehouse(id: UUID?) {
         this.warehouseId = id ?: UUID.randomUUID()
         this.tryPrefetch = id != null
@@ -49,6 +47,7 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
         val geoposition = googleMapAddress.geoposition
         val warehouse = dp.warehouses.get(warehouseId, DataProviderGetMode.DIRTY).entry
         warehouse.geoposition = geoposition
+        warehouse.rawAddress = googleMapAddress.primaryText.toString()
         return super.onItemClick(view, position)
     }
 
@@ -70,6 +69,8 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
             tryPrefetch = false
         }
 
+        anchorElement = llName
+
         val warehouse = dp.warehouses.get(warehouseId, DataProviderGetMode.DIRTY).entry
 
         val vto = llName.viewTreeObserver
@@ -90,11 +91,8 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
             }
         })
 
-        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
         validation.addValidation(
                 etNameField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_WarehouseTitleValidationError))
-        validation.addValidation(
-                etAddressField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_WarehouseAddressValidationError))
         validation.setContext(this@EditWarehouseFragment.dtActivity)
     }
 
@@ -118,7 +116,6 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
                 }
                 val warehouse = dp.warehouses.getAsync(warehouseId, DataProviderGetMode.DIRTY).entry
                 warehouse.name = etNameField.text.toString()
-                warehouse.rawAddress = etAddressField.text.toString()
                 dp.warehouses.upsertAsync(warehouse)
 
                 navigationController.closeCurrentFragment()

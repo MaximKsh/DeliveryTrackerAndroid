@@ -16,6 +16,9 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import com.basgeekball.awesomevalidation.AwesomeValidation
+import com.basgeekball.awesomevalidation.ValidationStyle
+import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.kvteam.deliverytracker.core.async.launchUI
@@ -36,7 +39,6 @@ import dagger.android.support.AndroidSupportInjection
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_base_edit_address.*
 import kotlinx.android.synthetic.main.fragment_base_edit_address.view.*
-import kotlinx.android.synthetic.main.fragment_edit_warehouse.*
 import javax.inject.Inject
 
 
@@ -52,6 +54,8 @@ open class BaseAddressMapFragment : DeliveryTrackerFragment(), FlexibleAdapter.O
 
     @Inject
     lateinit var referenceWebservice: IReferenceWebservice
+
+    protected lateinit var validation: AwesomeValidation
 
     @Inject
     lateinit var lm: ILocalizationManager
@@ -132,9 +136,11 @@ open class BaseAddressMapFragment : DeliveryTrackerFragment(), FlexibleAdapter.O
         toolbar.setToolbarTitle("")
     }
 
+    protected lateinit var anchorElement: View
+
     fun toggleAnimations(open: Boolean) {
         if (!open) {
-            val endPercent = 1 - (llWarehouseAddress.top.toFloat() + originalTopMarginOfRl) / slidingLayout.height
+            val endPercent = 1 - (anchorElement.bottom.toFloat() + originalTopMarginOfRl - originalTopPaddingOfRl) / slidingLayout.height
             slidingLayout.anchorPoint = 0.01f
             autoAnimateInterpolation(200, slidingLayout.anchorPoint, endPercent)
         } else {
@@ -233,6 +239,8 @@ open class BaseAddressMapFragment : DeliveryTrackerFragment(), FlexibleAdapter.O
             }
         })
 
+        anchorElement = llWarehouseAddress
+
         etAddressField.addOnFocusChangeListener(addressFieldFocusListener)
 
         ivDeleteTextIcon.setOnClickListener {
@@ -258,17 +266,23 @@ open class BaseAddressMapFragment : DeliveryTrackerFragment(), FlexibleAdapter.O
         rvAddressList.adapter = mAddressListAdapter
 
         etAddressField.addTextChangedListener(addressFieldTextChangedListener)
+
+        validation = AwesomeValidation(ValidationStyle.UNDERLABEL)
+        validation.addValidation(
+                etAddressField, RegexTemplate.NOT_EMPTY, getString(com.kvteam.deliverytracker.core.R.string.Core_WarehouseAddressValidationError))
+        validation.setContext(this@BaseAddressMapFragment.dtActivity)
     }
 
     protected var startGeoposition: Geoposition? = null
 
     open val editContainerLayoutID: Int? = null
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_base_edit_address, container, false)
 
         if (editContainerLayoutID != null) {
-            inflater.inflate(editContainerLayoutID as Int, rootView.flContainer)
+            inflater.inflate(editContainerLayoutID as Int, rootView.rlInflateContainer)
         }
 
         (rootView.flContainer.layoutParams as ViewGroup.MarginLayoutParams).topMargin =
