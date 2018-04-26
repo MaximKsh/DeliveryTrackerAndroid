@@ -16,6 +16,8 @@ abstract class DeliveryTrackerFragment: Fragment() {
     protected val dropdownTop
         get() = toolbarController.dropDownTop
 
+    protected var backStackEntryCount: Int = -1
+
     val name: String = this.javaClass.simpleName
 
     open val useSoftKeyboardFeatures = true
@@ -37,6 +39,10 @@ abstract class DeliveryTrackerFragment: Fragment() {
 
     }
 
+    protected open fun onPopFragmentFromBackstack() {
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureToolbar(toolbarController)
@@ -54,9 +60,28 @@ abstract class DeliveryTrackerFragment: Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val currentActivity = activity as? DeliveryTrackerActivity
+        if (currentActivity != null) {
+            backStackEntryCount = currentActivity.supportFragmentManager.backStackEntryCount
+        }
+    }
+
     override fun onPause() {
         dtActivity.softKeyboard.closeSoftKeyboard()
         super.onPause()
+    }
+
+    override fun onDestroy() {
+        val currentActivity = activity as? DeliveryTrackerActivity
+        if (currentActivity != null) {
+            val currentBackStackEntryCount = currentActivity.supportFragmentManager.backStackEntryCount
+            if (currentBackStackEntryCount < backStackEntryCount) {
+                onPopFragmentFromBackstack()
+            }
+        }
+        super.onDestroy()
     }
 
     protected fun showFab() {

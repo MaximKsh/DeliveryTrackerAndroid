@@ -62,7 +62,7 @@ class ErrorHandler(
     override fun handleNoInternetWarn(origin: DataProviderGetOrigin): Boolean {
         if(origin != DataProviderGetOrigin.WEB) {
             Snackbar
-                    .make(ctx.rootView, "No Internet", Snackbar.LENGTH_LONG)
+                    .make(ctx.rootView, lm.getString(R.string.Core_NoInternet), Snackbar.LENGTH_LONG)
                     .show()
             return true
         }

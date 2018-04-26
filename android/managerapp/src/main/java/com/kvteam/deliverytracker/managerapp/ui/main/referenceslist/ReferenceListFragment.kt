@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.ReferenceViewGroup
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
 import com.kvteam.deliverytracker.core.models.Client
@@ -42,7 +43,7 @@ open class ReferenceListFragment : BaseListFragment() {
 
     override val defaultHeader by lazy { lm.getString(R.string.ServerMessage_Views_ProductsView) }
 
-    override val viewGroup: String = "ReferenceViewGroup"
+    override val viewGroup: String = ReferenceViewGroup
 
     private val paymentTypesActions = object : IBaseListItemActions<PaymentTypeListItem> {
         override suspend fun onDelete(adapter: FlexibleAdapter<*>, itemList: MutableList<PaymentTypeListItem>, item: PaymentTypeListItem) {

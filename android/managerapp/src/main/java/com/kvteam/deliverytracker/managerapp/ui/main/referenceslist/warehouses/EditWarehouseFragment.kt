@@ -129,4 +129,9 @@ class EditWarehouseFragment : BaseAddressMapFragment() {
         inflater.inflate(R.menu.done_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+    override fun onPopFragmentFromBackstack() {
+        dp.warehouses.invalidateDirty(warehouseId)
+        super.onPopFragmentFromBackstack()
+    }
 }

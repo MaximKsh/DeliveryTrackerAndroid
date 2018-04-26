@@ -14,7 +14,8 @@ interface IDataComponent <T : ModelBase> {
 
     fun hasDirty(id: UUID) : Boolean
 
-    fun invalidate(id: UUID? = null)
-
-    fun invalidateDirty(id: UUID?)
+    fun invalidate()
+    fun invalidate(id: UUID)
+    fun invalidateDirty()
+    fun invalidateDirty(id: UUID)
 }

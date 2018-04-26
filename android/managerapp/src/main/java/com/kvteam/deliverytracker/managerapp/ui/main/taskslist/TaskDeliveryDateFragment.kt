@@ -109,7 +109,11 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
 
     private fun getDateIndex (date: DateTime): Int {
         val duration = Duration(DateTime.now(DateTimeZone.UTC), date)
-        return if (duration.standardDays.toInt() < 2) duration.standardDays.toInt() else 2
+        return when (duration.standardDays.toInt()) {
+            0 -> 0
+            1 -> 1
+            else -> 2
+        }
     }
 
     private fun getTimeIntervalIndex (dateFrom: DateTime, dateTo: DateTime): Int {

@@ -74,6 +74,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         if (!result.success) {
             throw NetworkException(result)
         }
+        viewDigestContainer.clearViewDigests()
         invalidate(id)
     }.await()
 
@@ -81,26 +82,26 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
         return dataContainer.getDirty(id) != null
     }
 
-    override fun invalidate(id: UUID?) {
-        if(id == null) {
-            dataContainer.clearEntries()
-            dataContainer.clearDirties()
-            clearCollections()
-        } else {
-            dataContainer.removeEntry(id)
-            dataContainer.removeDirty(id)
-            clearCollections(id)
-        }
+    override fun invalidate() {
+        dataContainer.clearEntries()
+        dataContainer.clearDirties()
+        clearCollections()
     }
 
-    override fun invalidateDirty(id: UUID?) {
-        if(id == null) {
-            dataContainer.clearDirties()
-            clearCollectionDirties()
-        } else {
-            dataContainer.removeDirty(id)
-            clearCollectionDirties(id)
-        }
+    override fun invalidate(id: UUID) {
+        dataContainer.removeEntry(id)
+        dataContainer.removeDirty(id)
+        clearCollections(id)
+    }
+
+    override fun invalidateDirty() {
+        dataContainer.clearDirties()
+        clearCollectionDirties()
+    }
+
+    override fun invalidateDirty(id: UUID) {
+        dataContainer.removeDirty(id)
+        clearCollectionDirties(id)
     }
 
     private suspend fun getForceWebAsync(id: UUID) : DataProviderGetResult<T> = async {
