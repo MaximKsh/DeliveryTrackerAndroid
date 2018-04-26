@@ -61,6 +61,9 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     private fun addPolyline(results: DirectionsResult) {
         val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
         googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
+        val latLngBoundsBuilder = LatLngBounds.builder()
+        decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
+        (googleMap as GoogleMap).moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 0));
     }
 
     private fun addMarkersToMap(results: DirectionsResult) {
@@ -87,7 +90,6 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
 
         addMarkersToMap(result)
         addPolyline(result)
-        moveCameraToPosition(origin.toGeoposition().toLtnLng(), false)
     }
 
     fun moveCameraToPosition(position: LatLng, animated: Boolean) {
