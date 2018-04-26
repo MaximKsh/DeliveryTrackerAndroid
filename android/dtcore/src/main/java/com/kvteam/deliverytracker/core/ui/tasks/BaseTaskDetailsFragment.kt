@@ -4,17 +4,26 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.DirectionsApi
+import com.google.maps.model.TravelMode
 import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.common.MapsAdapter
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
+import com.kvteam.deliverytracker.core.models.Geoposition
+import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
@@ -26,6 +35,9 @@ import kotlinx.android.synthetic.main.task_product_item.view.*
 import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
+import com.google.maps.GeoApiContext
+
+
 
 abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     @Inject
@@ -36,6 +48,9 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var lm: ILocalizationManager
+
+    @Inject
+    lateinit var mapsAdapter: MapsAdapter
 
     @Inject
     lateinit var dp: DataProvider
@@ -85,6 +100,31 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         toolbar.setToolbarTitle("Task details")
     }
 
+    private fun setGoogleMap() {
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE).entry
+        val warehouse = dp.warehouses.get(task.warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+        val clientAddress = dp.clientAddresses.get(
+                task.clientAddressId as UUID,
+                task.clientId as UUID,
+                DataProviderGetMode.FORCE_CACHE
+        )
+
+        if (warehouse.geoposition != null && clientAddress.geoposition != null) {
+            Handler().postDelayed({
+                if (isAdded) {
+                    val mapFragment = SupportMapFragment()
+                    childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
+                    mapFragment.getMapAsync {
+                        mapsAdapter.googleMap = it
+                        mapsAdapter.buildRoute(warehouse.geoposition!!.toDirectionsLtnLng(),
+                                clientAddress.geoposition!!.toDirectionsLtnLng(),
+                                task.deliveryFrom)
+                    }
+                }
+            }, 250)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
 
@@ -95,6 +135,10 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             return@launchUI
         }
         val task = taskResult.entry
+
+        if (task.clientAddressId != null && task.warehouseId != null) {
+            setGoogleMap()
+        }
 
         tvTaskStatus.text = lm.getString(task.taskStateCaption!!)
         tvTaskNumber.text = task.taskNumber
@@ -186,7 +230,8 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_base_task_details, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_base_task_details, container, false)
+        return rootView
     }
 
     private fun onChangeStateClick(transitionId: UUID) = launchUI {

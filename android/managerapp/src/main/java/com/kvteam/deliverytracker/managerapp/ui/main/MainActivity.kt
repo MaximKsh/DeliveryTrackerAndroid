@@ -13,6 +13,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.DirectionsApi
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.common.MapsAdapter
@@ -31,7 +32,7 @@ class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFail
 
     private val bnvSelectedItemKey = "bnvSelectedItem"
 
-    lateinit var mMapsAdapter: MapsAdapter
+    lateinit var googleApiClient: GoogleApiClient
 
     @Inject
     lateinit var gsonProvider: IDeliveryTrackerGsonProvider
@@ -97,15 +98,12 @@ class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFail
 
         toolbarController.mainContainer = mainContainer
 
-        val googleApiClient = GoogleApiClient
+        googleApiClient = GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build()
-
-        mMapsAdapter = MapsAdapter(googleApiClient)
-
 
         if(intent.action == PUSH_ACTION) {
             val action = intent.extras[PUSH_ACTION_KEY] as? String ?: EMPTY_STRING

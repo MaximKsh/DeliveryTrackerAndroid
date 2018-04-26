@@ -108,6 +108,12 @@
                         android:textColor="@color/colorGray"
                         android:textSize="16sp" />
                 </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/flTaskLiteMap"
+                    android:layout_below="@id/rlPerformerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
             </RelativeLayout>
 
             <RelativeLayout
