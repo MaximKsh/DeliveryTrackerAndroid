@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.common
 
 import android.content.pm.PackageManager
+import android.util.Log
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Places
@@ -19,6 +20,8 @@ import org.joda.time.DateTime
 import com.google.maps.model.DirectionsResult
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 data class GoogleMapAddress(
@@ -63,7 +66,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
         val latLngBoundsBuilder = LatLngBounds.builder()
         decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
-        (googleMap as GoogleMap).moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 0));
+        (googleMap as GoogleMap).moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 0))
     }
 
     private fun addMarkersToMap(results: DirectionsResult) {

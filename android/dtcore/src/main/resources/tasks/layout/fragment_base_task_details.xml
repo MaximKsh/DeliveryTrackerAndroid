@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
@@ -109,11 +110,6 @@
                         android:textSize="16sp" />
                 </RelativeLayout>
 
-                <FrameLayout
-                    android:id="@+id/flTaskLiteMap"
-                    android:layout_below="@id/rlPerformerContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -161,11 +157,42 @@
                 android:padding="15dp"
                 android:text="No description" />
 
+
+            <HorizontalScrollView
+                android:id="@+id/flTaskLiteMapContainer"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:layout_height="250dp"
+                android:layout_below="@id/tvTaskDescription">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
+
+                    <FrameLayout
+                        android:id="@+id/flTaskLiteMap"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp" />
+
+                    <ImageView
+                        android:id="@+id/flStreetView"
+                        android:layout_width="300dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@id/flTaskLiteMap" />
+                </RelativeLayout>
+            </HorizontalScrollView>
+
             <View
                 android:id="@+id/vSeparator"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_below="@id/tvTaskDescription"
+                android:layout_below="@id/flTaskLiteMapContainer"
                 android:background="@color/colorLightGray" />
 
             <View
@@ -174,6 +201,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@id/vSeparator"
                 android:background="@drawable/shape_bottom_border_ltgray" />
+
 
             <TextView
                 android:id="@+id/tvDeliveryInfo"
@@ -374,8 +402,8 @@
                     android:id="@+id/rlTotalCost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     android:layout_below="@+id/tvNoProducts"
+                    android:layout_marginTop="15dp"
                     android:visibility="gone">
 
                     <TextView
@@ -450,17 +478,17 @@
     <RelativeLayout
         android:id="@+id/rlChangeState"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:padding="15dp"
-        android:layout_height="wrap_content">
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/tvTaskChangeState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:layout_alignParentStart="true"
-            android:text="Change status"/>
+            android:text="Change status"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/ivTaskStateExpandIcon"
@@ -470,10 +498,10 @@
 
         <LinearLayout
             android:id="@+id/llTransitionButtons"
-            android:layout_marginTop="25dp"
-            android:layout_below="@id/tvTaskState"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tvTaskState"
+            android:layout_marginTop="25dp"
             android:orientation="vertical" />
 
     </RelativeLayout>

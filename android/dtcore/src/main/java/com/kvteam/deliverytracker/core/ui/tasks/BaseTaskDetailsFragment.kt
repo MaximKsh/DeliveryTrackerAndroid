@@ -1,15 +1,22 @@
 package com.kvteam.deliverytracker.core.ui.tasks
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ethanhua.skeleton.Skeleton
+import com.ethanhua.skeleton.SkeletonScreen
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.DirectionsApi
@@ -36,7 +43,9 @@ import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
 import com.google.maps.GeoApiContext
-
+import com.kvteam.deliverytracker.core.async.invokeAsync
+import java.io.InputStream
+import java.net.URL
 
 
 abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
@@ -82,8 +91,8 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         get() = arguments?.getInt(transitionsCountKey)!!
         set(value) = arguments?.putInt(transitionsCountKey, value)!!
 
-    fun setTask (id: UUID) {
-        this.taskId= id
+    fun setTask(id: UUID) {
+        this.taskId = id
     }
 
     protected abstract fun closeFragment()
@@ -101,6 +110,12 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
     private fun setGoogleMap() {
+//        val skeletonMap = Skeleton.bind(flTaskLiteMap)
+//                .load(R.layout.layout_img_sketelon)
+//                .angle(0)
+//                .color(R.color.colorLightGray)
+//                .show()
+
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE).entry
         val warehouse = dp.warehouses.get(task.warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
         val clientAddress = dp.clientAddresses.get(
@@ -109,24 +124,70 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                 DataProviderGetMode.FORCE_CACHE
         )
 
+        if (clientAddress.geoposition == null) {
+            clientAddress.geoposition = Geoposition(37.625065, 55.759832)
+        }
+
         if (warehouse.geoposition != null && clientAddress.geoposition != null) {
             Handler().postDelayed({
                 if (isAdded) {
-                    val mapFragment = SupportMapFragment()
+                    val googleMapOptions = GoogleMapOptions()
+                            .liteMode(true)
+                    val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
                     childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
                     mapFragment.getMapAsync {
+                        mapFragment.view!!.visibility = View.INVISIBLE
                         mapsAdapter.googleMap = it
-                        mapsAdapter.buildRoute(warehouse.geoposition!!.toDirectionsLtnLng(),
-                                clientAddress.geoposition!!.toDirectionsLtnLng(),
-                                task.deliveryFrom)
+                        (mapsAdapter.googleMap as GoogleMap).setOnMapLoadedCallback {
+                            (mapsAdapter.googleMap as GoogleMap).setOnCameraChangeListener {
+                                Log.i("SHIT", "SHITTER")
+                                mapFragment.view!!.visibility = View.VISIBLE
+                            }
+                            mapsAdapter.buildRoute(
+                                    warehouse.geoposition!!.toDirectionsLtnLng(),
+                                    clientAddress.geoposition!!.toDirectionsLtnLng(),
+                                    task.deliveryFrom)
+//                            skeletonMap.hide()
+                        }
                     }
                 }
             }, 250)
         }
     }
 
+    private fun setStreetViewPicture() {
+        val skeletonStreetView = Skeleton.bind(flStreetView)
+                .load(R.layout.layout_img_sketelon)
+                .angle(0)
+                .color(R.color.colorLightGray)
+                .show()
+
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE).entry
+        val clientAddress = dp.clientAddresses.get(
+                task.clientAddressId as UUID,
+                task.clientId as UUID,
+                DataProviderGetMode.FORCE_CACHE
+        )
+
+        if (clientAddress.geoposition == null) {
+            clientAddress.geoposition = Geoposition(37.625065, 55.759832)
+        }
+
+        imageURL = "$imageURL${(clientAddress.geoposition as Geoposition).latitude},${(clientAddress.geoposition as Geoposition).longitude}"
+        invokeAsync({
+            BitmapFactory.decodeStream(URL(imageURL).content as InputStream)
+        }, {
+            flStreetView.setImageBitmap(it)
+            skeletonStreetView.hide()
+        })
+    }
+
+    private lateinit var imageURL: String
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+
+        imageURL = "https://maps.googleapis.com/maps/api/streetview?size=${(300 * density).toInt()}x${(220 * density).toInt()}&fov=90&heading=235&pitch=10&location="
 
         val taskResult = try {
             dp.taskInfos.getAsync(taskId, DataProviderGetMode.FORCE_WEB)
@@ -138,6 +199,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
         if (task.clientAddressId != null && task.warehouseId != null) {
             setGoogleMap()
+            setStreetViewPicture()
         }
 
         tvTaskStatus.text = lm.getString(task.taskStateCaption!!)
@@ -221,7 +283,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         transitionsCount = task.taskStateTransitions.size
         for (transition in task.taskStateTransitions) {
             val view = SwitchStateView(this@BaseTaskDetailsFragment.context!!)
-            view.button.text = lm.getString( transition.buttonCaption ?: EMPTY_STRING )
+            view.button.text = lm.getString(transition.buttonCaption ?: EMPTY_STRING)
             view.button.setOnClickListener { onChangeStateClick(transition.id!!) }
             llTransitionButtons.addView(view)
         }
@@ -237,13 +299,13 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     private fun onChangeStateClick(transitionId: UUID) = launchUI {
         val transitResult = taskWebservice.changeStateAsync(taskId, transitionId)
         dp.taskInfoViews.invalidate()
-        if(eh.handle(transitResult)) {
+        if (eh.handle(transitResult)) {
             return@launchUI
         }
         closeFragment()
     }
 
-    private fun rotateBitmap (source: Bitmap, angle: Float): Bitmap {
+    private fun rotateBitmap(source: Bitmap, angle: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angle)
         return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
