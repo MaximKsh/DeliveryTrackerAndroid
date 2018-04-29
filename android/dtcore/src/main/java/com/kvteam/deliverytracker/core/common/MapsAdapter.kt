@@ -7,10 +7,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.maps.DirectionsApi
 import com.google.maps.model.TravelMode
 import com.kvteam.deliverytracker.core.models.Geoposition
@@ -18,7 +15,6 @@ import kotlinx.coroutines.experimental.async
 import com.google.maps.GeoApiContext
 import org.joda.time.DateTime
 import com.google.maps.model.DirectionsResult
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.model.DirectionsLeg
 import java.util.*
@@ -119,11 +115,14 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     private fun addMarkersToMap(route: DirectionsLeg) {
         googleMap!!.addMarker(MarkerOptions()
                 .position(LatLng(route.startLocation.lat, route.startLocation.lng))
-                .title(route.startAddress))
+                .title(route.startAddress)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+        )
 
         googleMap!!.addMarker(MarkerOptions()
                                 .position(LatLng(route.endLocation.lat, route.endLocation.lng))
-                                .title(route.startAddress))
+                                .title(route.endAddress)
+        )
     }
 
     fun drawRoute(route: DirectionsLeg, decodedPath: Iterable<LatLng>) {

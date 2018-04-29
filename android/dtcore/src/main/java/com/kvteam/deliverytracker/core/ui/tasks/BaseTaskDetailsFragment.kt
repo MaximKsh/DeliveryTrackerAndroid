@@ -1,10 +1,12 @@
 package com.kvteam.deliverytracker.core.ui.tasks
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -160,10 +162,19 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                             .liteMode(true)
 
                     val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
+
                     childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
+
                     mapFragment.getMapAsync {
                         mapsAdapter.googleMap = it
-                        (mapsAdapter.googleMap as GoogleMap).setOnMapLoadedCallback {
+                        mapsAdapter.googleMap!!.setOnMapClickListener {
+                            val intent = Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("http://maps.google.com/maps?" +
+                                            "saddr=${warehouse.geoposition!!.latitude},${warehouse.geoposition!!.longitude}" +
+                                            "&daddr=${clientAddress.geoposition!!.latitude},${clientAddress.geoposition!!.longitude}"))
+                            startActivity(intent)
+                        }
+                        mapsAdapter.googleMap!!.setOnMapLoadedCallback {
                             mapsAdapter.drawRoute(routeResults.route, routeResults.decodedPath)
                             skeletonMap.hide()
                         }
