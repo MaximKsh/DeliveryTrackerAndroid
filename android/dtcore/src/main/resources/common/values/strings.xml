@@ -2,7 +2,6 @@
     <string name="Core_ConfirmUserData">Confirm profile</string>
     <string name="Core_MainAppLogo">Delivery Bear</string>Core_LastCode
     <string name="Core_LoginActivity_ForgotPassword">Forgot password</string>
-    <string name="Core_LastCode">Your last code %s</string>
     <string name="Core_LoginActivity_CreateInstance">You can add your company</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
     <string name="Core_LoginActivity_Register">Register</string>

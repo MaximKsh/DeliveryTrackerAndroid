@@ -85,7 +85,6 @@ dependencies {
     api 'joda-time:joda-time:2.9.9'
     api 'com.squareup.okhttp3:okhttp:3.9.0'
 
-    api 'com.github.glomadrian:CodeInput:1.1@aar'
     api "android.arch.persistence.room:runtime:1.0.0"
     api 'com.thoughtbot:expandablecheckrecyclerview:1.4'
     api 'com.wang.avi:library:2.1.3'
