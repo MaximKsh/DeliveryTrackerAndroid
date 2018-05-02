@@ -50,8 +50,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(path: ':dtcore')
 
-    kapt 'com.google.dagger:dagger-compiler:2.14.1'
-    kapt "com.google.dagger:dagger-android-processor:2.14.1"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 }
 kotlin {
     experimental {
