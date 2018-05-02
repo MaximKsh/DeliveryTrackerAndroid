@@ -85,21 +85,17 @@ dependencies {
     api 'joda-time:joda-time:2.9.9'
     api 'com.squareup.okhttp3:okhttp:3.9.0'
 
+    // =========== UI ===============
     api 'com.thoughtbot:expandablecheckrecyclerview:1.4'
     api 'com.wang.avi:library:2.1.3'
-
-    // Using JCenter
     api 'eu.davidea:flexible-adapter:5.0.3'
     api 'eu.davidea:flexible-adapter-ui:1.0.0-b3'
     api 'com.sothree.slidinguppanel:library:3.4.0'
-
-    // Using MavenSnapshots repository for continuous updates from my development
     api 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-
     api 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     api 'com.github.arcadefire:nice-spinner:1.3.1'
     api 'in.srain.cube:ultra-ptr:1.0.11'
-    api 'ru.egslava:MaskedEditText:1.0.5'
+    // ==============================
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'

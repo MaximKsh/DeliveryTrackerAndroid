@@ -1,5 +1,7 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
+import com.kvteam.deliverytracker.core.common.getDifference
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IDataContainer
@@ -51,7 +53,10 @@ class TaskInfoDataComponent (
         return taskWebservice.createAsync(taskPackage)
     }
 
-    override suspend fun editRequestAsync(entity: TaskInfo): NetworkResult<TaskResponse> {
+    override suspend fun editRequestAsync(diff: DifferenceResult<TaskInfo>): NetworkResult<TaskResponse>? {
+        val entity = diff.difference
+        var hasDifference = diff.hasDifferentFields
+
         val pack = TaskPackage()
         pack.taskInfo.add(entity)
 
@@ -62,20 +67,30 @@ class TaskInfoDataComponent (
             when(dirty.action) {
                 CollectionEntityAction.Create -> {
                     toPackage.add(dirty)
+                    hasDifference = true
                 }
                 CollectionEntityAction.Edit -> {
-                    toPackage.add(dirty)
+                    val clean = taskProductDataContainer.getEntry(dirty.id!!)
+                    val tpDiff = clean?.getDifference(dirty, { TaskProduct() })
+                    if (tpDiff?.hasDifferentFields == true) {
+                        toPackage.add(tpDiff.difference)
+                        hasDifference = true
+                    }
                 }
                 CollectionEntityAction.Delete -> {
                     dirty.quantity = 0
                     toPackage.add(dirty)
+                    hasDifference = true
                 }
             }
         }
 
         pack.taskProducts.addAll(toPackage)
-
-        return taskWebservice.editAsync(pack)
+        return if (hasDifference) {
+            taskWebservice.editAsync(pack)
+        } else {
+            null
+        }
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<TaskResponse> {

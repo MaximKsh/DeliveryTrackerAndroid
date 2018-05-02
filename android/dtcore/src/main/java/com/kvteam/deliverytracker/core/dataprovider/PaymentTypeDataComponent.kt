@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.common.PaymentTypeType
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
@@ -20,8 +21,12 @@ class PaymentTypeDataComponent(
         return referenceWebservice.createAsync(PaymentTypeType, RequestReferencePackage(entity))
     }
 
-    override suspend fun editRequestAsync(entity: PaymentType): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.editAsync(PaymentTypeType, RequestReferencePackage(entity))
+    override suspend fun editRequestAsync(diff: DifferenceResult<PaymentType>): NetworkResult<ReferenceResponse>? {
+        return if (diff.hasDifferentFields) {
+            referenceWebservice.editAsync(PaymentTypeType, RequestReferencePackage(diff.difference))
+        } else {
+            null
+        }
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {
