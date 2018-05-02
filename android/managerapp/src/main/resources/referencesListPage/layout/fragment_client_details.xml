@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
@@ -47,8 +48,7 @@
             android:foreground="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="15dp"
-            android:layout_alignParentTop="true">
+            android:layout_below="@id/flSurname">
             <!-- парент дает эффект выделения -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,7 +81,6 @@
             android:foreground="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="15dp"
             android:layout_below="@id/flName">
             <!-- парент дает эффект выделения -->
             <LinearLayout
@@ -115,7 +114,6 @@
             android:foreground="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="15dp"
             android:layout_below="@id/flPatronymic">
             <!-- парент дает эффект выделения -->
             <LinearLayout
@@ -144,14 +142,15 @@
 
         <TextView
             android:id="@+id/tvAddressesHeader"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/flPhoneNumber"
-            android:textColor="@color/colorPrimary"
-            android:paddingStart="20dp"
+            android:gravity="center"
             android:paddingEnd="20dp"
-            android:textSize="18sp"
-            android:text="@string/Core_Addresses" />
+            android:paddingStart="20dp"
+            android:text="@string/Core_Addresses"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/llAddressesContainer"
