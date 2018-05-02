@@ -4,16 +4,10 @@ buildscript {
     ext.kotlin_version = '1.2.30'
     ext.support_version = '27.1.1'
     ext.coroutines_version = '0.19.1'
-
     repositories {
         google()
         jcenter()
-        maven {
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-            url 'http://dl.bintray.com/amulyakhare/maven'
-        }
     }
-
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -28,7 +22,6 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "http://dl.bintray.com/glomadrian/maven" }
     }
 }
 
