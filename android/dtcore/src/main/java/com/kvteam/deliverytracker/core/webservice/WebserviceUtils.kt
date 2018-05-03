@@ -9,10 +9,7 @@ fun doubleTimeRequest(
         doRequestFunc: (Map<String, String>) -> RawNetworkResult) : RawNetworkResult {
     var authHeaders: Map<String, String>?
     if(withToken) {
-        authHeaders = getAuthorizationHeaders(session)
-        if(authHeaders == null) {
-            return RawNetworkResult()
-        }
+        authHeaders = getAuthorizationHeaders(session) ?: return RawNetworkResult(noToken = true)
     } else {
         authHeaders = mapOf()
     }
@@ -26,7 +23,7 @@ fun doubleTimeRequest(
     // Если дали токен, но сервер вернул forbidden, может быть токен просрочен
     if(withToken && result.statusCode == INVALID_TOKEN_HTTP_STATUS) {
         session.invalidateToken()
-        authHeaders = getAuthorizationHeaders(session) ?: return RawNetworkResult()
+        authHeaders = getAuthorizationHeaders(session) ?: return RawNetworkResult(noToken = true)
         try {
             result = doRequestFunc(authHeaders)
         } catch (e: Exception) {

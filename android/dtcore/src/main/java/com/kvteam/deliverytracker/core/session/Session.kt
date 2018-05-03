@@ -141,10 +141,17 @@ class Session (
     }.await()
 
     override suspend fun checkSessionAsync(): CheckSessionResult = async {
-        val url = baseUrl + "/api/account/check"
+        val url = "$baseUrl/api/account/check"
         val result = doubleTimeRequest(this@Session, true) {
             httpManager.get(url, it)
         }
+
+        // Если вообще нет токена (например, уже были попытки обновить токен и они провалились),
+        // то нужно разлогинится
+        if (result.noToken) {
+            return@async CheckSessionResult.Incorrect
+        }
+
         // Если нет доступа в сеть, дальше нет смысла что-либо делать
         if(!result.fetched) {
             return@async CheckSessionResult.ServiceUnavailable
@@ -282,15 +289,6 @@ class Session (
             storage.set(LAST_CODE_KEY, user.code!!)
         }
 
-        val headers =  getAuthorizationHeaders(this@Session)
-        if (headers != null) {
-            httpManager.post(
-                    baseUrl + "/api/account/logout",
-                    EMPTY_STRING,
-                    headers,
-                    "application/json")
-        }
-
         accountManager.getAccountsByType(sessionInfo.accountType)
                 .forEach {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -300,6 +298,15 @@ class Session (
                         accountManager.removeAccount(it, null, null)
                     }
                 }
+
+        val headers =  getAuthorizationHeaders(this@Session)
+        if (headers != null) {
+            httpManager.post(
+                    "$baseUrl/api/account/logout",
+                    EMPTY_STRING,
+                    headers,
+                    "application/json")
+        }
 
     }.await()
 
