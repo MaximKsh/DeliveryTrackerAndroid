@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.webservice
 
 import com.kvteam.deliverytracker.core.models.CodePassword
+import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.Instance
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.viewmodels.InstanceRequest
@@ -15,6 +16,7 @@ class InstanceWebservice (
     override suspend fun createAsync(
             instance: Instance,
             creator: User,
+            creatorDevice: Device,
             codePassword: CodePassword) : NetworkResult<InstanceResponse> {
         if(instance.name == null){
             throw IllegalArgumentException("instance.name")
@@ -38,6 +40,7 @@ class InstanceWebservice (
         val request = InstanceRequest()
         request.instance = instance
         request.creator = creator
+        request.creatorDevice = creatorDevice
         request.codePassword = codePassword
 
         return webservice.postAsync(
