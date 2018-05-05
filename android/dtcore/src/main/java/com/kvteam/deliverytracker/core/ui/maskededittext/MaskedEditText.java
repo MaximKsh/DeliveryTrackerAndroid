@@ -1,6 +1,8 @@
 package com.kvteam.deliverytracker.core.ui.maskededittext;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
@@ -38,27 +40,26 @@ public class MaskedEditText extends AppCompatEditText implements IMaskedEditText
         super(context, attrs, defStyle);
         component = new MaskedEditTextComponent(adapter, context);
     }
-//
-//	@Override
-//	public Parcelable onSaveInstanceState() {
-//		final Parcelable superParcellable = super.onSaveInstanceState();
-//		final Bundle state = new Bundle();
-//		state.putParcelable("super", superParcellable);
-//		state.putString("text", getRawText());
-//		state.putBoolean("keepHint", isKeepHint());
-//		return state;
-//	}
-//
-//	@Override
-//	public void onRestoreInstanceState(Parcelable state) {
-//		Bundle bundle = (Bundle) state;
-//		keepHint = bundle.getBoolean("keepHint", false);
-//		super.onRestoreInstanceState(((Bundle) state).getParcelable("super"));
-//		final String text = bundle.getString("text");
-//
-//		setText(text);
-//		Log.d(TAG, "onRestoreInstanceState: " + text);
-//	}
+
+	@Override
+	public Parcelable onSaveInstanceState() {
+		final Parcelable superParcelable = super.onSaveInstanceState();
+		final Bundle state = new Bundle();
+		state.putParcelable("super", superParcelable);
+		if (component != null) {
+		    component.onSaveInstanceState(state);
+        }
+		return state;
+	}
+
+	@Override
+	public void onRestoreInstanceState(Parcelable state) {
+		Bundle bundle = (Bundle) state;
+		super.onRestoreInstanceState(bundle.getParcelable("super"));
+		if (component != null) {
+		    component.onRestoreInstanceState(bundle);
+        }
+	}
 
 	/** @param listener - its onFocusChange() method will be called before performing MaskedEditText operations,
 	 * related to this event. */

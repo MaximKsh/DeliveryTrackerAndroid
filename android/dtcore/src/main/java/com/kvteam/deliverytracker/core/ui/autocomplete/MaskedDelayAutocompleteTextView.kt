@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.kvteam.deliverytracker.core.ui.GreatFocusListenerJavaHelper
-import com.kvteam.deliverytracker.core.ui.addOnFocusChangeListener
 import com.kvteam.deliverytracker.core.ui.maskededittext.IMaskedEditText
 import com.kvteam.deliverytracker.core.ui.maskededittext.MaskedEditTextComponent
 import com.kvteam.deliverytracker.core.ui.maskededittext.MaskedEditTextComponentAdapter
-
+import android.os.Bundle
+import android.os.Parcelable
 
 class MaskedDelayAutocompleteTextView(context: Context, attrs: AttributeSet)
     : DelayAutoCompleteTextView(context, attrs), IMaskedEditText {
@@ -18,6 +18,20 @@ class MaskedDelayAutocompleteTextView(context: Context, attrs: AttributeSet)
     }
     private val adapter = MaskedEditTextComponentAdapter(this)
     private val component: MaskedEditTextComponent? = MaskedEditTextComponent(adapter, context, attrs)
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val superParcelable = super.onSaveInstanceState()
+        val state = Bundle()
+        state.putParcelable("super", superParcelable)
+        component?.onSaveInstanceState(state)
+        return state
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+        val bundle = state as Bundle
+        super.onRestoreInstanceState(state.getParcelable("super"))
+        component?.onRestoreInstanceState(bundle)
+    }
 
     override fun setOnFocusChangeListener(listener: View.OnFocusChangeListener?) {
         GreatFocusListenerJavaHelper.addOnFocusChangeListener(

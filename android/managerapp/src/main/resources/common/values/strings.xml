@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Delivery Bear Management</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
 
     <string name="ManagerApp_LoginActivity_ForgotPassword">Forgot password</string>
     <string name="ManagerApp_LoginActivity_CreateInstance">You can add your company</string>
@@ -73,4 +72,18 @@
     <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>
     <string name="ManagerApp_InvitationItem_CancelInvitation">Cancel</string>
 
+
+    <string name="ManagerApp_EditTaskFragment_NoAvailableWarehouse">No available warehouse</string>
+    <string name="ManagerApp_EditTaskFragment_NoAvailablePaymentType">No available payment type</string>
+    <string name="ManagerApp_EditTaskFragment_Today">Today</string>
+    <string name="ManagerApp_EditTaskFragment_Tomorrow">Tomorrow</string>
+    <string name="ManagerApp_EditTaskFragment_ExactDate">Exact date</string>
+    <string name="ManagerApp_EditTaskFragment_Morning">09:00 – 12:00</string>
+    <string name="ManagerApp_EditTaskFragment_Afternoon">12:00 – 18:00</string>
+    <string name="ManagerApp_EditTaskFragment_Evening">18:00 – 22:00</string>
+    <string name="ManagerApp_EditTaskFragment_ExactTime">Exact time</string>
+    <string name="ManagerApp_EditTaskFragment_ASAP">As soon as possible</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerUnassigned">Unassigned</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerAuto">Auto</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerFromStaff">From staff</string>
 </resources>

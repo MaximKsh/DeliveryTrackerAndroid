@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.core.ui.maskededittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -185,6 +186,18 @@ public class MaskedEditTextComponent implements TextWatcher, IMaskedEditText {
     @Override
     public char getCharRepresentation() {
         return this.charRepresentation;
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+        bundle.putString("text", getRawText());
+        bundle.putBoolean("keepHint", isKeepHint());
+    }
+
+    public void onRestoreInstanceState(Bundle bundle) {
+        keepHint = bundle.getBoolean("keepHint", false);
+        String text = bundle.getString("text");
+
+        adapter.setText(text);
     }
 
     public void onSelectionChanged(int selStart, int selEnd) {

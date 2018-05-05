@@ -11,20 +11,17 @@ import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.ClientsView
 import com.kvteam.deliverytracker.core.common.ReferenceViewGroup
 import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
-import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Client
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.autocomplete.ClientsAutoCompleteAdapter
 import com.kvteam.deliverytracker.core.ui.setPhoneNumber
 import com.kvteam.deliverytracker.managerapp.R
-import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.client_info.*
 import kotlinx.android.synthetic.main.client_info.view.*
 import kotlinx.coroutines.experimental.runBlocking
 import java.util.*
-import javax.inject.Inject
 
 class TaskClientFragment : BaseTaskPageFragment() {
     inner class ClientTextWatcher (fragment: TaskClientFragment) : TextWatcher {
@@ -57,12 +54,6 @@ class TaskClientFragment : BaseTaskPageFragment() {
 
     }
 
-    @Inject
-    lateinit var dp: DataProvider
-
-    @Inject
-    lateinit var navigationController: NavigationController
-
     private var etNameWatcher: TaskTextWatcher<Client>? = null
     private var etSurnameWatcher: TaskTextWatcher<Client>? = null
     private var clientPhoneTextWatcher: ClientTextWatcher? = null
@@ -81,7 +72,6 @@ class TaskClientFragment : BaseTaskPageFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        //val autocomplete = acClient.autoCompleteTextView
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
         if (task.clientId != null) {
             showClientDetails()

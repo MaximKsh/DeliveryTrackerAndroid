@@ -21,11 +21,6 @@ import java.util.*
 import javax.inject.Inject
 
 class TaskProductsFragment : BaseTaskPageFragment() {
-    @Inject
-    lateinit var navigationController: NavigationController
-
-    @Inject
-    lateinit var dp: DataProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)

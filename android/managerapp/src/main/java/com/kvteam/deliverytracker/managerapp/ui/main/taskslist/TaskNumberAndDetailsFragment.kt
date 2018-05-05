@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
+import com.kvteam.deliverytracker.core.common.PaymentTypesView
+import com.kvteam.deliverytracker.core.common.ReferenceViewGroup
 import com.kvteam.deliverytracker.core.dataprovider.base.CacheException
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
+import com.kvteam.deliverytracker.core.dataprovider.base.NetworkException
 import com.kvteam.deliverytracker.core.models.PaymentType
 import com.kvteam.deliverytracker.core.models.TaskInfo
 import com.kvteam.deliverytracker.core.ui.ModelTextWatcher
@@ -19,8 +23,11 @@ import javax.inject.Inject
 
 
 class TaskNumberAndDetailsFragment : BaseTaskPageFragment() {
-    @Inject
-    lateinit var dp: DataProvider
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_number_and_details, container, false) as ViewGroup
@@ -56,28 +63,15 @@ class TaskNumberAndDetailsFragment : BaseTaskPageFragment() {
         super.onActivityCreated(savedInstanceState)
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
 
-        val paymentTypesIds = dp.paymentTypesViews
-                .getViewResultAsync("ReferenceViewGroup", "PaymentTypesView").viewResult
+        val paymentTypes = loadPaymentTypes(dp)
+        val strings = getPaymentTypeSpinnerList(paymentTypes)
+        spinnerPaymentType.attachDataSource(strings)
 
-        val strings = arrayListOf<String>()
-        val paymentTypes = arrayListOf<PaymentType>()
-        if (paymentTypesIds.isNotEmpty()) {
-            for (id in paymentTypesIds) {
-                try {
-                    val (e, _) = dp.paymentTypes.get(id, DataProviderGetMode.FORCE_CACHE)
-                    paymentTypes.add(e)
-                    strings.add(e.name!!)
-                } catch (e: CacheException) {
-                }
-            }
-            spinnerPaymentType.attachDataSource(strings)
-            spinnerPaymentType.addOnItemClickListener { adapterView, view, i, l ->
+        if (paymentTypes.isNotEmpty()) {
+            spinnerPaymentType.addOnItemClickListener { _, _, i, _ ->
                 setTaskPaymentType(paymentTypes[i])
             }
 
-            if (task.paymentTypeId == null) {
-                setTaskPaymentType(paymentTypes[0])
-            }
             val selected = paymentTypes.indexOfFirst { it.id == task.paymentTypeId }
             spinnerPaymentType.selectedIndex = selected
         }
@@ -88,8 +82,11 @@ class TaskNumberAndDetailsFragment : BaseTaskPageFragment() {
         task.paymentTypeId = paymentType.id
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
+    private fun getPaymentTypeSpinnerList(pt: List<PaymentType>) : List<String> {
+        return if (pt.isNotEmpty()) {
+            pt.map { it.name ?: EMPTY_STRING }
+        } else {
+            return listOf(lm.getString(R.string.ManagerApp_EditTaskFragment_NoAvailablePaymentType))
+        }
     }
 }
