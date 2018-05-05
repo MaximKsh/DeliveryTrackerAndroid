@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.dataprovider.base
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.common.deepCopy
 import com.kvteam.deliverytracker.core.common.getDifference
 import com.kvteam.deliverytracker.core.models.ModelBase
@@ -14,7 +15,7 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
 ) : IDataComponent<T> {
 
     protected abstract suspend fun createRequestAsync(entity: T): NetworkResult<R>
-    protected abstract suspend fun editRequestAsync(entity: T): NetworkResult<R>
+    protected abstract suspend fun editRequestAsync(diff: DifferenceResult<T>): NetworkResult<R>?
     protected abstract suspend fun getRequestAsync(id: UUID): NetworkResult<R>
     protected abstract suspend fun deleteRequestAsync(id: UUID): NetworkResult<R>
 
@@ -32,10 +33,16 @@ abstract class BaseDataComponent <T : ModelBase, R : ResponseBase>(
     override suspend fun upsertAsync(entity: T): T = async {
         val origin = dataContainer.getEntry(entity.id!!)
         val result =  if (origin != null) {
-            val diff = origin.getDifference(entity, ::entryFactory)
-            editRequestAsync(diff)
+            val diffResult = origin.getDifference(entity, ::entryFactory)
+            editRequestAsync(diffResult)
         } else {
             createRequestAsync(entity)
+        }
+
+        if (result == null) {
+            // Запроса не было, т.к. изменения данных не было
+            // origin есть, т.к. при создании изменения отсутствовать не могут.
+            return@async origin!!
         }
 
         if (!result.success) {

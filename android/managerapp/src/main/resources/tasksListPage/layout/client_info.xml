@@ -27,7 +27,7 @@
             android:layout_below="@+id/phoneNumberLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+<!--
             <com.kvteam.deliverytracker.core.ui.autocomplete.AutocompleteView
                 android:id="@+id/acClient"
                 android:layout_width="match_parent"
@@ -39,8 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite" />
-
-            <br.com.sapereaude.maskedEditText.MaskedEditText
+-->
+            <com.kvteam.deliverytracker.core.ui.autocomplete.MaskedDelayAutocompleteTextView
                 android:id="@+id/etPhoneNumberField"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

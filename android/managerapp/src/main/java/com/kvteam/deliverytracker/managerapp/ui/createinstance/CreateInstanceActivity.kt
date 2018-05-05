@@ -118,6 +118,7 @@ class CreateInstanceActivity : DeliveryTrackerActivity() {
         return instanceWebservice.createAsync(
                 instance,
                 user,
+                session.getDevice(),
                 CodePassword(password = etPassword.text.toString()))
     }
 

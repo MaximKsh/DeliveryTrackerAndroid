@@ -109,7 +109,7 @@
                 android:labelFor="@id/etPhoneNumber"
                 android:textColor="@color/colorGray"/>
 
-            <br.com.sapereaude.maskedEditText.MaskedEditText
+            <com.kvteam.deliverytracker.core.ui.maskededittext.MaskedEditText
                 android:id="@+id/etPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

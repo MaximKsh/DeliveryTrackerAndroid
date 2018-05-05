@@ -146,14 +146,14 @@ class ToolbarController(
         activity.updateHomeUpButton()
         activity.updateMenuItems()
 
+        activity.toolbar_title.visibility = View.VISIBLE
+        activity.rlToolbarSearch.visibility = View.GONE
+        activity.etToolbarSearch.setText(EMPTY_STRING)
+
         if(tw != null) {
             activity.etToolbarSearch.removeTextChangedListener(tw)
             tw = null
         }
-
-        activity.toolbar_title.visibility = View.VISIBLE
-        activity.rlToolbarSearch.visibility = View.GONE
-        activity.etToolbarSearch.setText(EMPTY_STRING)
 
         activity.softKeyboard.closeSoftKeyboard()
     }

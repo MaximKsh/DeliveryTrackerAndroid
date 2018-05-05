@@ -354,7 +354,7 @@ abstract class BaseListFragment :
                                                          animate: Boolean) {
         val currentAdapter = mAdapter as? A
         if (currentAdapter != null) {
-            currentAdapter.updateDataSet(list, false)
+            currentAdapter.updateDataSet(list, animate)
         } else {
             val newAdapter = adapterFactory(list)
             newAdapter.updateDataSet(list, false)

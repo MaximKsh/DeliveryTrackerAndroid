@@ -62,19 +62,25 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     }
 
     private fun addPolyline(results: DirectionsResult) {
+        val googleMap = this.googleMap ?: return
         val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
-        googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
+        googleMap.addPolyline(PolylineOptions().addAll(decodedPath))
         val latLngBoundsBuilder = LatLngBounds.builder()
         decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
-        (googleMap as GoogleMap).moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 0))
+        googleMap.setOnMapLoadedCallback {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBoundsBuilder.build(), 40))
+            googleMap.setOnMapLoadedCallback(null)
+        }
     }
 
     private fun addMarkersToMap(results: DirectionsResult) {
-        googleMap!!.addMarker(MarkerOptions()
+        val googleMap = this.googleMap ?: return
+
+        googleMap.addMarker(MarkerOptions()
                 .position(LatLng(results.routes[0].legs[0].startLocation.lat, results.routes[0].legs[0].startLocation.lng))
                 .title(results.routes[0].legs[0].startAddress))
 
-        googleMap!!.addMarker(MarkerOptions()
+        googleMap.addMarker(MarkerOptions()
                                 .position(LatLng(results.routes[0].legs[0].endLocation.lat, results.routes[0].legs[0].endLocation.lng))
                                 .title(results.routes[0].legs[0].startAddress)
                                 .snippet(getEndLocationTitle(results)))
@@ -84,11 +90,17 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
                    destination: com.google.maps.model.LatLng,
                    departureTime: DateTime?) {
 
+        val time = if (departureTime?.isAfterNow == true) {
+            departureTime
+        } else {
+            DateTime.now()
+        }
+
         val result = DirectionsApi.newRequest(getGeoContext)
                 .mode(TravelMode.DRIVING)
                 .origin(origin)
                 .destination(destination)
-                .departureTime(departureTime?: DateTime.now())
+                .departureTime(time)
                 .await()
 
         addMarkersToMap(result)

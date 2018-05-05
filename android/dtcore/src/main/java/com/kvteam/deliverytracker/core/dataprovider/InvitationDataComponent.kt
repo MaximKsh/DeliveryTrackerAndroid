@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
@@ -19,7 +20,7 @@ class InvitationDataComponent (
         throw ActionNotSupportedException()
     }
 
-    override suspend fun editRequestAsync(entity: Invitation): NetworkResult<InvitationResponse> {
+    override suspend fun editRequestAsync(diff: DifferenceResult<Invitation>): NetworkResult<InvitationResponse>? {
         throw ActionNotSupportedException()
     }
 

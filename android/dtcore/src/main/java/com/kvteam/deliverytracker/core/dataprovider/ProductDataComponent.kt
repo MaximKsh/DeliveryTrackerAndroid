@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.common.ProductType
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
@@ -20,8 +21,12 @@ class ProductDataComponent (
         return referenceWebservice.createAsync(ProductType, RequestReferencePackage(entity))
     }
 
-    override suspend fun editRequestAsync(entity: Product): NetworkResult<ReferenceResponse> {
-        return referenceWebservice.editAsync(ProductType, RequestReferencePackage(entity))
+    override suspend fun editRequestAsync(diff: DifferenceResult<Product>): NetworkResult<ReferenceResponse>? {
+        return if (diff.hasDifferentFields) {
+            referenceWebservice.editAsync(ProductType, RequestReferencePackage(diff.difference))
+        } else {
+            null
+        }
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {

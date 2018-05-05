@@ -1,17 +1,10 @@
 package com.kvteam.deliverytracker.managerapp.ui.main.taskslist
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.DialogFragment
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.TimePicker
 import com.kvteam.deliverytracker.core.async.launchUI
-import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.managerapp.R
 import dagger.android.support.AndroidSupportInjection
@@ -21,13 +14,53 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.Duration
 import org.joda.time.Interval
-import javax.inject.Inject
-
 
 
 class TaskDeliveryDateFragment : BaseTaskPageFragment() {
-    @Inject
-    lateinit var dp: DataProvider
+
+    private val dateToday by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_Today) }
+    private val dateTomorrow by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_Tomorrow) }
+    private val dateCustom  by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_ExactDate) }
+
+    private lateinit var deliveryDateTypes: List<DeliveryDateTypeItem>
+
+    private val timeMorning by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_Morning) }
+    private val timeAfternoon by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_Afternoon) }
+    private val timeEvening by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_Evening) }
+    private val timeCustom by lazy { lm.getString(R.string.ManagerApp_EditTaskFragment_ExactTime) }
+
+
+    private lateinit var deliveryTimeTypes: List<DeliveryTimeTypeItem>
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+
+        deliveryDateTypes = listOf(
+                DeliveryDateTypeItem(dateToday, DateTime.now()),
+                DeliveryDateTypeItem(dateTomorrow, DateTime.now().plusDays(1)),
+                DeliveryDateTypeItem(dateCustom, null)
+        )
+        deliveryTimeTypes = listOf(
+                DeliveryTimeTypeItem(
+                        timeMorning,
+                        DateTime.now().withTime(9, 0, 0, 0),
+                        DateTime.now().withTime(11, 59, 59, 999)),
+                DeliveryTimeTypeItem(
+                        timeAfternoon,
+                        DateTime.now().withTime(12, 0, 0, 0),
+                        DateTime.now().withTime(17, 59, 59, 999)),
+                DeliveryTimeTypeItem(
+                        timeEvening,
+                        DateTime.now().withTime(18, 0, 0, 0),
+                        DateTime.now().withTime(21, 59, 59, 999)),
+                DeliveryTimeTypeItem(
+                        timeCustom,
+                        null,
+                        null)
+        )
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_task_delivery_date, container, false) as ViewGroup
@@ -53,7 +86,7 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
         val stringDates = deliveryDateTypes.map { it.name }
         view.spinnerDeliveryDate.attachDataSource(stringDates)
         var oldSelectedDateTypeIndex = -1
-        view.spinnerDeliveryDate.addOnItemClickListener { adapterView, view, i, l ->
+        view.spinnerDeliveryDate.addOnItemClickListener { _, _, i, _ ->
             if ((oldSelectedDateTypeIndex == i && i == deliveryDateTypes.size - 1) || deliveryDateTypes[i].selectedDateTime == null) {
                 oldSelectedDateTypeIndex = i
                 val datePickerFragment = DatePickerFragment()
@@ -70,7 +103,7 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
         val stringTimes = deliveryTimeTypes.map { it.name }
         view.spinnerDeliveryTime.attachDataSource(stringTimes)
         var oldSelectedTimeTypeIndex = -1
-        view.spinnerDeliveryTime.addOnItemClickListener { adapterView, view, i, l ->
+        view.spinnerDeliveryTime.addOnItemClickListener { _, _, i, _ ->
             if ((oldSelectedTimeTypeIndex == i && i == deliveryTimeTypes.size - 1) || deliveryTimeTypes[i].fromTime == null) {
                 oldSelectedTimeTypeIndex = i
                 val timePickerFragment = TimePickerFragment()
@@ -131,41 +164,6 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
         return deliveryTimeTypes.size - 1
     }
 
-    // SECTION: DatePicker --START--
-
-    class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-        private lateinit var callback: (DateTime) -> Unit
-        private lateinit var startingDate: DateTime
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val dialog = DatePickerDialog(activity, this, startingDate.year, startingDate.minusMonths(1).monthOfYear, startingDate.dayOfMonth)
-            dialog.datePicker.minDate = DateTime.now().millis
-            return dialog
-        }
-
-        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-            callback(DateTime(year, month + 1, day, 0, 0))
-        }
-
-        fun setStartDate(date: DateTime?) {
-            startingDate = date ?: DateTime.now()
-        }
-
-        fun setOnDateSelectCallback(cb: (DateTime) -> Unit) {
-            callback = cb
-        }
-    }
-
-    private val DATE_TODAY = "Today"
-    private val DATE_TOMORROW = "Tomorrow"
-    private val DATE_CUSTOM = "Custom date"
-
-    private val deliveryDateTypes = arrayListOf<DeliveryDateTypeItem>(
-            DeliveryDateTypeItem(DATE_TODAY, DateTime.now()),
-            DeliveryDateTypeItem(DATE_TOMORROW, DateTime.now().plusDays(1)),
-            DeliveryDateTypeItem(DATE_CUSTOM, null)
-    )
-
     private fun setTaskDate(date: DateTime) = launchUI {
         val task = dp.taskInfos.getAsync(taskId, DataProviderGetMode.DIRTY).entry
         val dateReal = task.deliveryFrom ?: DateTime.now()
@@ -185,57 +183,6 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
 
     private fun hideDateChip() {
         tvCustomDate.visibility = View.GONE
-    }
-
-    // SECTION: DatePicker --END--
-
-    // SECTION: TimePicker --START--
-
-    private val TIME_MORNING = "09:00 - 12:00"
-    private val TIME_AFTERNOON = "12:00 - 18:00"
-    private val TIME_EVENING = "18:00 - 22:00"
-    private val TIME_CUSTOM = "Exact time"
-
-
-    private val deliveryTimeTypes = arrayListOf<DeliveryTimeTypeItem>(
-                    DeliveryTimeTypeItem(
-                            TIME_MORNING,
-                            DateTime.now().withTime(9, 0, 0, 0),
-                            DateTime.now().withTime(11, 59, 59, 999)),
-                    DeliveryTimeTypeItem(
-                            TIME_AFTERNOON,
-                            DateTime.now().withTime(12, 0, 0, 0),
-                            DateTime.now().withTime(17, 59, 59, 999)),
-                    DeliveryTimeTypeItem(
-                            TIME_EVENING,
-                            DateTime.now().withTime(18, 0, 0, 0),
-                            DateTime.now().withTime(21, 59, 59, 999)),
-                    DeliveryTimeTypeItem(
-                            TIME_CUSTOM,
-                            null,
-                            null)
-    )
-
-    class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-        private lateinit var callback: (DateTime) -> Unit
-        private lateinit var startingTime: DateTime
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            val dialog = TimePickerDialog(activity, this, startingTime.hourOfDay, startingTime.minuteOfHour, true)
-            return dialog
-        }
-
-        fun setStartTime(date: DateTime?) {
-            startingTime = date ?: DateTime.now()
-        }
-
-        fun setOnTimeSelectCallback(cb: (DateTime) -> Unit) {
-            callback = cb
-        }
-
-        override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-            callback(DateTime.now().withTime(hourOfDay, minute, 0, 0))
-        }
     }
 
     private fun setTaskTime(fromTime: DateTime, toTime: DateTime) = launchUI {
@@ -258,14 +205,5 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
 
     private fun hideTimeChip() {
         tvCustomTime.visibility = View.GONE
-    }
-
-
-    // SECTION: TimePicker --END--
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
     }
 }

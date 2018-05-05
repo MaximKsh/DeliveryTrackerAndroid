@@ -7,10 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonSyntaxException
-import com.kvteam.deliverytracker.core.common.Configuration
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
-import com.kvteam.deliverytracker.core.common.webserviceURL
+import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.Instance
@@ -70,6 +67,25 @@ class Session (
         }
     }
 
+    override fun getDevice(): Device {
+        val refreshedToken = FirebaseInstanceId.getInstance().token ?: EMPTY_STRING
+        val userId = this@Session.user?.id ?: EMPTY_UUID
+        val device = Device()
+        device.userId = userId
+        device.type = deviceType
+        device.version = Build.VERSION.SDK_INT.toString()
+        device.language = Locale.getDefault().language
+        device.firebaseId = refreshedToken
+        try {
+            val pInfo = this@Session.context.packageManager.getPackageInfo(this@Session.context.packageName, 0)
+            device.applicationType = pInfo.packageName
+            device.applicationVersion = pInfo.versionCode.toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return device
+    }
+
     override fun invalidateToken() {
         val account = getFirstAccount()
         val token = accountManager.peekAuthToken(account, sessionInfo.accountType)
@@ -111,40 +127,31 @@ class Session (
     }
 
     override suspend fun updateDeviceAsync(): Unit = async {
-        val refreshedToken = FirebaseInstanceId.getInstance().token ?: return@async
-        val user = this@Session.user ?: return@async
-
-        val device = Device()
-        device.userId = user.id
-        device.type = deviceType
-        device.version = Build.VERSION.SDK_INT.toString()
-        device.language = Locale.getDefault().language
-        device.firebaseId = refreshedToken
-        try {
-            val pInfo = this@Session.context.packageManager.getPackageInfo(this@Session.context.packageName, 0)
-            device.applicationType = pInfo.packageName
-            device.applicationVersion = pInfo.versionCode.toString()
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-
-
+        val device = getDevice()
         val request = AccountRequest(device = device)
         val rawRequestBody = gson.toJson(request)
         doubleTimeRequest(this@Session, true) {
             httpManager.post(
-                    baseUrl + "/api/account/update_device",
+                    "$baseUrl/api/account/update_device",
                     rawRequestBody,
                     it,
                     "application/json")
         }
+        return@async
     }.await()
 
     override suspend fun checkSessionAsync(): CheckSessionResult = async {
-        val url = baseUrl + "/api/account/check"
+        val url = "$baseUrl/api/account/check"
         val result = doubleTimeRequest(this@Session, true) {
             httpManager.get(url, it)
         }
+
+        // Если вообще нет токена (например, уже были попытки обновить токен и они провалились),
+        // то нужно разлогинится
+        if (result.noToken) {
+            return@async CheckSessionResult.Incorrect
+        }
+
         // Если нет доступа в сеть, дальше нет смысла что-либо делать
         if(!result.fetched) {
             return@async CheckSessionResult.ServiceUnavailable
@@ -282,15 +289,6 @@ class Session (
             storage.set(LAST_CODE_KEY, user.code!!)
         }
 
-        val headers =  getAuthorizationHeaders(this@Session)
-        if (headers != null) {
-            httpManager.post(
-                    baseUrl + "/api/account/logout",
-                    EMPTY_STRING,
-                    headers,
-                    "application/json")
-        }
-
         accountManager.getAccountsByType(sessionInfo.accountType)
                 .forEach {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -300,6 +298,15 @@ class Session (
                         accountManager.removeAccount(it, null, null)
                     }
                 }
+
+        val headers =  getAuthorizationHeaders(this@Session)
+        if (headers != null) {
+            httpManager.post(
+                    "$baseUrl/api/account/logout",
+                    EMPTY_STRING,
+                    headers,
+                    "application/json")
+        }
 
     }.await()
 

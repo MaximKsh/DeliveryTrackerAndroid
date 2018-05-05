@@ -1,6 +1,5 @@
 package com.kvteam.deliverytracker.core.models
 
-import android.arch.persistence.room.Embedded
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
@@ -19,7 +18,6 @@ data class User(
     @SerializedName("Role", alternate = ["role"])
     var role: UUID? = null,
     @SerializedName("Geoposition", alternate = ["geoposition"])
-    @Embedded
     var geoposition: Geoposition? = null,
     @SerializedName("Online", alternate = ["online"])
     var online: Boolean = false
