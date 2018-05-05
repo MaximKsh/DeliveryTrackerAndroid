@@ -95,7 +95,7 @@ dependencies {
     api 'com.github.arcadefire:nice-spinner:1.3.1'
     api 'in.srain.cube:ultra-ptr:1.0.11'
     // ==============================
-
+    
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
