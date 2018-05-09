@@ -35,10 +35,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFrag
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -232,6 +229,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(UserTasksListFragmentModule::class))
     internal abstract fun userTasksListFragment(): UserTasksListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(UserStatsFragmentModule::class))
+    internal abstract fun userStatsFragment(): UserStatsFragment
 
     @Module
     class MainActivityScopeModule {
