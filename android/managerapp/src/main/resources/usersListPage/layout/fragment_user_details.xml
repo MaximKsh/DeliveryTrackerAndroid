@@ -9,13 +9,13 @@
     sothree:umanoFadeColor="@android:color/transparent"
     sothree:umanoDragView="@+id/rlGeneralInfo"
     sothree:umanoParallaxOffset="200dp"
-    sothree:umanoPanelHeight="160dp"
+    sothree:umanoPanelHeight="20dp"
     sothree:umanoShadowHeight="0dp">
 
     <RelativeLayout
         android:id="@+id/rlGeneralInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         android:paddingBottom="10dp"
         android:paddingEnd="20dp"
@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Manager"
             android:textColor="@color/colorGray"
             android:textSize="14sp" />
 
@@ -37,7 +36,8 @@
             android:layout_height="150dp"
             android:layout_below="@+id/tvUserRole"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/Core_AvatarDesc" />
 
         <TextView
             android:id="@+id/tvUserName"
@@ -46,7 +46,6 @@
             android:layout_below="@+id/ivUserAvatar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Viktor Varlamov"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -70,7 +69,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="2dp"
             android:layout_marginTop="2dp"
-            android:text="+7(924)222-33-44"
             android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
     </RelativeLayout>

@@ -86,4 +86,8 @@
     <string name="ManagerApp_EditTaskFragment_PerformerUnassigned">Unassigned</string>
     <string name="ManagerApp_EditTaskFragment_PerformerAuto">Auto</string>
     <string name="ManagerApp_EditTaskFragment_PerformerFromStaff">From staff</string>
+
+    <string name="ManagerApp_UserDetails_CreatedTasksLabel">Created</string>
+    <string name="ManagerApp_UserDetails_CompletedTasksLabel">Completed</string>
+    <string name="ManagerApp_UserDetails_DeliveredTasksLabel">Delivered</string>
 </resources>

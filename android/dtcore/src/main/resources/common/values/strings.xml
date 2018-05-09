@@ -160,10 +160,11 @@
     <string name="ServerMessage_Error_IncorrectTaskState">Incorrect task state</string>
     <string name="ServerMessage_Error_IncorrectTaskStateTransition">Incorrect transition</string>
     <string name="ServerMessage_Error_InstanceNotFound">Company not found</string>
-    <string name="ServerMessage_Error_InvitationCreationError">Invitaiton error</string>
-    <string name="ServerMessage_Error_InvitationExpired">Invitaion expired</string>
+    <string name="ServerMessage_Error_InvitationCreationError">Invitation error</string>
+    <string name="ServerMessage_Error_InvitationExpired">Invitation expired</string>
     <string name="ServerMessage_Error_InvitationNotFound">Invitation not found</string>
     <string name="ServerMessage_Error_ReferenceCreationError">Reference creation error</string>
+    <string name="ServerMessage_Error_ObserverCancelExecution">an error occurred while processing the task</string>
     <string name="ServerMessage_Error_ReferenceEditError">Reference edit error</string>
     <string name="ServerMessage_Error_ReferenceEntryNotFound">Reference entry not found</string>
     <string name="ServerMessage_Error_ReferenceTypeNotFound">Reference type not found</string>
