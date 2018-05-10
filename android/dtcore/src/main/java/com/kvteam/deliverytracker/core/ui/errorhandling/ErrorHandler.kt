@@ -8,6 +8,7 @@ import com.kvteam.deliverytracker.core.common.ILocalizationManager
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetOrigin
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetResult
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderViewResult
+import com.kvteam.deliverytracker.core.models.IError
 import com.kvteam.deliverytracker.core.models.ModelBase
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerActivity
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -78,9 +79,9 @@ class ErrorHandler(
     }
 
     private fun handleListInternal(errorListResult: ErrorListResult) {
-        val text = errorListResult.errors.joinToString(separator = "\n", transform = { it.message })
+        val text = errorListResult.errors.joinToString(separator = "\n", transform = { errorToString(it)})
         val defaultText = lm.getString(R.string.Core_UnknownError)
-        val actualText = if(text.isBlank()) defaultText else defaultText
+        val actualText = if(text.isNotBlank()) text else defaultText
         AlertDialog.Builder(activity)
                 .setMessage(actualText)
                 .setCancelable(true)
@@ -143,5 +144,19 @@ class ErrorHandler(
         }
 
         handleListInternal(networkResult)
+    }
+
+    private fun errorToString(error: IError) : String {
+        val localizedMessage = lm.getString(error.message)
+
+        val builder = StringBuilder()
+        for (param in error.info) {
+            builder.append("${param.key} = ${param.value} ")
+        }
+        return if (error.info.isNotEmpty()) {
+            "$localizedMessage\n ($builder)"
+        } else {
+            localizedMessage
+        }
     }
 }

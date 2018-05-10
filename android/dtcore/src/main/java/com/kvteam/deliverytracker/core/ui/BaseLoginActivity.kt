@@ -3,7 +3,6 @@ package com.kvteam.deliverytracker.core.ui
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import android.view.View
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -48,10 +47,7 @@ abstract class BaseLoginActivity : DeliveryTrackerActivity() {
         } else {
             val lastCode = storage.getString(LAST_CODE_KEY)
             if (lastCode.length == 6) {
-                tvLastCode.text = applicationContext.getString(R.string.Core_LastCode, lastCode)
-                tvLastCode.visibility = View.VISIBLE
-            } else {
-                tvLastCode.visibility = View.GONE
+                etLoginField.setCode(lastCode)
             }
         }
 

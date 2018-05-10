@@ -144,3 +144,19 @@ fun <T : IMapDeserializable> deserializeMapObjectsFromMap(
     }
     return mutableMapOf()
 }
+
+fun convertToInt (obj: Any?): Int? {
+    if (obj == null) {
+        return null
+    }
+    if (obj is Double) {
+        return obj.toInt()
+    }
+    return try {
+        obj.toString().toInt()
+    } catch(e1: NumberFormatException) {
+        null
+    } catch (e2: IllegalArgumentException) {
+        null
+    }
+}

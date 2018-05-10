@@ -27,6 +27,9 @@ open class AutocompleteListAdapter <T : ModelBase> (
 
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val results = FilterResults()
+            if (constraint == null) {
+                return results
+            }
             val adapter = adapterRef.get() ?: return results
             val items = adapter.getListFunc(constraint.toString())
             results.values = items.subList(0, min(adapter.limit, items.size))

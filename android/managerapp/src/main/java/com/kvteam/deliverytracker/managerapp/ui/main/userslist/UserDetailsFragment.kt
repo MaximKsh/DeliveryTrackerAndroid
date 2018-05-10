@@ -24,6 +24,9 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_user_details.*
 import java.util.*
 import javax.inject.Inject
+import android.opengl.ETC1.getHeight
+
+
 
 class UserDetailsFragment : DeliveryTrackerFragment() {
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager, val role: Role) : FragmentStatePagerAdapter(fm) {
@@ -65,6 +68,20 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
     }
 
 
+    override fun configureToolbar(toolbar: ToolbarController) {
+        super.configureToolbar(toolbar)
+        toolbar.setToolbarTitle("User")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val rootView = inflater.inflate(R.layout.fragment_user_details, container, false) as ViewGroup
+        return rootView
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
@@ -89,29 +106,22 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
 
         val userTasksFragment = UserTasksListFragment()
         userTasksFragment.setUser(user.id!!, user.role?.toRole()!!)
+        val userStatsFragment = UserStatsFragment()
+        userStatsFragment.setUser(user.id!!, user.role?.toRole()!!)
         fragments = listOf(
                 userTasksFragment,
-                UserStatsFragment(),
+                userStatsFragment,
                 UserOnMapFragment()
         )
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, user.role!!.toRole()!!)
         pager.adapter = mPagerAdapter
         tlUserNavigationTabs.setupWithViewPager(pager)
-    }
 
-    override fun configureToolbar(toolbar: ToolbarController) {
-        super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("User")
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_user_details, container, false) as ViewGroup
-        return rootView
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
+        val mainView = view
+        mainView?.post({
+            val viewHeight = mainView.height
+            slidingLayout.panelHeight = viewHeight - rlGeneralInfo.height
+        })
     }
 }

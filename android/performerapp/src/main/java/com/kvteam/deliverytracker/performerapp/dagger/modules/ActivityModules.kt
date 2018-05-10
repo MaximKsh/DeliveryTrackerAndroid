@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.app.Activity
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.common.MapsAdapter
 import com.kvteam.deliverytracker.core.dagger.scopes.ActivityScope
 import com.kvteam.deliverytracker.core.dagger.scopes.FragmentScope
 import com.kvteam.deliverytracker.core.ui.UIState
@@ -113,6 +114,12 @@ abstract class MainActivityModule {
         @ActivityScope
         fun navigationController(activity: MainActivity): NavigationController {
             return NavigationController(activity)
+        }
+
+        @Provides
+        @ActivityScope
+        fun mapsAdapter(activity: MainActivity): MapsAdapter {
+            return MapsAdapter(activity.googleApiClient)
         }
 
         @Provides

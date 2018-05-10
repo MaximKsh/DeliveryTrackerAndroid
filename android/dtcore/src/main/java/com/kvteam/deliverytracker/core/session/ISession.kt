@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.session
 
 import com.kvteam.deliverytracker.core.models.CodePassword
+import com.kvteam.deliverytracker.core.models.Device
 import com.kvteam.deliverytracker.core.models.Instance
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.webservice.NetworkResult
@@ -8,6 +9,7 @@ import com.kvteam.deliverytracker.core.webservice.viewmodels.AccountResponse
 
 interface ISession {
     fun getToken(): String?
+    fun getDevice(): Device
     fun invalidateToken()
     fun setAccountExplicitly(
             username: String,

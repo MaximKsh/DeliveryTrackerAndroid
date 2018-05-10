@@ -93,11 +93,18 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     fun getRoute(origin: com.google.maps.model.LatLng,
                                     destination: com.google.maps.model.LatLng,
                                     departureTime: DateTime?) : GoogleMapRouteResults {
-        val results = DirectionsApi.newRequest(getGeoContext)
+        
+        val time = if (departureTime?.isAfterNow == true) {
+            departureTime
+        } else {
+            DateTime.now()
+        }
+
+        val result = DirectionsApi.newRequest(getGeoContext)
                 .mode(TravelMode.DRIVING)
                 .origin(origin)
                 .destination(destination)
-                .departureTime(departureTime?: DateTime.now())
+                .departureTime(time)
                 .await()
 
         val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)

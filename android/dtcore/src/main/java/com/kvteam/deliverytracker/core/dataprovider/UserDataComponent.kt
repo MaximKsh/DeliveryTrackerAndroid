@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.dataprovider.base.ActionNotSupportedException
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
@@ -19,8 +20,13 @@ class UserDataComponent (
         throw ActionNotSupportedException()
     }
 
-    override suspend fun editRequestAsync(entity: User): NetworkResult<UserResponse> {
-        return userWebservice.editAsync(entity.id!!, entity)
+    override suspend fun editRequestAsync(diff: DifferenceResult<User>): NetworkResult<UserResponse>? {
+        val entity = diff.difference
+        return if (diff.hasDifferentFields) {
+            userWebservice.editAsync(entity.id!!, entity)
+        } else {
+            null
+        }
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<UserResponse> {

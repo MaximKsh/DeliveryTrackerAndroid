@@ -7,6 +7,7 @@ import com.kvteam.deliverytracker.core.webservice.viewmodels.ResponseBase
 
 open class NetworkResult<T : ResponseBase> (
         open var fetched: Boolean = false,
+        open var noToken: Boolean = false,
         open var statusCode: Int = 0
 ) : EntityResult<T>() {
     override var errors: List<IError>
@@ -22,6 +23,7 @@ open class NetworkResult<T : ResponseBase> (
                 response: T? = null) : NetworkResult<T> {
             val result = NetworkResult<T>()
             result.fetched = rawResult.fetched
+            result.noToken = rawResult.noToken
             result.statusCode = rawResult.statusCode
             result.entity = response
             return result
