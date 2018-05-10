@@ -94,8 +94,10 @@ dependencies {
     api 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     api 'com.github.arcadefire:nice-spinner:1.3.1'
     api 'in.srain.cube:ultra-ptr:1.0.11'
+    api 'com.ethanhua:skeleton:1.1.0'
+    api 'io.supercharge:shimmerlayout:2.0.0'
     // ==============================
-    
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 

@@ -100,7 +100,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
             DateTime.now()
         }
 
-        val result = DirectionsApi.newRequest(getGeoContext)
+        val results = DirectionsApi.newRequest(getGeoContext)
                 .mode(TravelMode.DRIVING)
                 .origin(origin)
                 .destination(destination)
