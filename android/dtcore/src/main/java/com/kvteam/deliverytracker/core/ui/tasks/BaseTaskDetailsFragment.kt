@@ -1,10 +1,12 @@
 package com.kvteam.deliverytracker.core.ui.tasks
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,10 +17,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.ethanhua.skeleton.Skeleton
 import com.ethanhua.skeleton.SkeletonScreen
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.DirectionsApi
 import com.google.maps.model.TravelMode
 import com.kvteam.deliverytracker.core.R
@@ -110,11 +115,11 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
     }
 
     private fun setGoogleMap() {
-//        val skeletonMap = Skeleton.bind(flTaskLiteMap)
-//                .load(R.layout.layout_img_sketelon)
-//                .angle(0)
-//                .color(R.color.colorLightGray)
-//                .show()
+        val skeletonMap = Skeleton.bind(vSkeletonMapLoader)
+                .load(R.layout.layout_img_sketelon)
+                .angle(0)
+                .color(R.color.colorLightGray)
+                .show()
 
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.FORCE_CACHE).entry
         val warehouse = dp.warehouses.get(task.warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
@@ -131,23 +136,47 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         if (warehouse.geoposition != null && clientAddress.geoposition != null) {
             Handler().postDelayed({
                 if (isAdded) {
+                    val routeResults = mapsAdapter.getRoute(
+                            warehouse.geoposition!!.toDirectionsLtnLng(),
+                            clientAddress.geoposition!!.toDirectionsLtnLng(),
+                            task.deliveryFrom)
+
+                    val latLngBoundsBuilder = LatLngBounds.builder()
+                    routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
+
+                    val zoom = mapsAdapter.getBoundsZoomLevel(
+                            latLngBoundsBuilder.build(),
+                            flTaskLiteMap.width,
+                            flTaskLiteMap.height,
+                            density
+                    )
+
+                    val cameraPosition = CameraPosition
+                            .builder()
+                            .target(latLngBoundsBuilder.build().center)
+                            .zoom(zoom)
+                            .build()
+
                     val googleMapOptions = GoogleMapOptions()
+                            .camera(cameraPosition)
                             .liteMode(true)
+
                     val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
+
                     childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
+
                     mapFragment.getMapAsync {
-                        mapFragment.view!!.visibility = View.INVISIBLE
                         mapsAdapter.googleMap = it
-                        (mapsAdapter.googleMap as GoogleMap).setOnMapLoadedCallback {
-                            (mapsAdapter.googleMap as GoogleMap).setOnCameraChangeListener {
-                                Log.i("SHIT", "SHITTER")
-                                mapFragment.view!!.visibility = View.VISIBLE
-                            }
-                            mapsAdapter.buildRoute(
-                                    warehouse.geoposition!!.toDirectionsLtnLng(),
-                                    clientAddress.geoposition!!.toDirectionsLtnLng(),
-                                    task.deliveryFrom)
-//                            skeletonMap.hide()
+                        mapsAdapter.googleMap!!.setOnMapClickListener {
+                            val intent = Intent(Intent.ACTION_VIEW,
+                                    Uri.parse("http://maps.google.com/maps?" +
+                                            "saddr=${warehouse.geoposition!!.latitude},${warehouse.geoposition!!.longitude}" +
+                                            "&daddr=${clientAddress.geoposition!!.latitude},${clientAddress.geoposition!!.longitude}"))
+                            startActivity(intent)
+                        }
+                        mapsAdapter.googleMap!!.setOnMapLoadedCallback {
+                            mapsAdapter.drawRoute(routeResults.route, routeResults.decodedPath)
+                            skeletonMap.hide()
                         }
                     }
                 }
