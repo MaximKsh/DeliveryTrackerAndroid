@@ -39,7 +39,11 @@
     <string name="ManagerApp_UserListFragment_EmptyList">Nothing\'s here yet</string>
     <string name="ManagerApp_UserListFragment_DeleteUserModalContent">Are you sure you want to delete selected users?</string>
     <string name="ManagerApp_DeleteButton">delete</string>
-    <string-array name="roles_array">
+
+    <string-array name="roles_for_manager">
+        <item>@string/ServerMessage_Roles_PerformerRole</item>
+    </string-array>
+    <string-array name="roles_for_creator">
         <item>@string/ServerMessage_Roles_ManagerRole</item>
         <item>@string/ServerMessage_Roles_PerformerRole</item>
     </string-array>

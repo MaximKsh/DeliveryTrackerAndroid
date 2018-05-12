@@ -97,11 +97,15 @@ class ErrorHandler(
         }
 
         if (networkResult.statusCode == 403) {
-            AlertDialog.Builder(activity)
-                    .setMessage(lm.getString(R.string.Core_InvalidCredentials))
-                    .setCancelable(true)
-                    .setPositiveButton(lm.getString(R.string.Core_OK), {_, _ ->  })
-                    .show()
+            if (networkResult.entity?.errors?.isNotEmpty() == true) {
+                handleListInternal(networkResult)
+            } else {
+                AlertDialog.Builder(activity)
+                        .setMessage(lm.getString(R.string.Core_InvalidCredentials))
+                        .setCancelable(true)
+                        .setPositiveButton(lm.getString(R.string.Core_OK), { _, _ -> })
+                        .show()
+            }
             return
         }
 

@@ -156,6 +156,8 @@
     <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Cancel</string>
 
     <string name="ServerMessage_Error_AccessDenied">Access denied</string>
+    <string name="ServerMessage_Error_CantDeleteCreator">Can\'t delete creator</string>
+    <string name="ServerMessage_Error_CantDeleteUser">Can\'t delete user</string>
     <string name="ServerMessage_Error_IncorrectPassword">Invalid password</string>
     <string name="ServerMessage_Error_IncorrectTaskState">Incorrect task state</string>
     <string name="ServerMessage_Error_IncorrectTaskStateTransition">Incorrect transition</string>
