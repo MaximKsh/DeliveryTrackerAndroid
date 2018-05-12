@@ -135,6 +135,11 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+        if (tryPrefetch) {
+            dp.taskInfos.getAsync(taskId, DataProviderGetMode.PREFER_CACHE)
+            tryPrefetch = false
+        }
+
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
