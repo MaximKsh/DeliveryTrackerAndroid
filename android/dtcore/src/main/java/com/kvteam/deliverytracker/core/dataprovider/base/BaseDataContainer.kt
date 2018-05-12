@@ -27,14 +27,12 @@ abstract  class BaseDataContainer <T : ModelBase> : IDataContainer<T> {
             entriesTimes[id] = DateTime.now()
             return entry
         }
-        if (time.plusSeconds(CACHE_EXPIRATION_SECONDS).isBeforeNow) {
-            // Если Entry просрочена, но на нее есть Dirty модель,
-            // то нужно сохранить Entry, но не вовзращать ее, т.к. она просрочена
-            if (!dirties.containsKey(id)) {
-                entriesTimes.remove(id)
-                entries.remove(id)
-                clearCollectionEntries(id)
-            }
+        // Если модель просрочнена и грязная модель для нее отсутствует.
+        if (time.plusSeconds(CACHE_EXPIRATION_SECONDS).isBeforeNow
+            && !dirties.containsKey(id)) {
+            entriesTimes.remove(id)
+            entries.remove(id)
+            clearCollectionEntries(id)
             return null
         }
         return entry

@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
@@ -27,6 +28,9 @@ class AddUserFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var invitationWebservice: IInvitationWebservice
+
+    @Inject
+    lateinit var dp: DataProvider
 
     @Inject
     lateinit var lm: ILocalizationManager
@@ -152,6 +156,7 @@ class AddUserFragment : DeliveryTrackerFragment() {
                 if(eh.handle(result)) {
                     return@launchUI
                 }
+                dp.invitationView.invalidate()
                 dtActivity.softKeyboard.closeSoftKeyboard()
                 this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                 this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
