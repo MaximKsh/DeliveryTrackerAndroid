@@ -49,6 +49,7 @@ import java.util.*
 import javax.inject.Inject
 import com.google.maps.GeoApiContext
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import org.joda.time.DateTimeZone
 import java.io.InputStream
 import java.net.URL
 
@@ -306,7 +307,11 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                     task.cost.toString())
         }
 
-        tvCreateDate.text = "${task.created!!.toString("dd.MM")}, ${task.created!!.toString("HH:mm")}"
+        val created = task.created?.withZoneRetainFields(DateTimeZone.UTC)?.withZone(DateTime.now().zone)
+        if (created != null) {
+            tvCreateDate.text = "${created.toString("dd.MM")}, ${created.toString("HH:mm")}"
+
+        }
 
         llTransitionButtons.removeAllViews()
         transitionsCount = task.taskStateTransitions.size

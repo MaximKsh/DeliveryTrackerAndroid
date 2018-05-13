@@ -141,8 +141,7 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
     }
 
     private fun getDateIndex (date: DateTime): Int {
-        val duration = Duration(DateTime.now(), date)
-        return when (duration.standardDays.toInt()) {
+        return when (date.dayOfYear - DateTime.now().dayOfYear) {
             0 -> 0
             1 -> 1
             else -> 2
@@ -150,8 +149,8 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
     }
 
     private fun getTimeIntervalIndex (dateFrom: DateTime, dateTo: DateTime): Int {
-        val dateFromNormalized = dateFrom.withDate(DateTime.now().toLocalDate())
-        val dateToNormalized = dateTo.withDate(DateTime.now().toLocalDate())
+        val dateFromNormalized = DateTime.now().withTime(dateFrom.hourOfDay, dateFrom.minuteOfHour, dateFrom.secondOfMinute, 500)
+        val dateToNormalized = DateTime.now().withTime(dateTo.hourOfDay, dateTo.minuteOfHour, dateTo.secondOfMinute, 500)
         if (dateFrom.isEqual(dateTo)) {
             return deliveryTimeTypes.size - 1
         }
