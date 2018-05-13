@@ -135,10 +135,11 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+        if (tryPrefetch) {
+            dp.taskInfos.getAsync(taskId, DataProviderGetMode.PREFER_CACHE)
+            tryPrefetch = false
+        }
 
-        dtActivity.addOnKeyboardShowListener(::hideStepper)
-
-        dtActivity.addOnKeyboardHideListener(::showStepper)
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
@@ -159,6 +160,26 @@ class EditTaskFragment : DeliveryTrackerFragment() {
                 pager.currentItem = pager.currentItem + 1
             }
         }
+
+        val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
+        if (task.paymentTypeId == null) {
+            val paymentTypes = loadPaymentTypes(dp)
+            if (paymentTypes.isNotEmpty()) {
+                task.paymentTypeId = paymentTypes[0].id
+            }
+        }
+        if (task.warehouseId == null) {
+            val warehouses = loadWarehouses(dp)
+            if (warehouses.isNotEmpty()) {
+                task.warehouseId = warehouses[0].id
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dtActivity.addOnKeyboardShowListener(::hideStepper)
+        dtActivity.addOnKeyboardHideListener(::showStepper)
     }
 
     override fun onStop() {

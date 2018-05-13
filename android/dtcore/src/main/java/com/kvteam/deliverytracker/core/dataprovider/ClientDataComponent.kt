@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.dataprovider
 
 import com.kvteam.deliverytracker.core.common.ClientType
+import com.kvteam.deliverytracker.core.common.DifferenceResult
 import com.kvteam.deliverytracker.core.common.getDifference
 import com.kvteam.deliverytracker.core.dataprovider.base.BaseDataComponent
 import com.kvteam.deliverytracker.core.dataprovider.base.IViewDigestContainer
@@ -42,7 +43,10 @@ class ClientDataComponent (
         return referenceWebservice.createAsync(ClientType, pack)
     }
 
-    override suspend fun editRequestAsync(entity: Client): NetworkResult<ReferenceResponse> {
+    override suspend fun editRequestAsync(diff: DifferenceResult<Client>): NetworkResult<ReferenceResponse>? {
+        val entity = diff.difference
+        var hasDifference = diff.hasDifferentFields
+
         val pack = RequestReferencePackage(entity)
         val dirties = clientAddressDataContainer.getDirtiesByParent(entity.id!!)
         val toPackage = mutableListOf<CollectionModelBase>()
@@ -51,27 +55,34 @@ class ClientDataComponent (
             when(dirty.action) {
                 CollectionEntityAction.Create -> {
                     toPackage.add(dirty)
+                    hasDifference = true
                 }
                 CollectionEntityAction.Edit -> {
                     val clean = clientAddressDataContainer.getEntry(dirty.id!!)
-                    val diff = clean?.getDifference(dirty, { ClientAddress() })
-                    if (diff != null) {
-                        toPackage.add(diff)
+                    val caDiff = clean?.getDifference(dirty, { ClientAddress() })
+                    if (caDiff?.hasDifferentFields == true) {
+                        toPackage.add(caDiff.difference)
+                        hasDifference = true
                     }
                 }
                 CollectionEntityAction.Delete -> {
-                    val diff = ClientAddress()
-                    diff.id = dirty.id
-                    diff.instanceId = dirty.instanceId
-                    diff.parentId = dirty.parentId
-                    diff.action = CollectionEntityAction.Delete
-                    toPackage.add(diff)
+                    val caDiff = ClientAddress()
+                    caDiff.id = dirty.id
+                    caDiff.instanceId = dirty.instanceId
+                    caDiff.parentId = dirty.parentId
+                    caDiff.action = CollectionEntityAction.Delete
+                    toPackage.add(caDiff)
+                    hasDifference = true
                 }
             }
         }
-
         pack.collections.addAll(toPackage)
-        return referenceWebservice.editAsync(ClientType, pack)
+
+        return if (hasDifference) {
+            referenceWebservice.editAsync(ClientType, pack)
+        } else {
+            null
+        }
     }
 
     override suspend fun getRequestAsync(id: UUID): NetworkResult<ReferenceResponse> {

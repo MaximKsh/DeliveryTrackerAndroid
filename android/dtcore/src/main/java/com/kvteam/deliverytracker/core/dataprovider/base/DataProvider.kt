@@ -22,6 +22,7 @@ class DataProvider (
         val taskInfos: TaskInfoDataComponent,
         val taskInfoViews: TaskInfoViewComponent,
         val taskProducts: TaskProductDataComponent,
+        val statistics: StatisticsComponent,
         private val clientContainer: ClientDataContainer,
         private val clientAddressesContainer: ClientAddressDataContainer,
         private val paymentTypesContainer: PaymentTypeDataContainer,
@@ -30,7 +31,8 @@ class DataProvider (
         private val userContainer: UserDataContainer,
         private val invitationContainer: InvitationDataContainer,
         private val taskInfoContainer: TaskInfoDataContainer,
-        private val taskProductDataContainer: TaskProductDataContainer) : IStorable {
+        private val taskProductDataContainer: TaskProductDataContainer,
+        private val statisticsContainer: StatisticsContainer) : IStorable {
 
 
     override fun fromStorage(storage: IStorage) {
@@ -43,6 +45,7 @@ class DataProvider (
         invitationContainer.fromStorage(storage)
         taskInfoContainer.fromStorage(storage)
         taskProductDataContainer.fromStorage(storage)
+        statisticsContainer.fromStorage(storage)
     }
 
     override fun toStorage(storage: IStorage) {
@@ -55,5 +58,6 @@ class DataProvider (
         invitationContainer.toStorage(storage)
         taskInfoContainer.toStorage(storage)
         taskProductDataContainer.toStorage(storage)
+        statisticsContainer.toStorage(storage)
     }
 }

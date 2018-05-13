@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="core_area">
-    <attr name="underline_color"
-        format="color"/>
-    <attr name="underline_selected_color"
-        format="color"/>
-    <attr name="hint_color"
-        format="color"/>
-    <attr name="text_color"
-        format="color"/>
-    <attr name="hint_text"
-        format="string"/>
-    <attr name="codes"
-        format="integer"/>
-  </declare-styleable>
-   <declare-styleable name="SpringIndicator">
+    <declare-styleable name="core_area">
+        <attr name="underline_color"
+            format="color"/>
+        <attr name="underline_selected_color"
+            format="color"/>
+        <attr name="hint_color"
+            format="color"/>
+        <attr name="text_color"
+            format="color"/>
+        <attr name="hint_text"
+            format="string"/>
+        <attr name="codes"
+            format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="SpringIndicator">
 
         <!--tab text color -->
         <attr name="siTextColor" format="reference"/>
@@ -40,5 +40,13 @@
         <!--min indicator radius when moving-->
         <attr name="siRadiusMin" format="dimension"/>
 
+    </declare-styleable>
+        
+    <declare-styleable name="MaskedEditText">
+	    <attr name="mask" format="string" />
+        <attr name="allowed_chars" format="string" />
+        <attr name="denied_chars" format="string" />
+	    <attr name="char_representation" format="string" />
+	    <attr name="keep_hint" format="boolean" />
     </declare-styleable>
 </resources>

@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.kvteam.deliverytracker.managerapp.dagger.modules
 
 import android.support.v4.app.Fragment
@@ -19,10 +17,7 @@ import com.kvteam.deliverytracker.managerapp.ui.main.settings.ChangePasswordFrag
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.settings.SettingsFragment
 import com.kvteam.deliverytracker.managerapp.ui.main.taskslist.*
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.AddUserFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.FilterUsersFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UserDetailsFragment
-import com.kvteam.deliverytracker.managerapp.ui.main.userslist.UsersListFragment
+import com.kvteam.deliverytracker.managerapp.ui.main.userslist.*
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
@@ -276,5 +271,14 @@ abstract class UserTasksListFragmentModule {
     @IntoMap
     @FragmentKey(UserTasksListFragment::class)
     internal abstract fun userTasksListFragmentInjector(builder: UserTasksListFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(UserStatsFragmentSubcomponent::class))
+abstract class UserStatsFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(UserStatsFragment::class)
+    internal abstract fun injector(builder: UserStatsFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }

@@ -157,15 +157,18 @@ class UsersListFragment : BaseListFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         mAdapter = UserListFlexibleAdapter(userActions)
         super.onActivityCreated(savedInstanceState)
+    }
 
+    override fun onStart() {
+        super.onStart()
         dtActivity.addOnKeyboardHideListener (::showFab)
         dtActivity.addOnKeyboardShowListener (::hideFab)
     }
 
-    override fun onDestroyView() {
+    override fun onStop() {
         dtActivity.removeOnKeyboardHideListener (::showFab)
         dtActivity.removeOnKeyboardShowListener (::hideFab)
-        super.onDestroyView()
+        super.onStop()
     }
 
 

@@ -15,14 +15,7 @@ import android.annotation.TargetApi
 import android.widget.AdapterView
 
 
-class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCompleteTextView(context, attrs) {
-
-    private val messageTextChanged = 100
-    private val defaultAutocompleteDelay = 750L
-
-    private var mAutoCompleteDelay = defaultAutocompleteDelay
-    private var mLoadingIndicator: ProgressBar? = null
-
+open class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCompleteTextView(context, attrs) {
     private class FilterMessageHandler(view : DelayAutoCompleteTextView): Handler() {
         private val viewReference = WeakReference<DelayAutoCompleteTextView>(view)
         override fun handleMessage(msg: Message?) {
@@ -33,21 +26,15 @@ class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCom
         }
     }
 
-    override fun dismissDropDown() {}
-
-    fun hideDropdown () {
-        super.dismissDropDown()
-    }
+    private val messageTextChanged = 100
+    private val defaultAutocompleteDelay = 750L
 
     private val handler = FilterMessageHandler(this)
 
-    fun setLoadingIndicator(progressBar: ProgressBar) {
-        mLoadingIndicator = progressBar
-    }
+    private var mAutoCompleteDelay = defaultAutocompleteDelay
+    private var mLoadingIndicator: ProgressBar? = null
 
-    fun setAutoCompleteDelay(autoCompleteDelay: Long) {
-        mAutoCompleteDelay = autoCompleteDelay
-    }
+    override fun dismissDropDown() {}
 
     override fun performFiltering(text: CharSequence, keyCode: Int) {
         mLoadingIndicator?.visibility = View.VISIBLE
@@ -58,6 +45,22 @@ class DelayAutoCompleteTextView(context: Context, attrs: AttributeSet) : AutoCom
     override fun onFilterComplete(count: Int) {
         mLoadingIndicator?.visibility = View.GONE
         super.onFilterComplete(count)
+    }
+
+    override fun replaceText(sequence: CharSequence) {
+        // DO NOTHING BY DEFAULT
+    }
+
+    fun hideDropdown () {
+        super.dismissDropDown()
+    }
+
+    fun setLoadingIndicator(progressBar: ProgressBar) {
+        mLoadingIndicator = progressBar
+    }
+
+    fun setAutoCompleteDelay(autoCompleteDelay: Long) {
+        mAutoCompleteDelay = autoCompleteDelay
     }
 
     private fun performFilteringSuper(text: CharSequence, keyCode: Int) {

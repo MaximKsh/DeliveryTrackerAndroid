@@ -3,6 +3,9 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.places.Places
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
 import com.kvteam.deliverytracker.core.models.TaskInfo
@@ -16,7 +19,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MainActivity : DeliveryTrackerActivity() {
+class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFailedListener {
+    override fun onConnectionFailed(p0: ConnectionResult) {
+
+    }
+
     private val bnvSelectedItemKey = "bnvSelectedItem"
 
     private val defaultItem = R.id.navigation_staff
@@ -26,6 +33,8 @@ class MainActivity : DeliveryTrackerActivity() {
             R.id.navigation_settings to {navigationController.navigateToSettings()}
     )
 
+
+    lateinit var googleApiClient: GoogleApiClient
 
     @Inject
     lateinit var gsonProvider: IDeliveryTrackerGsonProvider
@@ -59,6 +68,13 @@ class MainActivity : DeliveryTrackerActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         removeShiftMode(navigation)
+
+        googleApiClient = GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build()
 
         if(intent.action == PUSH_ACTION) {
             val action = intent.extras[PUSH_ACTION_KEY] as? String ?: EMPTY_STRING

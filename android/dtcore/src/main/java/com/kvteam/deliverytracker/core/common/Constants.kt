@@ -19,7 +19,9 @@ const val TaskViewGroup = "TaskViewGroup"
 const val AuxTaskViewGroup = "AuxTaskViewGroup"
 const val UserTasksView = "UserTasksView"
 
-
+const val StatisticsViewGroup = "StatisticsViewGroup"
+const val ActualTasksStateDistributionView = "ActualTasksStateDistributionView"
+const val PerformanceStatisticsView = "PerformanceStatisticsView"
 
 const val ReferenceViewGroup = "ReferenceViewGroup"
 const val ProductsView = "ProductsView"

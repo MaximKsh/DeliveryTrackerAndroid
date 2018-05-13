@@ -63,6 +63,7 @@ class DeliveryTrackerFirebaseMessageService : FirebaseMessagingService() {
                 .setChannelId(notificationChannel)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            @Suppress("DEPRECATION")
             builder.priority = Notification.PRIORITY_HIGH
         }
 

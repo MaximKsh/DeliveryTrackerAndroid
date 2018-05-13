@@ -10,8 +10,14 @@ annotation class MoveAlways
 @Target(AnnotationTarget.PROPERTY)
 annotation class MoveIfDiffer
 
-fun <T : ModelBase> T.getDifference(new: T, factory: () -> T) : T {
+data class DifferenceResult <out T : ModelBase>  (
+        val difference: T,
+        val hasDifferentFields: Boolean
+)
+
+fun <T : ModelBase> T.getDifference(new: T, factory: () -> T) : DifferenceResult<T> {
     val diff = factory()
+    var hasDifferentFields = false
 
     for(prop in this::class.memberProperties) {
         if(prop !is KMutableProperty<*>) {
@@ -23,6 +29,7 @@ fun <T : ModelBase> T.getDifference(new: T, factory: () -> T) : T {
                 val newVal = prop.getter.call(new)
                 if (oldVal != newVal) {
                     prop.setter.call(diff, newVal)
+                    hasDifferentFields = true
                 }
                 break
             } else if (annotation.annotationClass ==  MoveAlways::class) {
@@ -33,5 +40,5 @@ fun <T : ModelBase> T.getDifference(new: T, factory: () -> T) : T {
         }
     }
 
-    return diff
+    return DifferenceResult(diff, hasDifferentFields)
 }

@@ -4,134 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llLoginActivityRootView"
+    android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorWhite"
-    android:padding="30dp"
-    android:gravity="center_horizontal"
-    tools:context="com.kvteam.deliverytracker.core.ui.BaseLoginActivity">
-
-
-    <ImageView
-        android:contentDescription="@string/Core_MainAppLogo"
-        android:id="@+id/imageView"
-        android:layout_width="135dp"
-        android:layout_height="135dp"
-        android:src="@drawable/main_app_logo"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="20dp"
-        />
-
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:padding="30dp"
+        android:gravity="center_horizontal"
+        tools:context="com.kvteam.deliverytracker.core.ui.BaseLoginActivity">
+
 
         <ImageView
-            android:contentDescription="@string/Core_CodeHintIcon"
-            android:id="@+id/ivInvitationHintIcon"
-            android:alpha="0.3"
-            android:layout_marginTop="13dp"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_insert_invitation_black_24dp" />
-
-        <com.github.glomadrian.codeinputlib.CodeInput
-            android:id="@+id/etLoginField"
-            android:layout_toEndOf="@id/ivInvitationHintIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:hint_text="Invitation code"
+            android:contentDescription="@string/Core_MainAppLogo"
+            android:id="@+id/imageView"
+            android:layout_width="135dp"
+            android:layout_height="135dp"
+            android:src="@drawable/main_app_logo"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
             />
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        >
-
-        <EditText
-            android:id="@+id/etPasswordField"
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:paddingStart="45dp"
-            android:paddingEnd="45dp"
             android:layout_height="60dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:theme="@style/EditTextTheme"
-            android:backgroundTint="@color/selector_edit_text"
-            android:hint="@string/Core_EnterPasswordHint" />
+            android:layout_gravity="center">
+
+            <ImageView
+                android:contentDescription="@string/Core_CodeHintIcon"
+                android:id="@+id/ivInvitationHintIcon"
+                android:alpha="0.3"
+                android:layout_marginTop="13dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_insert_invitation_black_24dp" />
+
+            <com.github.glomadrian.codeinputlib.CodeInput
+                android:id="@+id/etLoginField"
+                android:layout_toEndOf="@id/ivInvitationHintIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:hint_text="Invitation code"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            >
+
+            <EditText
+                android:id="@+id/etPasswordField"
+                android:layout_width="match_parent"
+                android:paddingStart="45dp"
+                android:paddingEnd="45dp"
+                android:layout_height="60dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:theme="@style/EditTextTheme"
+                android:backgroundTint="@color/selector_edit_text"
+                android:hint="@string/Core_EnterPasswordHint" />
 
 
-        <ImageView
-            android:contentDescription="@string/Core_PasswordHintIcon"
-            android:id="@+id/ivPasswordHintIcon"
-            android:alpha="0.3"
-            android:layout_marginTop="13dp"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_lock_black_24dp" />
+            <ImageView
+                android:contentDescription="@string/Core_PasswordHintIcon"
+                android:id="@+id/ivPasswordHintIcon"
+                android:alpha="0.3"
+                android:layout_marginTop="13dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_lock_black_24dp" />
 
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Core_LoginButton"
-        android:theme="@style/PrimaryButtonTheme"
-        />
-
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/Core_LoginActivity_ForgotPassword" />
-
-    <TextView
-        android:id="@+id/tvLastCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:text="@string/Core_LastCode" />
-
-    <LinearLayout
-        android:id="@+id/llRegister"
-        android:gravity="bottom|center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Core_LoginActivity_CreateInstance" />
+        </RelativeLayout>
 
         <Button
-            android:id="@+id/btnAddCompany"
-            android:layout_marginTop="5dp"
+            android:id="@+id/btnLogin"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Core_LoginActivity_Register"
-            android:background="@drawable/shape_border"
-            android:theme="@style/OutlineButtonTheme"
+            android:text="@string/Core_LoginButton"
+            android:theme="@style/PrimaryButtonTheme"
             />
+
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/Core_LoginActivity_ForgotPassword" />
+
+        <LinearLayout
+            android:id="@+id/llRegister"
+            android:gravity="bottom|center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Core_LoginActivity_CreateInstance" />
+
+            <Button
+                android:id="@+id/btnAddCompany"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Core_LoginActivity_Register"
+                android:background="@drawable/shape_border"
+                android:theme="@style/OutlineButtonTheme"
+                />
+        </LinearLayout>
+
+
     </LinearLayout>
-
-
-</LinearLayout>
 
 </ScrollView>

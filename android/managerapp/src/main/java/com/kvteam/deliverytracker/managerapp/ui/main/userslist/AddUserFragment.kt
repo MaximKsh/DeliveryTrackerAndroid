@@ -6,9 +6,11 @@ import android.widget.ArrayAdapter
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.ILocalizationManager
+import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.models.User
 import com.kvteam.deliverytracker.core.roles.Role
 import com.kvteam.deliverytracker.core.roles.toRole
+import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.errorhandling.IErrorHandler
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
@@ -28,10 +30,16 @@ class AddUserFragment : DeliveryTrackerFragment() {
     lateinit var invitationWebservice: IInvitationWebservice
 
     @Inject
+    lateinit var dp: DataProvider
+
+    @Inject
     lateinit var lm: ILocalizationManager
 
     @Inject
     lateinit var eh: IErrorHandler
+
+    @Inject
+    lateinit var session: ISession
 
     private val userRoleKey = "userRoleKey"
     private val userNameKey = "userNameKey"
@@ -39,9 +47,14 @@ class AddUserFragment : DeliveryTrackerFragment() {
     private val userPhoneKey = "userPhoneKey"
     private val inviteCodeKey = "inviteCodeKey"
 
-    private val selectedRoleMapper = mapOf(
+    private val selectedRoleMapperCreator = mapOf(
             0 to Role.Manager,
             1 to Role.Performer
+    )
+
+
+    private val selectedRoleMapperManager = mapOf(
+            0 to Role.Performer
     )
 
     private lateinit var role: Role
@@ -86,8 +99,13 @@ class AddUserFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val adapter = ArrayAdapter.createFromResource(this.activity,
-                R.array.roles_array, android.R.layout.simple_spinner_item)
+        val array = if (session.user?.role?.toRole() == Role.Creator) {
+            R.array.roles_for_creator
+        } else {
+            R.array.roles_for_manager
+        }
+
+        val adapter = ArrayAdapter.createFromResource(this.activity, array, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         dtActivity.softKeyboard.openSoftKeyboard()
@@ -121,7 +139,11 @@ class AddUserFragment : DeliveryTrackerFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = launchUI ({
-        val selectedRole = selectedRoleMapper[sUserRole.selectedItemId.toInt()]
+        val selectedRole = if (session.user?.role?.toRole() == Role.Creator) {
+            selectedRoleMapperCreator[sUserRole.selectedItemId.toInt()]
+        } else {
+            selectedRoleMapperManager[sUserRole.selectedItemId.toInt()]
+        }
 
         when (item.itemId) {
             R.id.action_send -> {
@@ -134,6 +156,7 @@ class AddUserFragment : DeliveryTrackerFragment() {
                 if(eh.handle(result)) {
                     return@launchUI
                 }
+                dp.invitationView.invalidate()
                 dtActivity.softKeyboard.closeSoftKeyboard()
                 this@AddUserFragment.tvInvitationCodeInfo.visibility = View.VISIBLE
                 this@AddUserFragment.tvInvitationCode.text = result.entity?.invitation?.invitationCode
