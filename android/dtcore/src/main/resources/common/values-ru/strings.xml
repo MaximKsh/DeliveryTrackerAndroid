@@ -14,7 +14,7 @@
     <string name="Core_InvalidCredentials">Неправильный код приглашения или пароль</string>
     <string name="Core_AddressNotSpecified">Адрес не выбран</string>
     <string name="Core_PaymentTypeHeader">Способ оплаты</string>
-    <string name="Core_WarehouseHeader">Склад</string>
+    <string name="Core_WarehouseHeader">Точка выдачи</string>
     <string name="Core_ProductHeader">Товар</string>
     <string name="Core_ClientHeader">Клиент</string>
     <string name="Core_ClientAddressHeader">Адрес клиента</string>
