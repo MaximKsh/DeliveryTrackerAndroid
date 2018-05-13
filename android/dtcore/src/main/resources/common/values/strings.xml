@@ -1,8 +1,7 @@
 <resources>
     <string name="Core_ConfirmUserData">Confirm profile</string>
-    <string name="Core_MainAppLogo">Delivery Bear</string>Core_LastCode
+    <string name="Core_MainAppLogo">Delivery Bear</string>
     <string name="Core_LoginActivity_ForgotPassword">Forgot password</string>
-    <string name="Core_LastCode">Your last code %s</string>
     <string name="Core_LoginActivity_CreateInstance">You can add your company</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
     <string name="Core_LoginActivity_Register">Register</string>
@@ -13,7 +12,7 @@
     <string name="Core_OK">OK</string>
     <string name="Core_PageNotFound">Internal error. Unknown endpoint.</string>
     <string name="Core_NoInternet">No internet connection</string>
-    <string name="Core_InvalidCredentials">Wrong login/password pair</string>
+    <string name="Core_InvalidCredentials">Wrong invitation code/password pair</string>
 
     <string name="Core_AddressNotSpecified">Address not specified</string>
 
@@ -26,7 +25,7 @@
     <string name="Core_ChangePasswordTooltipHeader">Change password</string>
     <string name="Core_EditProfileHeader">Edit profile</string>
     <string name="Core_AvatarDesc">Avatar</string>
-    <string name="Core_SurnameNamePatronymic">%s %s %s</string>
+    <string name="Core_SurnameNamePatronymic" translatable="false">%s %s %s</string>
     <string name="Core_CompanyInfoGroup">Company info</string>
     <string name="Core_CreatorInfoGroup">Creator info</string>
     <string name="Core_InfoGroup">Info</string>
@@ -53,7 +52,7 @@
     <string name="Core_ProductCost">Cost</string>
     <string name="Core_ProductDescription">Description</string>
     <string name="Core_ClientAddress">Address</string>
-    <string name="Core_TaskNumber">Task number</string>
+    <string name="Core_TaskNumber">Task name</string>
     <string name="Core_TaskDescription">Description</string>
     <string name="Core_Addresses">Addresses</string>
     <string name="Core_AddAddress">Add address</string>
@@ -74,13 +73,12 @@
     <string name="Core_ProductVendorCodeValidationError">Vendor code is required</string>
     <string name="Core_ProductCostValidationError">Cost is required</string>
     <string name="Core_ClientAddressValidationError">Address is required</string>
-    <string name="Core_TaskNumberValidationError">Task number is required</string>
+    <string name="Core_TaskNumberValidationError">Task name is required</string>
 
     <string name="Core_EnterCodeHint">Invitation code</string>
     <string name="Core_EnterPasswordHint">Password</string>
     <string name="Core_LoginButton">Sign in</string>
     <string name="Core_NotificationHeader">Notification</string>
-    <string name="Core_Error_NetworkError">Network error</string>
     <string name="Core_Error_InvalidJson">Invalid JSON</string>
     <string name="Core_Error_InvalidRole">Invalid role</string>
     <string name="Core_InstanceManager_Error_ErrorTitle">Company action error</string>
