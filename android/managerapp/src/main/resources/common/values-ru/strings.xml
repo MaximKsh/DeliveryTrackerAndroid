@@ -1,0 +1,65 @@
+<resources>
+
+    <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Регистрация компании</string>
+
+    <string name="ManagerApp_MainActivity_Tasks">Задания</string>
+    <string name="ManagerApp_MainActivity_Staff">Сотрудники</string>
+    <string name="ManagerApp_MainActivity_Catalogs">Справочники</string>
+    <string name="ManagerApp_MainActivity_Settings">Настройки</string>
+
+    <string name="ManagerApp_Toolbar_AddUser">Приглашения пользователя</string>
+
+    <string name="ManagerApp_AddUserFragment_ShareCode">Поделитесь этим кодом с вашим коллегой</string>
+
+
+    <string-array name="roles_for_manager">
+        <item>@string/ServerMessage_Roles_PerformerRole</item>
+    </string-array>
+    <string-array name="roles_for_creator">
+        <item>@string/ServerMessage_Roles_ManagerRole</item>
+        <item>@string/ServerMessage_Roles_PerformerRole</item>
+    </string-array>
+
+    <string name="ManagerApp_UserListFragment_UserAvatarContentDesc">Аватар</string>
+    <string name="ManagerApp_UserListFragment_OnlineStatusContentDesc">Онлайн</string>
+    <string name="ManagerApp_UserListFragment_AdminContentDesc">Администратор</string>
+    <string name="ManagerApp_UserListFragment_ChatContentDesc">Чат</string>
+    <string name="ManagerApp_UserListFragment_PhoneContentDesc">Телефон</string>
+    <string name="ManagerApp_TasksListFragment_AddTaskButton">Создать задание</string>
+    <string name="ManagerApp_Dropdown_Top_Quantity"> (%d)</string>
+
+    <string name="ManagerApp_NoGeoposition">Адрес не указан</string>
+    <string name="ManagerApp_Date">Дата</string>
+    <string name="ManagerApp_TimeInterval">Временной интервал</string>
+    <string name="ManagerApp_GeneralInfo">Основная информация</string>
+    <string name="ManagerApp_TotalCost">Сумма: </string>
+    <string name="ManagerApp_SelectProduct">Выбрать товар</string>
+    <string name="ManagerApp_ReceiptInfo">Получение</string>
+    <string name="ManagerApp_Warehouse">Точка выдачи</string>
+    <string name="ManagerApp_PerformerType">Исполнитель</string>
+
+
+    <string name="ManagerApp_EditTaskFragment_Header">Задание</string>
+    <string name="ManagerApp_EditTaskFragment_NoAvailableWarehouse">Нет доступных точек выдачи</string>
+    <string name="ManagerApp_EditTaskFragment_NoAvailablePaymentType">Нет доступных способов оплаты</string>
+    <string name="ManagerApp_EditTaskFragment_Today">Сегодня</string>
+    <string name="ManagerApp_EditTaskFragment_Tomorrow">Завтра</string>
+    <string name="ManagerApp_EditTaskFragment_ExactDate">Указать дату</string>
+    <string name="ManagerApp_EditTaskFragment_Morning">09:00 – 12:00</string>
+    <string name="ManagerApp_EditTaskFragment_Afternoon">12:00 – 18:00</string>
+    <string name="ManagerApp_EditTaskFragment_Evening">18:00 – 22:00</string>
+    <string name="ManagerApp_EditTaskFragment_ExactTime">Указать время</string>
+    <string name="ManagerApp_EditTaskFragment_ASAP">Как можно быстрее</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerUnassigned">Не назначено</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerAuto">Автоматически</string>
+    <string name="ManagerApp_EditTaskFragment_PerformerFromStaff">Выбрать</string>
+    <string name="ManagerApp_EditTaskFragment_NoAvailablePerformers">Нет доступных исполнителей</string>
+
+    <string name="ManagerApp_UserDetails_Header">Пользователь</string>
+    <string name="ManagerApp_UserDetails_CreatedTasksLabel">Создано</string>
+    <string name="ManagerApp_UserDetails_CompletedTasksLabel">Завершено</string>
+    <string name="ManagerApp_UserDetails_DeliveredTasksLabel">Доставлено</string>
+    <string name="ManagerApp_UserDetails_Tasks">Задания</string>
+    <string name="ManagerApp_UserDetails_Statistics">Статистика</string>
+    <string name="ManagerApp_UserDetails_OnMap">На карте</string>
+</resources>

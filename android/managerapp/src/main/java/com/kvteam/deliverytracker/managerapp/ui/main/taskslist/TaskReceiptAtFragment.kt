@@ -126,7 +126,7 @@ class TaskReceiptAtFragment : BaseTaskPageFragment() {
                 if (index == 0) {
                     val performersIds = dp.userViews.getViewResultAsync("UserViewGroup", "PerformersView").viewResult
                     if (performersIds.isEmpty()) {
-                        Toast.makeText(activity, "No available performers", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, lm.getString(R.string.ManagerApp_EditTaskFragment_NoAvailablePerformers), Toast.LENGTH_LONG).show()
                     } else {
                         setTaskPerformer(performersIds[0])
                     }

@@ -106,10 +106,9 @@ class UsersListFragment : BaseListFragment() {
     }
 
     override fun handleInvitations(invitations: List<Invitation>, animate: Boolean) {
-        val headerThisWeek = BaseListHeader("This week")
-        val headerPreviousWeek = BaseListHeader("Previous week")
-        // TODO: fix this fate range
-        val headerLongTimeAgo = BaseListHeader("Long time ago")
+        val headerThisWeek = BaseListHeader(lm.getString(R.string.Core_ThisWeek))
+        val headerPreviousWeek = BaseListHeader(lm.getString(R.string.Core_PreviousWeek))
+        val headerLongTimeAgo = BaseListHeader(lm.getString(R.string.Core_LongTimeAgo))
 
         val invitationList = invitations
                 .sortedByDescending { a -> a.created }

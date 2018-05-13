@@ -1,44 +1,19 @@
 <resources>
-    <string name="app_name">Delivery Bear Management</string>
+    <string name="app_name" translatable="false">Delivery Bear Management</string>
 
 
-    <string name="ManagerApp_LoginActivity_ForgotPassword">Forgot password</string>
-    <string name="ManagerApp_LoginActivity_CreateInstance">You can add your company</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
-    <string name="ManagerApp_LoginActivity_Register">Register</string>
     <string name="ManagerApp_PasswordHintIcon" translatable="false">Password hint icon</string>
     <string name="ManagerApp_MainActivity" translatable="false">Main logo</string>
-    <string name="ManagerApp_CreateInstanceActivity_InstanceNameHint">Company name</string>
 
-    <string name="ManagerApp_ConfirmDataActivity_Confirm">Confirm</string>
     <string name="ManagerApp_MainActivity_Tasks">Tasks</string>
     <string name="ManagerApp_MainActivity_Staff">Staff</string>
     <string name="ManagerApp_MainActivity_Catalogs">Catalogs</string>
     <string name="ManagerApp_MainActivity_Settings">Settings</string>
-    <string name="ManagerApp_MainActivity_Managers">Managers</string>
-    <string name="ManagerApp_MainActivity_Performers">Performers</string>
-    <string name="ManagerApp_MainActivity_MyTasks">My tasks</string>
 
     <string name="ManagerApp_Toolbar_AddUser">Add user</string>
-    <string name="ManagerApp_Toolbar_ShowOnMap">Show on map</string>
 
-
-    <string name="ManagerApp_Toolbar_Save">Save</string>
-    <string name="ManagerApp_Toolbar_Edit">Edit</string>
-
-    <string name="ManagerApp_Toolbar_AddClient">Add entry</string>
-    <string name="ManagerApp_Toolbar_AddPaymentType">Add payment type</string>
-    <string name="ManagerApp_Toolbar_AddProduct">Add product</string>
-    <string name="ManagerApp_Toolbar_AddWarehouse">Add warehouse</string>
-
-    <string name="ManagerApp_Toolbar_AddTask">Add Task</string>
-    <string name="ManagerApp_Toolbar_DeleteUser">Delete</string>
-    <string name="ManagerApp_Cancel">Cancel</string>
-    <string name="ManagerApp_Toolbar_Finish">Finish</string>
     <string name="ManagerApp_AddUserFragment_ShareCode">Share code with your colleague</string>
-    <string name="ManagerApp_UserListFragment_EmptyList">Nothing\'s here yet</string>
-    <string name="ManagerApp_UserListFragment_DeleteUserModalContent">Are you sure you want to delete selected users?</string>
-    <string name="ManagerApp_DeleteButton">delete</string>
 
     <string-array name="roles_for_manager">
         <item>@string/ServerMessage_Roles_PerformerRole</item>
@@ -48,17 +23,6 @@
         <item>@string/ServerMessage_Roles_PerformerRole</item>
     </string-array>
 
-    <string name="ManagerApp_TaskFragment_CancelTask">Cancel task</string>
-    <string name="ManagerApp_AddTaskFragment_Number">Number*</string>
-    <string name="ManagerApp_AddTaskFragment_ShippingDesc">Shipping description</string>
-    <string name="ManagerApp_AddTaskFragment_Details">Details</string>
-    <string name="ManagerApp_AddTaskFragment_Address">Address</string>
-    <string name="ManagerApp_AddTaskFragment_Performer">Performer</string>
-    <string name="ManagerApp_AddTaskFragment_AddTaskButton">Add task</string>
-
-
-    <string name="ManagerApp_LoginActivity_WrongRole">Wrong role</string>
-    <string name="ManagerApp_LoginActivity_WrongCredentials">Wrong login/password</string>
     <string name="ManagerApp_UserListFragment_UserAvatarContentDesc">User avatar</string>
     <string name="ManagerApp_UserListFragment_OnlineStatusContentDesc">OnlineStatus</string>
     <string name="ManagerApp_UserListFragment_AdminContentDesc">Admin status</string>
@@ -68,15 +32,18 @@
     <string name="ManagerApp_TaskRepository_Error_ErrorTitle">Task error</string>
     <string name="ManagerApp_Dropdown_Top_Quantity"> (%d)</string>
     <string name="ServerMessage_Views_ProductsView">Products</string>
-    <string name="ServerMessage_Views_PaymentTypesView">Payment Types</string>
-    <string name="ServerMessage_Views_ClientsView">Clients</string>
-    <string name="ServerMessage_Views_WarehousesView">Warehouses</string>
 
-    <string name="ManagerApp_Toolbar_Done">Done</string>
-    <string name="ManagerApp_SelectPerformersFragment_EmptyAddress">Address not defined</string>
-    <string name="ManagerApp_InvitationItem_CancelInvitation">Cancel</string>
+    <string name="ManagerApp_NoGeoposition">Address not specified</string>
+    <string name="ManagerApp_Date">Date</string>
+    <string name="ManagerApp_TimeInterval">Time interval</string>
+    <string name="ManagerApp_GeneralInfo">General info</string>
+    <string name="ManagerApp_TotalCost">Total cost: </string>
+    <string name="ManagerApp_SelectProduct">Select product</string>
+    <string name="ManagerApp_ReceiptInfo">Receipt info</string>
+    <string name="ManagerApp_Warehouse">Warehouse</string>
+    <string name="ManagerApp_PerformerType">Performer type</string>
 
-
+    <string name="ManagerApp_EditTaskFragment_Header">Task</string>
     <string name="ManagerApp_EditTaskFragment_NoAvailableWarehouse">No available warehouse</string>
     <string name="ManagerApp_EditTaskFragment_NoAvailablePaymentType">No available payment type</string>
     <string name="ManagerApp_EditTaskFragment_Today">Today</string>
@@ -90,8 +57,13 @@
     <string name="ManagerApp_EditTaskFragment_PerformerUnassigned">Unassigned</string>
     <string name="ManagerApp_EditTaskFragment_PerformerAuto">Auto</string>
     <string name="ManagerApp_EditTaskFragment_PerformerFromStaff">From staff</string>
+    <string name="ManagerApp_EditTaskFragment_NoAvailablePerformers">No available performers</string>
 
+    <string name="ManagerApp_UserDetails_Header">User</string>
     <string name="ManagerApp_UserDetails_CreatedTasksLabel">Created</string>
     <string name="ManagerApp_UserDetails_CompletedTasksLabel">Completed</string>
     <string name="ManagerApp_UserDetails_DeliveredTasksLabel">Delivered</string>
+    <string name="ManagerApp_UserDetails_Tasks">Tasks</string>
+    <string name="ManagerApp_UserDetails_Statistics">Statistics</string>
+    <string name="ManagerApp_UserDetails_OnMap">On map</string>
 </resources>

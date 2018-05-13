@@ -141,7 +141,7 @@ class TaskDeliveryDateFragment : BaseTaskPageFragment() {
     }
 
     private fun getDateIndex (date: DateTime): Int {
-        val duration = Duration(DateTime.now(DateTimeZone.UTC), date)
+        val duration = Duration(DateTime.now(), date)
         return when (duration.standardDays.toInt()) {
             0 -> 0
             1 -> 1

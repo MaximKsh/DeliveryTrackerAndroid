@@ -30,7 +30,6 @@
                     android:id="@+id/tvTaskStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Preparing"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
 
@@ -39,7 +38,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvTaskStatus"
-                    android:text="Deliver Iphone 6s"
                     android:textColor="@color/colorBlack"
                     android:textSize="18sp" />
 
@@ -94,7 +92,6 @@
                         android:layout_below="@+id/ivPerformerImage"
                         android:layout_marginEnd="5dp"
                         android:layout_marginTop="6dp"
-                        android:text="No"
                         android:textColor="@color/colorGray"
                         android:textSize="16sp" />
 
@@ -105,7 +102,6 @@
                         android:layout_below="@+id/ivPerformerImage"
                         android:layout_marginTop="6dp"
                         android:layout_toEndOf="@+id/tvPerformerName"
-                        android:text="Performer"
                         android:textColor="@color/colorGray"
                         android:textSize="16sp" />
                 </RelativeLayout>
@@ -125,7 +121,7 @@
                     android:id="@+id/tvTaskReceiptAt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No receipt date"
+                    android:text="@string/Core_TaskDetails_NoReceiptDate"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -143,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="2dp"
-                    android:text="No warehouse"
+                    android:text="@string/Core_TaskDetails_NoWarehouse"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -154,8 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlTaskReceipt"
                 android:background="@drawable/shape_bottom_border_ltgray"
-                android:padding="15dp"
-                android:text="No description" />
+                android:padding="15dp"/>
 
 
             <HorizontalScrollView
@@ -217,7 +212,7 @@
                 android:paddingEnd="15dp"
                 android:paddingStart="15dp"
                 android:paddingTop="15dp"
-                android:text="Delivery info"
+                android:text="@string/Core_TaskDetails_DeliveryInfo"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
@@ -233,7 +228,7 @@
                     android:id="@+id/tvDeliveryDateLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date and time"
+                    android:text="@string/Core_TaskDetails_DateAndTime"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -244,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="2dp"
-                    android:text="Not assigned"
+                    android:text="@string/Core_TaskDetails_NotAssigned"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -260,7 +255,7 @@
                     android:id="@+id/tvClientAddressLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Address"
+                    android:text="@string/Core_TaskDetails_Address"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -279,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="2dp"
-                    android:text="Not assigned"
+                    android:text="@string/Core_TaskDetails_NotAssigned"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -296,7 +291,7 @@
                     android:id="@+id/tvClientNameLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Client name"
+                    android:text="@string/Core_TaskDetails_Client"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -305,7 +300,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@+id/tvClientSurname"
-                    android:text="Not assigned"
+                    android:text="@string/Core_TaskDetails_NotAssigned"
                     android:textSize="16sp" />
 
                 <TextView
@@ -329,7 +324,7 @@
                     android:id="@+id/tvClientPhoneNumberLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Client phone number"
+                    android:text="@string/Core_TaskDetails_ClientPhoneNumber"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -348,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="2dp"
-                    android:text="Not assigned"
+                    android:text="@string/Core_TaskDetails_NotAssigned"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -376,7 +371,7 @@
                 android:paddingEnd="15dp"
                 android:paddingStart="15dp"
                 android:paddingTop="15dp"
-                android:text="Products info"
+                android:text="@string/Core_TaskDetails_ProductsInfo"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
@@ -399,7 +394,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/llProductsContainer"
-                    android:text="No products here"
+                    android:text="@string/Core_TaskDetails_NoProductsHere"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -415,7 +410,7 @@
                         android:id="@+id/tvTotalCostLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total cost"
+                        android:text="@string/Core_TaskDetails_TotalCost"
                         android:textColor="@color/colorGray"
                         android:textSize="16sp" />
 
@@ -451,7 +446,7 @@
                 android:paddingEnd="15dp"
                 android:paddingStart="15dp"
                 android:paddingTop="15dp"
-                android:text="Additional info"
+                android:text="@string/Core_TaskDetails_AdditionalInfo"
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp" />
 
@@ -466,7 +461,7 @@
                     android:id="@+id/tvCreateDateLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Created"
+                    android:text="@string/Core_TaskDetails_Created"
                     android:textColor="@color/colorGray"
                     android:textSize="16sp" />
 
@@ -492,7 +487,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:text="Change status"
+            android:text="@string/Core_TaskDetails_ChangeStatus"
             android:textSize="16sp" />
 
         <ImageView

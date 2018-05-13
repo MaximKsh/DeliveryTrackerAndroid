@@ -29,8 +29,14 @@ import android.opengl.ETC1.getHeight
 
 
 class UserDetailsFragment : DeliveryTrackerFragment() {
-    private inner class ScreenSlidePagerAdapter(fm: FragmentManager, val role: Role) : FragmentStatePagerAdapter(fm) {
-        val mPageTitles = listOf("Tasks", "Statistics", "On map")
+    private inner class ScreenSlidePagerAdapter(
+            lm: ILocalizationManager,
+            fm: FragmentManager,
+            val role: Role) : FragmentStatePagerAdapter(fm) {
+        val mPageTitles = listOf(
+                lm.getString(R.string.ManagerApp_UserDetails_Tasks),
+                lm.getString(R.string.ManagerApp_UserDetails_Statistics),
+                lm.getString(R.string.ManagerApp_UserDetails_OnMap))
 
         override fun getPageTitle(position: Int): CharSequence? {
             return mPageTitles[position]
@@ -70,7 +76,7 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("User")
+        toolbar.setToolbarTitle(lm.getString(R.string.ManagerApp_UserDetails_Header))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +104,7 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
                 when (newState) {
                     SlidingUpPanelLayout.PanelState.EXPANDED -> { toolbarController.setToolbarTitle("${user.name} ${user.surname}") }
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> { toolbarController.setToolbarTitle("User")}
+                    SlidingUpPanelLayout.PanelState.COLLAPSED -> { toolbarController.setToolbarTitle(lm.getString(R.string.ManagerApp_UserDetails_Header))}
                     else -> {}
                 }
             }
@@ -114,7 +120,7 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
                 UserOnMapFragment()
         )
 
-        mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, user.role!!.toRole()!!)
+        mPagerAdapter = ScreenSlidePagerAdapter(lm, childFragmentManager, user.role!!.toRole()!!)
         pager.adapter = mPagerAdapter
         tlUserNavigationTabs.setupWithViewPager(pager)
 

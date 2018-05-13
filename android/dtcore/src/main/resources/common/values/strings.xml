@@ -10,6 +10,8 @@
 
     <string name="Core_UnknownError">Sorry. Something went wrong</string>
     <string name="Core_OK">OK</string>
+    <string name="Core_Next">NEXT</string>
+    <string name="Core_Prev">PREV</string>
     <string name="Core_PageNotFound">Internal error. Unknown endpoint.</string>
     <string name="Core_NoInternet">No internet connection</string>
     <string name="Core_InvalidCredentials">Wrong invitation code/password pair</string>
@@ -46,7 +48,7 @@
     <string name="Core_CompanyName">Company</string>
     <string name="Core_PaymentType">Payment type</string>
     <string name="Core_WarehouseTitle">Warehouse title</string>
-    <string name="Core_WarehouseAddress">Warehouse address</string>
+    <string name="Core_WarehouseAddress">Address</string>
     <string name="Core_ProductTitle">Product title</string>
     <string name="Core_ProductVendorCode">Vendor code</string>
     <string name="Core_ProductCost">Cost</string>
@@ -74,6 +76,27 @@
     <string name="Core_ProductCostValidationError">Cost is required</string>
     <string name="Core_ClientAddressValidationError">Address is required</string>
     <string name="Core_TaskNumberValidationError">Task name is required</string>
+    <string name="Core_ThisWeek">This week</string>
+    <string name="Core_PreviousWeek">Previous week</string>
+    <string name="Core_LongTimeAgo">Long time ago</string>
+
+    <string name="Core_TaskDetails_DeliveryInfo">Delivery info</string>
+    <string name="Core_TaskDetails_DateAndTime">Date and time</string>
+    <string name="Core_TaskDetails_NotAssigned">Not assigned</string>
+    <string name="Core_TaskDetails_Address">Address</string>
+    <string name="Core_TaskDetails_Client">Client</string>
+    <string name="Core_TaskDetails_ClientPhoneNumber">Client phone number</string>
+    <string name="Core_TaskDetails_ProductsInfo">Products info</string>
+    <string name="Core_TaskDetails_NoProductsHere">No products</string>
+    <string name="Core_TaskDetails_TotalCost">Total cost</string>
+    <string name="Core_TaskDetails_AdditionalInfo">Additional info</string>
+    <string name="Core_TaskDetails_Created">Created</string>
+    <string name="Core_TaskDetails_ChangeStatus">Change status</string>
+    <string name="Core_TaskDetails_NoReceiptDate">No receipt date</string>
+    <string name="Core_TaskDetails_NoWarehouse">No warehouse</string>
+    <string name="Core_TaskDetails_NoDescription">No description</string>
+    <string name="Core_TaskDetails_Header">Task details</string>
+
 
     <string name="Core_EnterCodeHint">Invitation code</string>
     <string name="Core_EnterPasswordHint">Password</string>
@@ -129,6 +152,10 @@
     <string name="ServerMessage_Views_DeliveredTasksPerformerView">Delivered</string>
     <string name="ServerMessage_Views_CompletedTasksPerformerView">Completed</string>
     <string name="ServerMessage_Views_RevokedTasksPerformerView">Revoked</string>
+    <string name="ServerMessage_Views_ProductsView">Products</string>
+    <string name="ServerMessage_Views_ClientsView">Clients</string>
+    <string name="ServerMessage_Views_PaymentTypesView">Payment types</string>
+    <string name="ServerMessage_Views_WarehousesView">Warehouses</string>
 
     <string name="ServerMessage_PushMessage_TaskHeader">Delivery Bear task</string>
     <string name="ServerMessage_PushMessage_TaskPlannedToYou">You are appointed as a performer</string>

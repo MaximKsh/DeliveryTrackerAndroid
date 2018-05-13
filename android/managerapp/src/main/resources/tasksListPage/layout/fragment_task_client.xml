@@ -16,7 +16,7 @@
             android:paddingTop="10dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="Client info"/>
+            android:text="@string/Core_ClientInfoHeader"/>
 
         <include
             android:id="@+id/rlClientInfo"

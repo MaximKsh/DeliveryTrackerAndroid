@@ -1,5 +1,5 @@
 <resources>
-    <string name="PerformerApp_AppName">Delivery Bear Performing</string>
+    <string name="PerformerApp_AppName" translatable="false">Delivery Bear Performing</string>
 
     <string name="PerformerApp_MainActivity_Tasks">Tasks</string>
     <string name="PerformerApp_MainActivity_Staff">Staff</string>

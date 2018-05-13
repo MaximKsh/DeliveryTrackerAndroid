@@ -16,7 +16,7 @@
             android:textColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="General info"/>
+            android:text="@string/ManagerApp_GeneralInfo"/>
 
         <LinearLayout
             android:id="@+id/llTaskNumber"
@@ -76,7 +76,7 @@
             android:textColor="@color/colorGray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Payment type"/>
+            android:text="@string/Core_PaymentType"/>
 
         <org.angmarch.views.NiceSpinner
             android:id="@+id/spinnerPaymentType"

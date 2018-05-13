@@ -84,7 +84,6 @@ class EditClientAddressFragment : BaseAddressMapFragment() {
                 }
 
                 val address = dp.clientAddresses.get(addressId, clientId, DataProviderGetMode.DIRTY)
-                Log.i("SHIT", address.geoposition.toString())
                 address.instanceId = session.user!!.instanceId
                 dp.clientAddresses.saveChanges(address)
 

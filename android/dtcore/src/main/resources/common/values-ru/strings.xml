@@ -9,6 +9,8 @@
 
     <string name="Core_UnknownError">Извините. Что-то пошло не так</string>
     <string name="Core_OK">ОК</string>
+    <string name="Core_Next">ДАЛЕЕ</string>
+    <string name="Core_Prev">НАЗАД</string>
     <string name="Core_PageNotFound">Внутренняя ошибка. Неизвестная страница</string>
     <string name="Core_NoInternet">Нет соединения с интернетом</string>
     <string name="Core_InvalidCredentials">Неправильный код приглашения или пароль</string>
@@ -19,8 +21,8 @@
     <string name="Core_ClientHeader">Клиент</string>
     <string name="Core_ClientAddressHeader">Адрес клиента</string>
     <string name="Core_ProfileTooltipHeader">Профиль</string>
-    <string name="Core_ChangePasswordTooltipHeader">Изменить пароль</string>
-    <string name="Core_EditProfileHeader">Редактировать профиль</string>
+    <string name="Core_ChangePasswordTooltipHeader">Измениние пароль</string>
+    <string name="Core_EditProfileHeader">Редактирование профиль</string>
     <string name="Core_AvatarDesc">Аватар</string>
     <string name="Core_CompanyInfoGroup">Информация о компании</string>
     <string name="Core_CreatorInfoGroup">Информация о создателе</string>
@@ -39,10 +41,10 @@
     <string name="Core_Name">Имя</string>
     <string name="Core_Patronymic">Отчество</string>
     <string name="Core_ConfirmNewPassword">Подтверждение нового пароля</string>
-    <string name="Core_CompanyName">Компания</string>
+    <string name="Core_CompanyName">Название компании</string>
     <string name="Core_PaymentType">Способ оплаты</string>
     <string name="Core_WarehouseTitle">Название точки выдачи</string>
-    <string name="Core_WarehouseAddress">Адрес точки выдачи</string>
+    <string name="Core_WarehouseAddress">Адрес</string>
     <string name="Core_ProductTitle">Название товара</string>
     <string name="Core_ProductVendorCode">Артикул</string>
     <string name="Core_ProductCost">Цена</string>
@@ -53,9 +55,9 @@
     <string name="Core_Addresses">Адреса</string>
     <string name="Core_AddAddress">Добавить адрес</string>
     <string name="Core_ClientInfoHeader">Информация о клиенте</string>
-    <string name="Core_PreliminaryUserHeader">Предварительная информация о пользователе</string>
+    <string name="Core_PreliminaryUserHeader">Предварительная информация</string>
     <string name="Core_EnterOldPasswordValidationError">Укажите старый пароль</string>
-    <string name="Core_EnterNewPasswordValidationError">Новый пароль неверен</string>
+    <string name="Core_EnterNewPasswordValidationError">Укажите корректный пароль</string>
     <string name="Core_ConfirmPasswordValidationError">Подтвердите новый пароль</string>
     <string name="Core_EnterPassword">Укажите пароль</string>
     <string name="Core_SurnameValidationError">Укажите фамилию</string>
@@ -63,8 +65,8 @@
     <string name="Core_PhoneValidationError">Укажите номер телефона</string>
     <string name="Core_CompanyNameValidationError">Укажите название компании</string>
     <string name="Core_PaymentTypeValidationError">Укажите способ оплаты</string>
-    <string name="Core_WarehouseTitleValidationError">Укажите название точки выдачи</string>
-    <string name="Core_WarehouseAddressValidationError">Укажите адрес точки выдачи</string>
+    <string name="Core_WarehouseTitleValidationError">Укажите название</string>
+    <string name="Core_WarehouseAddressValidationError">Укажите адрес</string>
     <string name="Core_ProductTitleValidationError">Укажите название товара</string>
     <string name="Core_ProductVendorCodeValidationError">Укажите артикул товара</string>
     <string name="Core_ProductCostValidationError">Укажите стоимость товара</string>
@@ -84,6 +86,24 @@
     <string name="Core_Session_Error_EditUserInfo">Ошибка изменения информации о пользователе</string>
     <string name="Core_Session_Error_Unauthorized">Нет авторизации</string>
 
+
+    <string name="Core_TaskDetails_DeliveryInfo">Информация о доставке</string>
+    <string name="Core_TaskDetails_DateAndTime">Дата и время</string>
+    <string name="Core_TaskDetails_NotAssigned">Не указано</string>
+    <string name="Core_TaskDetails_Address">Адрес</string>
+    <string name="Core_TaskDetails_Client">Клиент</string>
+    <string name="Core_TaskDetails_ClientPhoneNumber">Телефон клиента</string>
+    <string name="Core_TaskDetails_ProductsInfo">Информация о товарах</string>
+    <string name="Core_TaskDetails_NoProductsHere">Товары не указаны</string>
+    <string name="Core_TaskDetails_TotalCost">Стоимость</string>
+    <string name="Core_TaskDetails_AdditionalInfo">Дополнительная информация</string>
+    <string name="Core_TaskDetails_Created">Дата создания</string>
+    <string name="Core_TaskDetails_ChangeStatus">Сменить состояние</string>
+    <string name="Core_TaskDetails_NoReceiptDate">Нет даты получения</string>
+    <string name="Core_TaskDetails_NoWarehouse">Нет точки получения</string>
+    <string name="Core_TaskDetails_NoDescription">Не указано описание</string>
+    <string name="Core_TaskDetails_Header">Задание</string>
+
     <string name="NoTaskPerformer">Нет исполнителя</string>
     <string name="Core_Product_Name">Название товара</string>
     <string name="Core_Product_Vendor_Code">Артикул</string>
@@ -101,6 +121,9 @@
     <string name="Core_Edit">Редактировать</string>
     <string name="Core_Search">Поиск</string>
     <string name="Core_Send">Готово</string>
+    <string name="Core_ThisWeek">На этой неделе</string>
+    <string name="Core_PreviousWeek">На предыдущей неделе</string>
+    <string name="Core_LongTimeAgo">Ранее</string>
 
 
     <string name="ServerMessage_Roles_CreatorRole">Создатель</string>
@@ -112,10 +135,10 @@
     <string name="ServerMessage_Views_TasksManagersView">Задачи</string>
     <string name="ServerMessage_Views_TasksPerformerView">Задачи</string>
     <string name="ServerMessage_Views_InvitationsView">Приглашения</string>
-    <string name="ServerMessage_Views_ActualTasksPerformerView">Активные задачи</string>
-    <string name="ServerMessage_Views_ActualTasksManagerView">Активные задачи</string>
+    <string name="ServerMessage_Views_ActualTasksPerformerView">Активные</string>
+    <string name="ServerMessage_Views_ActualTasksManagerView">Активные</string>
     <string name="ServerMessage_Views_CompletedTasksManagerView">Завершенные</string>
-    <string name="ServerMessage_Views_MyTasksManagerView">Мои задачи</string>
+    <string name="ServerMessage_Views_MyTasksManagerView">Созданные мной</string>
     <string name="ServerMessage_Views_PreparingTasksManagerView">Не подготовке</string>
     <string name="ServerMessage_Views_QueueTasksManagerView">В очереди</string>
     <string name="ServerMessage_Views_RevokedTasksManagerView">Отмененнные</string>
@@ -123,6 +146,10 @@
     <string name="ServerMessage_Views_DeliveredTasksPerformerView">Доставленные</string>
     <string name="ServerMessage_Views_CompletedTasksPerformerView">Завершенные</string>
     <string name="ServerMessage_Views_RevokedTasksPerformerView">Отмененные</string>
+    <string name="ServerMessage_Views_ProductsView">Товары</string>
+    <string name="ServerMessage_Views_ClientsView">Клиенты</string>
+    <string name="ServerMessage_Views_PaymentTypesView">Способы оплаты</string>
+    <string name="ServerMessage_Views_WarehousesView">Точки выдачи</string>
 
     <string name="ServerMessage_PushMessage_TaskHeader">Delivery Bear</string>
     <string name="ServerMessage_PushMessage_TaskPlannedToYou">Вы назначены исполнителем задания</string>
@@ -149,7 +176,8 @@
     <string name="ServerMessage_StateTransitionButton_PerformerInProgressCancelled">Отменить</string>
 
     <string name="ServerMessage_Error_AccessDenied">Доступ запрещен</string>
-    <string name="ServerMessage_Error_IncorrectPassword">Неправильный пароль</string>
+    <string name="ServerMessage_Error_CantDeleteCreator">Нельзя удалить создателя</string>
+    <string name="ServerMessage_Error_CantDeleteUser">Нельзя удалить выбранного пользователя</string>
     <string name="ServerMessage_Error_IncorrectTaskState">Неправильное состояние задачи</string>
     <string name="ServerMessage_Error_IncorrectTaskStateTransition">Ошибка при смене состояния</string>
     <string name="ServerMessage_Error_InstanceNotFound">Компания не найдена</string>
@@ -174,7 +202,7 @@
     <string name="ServerMessage_Error_ViewNotFound">Представление не найдено</string>
     <string name="ServerMessage_Error_ViewResultTypeError">Результат представления имеет другой тип</string>
 
-    <string name="Core_Revoke">Отвенить</string>
+    <string name="Core_Revoke">Отменить</string>
     <string name="ServerMessage_TransitionButton_CreatorPreparingQueue">Добавить в очередь</string>
     <string name="ServerMessage_TransitionButton_CreatorQueuePreparing">Вернуть на подготовку</string>
     <string name="ServerMessage_TransitionButton_CreatorQueueWaiting">Отправить на выполнение</string>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="PerformerApp_MainActivity_Tasks">Задания</string>
+    <string name="PerformerApp_MainActivity_Staff">Сотрудники</string>
+    <string name="PerformerApp_MainActivity_Settings">Настройки</string>
+    <string name="PerformerApp_ToWork">В работу</string>
+</resources>

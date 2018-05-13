@@ -19,10 +19,10 @@ abstract class BaseTasksListFragment : BaseListFragment() {
     protected abstract val tasksActions : IBaseListItemActions<TaskListItem>
 
     override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
-        val headerThisWeek = BaseListHeader("This week")
-        val headerPreviousWeek = BaseListHeader("Previous week")
+        val headerThisWeek = BaseListHeader(lm.getString(R.string.Core_ThisWeek))
+        val headerPreviousWeek = BaseListHeader(lm.getString(R.string.Core_PreviousWeek))
         // TODO: fix this fate range
-        val headerLongTimeAgo = BaseListHeader("Long time ago")
+        val headerLongTimeAgo = BaseListHeader(lm.getString(R.string.Core_LongTimeAgo))
 
         val list = tasks
                 .sortedByDescending { a -> a.created }

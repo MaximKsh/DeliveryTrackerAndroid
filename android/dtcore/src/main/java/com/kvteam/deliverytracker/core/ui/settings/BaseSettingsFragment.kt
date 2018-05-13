@@ -89,6 +89,8 @@ abstract class BaseSettingsFragment : DeliveryTrackerFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(scrollPosKey, svMainScrollView.scrollY)
+        if (svMainScrollView != null) {
+            outState.putInt(scrollPosKey, svMainScrollView.scrollY)
+        }
     }
 }

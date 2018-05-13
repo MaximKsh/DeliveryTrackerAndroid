@@ -20,7 +20,7 @@
         android:visibility="gone"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:contentDescription="@string/ManagerApp_Toolbar_Done"
+        android:contentDescription="@string/Core_Done"
         android:src="@drawable/ic_done_black_24dp"
         />
 </RelativeLayout>

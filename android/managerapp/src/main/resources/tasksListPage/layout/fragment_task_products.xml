@@ -14,7 +14,7 @@
             android:textColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Products info"/>
+            android:text="@string/Core_TaskDetails_ProductsInfo"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:text="Select products"
+                android:text="@string/ManagerApp_SelectProduct"
                 android:id="@+id/tvSelectProduct"
                 android:textColor="@color/colorBlack"
                 android:textSize="16sp"
@@ -48,7 +48,7 @@
             android:textSize="18sp"
             android:background="@color/colorWhite"
             android:textColor="@color/colorBlack"
-            android:text="Total cost:"/>
+            android:text="@string/ManagerApp_TotalCost"/>
 
         <TextView
             android:id="@+id/tvTotalProductsPrice"

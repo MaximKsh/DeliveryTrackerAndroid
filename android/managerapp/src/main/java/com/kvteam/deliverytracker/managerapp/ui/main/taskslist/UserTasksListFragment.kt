@@ -12,6 +12,7 @@ import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.ui.tasks.TaskListItem
 import com.kvteam.deliverytracker.core.ui.tasks.TasksListFlexibleAdapter
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
+import com.kvteam.deliverytracker.managerapp.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import org.joda.time.DateTime
@@ -67,10 +68,9 @@ class UserTasksListFragment : BaseFilterFragment() {
     }
 
     override fun handleTasks(tasks: List<TaskInfo>, animate: Boolean) {
-        val headerThisWeek = BaseListHeader("This week")
-        val headerPreviousWeek = BaseListHeader("Previous week")
-        // TODO: fix this fate range
-        val headerLongTimeAgo = BaseListHeader("Long time ago")
+        val headerThisWeek = BaseListHeader(lm.getString(R.string.Core_ThisWeek))
+        val headerPreviousWeek = BaseListHeader(lm.getString(R.string.Core_PreviousWeek))
+        val headerLongTimeAgo = BaseListHeader(lm.getString(R.string.Core_LongTimeAgo))
 
         val list = tasks
                 .sortedByDescending { a -> a.created }

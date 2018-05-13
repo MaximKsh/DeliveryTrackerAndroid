@@ -48,7 +48,7 @@
                 android:layout_toEndOf="@id/ivInvitationHintIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:hint_text="Invitation code"
+                app:hint_text="@string/Core_EnterCodeHint"
                 />
 
         </RelativeLayout>

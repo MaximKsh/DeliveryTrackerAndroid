@@ -18,8 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvTasksList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/fragment_tasks_item" />
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

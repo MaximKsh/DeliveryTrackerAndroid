@@ -111,7 +111,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("Task details")
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_TaskDetails_Header))
     }
 
     private fun setGoogleMap() {
@@ -236,7 +236,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
         if (task.authorId != null) {
             val author = dp.users.get(task.authorId as UUID, DataProviderGetMode.FORCE_CACHE).entry
-            tvAuthorName.text = "by ${author.name}"
+            tvAuthorName.text = author.name
             tvAuthorSurname.text = author.surname
         }
 

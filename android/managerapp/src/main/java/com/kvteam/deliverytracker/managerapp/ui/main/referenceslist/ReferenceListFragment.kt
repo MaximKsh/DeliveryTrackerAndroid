@@ -18,7 +18,7 @@ import com.kvteam.deliverytracker.core.ui.BaseListFragment
 import com.kvteam.deliverytracker.core.ui.BaseListHeader
 import com.kvteam.deliverytracker.core.ui.IBaseListItemActions
 import com.kvteam.deliverytracker.core.webservice.IReferenceWebservice
-import com.kvteam.deliverytracker.managerapp.R
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.managerapp.ui.main.NavigationController
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientListItem
 import com.kvteam.deliverytracker.managerapp.ui.main.referenceslist.clients.ClientsListFlexibleAdapter

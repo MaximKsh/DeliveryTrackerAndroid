@@ -118,7 +118,7 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         toolbar.disableDropDown()
-        toolbar.setToolbarTitle("Task")
+        toolbar.setToolbarTitle(lm.getString(R.string.ManagerApp_EditTaskFragment_Header))
         toolbar.showBackButton()
     }
 
@@ -135,11 +135,6 @@ class EditTaskFragment : DeliveryTrackerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
-        if (tryPrefetch) {
-            dp.taskInfos.getAsync(taskId, DataProviderGetMode.PREFER_CACHE)
-            tryPrefetch = false
-        }
-
 
         mPagerAdapter = ScreenSlidePagerAdapter(childFragmentManager)
         pager.adapter = mPagerAdapter
@@ -159,6 +154,11 @@ class EditTaskFragment : DeliveryTrackerFragment() {
             if (pager.currentItem <= NUM_PAGES) {
                 pager.currentItem = pager.currentItem + 1
             }
+        }
+
+        if (tryPrefetch) {
+            dp.taskInfos.getAsync(taskId, DataProviderGetMode.PREFER_CACHE)
+            tryPrefetch = false
         }
 
         val task = dp.taskInfos.get(taskId, DataProviderGetMode.DIRTY).entry
