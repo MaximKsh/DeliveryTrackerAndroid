@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.DeliveryTrackerApplication
-import com.kvteam.deliverytracker.core.common.Configuration
-import com.kvteam.deliverytracker.core.common.EMPTY_STRING
-import com.kvteam.deliverytracker.core.common.IDeliveryTrackerGsonProvider
-import com.kvteam.deliverytracker.core.common.webserviceURL
+import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.models.CodePassword
 import com.kvteam.deliverytracker.core.webservice.CREATED_HTTP_STATUS
 import com.kvteam.deliverytracker.core.webservice.IHttpManager
@@ -113,6 +110,23 @@ class AccountAuthenticator(
             gson.fromJson<AccountResponse>(response.entity, AccountResponse::class.java)
         } catch (e: JsonSyntaxException) {
             return EMPTY_STRING
+        }
+        val userId = accountResponse.user?.id ?: EMPTY_UUID
+
+        val token = accountResponse?.token
+        if (token != null) {
+            try {
+                val device = getDevice(userId, deviceType, application.applicationContext)
+                val updDeviceRequest = AccountRequest(device = device)
+                val updDeviceRequestBody = gson.toJson(updDeviceRequest)
+                httpManager.post(
+                        "$baseUrl/api/account/update_device",
+                        updDeviceRequestBody,
+                        mapOf("Authorization" to "Bearer $token"),
+                        "application/json")
+            }catch (e: Exception){
+
+            }
         }
         return accountResponse?.token ?: EMPTY_STRING
     }

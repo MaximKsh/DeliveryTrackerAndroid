@@ -72,7 +72,7 @@ class EditClientFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("Edit client")
+        toolbar.setToolbarTitle(lm.getString(R.string.Core_ClientHeader))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {

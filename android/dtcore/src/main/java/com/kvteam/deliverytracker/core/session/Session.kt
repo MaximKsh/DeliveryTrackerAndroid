@@ -3,9 +3,7 @@ package com.kvteam.deliverytracker.core.session
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonSyntaxException
 import com.kvteam.deliverytracker.core.common.*
 import com.kvteam.deliverytracker.core.models.CodePassword
@@ -32,7 +30,6 @@ class Session (
         private val context: Context,
         private val storage: IStorage) : ISession {
 
-    private val deviceType = "ANDROID"
 
     val gson = gsonProvider.gson
 
@@ -68,22 +65,8 @@ class Session (
     }
 
     override fun getDevice(): Device {
-        val refreshedToken = FirebaseInstanceId.getInstance().token ?: EMPTY_STRING
         val userId = this@Session.user?.id ?: EMPTY_UUID
-        val device = Device()
-        device.userId = userId
-        device.type = deviceType
-        device.version = Build.VERSION.SDK_INT.toString()
-        device.language = Locale.getDefault().language
-        device.firebaseId = refreshedToken
-        try {
-            val pInfo = this@Session.context.packageManager.getPackageInfo(this@Session.context.packageName, 0)
-            device.applicationType = pInfo.packageName
-            device.applicationVersion = pInfo.versionCode.toString()
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return device
+        return com.kvteam.deliverytracker.core.session.getDevice(userId, deviceType, context)
     }
 
     override fun invalidateToken() {

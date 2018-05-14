@@ -139,7 +139,7 @@
     <string name="ServerMessage_Views_ActualTasksManagerView">Активные</string>
     <string name="ServerMessage_Views_CompletedTasksManagerView">Завершенные</string>
     <string name="ServerMessage_Views_MyTasksManagerView">Созданные мной</string>
-    <string name="ServerMessage_Views_PreparingTasksManagerView">Не подготовке</string>
+    <string name="ServerMessage_Views_PreparingTasksManagerView">На подготовке</string>
     <string name="ServerMessage_Views_QueueTasksManagerView">В очереди</string>
     <string name="ServerMessage_Views_RevokedTasksManagerView">Отмененнные</string>
     <string name="ServerMessage_Views_QueueTasksPerformerView">В очереди</string>

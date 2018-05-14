@@ -15,3 +15,5 @@ internal const val INSTANCE_NAME_KEY = "_instanceName"
 internal const val INSTANCE_CREATOR_ID_KEY = "_instanceCreatorId"
 
 internal const val LAST_CODE_KEY = "LAST_CODE_KEY"
+
+internal const val deviceType = "ANDROID"
