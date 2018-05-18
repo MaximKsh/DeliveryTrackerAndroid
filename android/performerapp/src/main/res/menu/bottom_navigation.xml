@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_staff"
-        android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/PerformerApp_MainActivity_Staff" />
-
-    <item
         android:id="@+id/navigation_day_route"
         android:icon="@drawable/route_icon"
         android:title="@string/PerformerApp_MainActivity_Day_Route" />
+
+    <item
+        android:id="@+id/navigation_staff"
+        android:icon="@drawable/ic_group_black_24dp"
+        android:title="@string/PerformerApp_MainActivity_Staff" />
 
     <item
         android:id="@+id/navigation_tasks"

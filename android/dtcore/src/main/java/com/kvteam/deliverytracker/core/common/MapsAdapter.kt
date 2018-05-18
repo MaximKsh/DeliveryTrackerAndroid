@@ -18,7 +18,18 @@ import com.google.maps.model.DirectionsResult
 import com.google.maps.android.PolyUtil
 import com.google.maps.model.DirectionsLeg
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Paint.Align
+import com.basgeekball.awesomevalidation.helper.SpanHelper.setColor
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import java.lang.Float.max
 
 
 data class GoogleMapAddress(
@@ -90,20 +101,40 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         return Math.floor(Math.log(mapPx.toDouble() / worldPx.toDouble() / fraction) / LN2)
     }
 
-    fun getRoute(origin: com.google.maps.model.LatLng,
-                                    destination: com.google.maps.model.LatLng,
-                                    departureTime: DateTime?) : GoogleMapRouteResults {
-        
+    private fun textAsBitmap(text: String, textSize: Float, textColor: Int): Bitmap {
+        val paint = Paint(ANTI_ALIAS_FLAG)
+        paint.textSize = textSize
+        paint.color = textColor
+        paint.textAlign = Paint.Align.CENTER
+        val baseline = -paint.ascent()
+        val width = (paint.measureText(text) + 0.5f)
+        val height = (baseline + paint.descent() + 0.5f)
+        val size = Math.max(width, height)
+        val image = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(image)
+        val circle = Paint(ANTI_ALIAS_FLAG)
+        paint.color = Color.WHITE
+        canvas.drawCircle(size / 2, size / 2, size / 2, circle)
+        canvas.drawText(text, size / 2, baseline, paint)
+        return image
+    }
+
+    fun getRoute(route: ArrayList<com.google.maps.model.LatLng>,
+                 departureTime: DateTime?) : GoogleMapRouteResults {
+
         val time = if (departureTime?.isAfterNow == true) {
             departureTime
         } else {
             DateTime.now()
         }
 
+        val waypointsArray = route.slice(1 until (route.size - 1)).toTypedArray()
+
         val results = DirectionsApi.newRequest(getGeoContext)
                 .mode(TravelMode.DRIVING)
-                .origin(origin)
-                .destination(destination)
+                .origin(route[0])
+                .waypoints(*waypointsArray)
+                .destination(route.last())
                 .departureTime(time)
                 .await()
 
@@ -115,26 +146,8 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable
     }
 
-    private fun addPolyline(decodedPath: Iterable<LatLng>) {
+    fun addPolyline(decodedPath: Iterable<LatLng>) {
         googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
-    }
-
-    private fun addMarkersToMap(route: DirectionsLeg) {
-        googleMap!!.addMarker(MarkerOptions()
-                .position(LatLng(route.startLocation.lat, route.startLocation.lng))
-                .title(route.startAddress)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-        )
-
-        googleMap!!.addMarker(MarkerOptions()
-                                .position(LatLng(route.endLocation.lat, route.endLocation.lng))
-                                .title(route.endAddress)
-        )
-    }
-
-    fun drawRoute(route: DirectionsLeg, decodedPath: Iterable<LatLng>) {
-        addMarkersToMap(route)
-        addPolyline(decodedPath)
     }
 
     fun moveCameraToPosition(position: LatLng, animated: Boolean) {
@@ -152,6 +165,17 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         } else {
             googleMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(viewPort, 0))
         }
+    }
+
+    fun moveToLatLngBounds(bounds: LatLngBounds) {
+        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+    }
+
+    fun addCustomMarker(text: String, position: LatLng) {
+        googleMap!!.addMarker(MarkerOptions()
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromBitmap(textAsBitmap(text, 70f, Color.BLACK)))
+        )
     }
 
     fun setMarker(position: LatLng, viewPort: LatLngBounds?, animated: Boolean) {

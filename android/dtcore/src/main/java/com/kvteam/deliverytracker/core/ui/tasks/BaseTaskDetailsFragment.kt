@@ -49,6 +49,7 @@ import java.util.*
 import javax.inject.Inject
 import com.google.maps.GeoApiContext
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.toGeoposition
 import org.joda.time.DateTimeZone
 import java.io.InputStream
 import java.net.URL
@@ -137,9 +138,12 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         if (warehouse.geoposition != null && clientAddress.geoposition != null) {
             Handler().postDelayed({
                 if (isAdded) {
-                    val routeResults = mapsAdapter.getRoute(
+                    val route = arrayListOf<com.google.maps.model.LatLng>(
                             warehouse.geoposition!!.toDirectionsLtnLng(),
-                            clientAddress.geoposition!!.toDirectionsLtnLng(),
+                            clientAddress.geoposition!!.toDirectionsLtnLng()
+                    )
+                    val routeResults = mapsAdapter.getRoute(
+                            route,
                             task.deliveryFrom)
 
                     val latLngBoundsBuilder = LatLngBounds.builder()
@@ -176,7 +180,9 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                             startActivity(intent)
                         }
                         mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                            mapsAdapter.drawRoute(routeResults.route, routeResults.decodedPath)
+                            mapsAdapter.addPolyline(routeResults.decodedPath)
+                            mapsAdapter.addCustomMarker("C", routeResults.route.startLocation.toGeoposition().toLtnLng())
+                            mapsAdapter.addCustomMarker("З", routeResults.route.endLocation.toGeoposition().toLtnLng())
                             skeletonMap.hide()
                         }
                     }
