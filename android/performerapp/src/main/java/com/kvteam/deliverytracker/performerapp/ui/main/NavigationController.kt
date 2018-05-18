@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.support.v4.app.FragmentManager
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
+import com.kvteam.deliverytracker.performerapp.ui.main.dayroute.DayRouteFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
@@ -43,6 +44,15 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         fragmentManager.beginTransaction()
                 .replace(containerId, tasksListFragment)
+                .commitAllowingStateLoss()
+    }
+
+    fun navigateToDayRoute() {
+        val dayRouteFragment = DayRouteFragment()
+        fragmentTracer.next(dayRouteFragment)
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        fragmentManager.beginTransaction()
+                .replace(containerId, dayRouteFragment)
                 .commitAllowingStateLoss()
     }
 

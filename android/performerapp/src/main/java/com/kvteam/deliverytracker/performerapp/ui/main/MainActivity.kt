@@ -28,6 +28,7 @@ class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFail
 
     private val defaultItem = R.id.navigation_staff
     private val menuItemMapper = mapOf(
+            R.id.navigation_day_route to {navigationController.navigateToDayRoute()},
             R.id.navigation_staff to {navigationController.navigateToStaff()},
             R.id.navigation_tasks to {navigationController.navigateToTasks()},
             R.id.navigation_settings to {navigationController.navigateToSettings()}
@@ -67,6 +68,7 @@ class MainActivity : DeliveryTrackerActivity(), GoogleApiClient.OnConnectionFail
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        toolbarController.mainContainer = mainContainer
         removeShiftMode(navigation)
 
         googleApiClient = GoogleApiClient

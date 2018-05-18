@@ -1,5 +1,6 @@
 package com.kvteam.deliverytracker.performerapp.dagger.components
 
+import com.kvteam.deliverytracker.performerapp.ui.main.dayroute.DayRouteFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
@@ -20,6 +21,12 @@ interface UsersListFragmentSubcomponent : AndroidInjector<UsersListFragment> {
 interface TasksListFragmentSubcomponent : AndroidInjector<TasksListFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<TasksListFragment>()
+}
+
+@Subcomponent
+interface DayRouteFragmentSubcomponent : AndroidInjector<DayRouteFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<DayRouteFragment>()
 }
 
 @Subcomponent

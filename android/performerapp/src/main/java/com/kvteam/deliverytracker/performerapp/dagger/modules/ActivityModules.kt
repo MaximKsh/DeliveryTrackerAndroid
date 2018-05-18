@@ -16,6 +16,7 @@ import com.kvteam.deliverytracker.performerapp.ui.confirm.ConfirmDataActivity
 import com.kvteam.deliverytracker.performerapp.ui.login.LoginActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import com.kvteam.deliverytracker.performerapp.ui.main.dayroute.DayRouteFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
@@ -91,6 +92,10 @@ abstract class MainActivityModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(TasksListFragmentModule::class))
     internal abstract fun tasksListFragment(): TasksListFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(DayRouteFragmentModule::class))
+    internal abstract fun dayRouteFragment(): DayRouteFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = arrayOf(SettingsFragmentModule::class))

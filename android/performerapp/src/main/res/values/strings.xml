@@ -2,6 +2,7 @@
     <string name="PerformerApp_AppName" translatable="false">Delivery Bear Performing</string>
 
     <string name="PerformerApp_MainActivity_Tasks">Tasks</string>
+    <string name="PerformerApp_MainActivity_Day_Route">Route</string>
     <string name="PerformerApp_MainActivity_Staff">Staff</string>
     <string name="PerformerApp_MainActivity_Settings">Settings</string>
     <string name="PerformerApp_ToWork">In work</string>
