@@ -18,7 +18,7 @@ class TasksStepperContainer(
         private val context: Context) {
     inner class TasksStepperAdapter(context: Context) : VerticalStepperAdapter(context) {
         override fun getTitle(position: Int): CharSequence {
-            return tasks[position].name
+            return ""
         }
 
         override fun getSummary(position: Int): CharSequence? {
@@ -43,8 +43,10 @@ class TasksStepperContainer(
 
         override fun onCreateContentView(context: Context, position: Int): View {
             val content = TaskStepperItemView(context)
+            content.stepperTaskName.text = tasks[position].name
             content.stepperTaskDescription.text = tasks[position].description ?: "Нет описания"
             content.stepperTaskAddress.text = tasks[position].address
+            content.stepperTaskPredictedTime.text = tasks[position].predictedTime.toString("HH:mm")
             content.stepperTaskGoToMarker.setOnClickListener {
                 goToMarkerCallback(tasks[position].latLng)
             }

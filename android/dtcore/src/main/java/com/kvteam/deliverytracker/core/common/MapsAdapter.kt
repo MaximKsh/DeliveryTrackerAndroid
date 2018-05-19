@@ -113,7 +113,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         val image = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(image)
         val circle = Paint(ANTI_ALIAS_FLAG)
-        paint.color = Color.WHITE
+        circle.color = Color.WHITE
         canvas.drawCircle(size / 2, size / 2, size / 2, circle)
         canvas.drawText(text, size / 2, baseline, paint)
         return image

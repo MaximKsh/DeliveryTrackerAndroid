@@ -7,8 +7,7 @@ import android.widget.LinearLayout
 import com.kvteam.deliverytracker.performerapp.R
 import kotlinx.android.synthetic.main.stepper_task_item.view.*
 import android.os.Parcelable
-
-
+import android.util.Log
 
 
 class TaskStepperItemView : LinearLayout {

@@ -30,14 +30,21 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_day_route.*
 import kotlinx.android.synthetic.main.fragment_day_route.view.*
+import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator.AnimatorUpdateListener
+import kotlinx.coroutines.experimental.async
+
 
 data class TaskStepperInfo(
         val taskId: UUID,
         val name: String,
         val description: String?,
+        val predictedTime: DateTime,
         val latLng: LatLng,
         val address: String
 )
@@ -55,6 +62,8 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
     private val density by lazy { activity?.resources?.displayMetrics?.density!! }
 
+    private var originalPaddingTop: Int = 0
+
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
         toolbar.setToolbarTitle("")
@@ -67,10 +76,18 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
     override fun onStop() {
         dtActivity.toolbarController.setTransparent(false)
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = (58 * density).toInt()
+        activity!!.mainContainer.layoutParams = x
+
+        val navigation = (activity as MainActivity).navigation
+        val layoutParams = (navigation.layoutParams as ViewGroup.MarginLayoutParams)
+        layoutParams.leftMargin = 0
+        navigation.layoutParams = layoutParams
         super.onStop()
     }
 
-    private fun toggleBottomNavigation () {
+    private fun toggleBottomNavigation (): ValueAnimator {
         val navigation = (activity as MainActivity).navigation
         val width = navigation.width
         val anim = ValueAnimator.ofInt(0, width)
@@ -85,16 +102,19 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             rlSlidingRouteTasksList.layoutParams = layoutParams2
         }
         anim.duration = 200L
-        anim.start()
-
-        ivBackToNavigation.setOnClickListener { anim.reverse()  }
+        return anim
     }
 
-    override fun onDestroy() {
-        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
-        x.bottomMargin = (58 * density).toInt()
-        activity!!.mainContainer.layoutParams = x
-        super.onDestroy()
+    private fun interpolatePanelPadding(offset: Float) {
+        rlSlidingRouteTasksList.setPadding(
+                rlSlidingRouteTasksList.paddingLeft,
+                (originalPaddingTop + (offset * dtActivity.statusBarHeight)).toInt(),
+                rlSlidingRouteTasksList.paddingRight,
+                rlSlidingRouteTasksList.paddingBottom
+        )
+        ivBackToNavigation.pivotX = ivBackToNavigation.width / 2f
+        ivBackToNavigation.pivotY = ivBackToNavigation.height / 2f
+        ivBackToNavigation.rotation = offset * 90
     }
 
     private fun goToMarker(latLng: LatLng) {
@@ -106,15 +126,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         navigationController.navigateToTaskDetails(taskId)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
-        super.onActivityCreated(savedInstanceState)
-
-        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
-        x.bottomMargin = 0
-        activity!!.mainContainer.layoutParams = x
-
-        toggleBottomNavigation()
-
+    private fun loadMapAndData () = launchUI {
         val viewResult = dp.taskInfoViews.getViewResultAsync(
                 "TaskViewGroup",
                 "ActualTasksPerformerView",
@@ -139,6 +151,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         task.id!!,
                         task.taskNumber!!,
                         task.comment,
+                        task.deliveryFrom!!,
                         clientAddress.geoposition!!.toLtnLng(),
                         clientAddress.rawAddress!!
                 ))
@@ -160,8 +173,8 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             val latLngBoundsBuilder = LatLngBounds.builder()
             routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
 
-            Handler().postDelayed({
-                if (isAdded) {
+//            Handler().postDelayed({
+//                if (isAdded) {
                     val zoom = mapsAdapter.getBoundsZoomLevel(
                             latLngBoundsBuilder.build(),
                             fGoogleMap.width,
@@ -192,12 +205,43 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                                     text = "С"
                                 }
                                 mapsAdapter.addCustomMarker(text, latLng.toGeoposition().toLtnLng())
+                                aviRoutes.hide()
                             }
                         }
                     }
-                }
-            }, 250)
+//                }
+//            }, 250)
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
+        super.onActivityCreated(savedInstanceState)
+
+        stepperTaskList.setStepperAdapter( TasksStepperContainer(
+                ::goToTasksDetails,
+                ::goToMarker,
+                listOf(),
+                activity as FragmentActivity
+        ).getAdapter() )
+
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = 0
+        activity!!.mainContainer.layoutParams = x
+
+        val anim = toggleBottomNavigation()
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                anim.removeAllListeners()
+                if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    aviRoutes.smoothToShow()
+                }
+                loadMapAndData()
+            }
+        })
+
+        anim.start()
+
+        ivBackToNavigation.setOnClickListener { anim.reverse()  }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -210,6 +254,16 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         val lp = view.rlSlidingRouteTasksList.layoutParams as ViewGroup.MarginLayoutParams
         lp.marginStart = -view.width
         view.rlSlidingRouteTasksList.layoutParams = lp
+        originalPaddingTop = view.rlSlidingRouteTasksList.paddingTop
+        view.slidingLayout.addPanelSlideListener(object: SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+                interpolatePanelPadding(slideOffset)
+            }
+
+            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+            }
+
+        })
         return view
     }
 
