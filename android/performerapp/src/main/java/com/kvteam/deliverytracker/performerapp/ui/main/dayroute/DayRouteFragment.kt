@@ -3,6 +3,7 @@ package com.kvteam.deliverytracker.performerapp.ui.main.dayroute
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.MapsAdapter
+import com.kvteam.deliverytracker.core.common.deepCopy
 import com.kvteam.deliverytracker.core.common.toGeoposition
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
@@ -22,6 +24,8 @@ import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
+import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_day_route.*
@@ -30,10 +34,21 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
+data class TaskStepperInfo(
+        val taskId: UUID,
+        val name: String,
+        val description: String?,
+        val latLng: LatLng,
+        val address: String
+)
+
 class DayRouteFragment : DeliveryTrackerFragment() {
 
     @Inject
     lateinit var mapsAdapter: MapsAdapter
+
+    @Inject
+    lateinit var navigationController: NavigationController
 
     @Inject
     lateinit var dp: DataProvider
@@ -75,8 +90,28 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         ivBackToNavigation.setOnClickListener { anim.reverse()  }
     }
 
+    override fun onDestroy() {
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = (58 * density).toInt()
+        activity!!.mainContainer.layoutParams = x
+        super.onDestroy()
+    }
+
+    private fun goToMarker(latLng: LatLng) {
+        slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        mapsAdapter.moveCameraToPosition(latLng, true)
+    }
+
+    private fun goToTasksDetails(taskId: UUID) {
+        navigationController.navigateToTaskDetails(taskId)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
+
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = 0
+        activity!!.mainContainer.layoutParams = x
 
         toggleBottomNavigation()
 
@@ -87,11 +122,11 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
         val tasks = viewResult
                 .map { dp.taskInfos.getAsync(it, DataProviderGetMode.PREFER_CACHE).entry }
-                .toMutableList()
 
         // Здесь и далее мы считаем что маршрутная вьэха вернула таски где есть адреса и склады
-        if (tasks.size != 0) {
+        if (tasks.isNotEmpty()) {
             val route = ArrayList<com.google.maps.model.LatLng>()
+            val taskStepperInfos = ArrayList<TaskStepperInfo>()
             val warehouse = dp.warehouses.get(tasks[0].warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
             route.add(warehouse.geoposition!!.toDirectionsLtnLng())
             tasks.forEach { task ->
@@ -100,8 +135,23 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         task.clientId as UUID,
                         DataProviderGetMode.FORCE_CACHE
                 )
+                taskStepperInfos.add(TaskStepperInfo(
+                        task.id!!,
+                        task.taskNumber!!,
+                        task.comment,
+                        clientAddress.geoposition!!.toLtnLng(),
+                        clientAddress.rawAddress!!
+                ))
                 route.add(clientAddress.geoposition!!.toDirectionsLtnLng())
             }
+
+            stepperTaskList.setStepperAdapter( TasksStepperContainer(
+                    ::goToTasksDetails,
+                    ::goToMarker,
+                    taskStepperInfos,
+                    activity as FragmentActivity
+            ).getAdapter() )
+
             // Пока ситаем запрос маршрута со времени первого таска
             val routeResults = mapsAdapter.getRoute(
                     route,
