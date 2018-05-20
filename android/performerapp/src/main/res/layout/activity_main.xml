@@ -7,16 +7,20 @@
     android:id="@+id/rlMainActivityContainer"
     tools:context="com.kvteam.deliverytracker.performerapp.ui.main.MainActivity">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
             android:layout_marginTop="60dp"
             android:id="@+id/mainContainer"
+            android:layout_marginBottom="57dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/navigation"/>
+            android:layout_height="match_parent"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -26,6 +30,8 @@
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -33,7 +39,8 @@
             app:itemIconTint="@drawable/bnv_item_color_selector"
             app:itemTextColor="@drawable/bnv_item_color_selector"
             app:menu="@menu/bottom_navigation" />
-    </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
 
     <include layout="@layout/dropdown_top" />
 

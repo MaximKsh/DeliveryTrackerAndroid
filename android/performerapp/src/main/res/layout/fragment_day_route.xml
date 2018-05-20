@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slidingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoScrollableView="@id/stepperTaskList"
+    sothree:umanoFadeColor="@android:color/transparent"
+    sothree:umanoPanelHeight="57dp"
+    sothree:umanoParallaxOffset="0dp"
+    sothree:umanoShadowHeight="0dp">
+
+    <FrameLayout
+        android:id="@+id/fGoogleMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSlidingRouteTasksList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_top_border_ltgray"
+        android:padding="15dp">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/aviRoutes"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            app:indicatorColor="@color/colorPrimary"
+            app:indicatorName="BallPulseIndicator" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/aviRoutes"
+            android:text="Маршрутный лист"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/ivBackToNavigation"
+            android:layout_below="@id/aviRoutes"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_arrow_forward_black_24dp"
+            android:tint="@color/colorGray" />
+
+        <com.liefery.android.vertical_stepper_view.VerticalStepperView
+            android:id="@+id/stepperTaskList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivBackToNavigation"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay" />
+    </RelativeLayout>
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

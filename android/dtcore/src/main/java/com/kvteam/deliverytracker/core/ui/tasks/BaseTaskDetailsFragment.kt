@@ -49,6 +49,7 @@ import java.util.*
 import javax.inject.Inject
 import com.google.maps.GeoApiContext
 import com.kvteam.deliverytracker.core.async.invokeAsync
+import com.kvteam.deliverytracker.core.common.toGeoposition
 import org.joda.time.DateTimeZone
 import java.io.InputStream
 import java.net.URL
@@ -115,7 +116,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         toolbar.setToolbarTitle(lm.getString(R.string.Core_TaskDetails_Header))
     }
 
-    private fun setGoogleMap() {
+    private fun setGoogleMap() = launchUI {
         val skeletonMap = Skeleton.bind(vSkeletonMapLoader)
                 .load(R.layout.layout_img_sketelon)
                 .angle(0)
@@ -135,53 +136,55 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
         }
 
         if (warehouse.geoposition != null && clientAddress.geoposition != null) {
-            Handler().postDelayed({
-                if (isAdded) {
-                    val routeResults = mapsAdapter.getRoute(
-                            warehouse.geoposition!!.toDirectionsLtnLng(),
-                            clientAddress.geoposition!!.toDirectionsLtnLng(),
-                            task.deliveryFrom)
 
-                    val latLngBoundsBuilder = LatLngBounds.builder()
-                    routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
+            val route = arrayListOf<com.google.maps.model.LatLng>(
+                    warehouse.geoposition!!.toDirectionsLtnLng(),
+                    clientAddress.geoposition!!.toDirectionsLtnLng()
+            )
+            val routeResults = mapsAdapter.getRoute(
+                    route,
+                    task.deliveryFrom)
 
-                    val zoom = mapsAdapter.getBoundsZoomLevel(
-                            latLngBoundsBuilder.build(),
-                            flTaskLiteMap.width,
-                            flTaskLiteMap.height,
-                            density
-                    )
+            val latLngBoundsBuilder = LatLngBounds.builder()
+            routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
 
-                    val cameraPosition = CameraPosition
-                            .builder()
-                            .target(latLngBoundsBuilder.build().center)
-                            .zoom(zoom)
-                            .build()
+            val zoom = mapsAdapter.getBoundsZoomLevel(
+                    latLngBoundsBuilder.build(),
+                    flTaskLiteMap.width,
+                    flTaskLiteMap.height,
+                    density
+            )
 
-                    val googleMapOptions = GoogleMapOptions()
-                            .camera(cameraPosition)
-                            .liteMode(true)
+            val cameraPosition = CameraPosition
+                    .builder()
+                    .target(latLngBoundsBuilder.build().center)
+                    .zoom(zoom)
+                    .build()
 
-                    val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
+            val googleMapOptions = GoogleMapOptions()
+                    .camera(cameraPosition)
+                    .liteMode(true)
 
-                    childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
+            val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
-                    mapFragment.getMapAsync {
-                        mapsAdapter.googleMap = it
-                        mapsAdapter.googleMap!!.setOnMapClickListener {
-                            val intent = Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("http://maps.google.com/maps?" +
-                                            "saddr=${warehouse.geoposition!!.latitude},${warehouse.geoposition!!.longitude}" +
-                                            "&daddr=${clientAddress.geoposition!!.latitude},${clientAddress.geoposition!!.longitude}"))
-                            startActivity(intent)
-                        }
-                        mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                            mapsAdapter.drawRoute(routeResults.route, routeResults.decodedPath)
-                            skeletonMap.hide()
-                        }
-                    }
+            childFragmentManager.beginTransaction().add(R.id.flTaskLiteMap, mapFragment).commit()
+
+            mapFragment.getMapAsync {
+                mapsAdapter.googleMap = it
+                mapsAdapter.googleMap!!.setOnMapClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://maps.google.com/maps?" +
+                                    "saddr=${warehouse.geoposition!!.latitude},${warehouse.geoposition!!.longitude}" +
+                                    "&daddr=${clientAddress.geoposition!!.latitude},${clientAddress.geoposition!!.longitude}"))
+                    startActivity(intent)
                 }
-            }, 250)
+                mapsAdapter.googleMap!!.setOnMapLoadedCallback {
+                    mapsAdapter.addPolyline(routeResults.decodedPath)
+                    mapsAdapter.addCustomMarker("C", routeResults.route.startLocation.toGeoposition().toLtnLng())
+                    mapsAdapter.addCustomMarker("З", routeResults.route.endLocation.toGeoposition().toLtnLng())
+                    skeletonMap.hide()
+                }
+            }
         }
     }
 

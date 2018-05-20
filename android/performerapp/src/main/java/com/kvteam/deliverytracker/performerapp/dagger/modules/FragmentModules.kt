@@ -2,6 +2,7 @@ package com.kvteam.deliverytracker.performerapp.dagger.modules
 
 import android.support.v4.app.Fragment
 import com.kvteam.deliverytracker.performerapp.dagger.components.*
+import com.kvteam.deliverytracker.performerapp.ui.main.dayroute.DayRouteFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.EditSettingsFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.SettingsFragment
@@ -31,6 +32,15 @@ abstract class TasksListFragmentModule {
     @IntoMap
     @FragmentKey(TasksListFragment::class)
     internal abstract fun tasksListFragmentInjector(builder: TasksListFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
+
+@Module(subcomponents = arrayOf(DayRouteFragmentSubcomponent::class))
+abstract class DayRouteFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(DayRouteFragment::class)
+    internal abstract fun dayRouteFragmentInjector(builder: DayRouteFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
 
