@@ -2,7 +2,6 @@ package com.kvteam.deliverytracker.core.models
 
 import com.google.gson.internal.LinkedTreeMap
 import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
 import java.math.BigDecimal
 import java.util.*
 
@@ -34,7 +33,7 @@ fun deserializeDateTimeFromMap(key: String, map: Map<*, *>) : DateTime? {
     val dateStr = map[key] as? String
     if(dateStr != null) {
         return try {
-            ISODateTimeFormat.dateTimeParser().parseDateTime(dateStr)
+            DateTime.parse(dateStr)
         } catch (e: Exception) {
             null
         }
