@@ -10,6 +10,7 @@ import com.kvteam.deliverytracker.core.geoposition.isSendingGeoposition
 import com.kvteam.deliverytracker.core.geoposition.startSendingGeoposition
 import com.kvteam.deliverytracker.core.geoposition.stopSendingGeoposition
 import com.kvteam.deliverytracker.core.ui.settings.BaseSettingsFragment
+import com.kvteam.deliverytracker.core.webservice.IWebservice
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.main.NavigationController
 import kotlinx.android.synthetic.main.view_to_work.*
@@ -19,6 +20,9 @@ import javax.inject.Inject
 class SettingsFragment : BaseSettingsFragment() {
     @Inject
     lateinit var navigationController: NavigationController
+
+    @Inject
+    lateinit var webservice: IWebservice
 
     override fun onEditSettingsClicked() {
         navigationController.navigateToEditSettings()
@@ -43,10 +47,10 @@ class SettingsFragment : BaseSettingsFragment() {
             sToWork.toggle()
         }
 
-        sToWork.setOnCheckedChangeListener { switch, isChecked ->
+        sToWork.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked && !isSendingGeoposition(this.dtActivity)) {
                 if (checkPermissions()) {
-                    startSendingGeoposition(this.dtActivity)
+                    startSendingGeoposition(this.dtActivity, webservice)
                 }
             } else if (!isChecked && isSendingGeoposition(this.dtActivity)) {
                 stopSendingGeoposition(this.dtActivity)
@@ -76,7 +80,7 @@ class SettingsFragment : BaseSettingsFragment() {
             grantResults: IntArray) {
         if (requestCode == GEOPOSITION_PERMISSION_REQUEST_CODE) {
             if (grantResults.any { it == PackageManager.PERMISSION_GRANTED }) {
-                startSendingGeoposition(this.dtActivity)
+                startSendingGeoposition(this.dtActivity, webservice)
             } else {
                 sToWork.toggle()
             }

@@ -37,6 +37,8 @@ data class TaskInfo(
     @SerializedName("DeliveryTo", alternate = ["deliveryTo"])
     @MoveIfDiffer
     var deliveryTo: DateTime? = null,
+    @SerializedName("DeliveryEta", alternate = ["deliveryEta"])
+    var deliveryEta: DateTime? = null,
     @SerializedName("DeliveryActual", alternate = ["deliveryActual"])
     var deliveryActual: DateTime? = null,
     @SerializedName("Comment", alternate = ["comment"])
@@ -77,6 +79,7 @@ data class TaskInfo(
         receiptActual = deserializeDateTimeFromMap("ReceiptActual", map)
         deliveryFrom = deserializeDateTimeFromMap("DeliveryFrom", map)
         deliveryTo = deserializeDateTimeFromMap("DeliveryTo", map)
+        deliveryEta = deserializeDateTimeFromMap("DeliveryEta", map)
         deliveryActual = deserializeDateTimeFromMap("DeliveryActual", map)
         comment = map["Comment"] as? String
         warehouseId = deserializeUUIDFromMap("WarehouseId", map)

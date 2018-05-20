@@ -1,9 +1,11 @@
 package com.kvteam.deliverytracker.performerapp.ui.main.dayroute
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +16,16 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.kvteam.deliverytracker.core.async.launchUI
+import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.MapsAdapter
-import com.kvteam.deliverytracker.core.common.deepCopy
-import com.kvteam.deliverytracker.core.common.toGeoposition
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProvider
 import com.kvteam.deliverytracker.core.dataprovider.base.DataProviderGetMode
 import com.kvteam.deliverytracker.core.models.Geoposition
+import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.tasks.TaskState
+import com.kvteam.deliverytracker.core.tasks.getTaskState
 import com.kvteam.deliverytracker.core.ui.DeliveryTrackerFragment
+import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
 import com.kvteam.deliverytracker.core.ui.toolbar.ToolbarController
 import com.kvteam.deliverytracker.performerapp.R
 import com.kvteam.deliverytracker.performerapp.ui.main.MainActivity
@@ -34,16 +39,6 @@ import org.joda.time.DateTime
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.support.v4.content.ContextCompat
-import com.kvteam.deliverytracker.core.session.ISession
-import com.kvteam.deliverytracker.core.session.Session
-import com.kvteam.deliverytracker.core.tasks.TaskState
-import com.kvteam.deliverytracker.core.tasks.getTaskState
-import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
-import kotlinx.coroutines.experimental.async
 
 
 data class TaskStepperInfo(
@@ -74,11 +69,12 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
     override fun configureToolbar(toolbar: ToolbarController) {
         super.configureToolbar(toolbar)
-        toolbar.setToolbarTitle("")
+        toolbar.setToolbarTitle(EMPTY_STRING)
     }
 
     override fun onResume() {
         super.onResume()
+
         dtActivity.toolbarController.setTransparent(true)
         val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
         x.bottomMargin = 0
@@ -88,6 +84,11 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         val layoutParams = (navigation.layoutParams as ViewGroup.MarginLayoutParams)
         layoutParams.leftMargin = navigation.width
         navigation.layoutParams = layoutParams
+        try {
+
+        } catch (e: Exception) {
+            Log.e("DayRouteFragment", e.toString())
+        }
     }
 
     override fun onStop() {
@@ -103,19 +104,26 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         super.onStop()
     }
 
-    private fun toggleBottomNavigation(): ValueAnimator {
-        val navigation = (activity as MainActivity).navigation
+    private fun toggleBottomNavigation(): ValueAnimator? {
+        val navigation = (activity as? MainActivity)?.navigation ?: return null
         val width = navigation.width
         val anim = ValueAnimator.ofInt(0, width)
         anim.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Int
-            val layoutParams = (navigation.layoutParams as ViewGroup.MarginLayoutParams)
+            val slidingList = rlSlidingRouteTasksList
+            val layoutParams = (navigation.layoutParams as? ViewGroup.MarginLayoutParams)
+            val layoutParams2 = (slidingList?.layoutParams as? ViewGroup.MarginLayoutParams)
+            // Проверяем, что во время анимации не был уничтожен view
+            if (layoutParams == null
+                || layoutParams2 == null) {
+                return@addUpdateListener
+            }
+
             layoutParams.leftMargin = value
             navigation.layoutParams = layoutParams
 
-            val layoutParams2 = (rlSlidingRouteTasksList.layoutParams as ViewGroup.MarginLayoutParams)
             layoutParams2.leftMargin = value - width
-            rlSlidingRouteTasksList.layoutParams = layoutParams2
+            slidingList.layoutParams = layoutParams2
         }
         anim.duration = 200L
         return anim
@@ -145,11 +153,10 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
     private fun loadMapAndData() = launchUI {
         val userInfo = session.refreshUserInfoAsync().entity!!.user
-
         val viewResult = dp.taskInfoViews.getViewResultAsync(
                 "AuxTaskViewGroup",
                 "RouteView",
-                mode = DataProviderGetMode.PREFER_CACHE).viewResult
+                mode = DataProviderGetMode.PREFER_WEB).viewResult
 
         val tasks = viewResult
                 .map { dp.taskInfos.getAsync(it, DataProviderGetMode.PREFER_CACHE).entry }
@@ -181,7 +188,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         task.id!!,
                         task.taskNumber!!,
                         task.comment,
-                        task.deliveryFrom!!,
+                        task.deliveryEta!!,
                         clientAddress.geoposition!!.toLtnLng(),
                         clientAddress.rawAddress!!
                 ))
@@ -307,30 +314,34 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         ).getAdapter())
 
         val anim = toggleBottomNavigation()
-        anim.addListener(object : AnimatorListenerAdapter() {
+        anim?.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
-                anim.removeAllListeners()
-                if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    slidingLayout.isTouchEnabled = false
-                    aviRoutes.smoothToShow()
+                animation.removeAllListeners()
+                val sl = slidingLayout ?: return
+                val ar = aviRoutes ?: return
+                val routeTask = rlSlidingRouteTasksList ?: return
+
+                if (sl.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    sl.isTouchEnabled = false
+                    ar.smoothToShow()
                 } else {
-                    aviRoutes.visibility = View.GONE
-                    rlSlidingRouteTasksList.setPadding(
-                            rlSlidingRouteTasksList.paddingLeft,
-                            (originalPaddingTop + dtActivity.statusBarHeight).toInt(),
-                            rlSlidingRouteTasksList.paddingRight,
-                            rlSlidingRouteTasksList.paddingBottom)
+                    ar.visibility = View.GONE
+                    routeTask.setPadding(
+                            routeTask.paddingLeft,
+                            originalPaddingTop + dtActivity.statusBarHeight,
+                            routeTask.paddingRight,
+                            routeTask.paddingBottom)
                 }
                 loadMapAndData()
             }
         })
 
-        anim.start()
+        anim?.start()
 
         ivBackToNavigation.setOnClickListener {
             canBeCollapsed = true
             slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-            anim.reverse()
+            anim?.reverse()
         }
     }
 

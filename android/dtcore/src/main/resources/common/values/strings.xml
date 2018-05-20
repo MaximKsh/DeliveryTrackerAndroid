@@ -82,6 +82,7 @@
 
     <string name="Core_TaskDetails_DeliveryInfo">Delivery info</string>
     <string name="Core_TaskDetails_DateAndTime">Date and time</string>
+    <string name="Core_TaskDetails_Eta">Estimated time</string>
     <string name="Core_TaskDetails_NotAssigned">Not assigned</string>
     <string name="Core_TaskDetails_Address">Address</string>
     <string name="Core_TaskDetails_Client">Client</string>
