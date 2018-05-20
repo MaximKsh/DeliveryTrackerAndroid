@@ -37,8 +37,12 @@ import kotlin.collections.ArrayList
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.support.v4.content.ContextCompat
 import com.kvteam.deliverytracker.core.session.ISession
 import com.kvteam.deliverytracker.core.session.Session
+import com.kvteam.deliverytracker.core.tasks.TaskState
+import com.kvteam.deliverytracker.core.tasks.getTaskState
+import com.kvteam.deliverytracker.core.ui.materialDefaultAvatar
 import kotlinx.coroutines.experimental.async
 
 
@@ -132,15 +136,11 @@ class DayRouteFragment : DeliveryTrackerFragment() {
     }
 
     private fun loadMapAndData() = launchUI {
-        val t = session.refreshUserInfoAsync()
-
-        val user = session.user!!
-
-        val userInfo = dp.users.getAsync(user.id!!, DataProviderGetMode.FORCE_WEB).entry
+        val userInfo = session.refreshUserInfoAsync().entity!!.user
 
         val viewResult = dp.taskInfoViews.getViewResultAsync(
-                "TaskViewGroup",
-                "ActualTasksPerformerView",
+                "AuxTaskViewGroup",
+                "RouteView",
                 mode = DataProviderGetMode.PREFER_CACHE).viewResult
 
         val tasks = viewResult
@@ -152,7 +152,9 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             val taskStepperInfos = ArrayList<TaskStepperInfo>()
             val warehouse = dp.warehouses.get(tasks[0].warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
             route.add(warehouse.geoposition!!.toDirectionsLtnLng())
-            tasks.forEach { task ->
+
+            var performerRouteIndex = -1
+            tasks.forEachIndexed { index, task ->
                 val clientAddress = dp.clientAddresses.get(
                         task.clientAddressId as UUID,
                         task.clientId as UUID,
@@ -166,6 +168,14 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         clientAddress.geoposition!!.toLtnLng(),
                         clientAddress.rawAddress!!
                 ))
+
+                // Вставляем курьера после последнего таска "Доставлено" или "Выполнено"
+                if ((task.taskStateCaption != TaskState.Delivered.stateCaption
+                        || task.taskStateCaption != TaskState.Complete.stateCaption)
+                        && performerRouteIndex == -1 && userInfo!!.geoposition != null) {
+                    route.add(userInfo.geoposition!!.toDirectionsLtnLng())
+                    performerRouteIndex = index + 1
+                }
                 route.add(clientAddress.geoposition!!.toDirectionsLtnLng())
             }
 
@@ -208,18 +218,49 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 mapsAdapter.googleMap = it
                 mapsAdapter.googleMap!!.setOnMapLoadedCallback {
                     mapsAdapter.addPolyline(routeResults.decodedPath)
-                    route.forEachIndexed { index, latLng ->
-                        var text = index.toString()
-                        if (index == 0) {
-                            text = "С"
-                        }
-                        mapsAdapter.addCustomMarker(text, latLng.toGeoposition().toLtnLng())
-                        aviRoutes.hide()
-                        if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
-                            slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
-                        }
-                        slidingLayout.isTouchEnabled = true
+                    // СКЛАД
+                    mapsAdapter.addCustomMarker("C", (warehouse.geoposition as Geoposition).toLtnLng())
+
+                    // ТАСКИ
+                    tasks.forEachIndexed{ index, task ->
+                        val markerColor = ContextCompat.getColor(dtActivity, task.getTaskState()!!.color)
+                        mapsAdapter.addCustomMarker((index + 1).toString(), taskStepperInfos[index].latLng, markerColor)
                     }
+
+                    // КУРЬЕР
+                    if (userInfo!!.geoposition != null) {
+                        mapsAdapter.addUserMarker(materialDefaultAvatar(userInfo), userInfo.geoposition!!.toLtnLng())
+                    }
+
+                    aviRoutes.hide()
+                    if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                        slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+                    }
+                    slidingLayout.isTouchEnabled = true
+                }
+            }
+        } else {
+            val cameraPosition = CameraPosition
+                    .builder()
+                    .target(LatLng(55.753774, 37.620998))
+                    .zoom(12.0f)
+                    .build()
+
+            val googleMapOptions = GoogleMapOptions()
+                    .camera(cameraPosition)
+
+            val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
+
+            childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
+            mapFragment.getMapAsync {
+                it.setPadding(0, 0, 0, 0)
+                mapsAdapter.googleMap = it
+                mapsAdapter.googleMap!!.setOnMapLoadedCallback {
+                    aviRoutes.hide()
+                    if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                        slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+                    }
+                    slidingLayout.isTouchEnabled = true
                 }
             }
         }

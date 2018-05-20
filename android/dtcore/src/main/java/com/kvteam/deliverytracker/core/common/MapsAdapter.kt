@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.core.common
 
 import android.content.pm.PackageManager
+import android.graphics.*
 import android.util.Log
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.AutocompleteFilter
@@ -20,13 +21,10 @@ import com.google.maps.model.DirectionsLeg
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Paint.Align
 import com.basgeekball.awesomevalidation.helper.SpanHelper.setColor
 import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import java.lang.Float.max
@@ -44,7 +42,7 @@ fun LatLng.toGeoposition(): Geoposition {
     return Geoposition(this.longitude, this.latitude)
 }
 
-fun com.google.maps.model.LatLng.toGeoposition() : Geoposition {
+fun com.google.maps.model.LatLng.toGeoposition(): Geoposition {
     return Geoposition(this.lng, this.lat)
 }
 
@@ -53,13 +51,15 @@ data class GoogleMapRouteResults(
         val route: DirectionsLeg
 )
 
-class MapsAdapter (private val googleApiClient: GoogleApiClient) {
+class MapsAdapter(private val googleApiClient: GoogleApiClient) {
     private val topLeftBound = LatLng(55.013424, 39.549786)
     private val bottomRightBound = LatLng(56.253291, 36.355584)
     private val typeFilter = AutocompleteFilter.Builder()
             .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
             .build()
     var googleMap: GoogleMap? = null
+
+    val density = googleApiClient.context?.resources?.displayMetrics?.density!!
 
     private val mapsApiKey =
             googleApiClient.context.packageManager.getApplicationInfo(
@@ -101,7 +101,33 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         return Math.floor(Math.log(mapPx.toDouble() / worldPx.toDouble() / fraction) / LN2)
     }
 
-    private fun textAsBitmap(text: String, textSize: Float, textColor: Int): Bitmap {
+    private fun drawUserMarker(picture: Drawable): Bitmap {
+        val circle = Paint(ANTI_ALIAS_FLAG)
+        circle.color = Color.BLACK
+
+        val image = Bitmap.createBitmap((40 * density).toInt(), (60 * density).toInt(), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(image)
+        canvas.drawCircle((20 * density), (20 * density), (20 * density), circle)
+        val paint = Paint(ANTI_ALIAS_FLAG)
+        paint.color = Color.BLACK
+        paint.style = Paint.Style.FILL
+
+        val a = Point(0, (20 * density).toInt())
+        val b = Point((20 * density).toInt(), (60 * density).toInt())
+        val c = Point((40 * density).toInt(), (20 * density).toInt())
+
+        val path = Path()
+        path.moveTo(a.x.toFloat(), a.y.toFloat())
+        path.lineTo(b.x.toFloat(), b.y.toFloat())
+        path.lineTo(c.x.toFloat(), c.y.toFloat())
+        path.close()
+
+        canvas.drawPath(path, paint)
+        picture.draw(canvas)
+        return image
+    }
+
+    private fun textAsBitmap(text: String, textSize: Float, textColor: Int, backgroundColor: Int): Bitmap {
         val paint = Paint(ANTI_ALIAS_FLAG)
         paint.textSize = textSize
         paint.color = textColor
@@ -112,15 +138,18 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         val size = Math.max(width, height)
         val image = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(image)
+        val circleBackground = Paint(ANTI_ALIAS_FLAG)
+        circleBackground.color = Color.BLACK
         val circle = Paint(ANTI_ALIAS_FLAG)
-        circle.color = Color.WHITE
-        canvas.drawCircle(size / 2, size / 2, size / 2, circle)
+        circle.color = backgroundColor
+        canvas.drawCircle(size / 2, size / 2, size / 2, circleBackground)
+        canvas.drawCircle(size / 2, size / 2, (size - 5) / 2, circle)
         canvas.drawText(text, size / 2, baseline, paint)
         return image
     }
 
     suspend fun getRoute(route: ArrayList<com.google.maps.model.LatLng>,
-                 departureTime: DateTime?) : GoogleMapRouteResults = async {
+                         departureTime: DateTime?): GoogleMapRouteResults = async {
 
         val time = if (departureTime?.isAfterNow == true) {
             departureTime
@@ -139,7 +168,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
                 .await()
 
         val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
-        return@async  GoogleMapRouteResults(decodedPath, results.routes[0].legs[0])
+        return@async GoogleMapRouteResults(decodedPath, results.routes[0].legs[0])
     }.await()
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
@@ -171,10 +200,17 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         googleMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
     }
 
-    fun addCustomMarker(text: String, position: LatLng) {
+    fun addCustomMarker(text: String, position: LatLng, backgroundColor: Int? = Color.WHITE) {
         googleMap!!.addMarker(MarkerOptions()
                 .position(position)
-                .icon(BitmapDescriptorFactory.fromBitmap(textAsBitmap(text, 70f, Color.BLACK)))
+                .icon(BitmapDescriptorFactory.fromBitmap(textAsBitmap(text, 70f, Color.BLACK, backgroundColor!!)))
+        )
+    }
+
+    fun addUserMarker(image: Drawable, position: LatLng) {
+        googleMap!!.addMarker(MarkerOptions()
+                .position(position)
+                .icon(BitmapDescriptorFactory.fromBitmap(drawUserMarker(image)))
         )
     }
 
@@ -191,7 +227,7 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
     private suspend fun getAddressesForPlaces(googleMapAddresses: List<GoogleMapAddress>): List<GoogleMapAddress> = async {
         val addresses = Places.GeoDataApi.getPlaceById(
                 googleApiClient,
-                *googleMapAddresses.map{ it.placeId }.toTypedArray()
+                *googleMapAddresses.map { it.placeId }.toTypedArray()
         ).await()
 
         addresses.forEachIndexed { index, address ->
@@ -210,12 +246,13 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
                 null
         )
                 .await()
-                .map { GoogleMapAddress(
-                        it.placeId,
-                        it.getPrimaryText(null),
-                        it.getSecondaryText(null),
-                        null,
-                        null)
+                .map {
+                    GoogleMapAddress(
+                            it.placeId,
+                            it.getPrimaryText(null),
+                            it.getSecondaryText(null),
+                            null,
+                            null)
                 }
 
         return@async getAddressesForPlaces(list)
