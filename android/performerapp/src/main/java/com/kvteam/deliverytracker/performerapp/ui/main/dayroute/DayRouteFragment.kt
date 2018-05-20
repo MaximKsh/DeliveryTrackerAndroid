@@ -221,7 +221,21 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 it.setPadding(0, 0, 0, 0)
                 mapsAdapter.googleMap = it
                 mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                    mapsAdapter.addPolyline(routeResults.decodedPath)
+                    routeResults.decodedPath.forEachIndexed { index, path ->
+                        val testColor = when {
+                            index <= lastCompletedTaskIndex + 1 -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorGreen)
+                            }
+                            index == lastCompletedTaskIndex + 2 -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorYellow)
+                            }
+                            else -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorGray)
+                            }
+                        }
+
+                        mapsAdapter.addPolyline(path, testColor)
+                    }
                     // СКЛАД
                     val warehouseIcon = ContextCompat.getDrawable(dtActivity, R.drawable.warehouse_icon)!!
                     mapsAdapter.addUserMarker(warehouseIcon, (warehouse.geoposition as Geoposition).toLtnLng())

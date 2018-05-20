@@ -177,11 +177,11 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                     startActivity(intent)
                 }
                 mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                    mapsAdapter.addPolyline(routeResults.decodedPath)
+                    mapsAdapter.addPolyline(routeResults.decodedPath[0])
                     val warehouseIcon = ContextCompat.getDrawable(dtActivity, R.drawable.warehouse_icon)!!
-                    mapsAdapter.addUserMarker(warehouseIcon, routeResults.route.startLocation.toGeoposition().toLtnLng())
+                    mapsAdapter.addUserMarker(warehouseIcon, warehouse.geoposition!!.toLtnLng())
                     val markerColor = ContextCompat.getColor(dtActivity, task.getTaskState()!!.color)
-                    mapsAdapter.addCustomMarker("З", routeResults.route.endLocation.toGeoposition().toLtnLng(), markerColor)
+                    mapsAdapter.addCustomMarker("З", clientAddress.geoposition!!.toLtnLng(), markerColor)
                     skeletonMap.hide()
                 }
             }

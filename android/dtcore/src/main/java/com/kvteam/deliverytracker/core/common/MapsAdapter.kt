@@ -54,8 +54,8 @@ fun com.google.maps.model.LatLng.toGeoposition(): Geoposition {
 }
 
 data class GoogleMapRouteResults(
-        val decodedPath: Iterable<LatLng>,
-        val route: DirectionsLeg,
+        val decodedPath: Array<ArrayList<LatLng>>,
+        val route: Array<DirectionsLeg>,
         val bounds: LatLngBounds
 )
 
@@ -174,20 +174,29 @@ class MapsAdapter(private val googleApiClient: GoogleApiClient) {
                 .departureTime(time)
                 .await()
 
-        val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
         val resultRoute = results.routes[0]
+        val decodedPathPerStep = Array(resultRoute.legs.size) { i ->
+            val t = ArrayList<LatLng>()
+            resultRoute.legs[i].steps.forEach {
+                t.addAll(PolyUtil.decode(it.polyline.encodedPath))
+            }
+            t
+        }
         val latLngBounds = LatLngBounds(
                 resultRoute.bounds.southwest.toGeoposition().toLtnLng(),
                 resultRoute.bounds.northeast.toGeoposition().toLtnLng())
-        return@async GoogleMapRouteResults(decodedPath, resultRoute.legs[0], latLngBounds)
+        return@async GoogleMapRouteResults(decodedPathPerStep, resultRoute.legs, latLngBounds)
     }.await()
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
         return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable
     }
 
-    fun addPolyline(decodedPath: Iterable<LatLng>) {
-        googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
+    fun addPolyline(decodedPath: Iterable<LatLng>, color: Int? = Color.BLACK) {
+        googleMap!!.addPolyline(PolylineOptions()
+                .addAll(decodedPath)
+                .color(color!!)
+        )
     }
 
     fun moveCameraToPosition(position: LatLng, animated: Boolean) {
