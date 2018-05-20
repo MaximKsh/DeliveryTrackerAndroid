@@ -37,6 +37,8 @@ import kotlin.collections.ArrayList
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import com.kvteam.deliverytracker.core.session.ISession
+import com.kvteam.deliverytracker.core.session.Session
 import kotlinx.coroutines.experimental.async
 
 
@@ -50,6 +52,8 @@ data class TaskStepperInfo(
 )
 
 class DayRouteFragment : DeliveryTrackerFragment() {
+    @Inject
+    lateinit var session: ISession
 
     @Inject
     lateinit var mapsAdapter: MapsAdapter
@@ -87,7 +91,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         super.onStop()
     }
 
-    private fun toggleBottomNavigation (): ValueAnimator {
+    private fun toggleBottomNavigation(): ValueAnimator {
         val navigation = (activity as MainActivity).navigation
         val width = navigation.width
         val anim = ValueAnimator.ofInt(0, width)
@@ -106,15 +110,16 @@ class DayRouteFragment : DeliveryTrackerFragment() {
     }
 
     private fun interpolatePanelPadding(offset: Float) {
+        val normalizedOffset = ((offset - 0.1) / (1 - 0.1)).toFloat()
         rlSlidingRouteTasksList.setPadding(
                 rlSlidingRouteTasksList.paddingLeft,
-                (originalPaddingTop + (offset * dtActivity.statusBarHeight)).toInt(),
+                (originalPaddingTop + (normalizedOffset * dtActivity.statusBarHeight)).toInt(),
                 rlSlidingRouteTasksList.paddingRight,
                 rlSlidingRouteTasksList.paddingBottom
         )
         ivBackToNavigation.pivotX = ivBackToNavigation.width / 2f
         ivBackToNavigation.pivotY = ivBackToNavigation.height / 2f
-        ivBackToNavigation.rotation = offset * 90
+        ivBackToNavigation.rotation = normalizedOffset * 90
     }
 
     private fun goToMarker(latLng: LatLng) {
@@ -126,7 +131,13 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         navigationController.navigateToTaskDetails(taskId)
     }
 
-    private fun loadMapAndData () = launchUI {
+    private fun loadMapAndData() = launchUI {
+        val t = session.refreshUserInfoAsync()
+
+        val user = session.user!!
+
+        val userInfo = dp.users.getAsync(user.id!!, DataProviderGetMode.FORCE_WEB).entry
+
         val viewResult = dp.taskInfoViews.getViewResultAsync(
                 "TaskViewGroup",
                 "ActualTasksPerformerView",
@@ -135,7 +146,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         val tasks = viewResult
                 .map { dp.taskInfos.getAsync(it, DataProviderGetMode.PREFER_CACHE).entry }
 
-        // Здесь и далее мы считаем что маршрутная вьэха вернула таски где есть адреса и склады
+        // Здесь и далее мы считаем что маршрутная вьюха вернула таски где есть адреса и склады
         if (tasks.isNotEmpty()) {
             val route = ArrayList<com.google.maps.model.LatLng>()
             val taskStepperInfos = ArrayList<TaskStepperInfo>()
@@ -158,12 +169,12 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 route.add(clientAddress.geoposition!!.toDirectionsLtnLng())
             }
 
-            stepperTaskList.setStepperAdapter( TasksStepperContainer(
+            stepperTaskList.setStepperAdapter(TasksStepperContainer(
                     ::goToTasksDetails,
                     ::goToMarker,
                     taskStepperInfos,
                     activity as FragmentActivity
-            ).getAdapter() )
+            ).getAdapter())
 
             // Пока ситаем запрос маршрута со времени первого таска
             val routeResults = mapsAdapter.getRoute(
@@ -173,56 +184,58 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             val latLngBoundsBuilder = LatLngBounds.builder()
             routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
 
-//            Handler().postDelayed({
-//                if (isAdded) {
-                    val zoom = mapsAdapter.getBoundsZoomLevel(
-                            latLngBoundsBuilder.build(),
-                            fGoogleMap.width,
-                            fGoogleMap.height,
-                            density
-                    )
+            val zoom = mapsAdapter.getBoundsZoomLevel(
+                    latLngBoundsBuilder.build(),
+                    fGoogleMap.width,
+                    fGoogleMap.height,
+                    density
+            )
 
-                    val cameraPosition = CameraPosition
-                            .builder()
-                            .target(latLngBoundsBuilder.build().center)
-                            .zoom(zoom)
-                            .build()
+            val cameraPosition = CameraPosition
+                    .builder()
+                    .target(latLngBoundsBuilder.build().center)
+                    .zoom(zoom)
+                    .build()
 
-                    val googleMapOptions = GoogleMapOptions()
-                            .camera(cameraPosition)
+            val googleMapOptions = GoogleMapOptions()
+                    .camera(cameraPosition)
 
-                    val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
+            val mapFragment = SupportMapFragment.newInstance(googleMapOptions)
 
-                    childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
-                    mapFragment.getMapAsync {
-                        it.setPadding(0, 0, 0, 0)
-                        mapsAdapter.googleMap = it
-                        mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                            mapsAdapter.addPolyline(routeResults.decodedPath)
-                            route.forEachIndexed { index, latLng ->
-                                var text = index.toString()
-                                if (index == 0) {
-                                    text = "С"
-                                }
-                                mapsAdapter.addCustomMarker(text, latLng.toGeoposition().toLtnLng())
-                                aviRoutes.hide()
-                            }
+            childFragmentManager.beginTransaction().add(R.id.fGoogleMap, mapFragment).commit()
+            mapFragment.getMapAsync {
+                it.setPadding(0, 0, 0, 0)
+                mapsAdapter.googleMap = it
+                mapsAdapter.googleMap!!.setOnMapLoadedCallback {
+                    mapsAdapter.addPolyline(routeResults.decodedPath)
+                    route.forEachIndexed { index, latLng ->
+                        var text = index.toString()
+                        if (index == 0) {
+                            text = "С"
                         }
+                        mapsAdapter.addCustomMarker(text, latLng.toGeoposition().toLtnLng())
+                        aviRoutes.hide()
+                        if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                            slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+                        }
+                        slidingLayout.isTouchEnabled = true
                     }
-//                }
-//            }, 250)
+                }
+            }
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) = launchUI {
         super.onActivityCreated(savedInstanceState)
 
-        stepperTaskList.setStepperAdapter( TasksStepperContainer(
+        slidingLayout.anchorPoint = 0.1f
+
+        stepperTaskList.setStepperAdapter(TasksStepperContainer(
                 ::goToTasksDetails,
                 ::goToMarker,
                 listOf(),
                 activity as FragmentActivity
-        ).getAdapter() )
+        ).getAdapter())
 
         val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
         x.bottomMargin = 0
@@ -233,7 +246,15 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             override fun onAnimationEnd(animation: Animator) {
                 anim.removeAllListeners()
                 if (slidingLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingLayout.isTouchEnabled = false
                     aviRoutes.smoothToShow()
+                } else {
+                    aviRoutes.visibility = View.GONE
+                    rlSlidingRouteTasksList.setPadding(
+                            rlSlidingRouteTasksList.paddingLeft,
+                            (originalPaddingTop + dtActivity.statusBarHeight).toInt(),
+                            rlSlidingRouteTasksList.paddingRight,
+                            rlSlidingRouteTasksList.paddingBottom)
                 }
                 loadMapAndData()
             }
@@ -241,8 +262,14 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
         anim.start()
 
-        ivBackToNavigation.setOnClickListener { anim.reverse()  }
+        ivBackToNavigation.setOnClickListener {
+            canBeCollapsed = true
+            slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            anim.reverse()
+        }
     }
+
+    private var canBeCollapsed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -255,12 +282,15 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         lp.marginStart = -view.width
         view.rlSlidingRouteTasksList.layoutParams = lp
         originalPaddingTop = view.rlSlidingRouteTasksList.paddingTop
-        view.slidingLayout.addPanelSlideListener(object: SlidingUpPanelLayout.PanelSlideListener {
+        view.slidingLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
                 interpolatePanelPadding(slideOffset)
             }
 
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED && !canBeCollapsed) {
+                    view.slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+                }
             }
 
         })

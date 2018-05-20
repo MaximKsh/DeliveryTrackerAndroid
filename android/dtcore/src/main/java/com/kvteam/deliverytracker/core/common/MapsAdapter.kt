@@ -119,8 +119,8 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
         return image
     }
 
-    fun getRoute(route: ArrayList<com.google.maps.model.LatLng>,
-                 departureTime: DateTime?) : GoogleMapRouteResults {
+    suspend fun getRoute(route: ArrayList<com.google.maps.model.LatLng>,
+                 departureTime: DateTime?) : GoogleMapRouteResults = async {
 
         val time = if (departureTime?.isAfterNow == true) {
             departureTime
@@ -139,8 +139,8 @@ class MapsAdapter (private val googleApiClient: GoogleApiClient) {
                 .await()
 
         val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
-        return GoogleMapRouteResults(decodedPath, results.routes[0].legs[0])
-    }
+        return@async  GoogleMapRouteResults(decodedPath, results.routes[0].legs[0])
+    }.await()
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
         return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable

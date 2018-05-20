@@ -1,6 +1,7 @@
 package com.kvteam.deliverytracker.performerapp.ui.main
 
 import android.support.v4.app.FragmentManager
+import com.kvteam.deliverytracker.core.R
 import com.kvteam.deliverytracker.core.ui.FragmentTracer
 import com.kvteam.deliverytracker.performerapp.ui.main.dayroute.DayRouteFragment
 import com.kvteam.deliverytracker.performerapp.ui.main.settings.ChangePasswordFragment
@@ -69,6 +70,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         val fragment = EditSettingsFragment()
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -78,6 +85,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         val fragment = ChangePasswordFragment()
         fragmentTracer.next(fragment)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()
@@ -89,6 +102,12 @@ class NavigationController (private val mainActivity: MainActivity) {
         fragmentTracer.next(taskDetailsFragment)
         taskDetailsFragment.setTask(id)
         fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.exit_to_right,
+                        R.anim.enter_from_left
+                )
                 .replace(containerId, taskDetailsFragment)
                 .addToBackStack(null)
                 .commitAllowingStateLoss()

@@ -17,8 +17,6 @@ import javax.inject.Inject
 
 
 class SettingsFragment : BaseSettingsFragment() {
-
-
     @Inject
     lateinit var navigationController: NavigationController
 
