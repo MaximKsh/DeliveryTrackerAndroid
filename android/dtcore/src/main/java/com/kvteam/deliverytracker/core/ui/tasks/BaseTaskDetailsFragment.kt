@@ -50,6 +50,7 @@ import javax.inject.Inject
 import com.google.maps.GeoApiContext
 import com.kvteam.deliverytracker.core.async.invokeAsync
 import com.kvteam.deliverytracker.core.common.toGeoposition
+import com.kvteam.deliverytracker.core.tasks.getTaskState
 import org.joda.time.DateTimeZone
 import java.io.InputStream
 import java.net.URL
@@ -145,11 +146,8 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                     route,
                     task.deliveryFrom)
 
-            val latLngBoundsBuilder = LatLngBounds.builder()
-            routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
-
             val zoom = mapsAdapter.getBoundsZoomLevel(
-                    latLngBoundsBuilder.build(),
+                    routeResults.bounds,
                     flTaskLiteMap.width,
                     flTaskLiteMap.height,
                     density
@@ -157,7 +155,7 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
 
             val cameraPosition = CameraPosition
                     .builder()
-                    .target(latLngBoundsBuilder.build().center)
+                    .target(routeResults.bounds.center)
                     .zoom(zoom)
                     .build()
 
@@ -180,8 +178,10 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
                 }
                 mapsAdapter.googleMap!!.setOnMapLoadedCallback {
                     mapsAdapter.addPolyline(routeResults.decodedPath)
-                    mapsAdapter.addCustomMarker("C", routeResults.route.startLocation.toGeoposition().toLtnLng())
-                    mapsAdapter.addCustomMarker("З", routeResults.route.endLocation.toGeoposition().toLtnLng())
+                    val warehouseIcon = ContextCompat.getDrawable(dtActivity, R.drawable.warehouse_icon)!!
+                    mapsAdapter.addUserMarker(warehouseIcon, routeResults.route.startLocation.toGeoposition().toLtnLng())
+                    val markerColor = ContextCompat.getColor(dtActivity, task.getTaskState()!!.color)
+                    mapsAdapter.addCustomMarker("З", routeResults.route.endLocation.toGeoposition().toLtnLng(), markerColor)
                     skeletonMap.hide()
                 }
             }
