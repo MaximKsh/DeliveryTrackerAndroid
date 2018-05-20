@@ -53,7 +53,7 @@ fun EditText.setPhoneNumber(str: String?) {
     }
 }
 
-fun materialDefaultAvatar(user: User?) : TextDrawable{
+fun materialDefaultAvatar(user: User?, color: Int? = Color.LTGRAY) : TextDrawable{
     val text = StringBuilder(4)
     if(user?.name?.isNotBlank() == true) {
         text.append(user.name!![0].toString())
@@ -63,7 +63,7 @@ fun materialDefaultAvatar(user: User?) : TextDrawable{
     }
 
     val materialAvatarDefault = TextDrawable.builder()
-            .buildRound(text.toString(), Color.LTGRAY)
+            .buildRound(text.toString(), color!!)
 
     return materialAvatarDefault
 }

@@ -28,6 +28,13 @@ import android.graphics.drawable.Drawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import java.lang.Float.max
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import android.view.animation.CycleInterpolator
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Handler
 
 
 data class GoogleMapAddress(
@@ -47,8 +54,9 @@ fun com.google.maps.model.LatLng.toGeoposition(): Geoposition {
 }
 
 data class GoogleMapRouteResults(
-        val decodedPath: Iterable<LatLng>,
-        val route: DirectionsLeg
+        val decodedPath: Array<ArrayList<LatLng>>,
+        val route: Array<DirectionsLeg>,
+        val bounds: LatLngBounds
 )
 
 class MapsAdapter(private val googleApiClient: GoogleApiClient) {
@@ -123,6 +131,8 @@ class MapsAdapter(private val googleApiClient: GoogleApiClient) {
         path.close()
 
         canvas.drawPath(path, paint)
+
+        picture.setBounds((4 * density).toInt(), (4 * density).toInt(), (36 * density).toInt(), (36 * density).toInt())
         picture.draw(canvas)
         return image
     }
@@ -138,12 +148,9 @@ class MapsAdapter(private val googleApiClient: GoogleApiClient) {
         val size = Math.max(width, height)
         val image = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         val canvas = Canvas(image)
-        val circleBackground = Paint(ANTI_ALIAS_FLAG)
-        circleBackground.color = Color.BLACK
         val circle = Paint(ANTI_ALIAS_FLAG)
         circle.color = backgroundColor
-        canvas.drawCircle(size / 2, size / 2, size / 2, circleBackground)
-        canvas.drawCircle(size / 2, size / 2, (size - 5) / 2, circle)
+        canvas.drawCircle(size / 2, size / 2, size / 2, circle)
         canvas.drawText(text, size / 2, baseline, paint)
         return image
     }
@@ -167,16 +174,29 @@ class MapsAdapter(private val googleApiClient: GoogleApiClient) {
                 .departureTime(time)
                 .await()
 
-        val decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.encodedPath)
-        return@async GoogleMapRouteResults(decodedPath, results.routes[0].legs[0])
+        val resultRoute = results.routes[0]
+        val decodedPathPerStep = Array(resultRoute.legs.size) { i ->
+            val t = ArrayList<LatLng>()
+            resultRoute.legs[i].steps.forEach {
+                t.addAll(PolyUtil.decode(it.polyline.encodedPath))
+            }
+            t
+        }
+        val latLngBounds = LatLngBounds(
+                resultRoute.bounds.southwest.toGeoposition().toLtnLng(),
+                resultRoute.bounds.northeast.toGeoposition().toLtnLng())
+        return@async GoogleMapRouteResults(decodedPathPerStep, resultRoute.legs, latLngBounds)
     }.await()
 
     private fun getEndLocationTitle(results: DirectionsResult): String {
         return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable
     }
 
-    fun addPolyline(decodedPath: Iterable<LatLng>) {
-        googleMap!!.addPolyline(PolylineOptions().addAll(decodedPath))
+    fun addPolyline(decodedPath: Iterable<LatLng>, color: Int? = Color.BLACK) {
+        googleMap!!.addPolyline(PolylineOptions()
+                .addAll(decodedPath)
+                .color(color!!)
+        )
     }
 
     fun moveCameraToPosition(position: LatLng, animated: Boolean) {
@@ -201,17 +221,41 @@ class MapsAdapter(private val googleApiClient: GoogleApiClient) {
     }
 
     fun addCustomMarker(text: String, position: LatLng, backgroundColor: Int? = Color.WHITE) {
-        googleMap!!.addMarker(MarkerOptions()
-                .position(position)
-                .icon(BitmapDescriptorFactory.fromBitmap(textAsBitmap(text, 70f, Color.BLACK, backgroundColor!!)))
-        )
+        val taskDrawable = BitmapDrawable(googleApiClient.context.resources, textAsBitmap(text, 70f, Color.BLACK, backgroundColor!!))
+        addUserMarker(taskDrawable, position)
     }
 
-    fun addUserMarker(image: Drawable, position: LatLng) {
-        googleMap!!.addMarker(MarkerOptions()
+    private fun scaleBitmap(bitmap: Bitmap, scaleFactor: Float): Bitmap {
+        val sizeX = Math.round(bitmap.width * scaleFactor)
+        val sizeY = Math.round(bitmap.height * scaleFactor)
+        return Bitmap.createScaledBitmap(bitmap, sizeX, sizeY, false)
+    }
+
+    private fun pulseMarker(markerIcon: Bitmap, marker: Marker, onePulseDuration: Long) {
+        val handler = Handler()
+        val startTime = System.currentTimeMillis()
+
+        val interpolator = CycleInterpolator(1f)
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = System.currentTimeMillis() - startTime
+                val t = interpolator.getInterpolation(elapsed.toFloat() / onePulseDuration)
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(scaleBitmap(markerIcon, 1f + 0.05f * t)))
+                handler.postDelayed(this, 16)
+            }
+        })
+    }
+
+    fun addUserMarker(image: Drawable, position: LatLng, animated: Boolean? = false) {
+        val iconBitmap = drawUserMarker(image)
+        val marker = googleMap!!.addMarker(MarkerOptions()
                 .position(position)
-                .icon(BitmapDescriptorFactory.fromBitmap(drawUserMarker(image)))
+                .icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
+                .zIndex(1f)
         )
+        if (animated!!) {
+            pulseMarker(iconBitmap, marker, 1000)
+        }
     }
 
     fun setMarker(position: LatLng, viewPort: LatLngBounds?, animated: Boolean) {

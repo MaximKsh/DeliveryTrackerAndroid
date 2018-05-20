@@ -76,6 +76,14 @@ class DayRouteFragment : DeliveryTrackerFragment() {
         super.onResume()
 
         dtActivity.toolbarController.setTransparent(true)
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = 0
+        activity!!.mainContainer.layoutParams = x
+
+        val navigation = (activity as MainActivity).navigation
+        val layoutParams = (navigation.layoutParams as ViewGroup.MarginLayoutParams)
+        layoutParams.leftMargin = navigation.width
+        navigation.layoutParams = layoutParams
         try {
 
         } catch (e: Exception) {
@@ -158,9 +166,18 @@ class DayRouteFragment : DeliveryTrackerFragment() {
             val route = ArrayList<com.google.maps.model.LatLng>()
             val taskStepperInfos = ArrayList<TaskStepperInfo>()
             val warehouse = dp.warehouses.get(tasks[0].warehouseId as UUID, DataProviderGetMode.FORCE_CACHE).entry
+
+            val lastCompletedTaskIndex = tasks.indexOfLast {
+                it.taskStateCaption == TaskState.Delivered.stateCaption
+                        || it.taskStateCaption == TaskState.Complete.stateCaption
+            }
+
+            if (lastCompletedTaskIndex == -1) {
+                route.add(userInfo!!.geoposition!!.toDirectionsLtnLng())
+            }
+
             route.add(warehouse.geoposition!!.toDirectionsLtnLng())
 
-            var performerRouteIndex = -1
             tasks.forEachIndexed { index, task ->
                 val clientAddress = dp.clientAddresses.get(
                         task.clientAddressId as UUID,
@@ -176,14 +193,12 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         clientAddress.rawAddress!!
                 ))
 
-                // Вставляем курьера после последнего таска "Доставлено" или "Выполнено"
-                if ((task.taskStateCaption != TaskState.Delivered.stateCaption
-                        || task.taskStateCaption != TaskState.Complete.stateCaption)
-                        && performerRouteIndex == -1 && userInfo!!.geoposition != null) {
-                    route.add(userInfo.geoposition!!.toDirectionsLtnLng())
-                    performerRouteIndex = index + 1
-                }
                 route.add(clientAddress.geoposition!!.toDirectionsLtnLng())
+
+                // Вставляем курьера после последнего таска "Доставлено" или "Выполнено"
+                if (index == lastCompletedTaskIndex) {
+                    route.add(userInfo!!.geoposition!!.toDirectionsLtnLng())
+                }
             }
 
             stepperTaskList.setStepperAdapter(TasksStepperContainer(
@@ -198,11 +213,8 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                     route,
                     tasks[0].deliveryFrom)
 
-            val latLngBoundsBuilder = LatLngBounds.builder()
-            routeResults.decodedPath.forEach { coordinate -> latLngBoundsBuilder.include(coordinate) }
-
             val zoom = mapsAdapter.getBoundsZoomLevel(
-                    latLngBoundsBuilder.build(),
+                    routeResults.bounds,
                     fGoogleMap.width,
                     fGoogleMap.height,
                     density
@@ -210,7 +222,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
             val cameraPosition = CameraPosition
                     .builder()
-                    .target(latLngBoundsBuilder.build().center)
+                    .target(routeResults.bounds.center)
                     .zoom(zoom)
                     .build()
 
@@ -224,9 +236,24 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 it.setPadding(0, 0, 0, 0)
                 mapsAdapter.googleMap = it
                 mapsAdapter.googleMap!!.setOnMapLoadedCallback {
-                    mapsAdapter.addPolyline(routeResults.decodedPath)
+                    routeResults.decodedPath.forEachIndexed { index, path ->
+                        val testColor = when {
+                            index <= lastCompletedTaskIndex + 1 -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorGreen)
+                            }
+                            index == lastCompletedTaskIndex + 2 -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorYellow)
+                            }
+                            else -> {
+                                ContextCompat.getColor(dtActivity, R.color.colorGray)
+                            }
+                        }
+
+                        mapsAdapter.addPolyline(path, testColor)
+                    }
                     // СКЛАД
-                    mapsAdapter.addCustomMarker("C", (warehouse.geoposition as Geoposition).toLtnLng())
+                    val warehouseIcon = ContextCompat.getDrawable(dtActivity, R.drawable.warehouse_icon)!!
+                    mapsAdapter.addUserMarker(warehouseIcon, (warehouse.geoposition as Geoposition).toLtnLng())
 
                     // ТАСКИ
                     tasks.forEachIndexed{ index, task ->
@@ -236,7 +263,8 @@ class DayRouteFragment : DeliveryTrackerFragment() {
 
                     // КУРЬЕР
                     if (userInfo!!.geoposition != null) {
-                        mapsAdapter.addUserMarker(materialDefaultAvatar(userInfo), userInfo.geoposition!!.toLtnLng())
+                        val backgroundColor = ContextCompat.getColor(dtActivity, R.color.colorPrimary)
+                        mapsAdapter.addUserMarker(materialDefaultAvatar(userInfo, backgroundColor), userInfo.geoposition!!.toLtnLng(), true)
                     }
 
                     aviRoutes.hide()
@@ -284,10 +312,6 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 listOf(),
                 activity as FragmentActivity
         ).getAdapter())
-
-        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
-        x.bottomMargin = 0
-        activity!!.mainContainer.layoutParams = x
 
         val anim = toggleBottomNavigation()
         anim?.addListener(object : AnimatorListenerAdapter() {
