@@ -89,6 +89,7 @@
 
     <string name="Core_TaskDetails_DeliveryInfo">Информация о доставке</string>
     <string name="Core_TaskDetails_DateAndTime">Дата и время</string>
+    <string name="Core_TaskDetails_Eta">Ожидаемое время</string>
     <string name="Core_TaskDetails_NotAssigned">Не указано</string>
     <string name="Core_TaskDetails_Address">Адрес</string>
     <string name="Core_TaskDetails_Client">Клиент</string>

@@ -265,10 +265,14 @@ abstract class BaseTaskDetailsFragment : DeliveryTrackerFragment() {
             tvTaskDescription.text = task.comment
         }
 
-        if (task.deliveryFrom != null) {
+        if (task.deliveryFrom != null && task.deliveryTo != null) {
             tvDeliveryDate.text = "${(task.deliveryFrom as DateTime).toString("dd.MM")}, " +
                     "${(task.deliveryFrom as DateTime).toString("HH:mm")}-" +
                     "${(task.deliveryTo as DateTime).toString("HH:mm")}"
+        }
+
+        if (task.deliveryEta != null) {
+            tvDeliveryEta.text = "${(task.deliveryEta as DateTime).toString("dd.MM HH:mm")}"
         }
 
         if (task.clientId != null) {

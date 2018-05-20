@@ -244,10 +244,37 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlDeliveryAddress"
+                android:id="@+id/rlDeliveryEta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlDeliveryDate"
+                android:background="@drawable/shape_bottom_border_ltgray"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tvDeliveryEtaLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Core_TaskDetails_Eta"
+                    android:textColor="@color/colorGray"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/tvDeliveryEta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/Core_TaskDetails_NotAssigned"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlDeliveryAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlDeliveryEta"
                 android:background="@drawable/shape_bottom_border_ltgray"
                 android:padding="15dp">
 
