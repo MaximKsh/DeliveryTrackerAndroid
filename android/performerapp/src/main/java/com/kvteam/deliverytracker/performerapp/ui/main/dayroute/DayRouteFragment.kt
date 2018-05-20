@@ -80,6 +80,14 @@ class DayRouteFragment : DeliveryTrackerFragment() {
     override fun onResume() {
         super.onResume()
         dtActivity.toolbarController.setTransparent(true)
+        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
+        x.bottomMargin = 0
+        activity!!.mainContainer.layoutParams = x
+
+        val navigation = (activity as MainActivity).navigation
+        val layoutParams = (navigation.layoutParams as ViewGroup.MarginLayoutParams)
+        layoutParams.leftMargin = navigation.width
+        navigation.layoutParams = layoutParams
     }
 
     override fun onStop() {
@@ -297,10 +305,6 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                 listOf(),
                 activity as FragmentActivity
         ).getAdapter())
-
-        val x = (activity!!.mainContainer.layoutParams as ViewGroup.MarginLayoutParams)
-        x.bottomMargin = 0
-        activity!!.mainContainer.layoutParams = x
 
         val anim = toggleBottomNavigation()
         anim.addListener(object : AnimatorListenerAdapter() {
