@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Delivery Bear Management</string>
+    <string name="app_name" translatable="false">Smart Delivery Management</string>
 
 
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>

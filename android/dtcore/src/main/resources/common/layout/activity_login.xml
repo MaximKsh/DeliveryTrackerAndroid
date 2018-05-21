@@ -21,11 +21,11 @@
         <ImageView
             android:contentDescription="@string/Core_MainAppLogo"
             android:id="@+id/imageView"
-            android:layout_width="135dp"
+            android:layout_width="match_parent"
             android:layout_height="135dp"
             android:src="@drawable/main_app_logo"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
             />
 
         <RelativeLayout

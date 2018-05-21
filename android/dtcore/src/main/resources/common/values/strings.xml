@@ -1,6 +1,6 @@
 <resources>
     <string name="Core_ConfirmUserData">Confirm profile</string>
-    <string name="Core_MainAppLogo">Delivery Bear</string>
+    <string name="Core_MainAppLogo">Smart Delivery</string>
     <string name="Core_LoginActivity_ForgotPassword">Forgot password</string>
     <string name="Core_LoginActivity_CreateInstance">You can add your company</string>
     <string name="ManagerApp_CreateInstanceActivity_CompanyRegistration">Company registration</string>
@@ -158,7 +158,7 @@
     <string name="ServerMessage_Views_PaymentTypesView">Payment types</string>
     <string name="ServerMessage_Views_WarehousesView">Warehouses</string>
 
-    <string name="ServerMessage_PushMessage_TaskHeader">Delivery Bear task</string>
+    <string name="ServerMessage_PushMessage_TaskHeader">Smart Delivery task</string>
     <string name="ServerMessage_PushMessage_TaskPlannedToYou">You are appointed as a performer</string>
     <string name="ServerMessage_PushMessage_TaskWaits">New actual task</string>
     <string name="ServerMessage_PushMessage_TaskRevoked">Task revoked</string>

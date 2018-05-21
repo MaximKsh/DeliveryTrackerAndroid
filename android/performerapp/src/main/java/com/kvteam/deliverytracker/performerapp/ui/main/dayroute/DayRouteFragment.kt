@@ -14,7 +14,6 @@ import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.kvteam.deliverytracker.core.async.launchUI
 import com.kvteam.deliverytracker.core.common.EMPTY_STRING
 import com.kvteam.deliverytracker.core.common.MapsAdapter
@@ -172,11 +171,16 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         || it.taskStateCaption == TaskState.Complete.stateCaption
             }
 
-            if (lastCompletedTaskIndex == -1) {
-                route.add(userInfo!!.geoposition!!.toDirectionsLtnLng())
+            val userGeoposition = userInfo?.geoposition
+            if (lastCompletedTaskIndex == -1
+                && userGeoposition != null) {
+                route.add(userGeoposition.toDirectionsLtnLng())
             }
 
-            route.add(warehouse.geoposition!!.toDirectionsLtnLng())
+            val warehouseGeoposition = warehouse.geoposition
+            if (warehouseGeoposition != null) {
+                route.add(warehouseGeoposition.toDirectionsLtnLng())
+            }
 
             tasks.forEachIndexed { index, task ->
                 val clientAddress = dp.clientAddresses.get(
@@ -184,20 +188,26 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                         task.clientId as UUID,
                         DataProviderGetMode.FORCE_CACHE
                 )
-                taskStepperInfos.add(TaskStepperInfo(
-                        task.id!!,
-                        task.taskNumber!!,
-                        task.comment,
-                        task.deliveryEta!!,
-                        clientAddress.geoposition!!.toLtnLng(),
-                        clientAddress.rawAddress!!
-                ))
+                val clientGeopos = clientAddress.geoposition
+                if (clientGeopos != null) {
+                    taskStepperInfos.add(TaskStepperInfo(
+                            task.id!!,
+                            task.taskNumber ?: EMPTY_STRING,
+                            task.comment,
+                            task.deliveryEta ?: DateTime.now(),
+                            clientGeopos.toLtnLng(),
+                            clientAddress.rawAddress ?: EMPTY_STRING
+                    ))
 
-                route.add(clientAddress.geoposition!!.toDirectionsLtnLng())
+                    route.add(clientGeopos.toDirectionsLtnLng())
+                }
+
+
 
                 // Вставляем курьера после последнего таска "Доставлено" или "Выполнено"
-                if (index == lastCompletedTaskIndex) {
-                    route.add(userInfo!!.geoposition!!.toDirectionsLtnLng())
+                if (index == lastCompletedTaskIndex
+                    && userGeoposition != null) {
+                    route.add(userGeoposition.toDirectionsLtnLng())
                 }
             }
 
