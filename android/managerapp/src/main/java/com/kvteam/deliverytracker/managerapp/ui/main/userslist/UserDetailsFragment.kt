@@ -114,10 +114,12 @@ class UserDetailsFragment : DeliveryTrackerFragment() {
         userTasksFragment.setUser(user.id!!, user.role?.toRole()!!)
         val userStatsFragment = UserStatsFragment()
         userStatsFragment.setUser(user.id!!, user.role?.toRole()!!)
+        val userOnMapFragment = UserOnMapFragment()
+        userOnMapFragment.setUser(user.id!!)
         fragments = listOf(
                 userTasksFragment,
                 userStatsFragment,
-                UserOnMapFragment()
+                userOnMapFragment
         )
 
         mPagerAdapter = ScreenSlidePagerAdapter(lm, childFragmentManager, user.role!!.toRole()!!)

@@ -252,7 +252,7 @@ class DayRouteFragment : DeliveryTrackerFragment() {
                                 ContextCompat.getColor(dtActivity, R.color.colorGreen)
                             }
                             index == lastCompletedTaskIndex + 2 -> {
-                                ContextCompat.getColor(dtActivity, R.color.colorYellow)
+                                ContextCompat.getColor(dtActivity, R.color.colorBlack)
                             }
                             else -> {
                                 ContextCompat.getColor(dtActivity, R.color.colorGray)

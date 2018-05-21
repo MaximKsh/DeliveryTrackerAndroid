@@ -187,3 +187,9 @@ interface UserStatsFragmentSubcomponent : AndroidInjector<UserStatsFragment> {
     @Subcomponent.Builder
     abstract class Builder : AndroidInjector.Builder<UserStatsFragment>()
 }
+
+@Subcomponent
+interface UserOnMapFragmentSubcomponent : AndroidInjector<UserOnMapFragment> {
+    @Subcomponent.Builder
+    abstract class Builder : AndroidInjector.Builder<UserOnMapFragment>()
+}

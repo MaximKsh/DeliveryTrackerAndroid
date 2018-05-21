@@ -234,6 +234,10 @@ abstract class MainActivityModule {
     @ContributesAndroidInjector(modules = arrayOf(UserStatsFragmentModule::class))
     internal abstract fun userStatsFragment(): UserStatsFragment
 
+    @FragmentScope
+    @ContributesAndroidInjector(modules = arrayOf(UserOnMapFragmentModule::class))
+    internal abstract fun userOnMapFragment(): UserOnMapFragment
+
     @Module
     class MainActivityScopeModule {
         @Provides

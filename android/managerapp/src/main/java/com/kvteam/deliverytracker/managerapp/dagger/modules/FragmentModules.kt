@@ -282,3 +282,12 @@ abstract class UserStatsFragmentModule {
     internal abstract fun injector(builder: UserStatsFragmentSubcomponent.Builder):
             AndroidInjector.Factory<out Fragment>
 }
+
+@Module(subcomponents = arrayOf(UserOnMapFragmentSubcomponent::class))
+abstract class UserOnMapFragmentModule {
+    @Binds
+    @IntoMap
+    @FragmentKey(UserOnMapFragment::class)
+    internal abstract fun injector(builder: UserOnMapFragmentSubcomponent.Builder):
+            AndroidInjector.Factory<out Fragment>
+}
